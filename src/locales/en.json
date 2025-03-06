@@ -1,0 +1,69 @@
+{
+  "welcome_text_key": "Welcome to Murshidk!",
+  "welcome_key": "Welcome",
+  "subtitle_key": "Your Guide to Identifying Plant Diseases",
+  "language_key": "Language",
+  "save_key": "Save",
+  "filled_key": "Filled Buttons",
+  "filled_description_key": "These buttons have a solid background color and are used for primary actions.",
+  "outlined_key": "Outlined Buttons",
+  "outlined_description_key": "These buttons have a border and no fill, used for secondary actions.",
+  "default_key": "Default Buttons",
+  "default_description_key": "These buttons have a neutral style and are used for generic actions.",
+  "loading_key": "Loading...",
+  "loading_btn_key": "Loading Buttons",
+  "loading_description_key": "These buttons show a loading spinner and are disabled while processing.",
+  "icon_btn_key": "Buttons with Icons",
+  "icon_description_key": "These buttons include an icon alongside the text.",
+  "text_input_label": "Text Input",
+  "text_input_description": "A standard text input field for entering single-line text, such as names or email addresses.",
+  "password_input_label": "Password Input",
+  "password_input_description": "A password input field with a toggleable eye icon to show/hide the password.",
+  "select_input_label": "Select Input",
+  "select_input_description": "A dropdown select input for choosing an option from a list.",
+  "radio_input_label": "Radio Input",
+  "radio_input_description": "A group of radio buttons for selecting a single option from multiple choices.",
+  "checkbox_input_label": "Checkbox Input",
+  "checkbox_input_description": "A checkbox for toggling a boolean value, such as agreeing to terms and conditions.",
+  "buttons_showcase_key": "Buttons",
+  "inputs_key": "Inputs",
+  "inputs_showcase": {
+    "title": "Inputs Showcase"
+  },
+  "text_input": {
+    "label": "Text Input",
+    "description": "A standard text input field for entering single-line text, such as names or email addresses.",
+    "placeholder": "Enter your name"
+  },
+  "password_input": {
+    "label": "Password Input",
+    "description": "A password input field with a toggleable eye icon to show/hide the password.",
+    "placeholder": "Enter your password"
+  },
+  "select_input": {
+    "label": "Select Input",
+    "description": "A dropdown select input for choosing an option from a list.",
+    "placeholder": "Select gender"
+  },
+  "radio_input": {
+    "label": "Radio Input",
+    "description": "A group of radio buttons for selecting a single option from multiple choices."
+  },
+  "checkbox_input": {
+    "label": "Checkbox Input",
+    "description": "A checkbox for toggling a boolean value, such as agreeing to terms and conditions."
+  },
+  "gender_options": {
+    "male": "Male",
+    "female": "Female",
+    "other": "Other"
+  },
+  "phone_input": {
+    "label": "Phone Input",
+    "description": "A phone input field with a country dropdown for selecting the country code.",
+    "placeholder": "Enter your phone number",
+    "search_placeholder": "Search for a country",
+    "selected_country": "Selected Country",
+    "phone_number": "Phone Number"
+  }
+}

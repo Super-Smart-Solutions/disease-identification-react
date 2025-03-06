@@ -1,0 +1,69 @@
+{
+  "welcome_text_key": " مرحباً بكم في مرشدك!",
+  "welcome_key": "مرحباً",
+  "subtitle_key": "دليلك في التعرف على أمراض النبات",
+  "language_key": "اللغة",
+  "save_key": "حفظ",
+  "filled_key": "أزرار مملوءة",
+  "filled_description_key": "هذه الأزرار تحتوي على لون خلفية صلب وتُستخدم للإجراءات الرئيسية.",
+  "outlined_key": "أزرار محددة",
+  "outlined_description_key": "هذه الأزرار تحتوي على حدود وبدون تعبئة، وتُستخدم للإجراءات الثانوية.",
+  "default_key": "أزرار افتراضية",
+  "default_description_key": "هذه الأزرار لها نمط محايد وتُستخدم للإجراءات العامة.",
+  "loading_key": "تحميل ....",
+  "loading_btn_key": "أزرار التحميل",
+  "loading_description_key": "هذه الأزرار تعرض رمز تحميل وتكون معطلة أثناء المعالجة.",
+  "icon_btn_key": "أزرار مع أيقونات",
+  "icon_description_key": "هذه الأزرار تحتوي على أيقونة بجانب النص.",
+  "text_input_label": "حقل إدخال نصي",
+  "text_input_description": "حقل إدخال نصي قياسي لإدخال نص من سطر واحد، مثل الأسماء أو عناوين البريد الإلكتروني.",
+  "password_input_label": "حقل إدخال كلمة المرور",
+  "password_input_description": "حقل إدخال كلمة المرور مع أيقونة عين قابلة للتبديل لإظهار/إخفاء كلمة المرور.",
+  "select_input_label": "حقل اختيار",
+  "select_input_description": "حقل اختيار منسدل لاختيار خيار من القائمة.",
+  "radio_input_label": "أزرار الاختيار",
+  "radio_input_description": "مجموعة من أزرار الاختيار لتحديد خيار واحد من بين عدة خيارات.",
+  "checkbox_input_label": "خانة الاختيار",
+  "checkbox_input_description": "خانة اختيار لتبديل قيمة منطقية، مثل الموافقة على الشروط والأحكام.",
+  "buttons_showcase_key": "الأزرار",
+  "inputs_key": "الحقول",
+  "inputs_showcase": {
+    "title": "عرض المدخلات"
+  },
+  "text_input": {
+    "label": "حقل إدخال نصي",
+    "description": "حقل إدخال نصي قياسي لإدخال نص من سطر واحد، مثل الأسماء أو عناوين البريد الإلكتروني.",
+    "placeholder": "أدخل اسمك"
+  },
+  "password_input": {
+    "label": "حقل إدخال كلمة المرور",
+    "description": "حقل إدخال كلمة المرور مع أيقونة عين قابلة للتبديل لإظهار/إخفاء كلمة المرور.",
+    "placeholder": "أدخل كلمة المرور"
+  },
+  "select_input": {
+    "label": "حقل اختيار",
+    "description": "حقل اختيار منسدل لاختيار خيار من القائمة.",
+    "placeholder": "اختر الجنس"
+  },
+  "radio_input": {
+    "label": "أزرار الاختيار",
+    "description": "مجموعة من أزرار الاختيار لتحديد خيار واحد من بين عدة خيارات."
+  },
+  "checkbox_input": {
+    "label": "خانة الاختيار",
+    "description": "خانة اختيار لتبديل قيمة منطقية، مثل الموافقة على الشروط والأحكام."
+  },
+  "gender_options": {
+    "male": "ذكر",
+    "female": "أنثى",
+    "other": "أخرى"
+  },
+  "phone_input": {
+    "label": "حقل إدخال الهاتف",
+    "description": "حقل إدخال الهاتف مع قائمة منسدلة لاختيار رمز الدولة.",
+    "placeholder": "أدخل رقم هاتفك",
+    "search_placeholder": "ابحث عن دولة",
+    "selected_country": "الدولة المحددة",
+    "phone_number": "رقم الهاتف"
+  }
+}

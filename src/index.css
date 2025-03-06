@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@theme {
+  --color-primary: #416a00;
+  --color-primaryDarker: #2b4700;
+}
+body {
+  font-family: "Roboto", sans-serif; /* Default for English */
+}
+
+html[dir="rtl"] body {
+  font-family: "Noto Kufi Arabic", serif; /* Apply Arabic font for RTL direction */
+}
