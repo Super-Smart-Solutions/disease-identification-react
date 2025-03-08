@@ -20,7 +20,7 @@ services:
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/www/certbot:/var/www/certbot
-      - react-build:/usr/share/nginx/html
+      - react-build:/etc/nginx/html
     env_file:
       - .env
     depends_on:
