@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile
     container_name: react-app
     restart: unless-stopped
+    volumes:
+      - react-build:/app/dist
 
   nginx:
     build:
@@ -18,9 +20,9 @@ services:
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/www/certbot:/var/www/certbot
+      - react-build:/usr/share/nginx/html
     env_file:
       - .env
-    command: /bin/sh -c "envsubst '$$SERVER_NAME $$CERT_BASE_PATH' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
     depends_on:
       - react-app
     restart: unless-stopped
