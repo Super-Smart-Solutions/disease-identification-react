@@ -47,7 +47,7 @@ http {
         location / {
             root /usr/share/nginx/html;
             index index.html index.htm;
-            try_files $uri $uri /index.html;
+            try_files $uri $uri/ /index.html;
         }
 
         # error_page 404 /index.html; # Redirect all 404 errors to index.html
