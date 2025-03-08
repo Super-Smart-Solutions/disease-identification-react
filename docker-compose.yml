@@ -26,3 +26,7 @@ services:
     depends_on:
       - react-app
     restart: unless-stopped
+
+
+volumes:
+  react-build:
