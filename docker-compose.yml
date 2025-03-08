@@ -5,7 +5,7 @@ services:
       context: ./
       dockerfile: Dockerfile
     container_name: react-app
-    restart: unless-stopped
+    restart: on-failure
     volumes:
       - react-build:/app/dist
 
