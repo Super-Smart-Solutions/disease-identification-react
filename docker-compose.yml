@@ -1,0 +1,32 @@
+
+services:
+  react-app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: react-app
+    restart: on-failure
+    volumes:
+      - react-build:/app/dist
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: ui_nginx_container
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /var/www/certbot:/var/www/certbot
+      - react-build:/etc/nginx/html
+    env_file:
+      - .env
+    depends_on:
+      - react-app
+    restart: unless-stopped
+
+
+volumes:
+  react-build:
