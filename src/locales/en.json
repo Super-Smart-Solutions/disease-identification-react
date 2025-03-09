@@ -27,6 +27,9 @@
   "checkbox_input_description": "A checkbox for toggling a boolean value, such as agreeing to terms and conditions.",
   "buttons_showcase_key": "Buttons",
   "inputs_key": "Inputs",
+  "fish_key": "Fish",
+  "plants_key": "Plants",
+  "animals_key": "Animals",
   "inputs_showcase": {
     "title": "Inputs Showcase"
   },

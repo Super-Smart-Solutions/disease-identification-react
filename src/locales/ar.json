@@ -27,6 +27,10 @@
   "checkbox_input_description": "خانة اختيار لتبديل قيمة منطقية، مثل الموافقة على الشروط والأحكام.",
   "buttons_showcase_key": "الأزرار",
   "inputs_key": "الحقول",
+  "fish_key": "أسماك",
+  "plants_key": "نباتات",
+  "animals_key": "حيوانات",
+
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },

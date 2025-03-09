@@ -2,6 +2,7 @@
 @theme {
   --color-primary: #416a00;
   --color-primaryDarker: #2b4700;
+  --color-primaryGray: #b7b7b7;
 }
 body {
   font-family: "Roboto", sans-serif; /* Default for English */
