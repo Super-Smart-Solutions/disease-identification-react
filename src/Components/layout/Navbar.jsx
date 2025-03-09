@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { NavLink, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
+import navRoutes from "./navRoutes";
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation(); // Get the current route location
 
   useEffect(() => {
     if (i18n.language === "ar") {
@@ -25,11 +29,31 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center">
         <h1 className="text-xl font-bold">{t("welcome_key")}</h1>
 
-        {/* Button to trigger the dropdown menu */}
+        {/* Navigation Links */}
+        <div className="flex items-center space-x-6">
+          {navRoutes.map((route) => (
+            <NavLink
+              key={route.path}
+              to={route.path}
+              className="relative text-sm font-medium transition-all hover:text-gray-300"
+            >
+              {t(route.label)}
+              {location.pathname === route.path && (
+                <motion.div
+                  className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-white"
+                  layoutId="underline" // Shared layoutId for smooth transition
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+            </NavLink>
+          ))}
+        </div>
+
+        {/* Language Dropdown */}
         <div className="relative ml-2">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className=" cursor-pointer text-center text-sm text-white"
+            className="cursor-pointer text-center text-sm text-white"
             type="button"
           >
             {i18n.language === "en" ? "English" : "العربية"}

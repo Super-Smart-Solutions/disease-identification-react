@@ -30,7 +30,12 @@
   "fish_key": "أسماك",
   "plants_key": "نباتات",
   "animals_key": "حيوانات",
-
+  "search_about_data_key": "ابحث عن البيانات",
+  "select_plant_key": "حدد النبات",
+  "select_disease_key": "حدد المرض",
+  "plants_animals_key": "النباتات والحيوانات",
+  "models_key": "النماذج",
+  "database_key": "قاعدة البيانات",
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },

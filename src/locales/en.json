@@ -30,6 +30,12 @@
   "fish_key": "Fish",
   "plants_key": "Plants",
   "animals_key": "Animals",
+  "search_about_data_key": "Search",
+  "select_plant_key": "Select Plant",
+  "select_disease_key": "Select Disease",
+  "plants_animals_key": "Plants and Animals",
+  "models_key": "Models",
+  "database_key": "Database",
   "inputs_showcase": {
     "title": "Inputs Showcase"
   },
