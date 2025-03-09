@@ -1,3 +1,4 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Breadcrumbs = ({ items }) => {
@@ -8,7 +9,7 @@ const Breadcrumbs = ({ items }) => {
   };
 
   return (
-    <nav className="flex items-center space-x-2 text-gray-500">
+    <nav className="flex items-center space-s-2 text-gray-500">
       {items.map((item, index) => (
         <div key={index} className="flex items-center">
           {/* Breadcrumb Item */}

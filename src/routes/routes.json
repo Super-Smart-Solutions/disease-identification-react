@@ -1,0 +1,25 @@
+[
+  {
+    "path": "/",
+    "element": "Landing",
+    "breadcrumb": false
+  },
+  {
+    "path": "buttons",
+    "element": "ButtonShowcase",
+    "breadcrumb": true,
+    "label": "buttons"
+  },
+  {
+    "path": "inputs",
+    "element": "InputsShowcase",
+    "breadcrumb": true,
+    "label": "inputs"
+  },
+  {
+    "path": "database",
+    "element": "DataBase",
+    "breadcrumb": true,
+    "label": "database"
+  }
+]
