@@ -36,6 +36,10 @@
   "plants_animals_key": "Plants and Animals",
   "models_key": "Models",
   "database_key": "Database",
+  "close_key": "Close",
+  "read_more_key": "Read More",
+  "no_arabic_name_key": "No Arabic Name",
+  "no_description_key": "No description available.",
   "inputs_showcase": {
     "title": "Inputs Showcase"
   },

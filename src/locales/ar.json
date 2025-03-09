@@ -36,6 +36,10 @@
   "plants_animals_key": "النباتات والحيوانات",
   "models_key": "النماذج",
   "database_key": "قاعدة البيانات",
+  "close_key": "إغلاق",
+  "read_more_key": "اقرأ المزيد",
+  "no_arabic_name_key": "لا يوجد اسم بالعربية",
+  "no_description_key": "لا يوجد وصف متاح.",
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },

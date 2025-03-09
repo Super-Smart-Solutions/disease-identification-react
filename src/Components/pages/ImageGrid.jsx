@@ -12,10 +12,12 @@ const ImageGrid = ({
   loading,
 }) => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isImageLoading, setIsImageLoading] = useState(true);
 
   // Open modal with selected image
   const openModal = (index) => {
     setSelectedImage(index);
+    setIsImageLoading(true); // Reset loading state for the modal image
   };
 
   // Close modal
@@ -26,11 +28,13 @@ const ImageGrid = ({
   // Navigate to previous image
   const prevImage = () => {
     setSelectedImage((prev) => (prev > 0 ? prev - 1 : images.length - 1));
+    setIsImageLoading(true); // Reset loading state for the new image
   };
 
   // Navigate to next image
   const nextImage = () => {
     setSelectedImage((prev) => (prev < images.length - 1 ? prev + 1 : 0));
+    setIsImageLoading(true); // Reset loading state for the new image
   };
 
   // Handle arrow key navigation
@@ -59,22 +63,31 @@ const ImageGrid = ({
   };
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-4">
-      {images.map((img, index) => (
-        <motion.div
-          key={index}
-          className="relative cursor-pointer overflow-hidden rounded-lg"
-          whileHover={{ scale: 1.05 }}
-          onClick={() => openModal(index)}
-        >
-          <img
-            src={img}
-            alt="Grid item"
-            className="w-full h-40 object-cover rounded-lg"
-            loading="lazy"
-          />
-        </motion.div>
-      ))}
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4  w-full">
+      {loading
+        ? // Skeleton Loading for Grid
+          Array.from({ length: 8 }).map((_, index) => (
+            <div
+              key={index}
+              className="relative h-40 bg-gray-200 rounded-lg animate-pulse"
+            />
+          ))
+        : // Actual Images
+          images.map((img, index) => (
+            <motion.div
+              key={index}
+              className="relative cursor-pointer overflow-hidden rounded-lg"
+              whileHover={{ scale: 1.05 }}
+              onClick={() => openModal(index)}
+            >
+              <img
+                src={img}
+                alt="Grid item"
+                className="w-full h-40 object-cover rounded-lg"
+                loading="lazy"
+              />
+            </motion.div>
+          ))}
 
       {/* Modal */}
       <AnimatePresence>
@@ -92,10 +105,16 @@ const ImageGrid = ({
               animate={{ scale: 1 }}
               exit={{ scale: 0.8 }}
             >
+              {isImageLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-200 animate-pulse rounded-lg">
+                  <p className="text-gray-500">Loading...</p>
+                </div>
+              )}
               <img
                 src={images[selectedImage]}
                 alt="Selected"
                 className="w-full h-auto max-h-[80vh] object-contain"
+                onLoad={() => setIsImageLoading(false)} // Hide skeleton when image loads
               />
               <button
                 className="absolute top-4 right-4 text-white text-2xl cursor-pointer"
