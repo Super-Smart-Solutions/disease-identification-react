@@ -154,7 +154,7 @@ const PhoneInput = ({
           <div
             ref={dropdownRef}
             className={classNames(
-              "absolute z-10 bg-white rounded-lg shadow-lg w-full sm:w-52 transition-all duration-300 ease-in-out",
+              "absolute z-10 bg-white rounded-lg shadow-md w-full sm:w-52 transition-all duration-300 ease-in-out",
               {
                 "mt-1": dropdownDirection === "down", // Open downwards
                 "mb-1 bottom-full": dropdownDirection === "up", // Open upwards

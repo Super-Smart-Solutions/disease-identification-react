@@ -34,12 +34,17 @@
   "select_plant_key": "Select Plant",
   "select_disease_key": "Select Disease",
   "plants_animals_key": "Plants and Animals",
+  "select_plant_required_key": "Please select a plant.",
+  "select_disease_required_key": "Please select a disease.",
+  "get_data_key": "Get Data",
   "models_key": "Models",
+  "home_key": "Home",
   "database_key": "Database",
   "close_key": "Close",
   "read_more_key": "Read More",
   "no_arabic_name_key": "No Arabic Name",
   "no_description_key": "No description available.",
+
   "inputs_showcase": {
     "title": "Inputs Showcase"
   },

@@ -63,7 +63,7 @@ const Navbar = () => {
           {isMenuOpen && (
             <ul
               role="menu"
-              className="absolute z-10 min-w-[60px] overflow-auto rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg focus:outline-none mt-2"
+              className="absolute z-10 min-w-[60px] overflow-auto rounded-lg border border-slate-200 bg-white p-1.5 shadow-md focus:outline-none mt-2"
             >
               <li
                 role="menuitem"
