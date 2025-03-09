@@ -1,30 +1,3 @@
-/* input[type='radio']:after {
-        width: 15px;
-        height: 15px;
-        border-radius: 15px;
-        top: -2px;
-        left: -1px;
-        position: relative;
-        background-color: white;
-        content: '';
-        display: inline-block;
-        visibility: visible;
-        border: 2px solid #416a00;
-    }
-
-    input[type='radio']:checked:after {
-        width: 15px;
-        height: 15px;
-        border-radius: 15px;
-        top: -2px;
-        left: -1px;
-        position: relative;
-        background-color: #6e8548;
-        content: '';
-        display: inline-block;
-        visibility: visible;
-        border: 2px solid #416a00;
-    } */
 .custom-input {
   width: 100%;
   padding: 0.5rem 0.75rem;
@@ -37,4 +10,16 @@
 .custom-input:focus {
   ring: 2px solid #416a00; /* primary color */
   border-color: #416a00; /* primary border */
+}
+.overlay {
+  position: fixed; /* Fixed position to cover the entire screen */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  z-index: 1000; /* Ensure it's above other content */
 }
