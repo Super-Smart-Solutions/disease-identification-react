@@ -11,6 +11,12 @@
     "label": "buttons"
   },
   {
+    "path": "models",
+    "element": "Models",
+    "breadcrumb": true,
+    "label": "models"
+  },
+  {
     "path": "inputs",
     "element": "InputsShowcase",
     "breadcrumb": true,

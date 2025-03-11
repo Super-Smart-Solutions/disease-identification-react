@@ -44,7 +44,14 @@
   "read_more_key": "Read More",
   "no_arabic_name_key": "No Arabic Name",
   "no_description_key": "No description available.",
-
+  "drag_drop_key": "Drag & drop files here, or click to select files",
+  "accepted_types_key": "Accepted file types",
+  "remove_file_key": "Remove file",
+  "select_category_key": "Select Category",
+  "select_model_key": "Select Model",
+  "select_image_key": "Select Image",
+  "processing_image_key": "Processing Image",
+  "result_key": "Inference Result",
   "inputs_showcase": {
     "title": "Inputs Showcase"
   },
