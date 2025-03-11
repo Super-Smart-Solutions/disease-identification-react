@@ -29,7 +29,7 @@ const FileUpload = ({
       {selectedFile.length === 0 ? (
         <div
           {...getRootProps()}
-          className="p-6 border-2 border-dashed border-gray-300 rounded-lg text-center cursor-pointer hover:border-blue-500 transition-colors"
+          className="p-6 border-2 border-dashed border-gray-300 rounded-lg text-center cursor-pointer hover:border-primary transition-colors"
         >
           <input {...getInputProps()} />
           <FiUploadCloud className="mx-auto text-3xl text-gray-400" />

@@ -25,7 +25,7 @@ export default function Landing() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center">
       <div className="relative bg-primaryGray rounded-2xl p-5 flex flex-col gap-6 w-10/12 h-[60vh] justify-center shadow-md">
         <span className="w-10/12 text-gray-700">
           Lorem ipsum dolor sit amet consectetur. Magnis tortor neque sit risus

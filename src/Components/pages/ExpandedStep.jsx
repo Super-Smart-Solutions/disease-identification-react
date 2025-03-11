@@ -1,23 +1,31 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai"; // Icons for expand/collapse
 import { FaChevronCircleUp } from "react-icons/fa";
 
 export default function ExpandedStep({ title, expandedContent, disabled }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  // Automatically close when disabled and open when enabled
+  useEffect(() => {
+    if (disabled) {
+      setIsExpanded(false); // Close when disabled
+    } else {
+      setIsExpanded(true); // Open when enabled
+    }
+  }, [disabled]);
+
   const toggleExpand = useCallback(() => {
     if (!disabled) {
-      setIsExpanded((prev) => !prev);
+      setIsExpanded((prev) => !prev); // Toggle expand/collapse
     }
   }, [disabled]);
 
   return (
-    <div className={``}>
+    <div>
       {/* Header */}
       <div
         onClick={toggleExpand}
-        className={`p-4 flex justify-between items-center rounded-xl bg-[#758F4C]  transition-colors text-white ${
+        className={`p-4 flex justify-between items-center rounded-xl bg-[#758F4C] transition-colors text-white ${
           disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
         }`}
       >
@@ -26,7 +34,7 @@ export default function ExpandedStep({ title, expandedContent, disabled }) {
           animate={{ rotate: isExpanded ? 180 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <FaChevronCircleUp size={22} />{" "}
+          <FaChevronCircleUp size={22} />
         </motion.div>
       </div>
 
@@ -38,7 +46,7 @@ export default function ExpandedStep({ title, expandedContent, disabled }) {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className={`px-4  rounded-xl shadow-xl border text-black border-slate-300 mt-1 ${
+            className={`px-4 rounded-xl shadow-xl border text-black border-slate-300 mt-1 ${
               disabled ? "opacity-50 pointer-events-none" : ""
             }`}
           >

@@ -50,8 +50,13 @@
   "select_category_key": "حدد الفئـة",
   "select_model_key": "اختيار النموذج",
   "select_image_key": "اختيار الصورة",
+  "find_diseases_key": "اكتشاف الامراض",
   "processing_image_key": "إجراء الاستدلال",
   "result_key": "نتيجة الاستدلال",
+  "uploaded_image_key": "الصورة التي تم تحميلها",
+  "category_key": "الفئة",
+  "selected_disease": "المرض المحدد",
+  "confidence_level": "درجة التأكد",
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },
