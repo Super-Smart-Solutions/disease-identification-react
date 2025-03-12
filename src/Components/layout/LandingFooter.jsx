@@ -2,34 +2,47 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
-export default function Footer() {
+export default function LandingFooter() {
   const { t } = useTranslation();
   return (
     <>
-      <footer className="bg-white">
-        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8 ">
-          <div className=" sm:flex sm:items-center sm:justify-between ">
+      <footer className="text-white">
+        <div className="mx-auto max-w-screen-xl px-4 pt-16 pb-8 sm:px-6 lg:px-8 lg:pt-24">
+          <div className="text-center">
+            <h2 className="text-3xl font-extrabold  sm:text-5xl">
+              مرشدك الزراعي - Murshiduk{" "}
+            </h2>
+
+            <p className="mx-auto mt-4 max-w-sm ">{t("subtitle_key")}</p>
+
+            <a
+              href="#"
+              className="mt-8 inline-block rounded-full border border-white px-12 py-3 text-sm font-medium text-white hover:bg-primary hover:border-primary"
+            >
+              Get Started
+            </a>
+          </div>
+
+          <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8 ">
             <div className="flex flex-col gap-2">
               {/* Phone */}
               <div className="flex items-center justify-center sm:justify-start gap-3">
-                <FaPhoneAlt className="text-xl text-black" />
-                <span dir="ltr" className="text-black font-medium">
+                <FaPhoneAlt className=" " />
+                <span dir="ltr" className=" font-medium">
                   +20 163549264
                 </span>
               </div>
 
               {/* Email */}
               <div className="flex items-center justify-center sm:justify-start gap-3">
-                <FaEnvelope className="text-xl text-black" />
-                <span className="text-black font-medium">
-                  info@myrsgidk.com
-                </span>
+                <FaEnvelope className=" " />
+                <span className=" font-medium">info@myrsgidk.com</span>
               </div>
 
               {/* Address */}
               <div className="flex items-center justify-center sm:justify-start gap-3">
-                <FaMapMarkerAlt className="text-xl text-black" />
-                <span className="text-black font-medium">
+                <FaMapMarkerAlt className=" " />
+                <span className=" font-medium">
                   Lorem ipsum dolor sit amet consectetur
                 </span>
               </div>

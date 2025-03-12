@@ -24,7 +24,7 @@ export default function ExpandableArticle({
 
   if (loading) {
     return (
-      <div className="w-full p-6 bg-white border border-gray-300 rounded-lg shadow-md animate-pulse">
+      <div className="w-full p-6 cardIt animate-pulse">
         <div className="h-6 bg-gray-300 rounded w-60  mb-4"></div>
         <div className="h-4 bg-gray-300 rounded w-60  mb-2"></div>
         <div className="h-4 bg-gray-300 rounded w-60  mb-2"></div>
@@ -36,7 +36,7 @@ export default function ExpandableArticle({
 
   return (
     <motion.div
-      className="w-full p-6 bg-white border border-gray-300 rounded-lg shadow-md"
+      className="w-full p-6 cardIt"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}

@@ -7,7 +7,7 @@ import navRoutes from "./navRoutes";
 const Navbar = () => {
   const { t, i18n } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation(); // Get the current route location
+  const location = useLocation();
 
   useEffect(() => {
     if (i18n.language === "ar") {
@@ -25,7 +25,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-primary p-4 text-white">
+    <nav
+      className={`p-4 text-white sticky top-0 z-20 bg-blend-color-burn ${
+        location.pathname !== "/" ? "bg-primary" : "bg-black opacity-80"
+      }`}
+    >
       <div className="container mx-auto flex justify-between items-center">
         <h1 className="text-xl font-bold">{t("welcome_key")}</h1>
 
@@ -41,7 +45,7 @@ const Navbar = () => {
               {location.pathname === route.path && (
                 <motion.div
                   className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-white"
-                  layoutId="underline" // Shared layoutId for smooth transition
+                  layoutId="underline"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                 />
               )}

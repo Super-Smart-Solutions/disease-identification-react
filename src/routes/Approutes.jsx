@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
+import LandingLayout from "../layouts/LandingLayout"; // Import LandingLayout
 import routes from "./routes.json";
 import Landing from "../pages/Landing";
 import ButtonShowcase from "../pages/ButtonShowcase";
@@ -20,6 +21,12 @@ const componentMap = {
 const AppRoutes = () => {
   return (
     <Routes>
+      {/* Landing page uses LandingLayout */}
+      <Route path="/" element={<LandingLayout />}>
+        <Route index element={<Landing />} />
+      </Route>
+
+      {/* All other routes use MainLayout */}
       <Route path="/" element={<MainLayout />}>
         {routes.map((route, index) => (
           <Route
