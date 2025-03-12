@@ -1,11 +1,12 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
-import routes from "./routes.json"; 
+import routes from "./routes.json";
 import Landing from "../pages/Landing";
 import ButtonShowcase from "../pages/ButtonShowcase";
 import InputsShowcase from "../pages/InputsShowcase";
 import DataBase from "../pages/DataBase";
+import Models from "../pages/Models";
 
 // Map component names to actual components
 const componentMap = {
@@ -13,6 +14,7 @@ const componentMap = {
   ButtonShowcase,
   InputsShowcase,
   DataBase,
+  Models,
 };
 
 const AppRoutes = () => {

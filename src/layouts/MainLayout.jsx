@@ -31,12 +31,12 @@ const MainLayout = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main className="flex-grow p-4 container mx-auto mt-4 space-y-4">
+      <main className="flex-grow p-4 container mx-auto mt-4 space-y-4 shadow-sm">
         {/* Render breadcrumbs if not on the home page */}
         {location.pathname !== "/" && <Breadcrumbs items={breadcrumbItems} />}
         <Outlet />
+        <Footer />
       </main>
-      <Footer />
     </div>
   );
 };
