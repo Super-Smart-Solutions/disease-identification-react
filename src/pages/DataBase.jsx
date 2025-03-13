@@ -7,17 +7,20 @@ import { useTranslation } from "react-i18next";
 
 export default function DataBase() {
   const [selectedDisease, setSelectedDisease] = useState(null);
+  const [selectedPlant, setSelectedPlant] = useState(null);
 
   return (
     <div>
       <div className="space-y-8">
-        <PlantDiseaseForm onSelectDisease={setSelectedDisease} />  
-        <ExpandableArticle 
-          article={selectedDisease || { english_name: "Select a disease to see details" }} 
-          loading={!selectedDisease} 
+        <PlantDiseaseForm
+          onSelectDisease={setSelectedDisease}
+          onSelectPlant={setSelectedPlant}
         />
-        
-        <ImageGrid />
+        <ExpandableArticle
+          article={selectedDisease || { english_name: "Select a disease to see details" }}
+          loading={!selectedDisease}
+        />
+        <ImageGrid plantId={selectedPlant} diseaseId={selectedDisease?.id} />
       </div>
     </div>
   );

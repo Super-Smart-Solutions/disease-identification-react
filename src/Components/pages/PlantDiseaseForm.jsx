@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchPlants, fetchDiseasesByPlant } from "../../api/plantAPI";
 import { fetchDiseaseById } from "../../api/diseaseAPI";
 
-const PlantDiseaseForm = ({ onSelectDisease }) => { 
+const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => { 
   const { t } = useTranslation();
   const [selectedPlant, setSelectedPlant] = useState(null);
 
@@ -49,6 +49,7 @@ const PlantDiseaseForm = ({ onSelectDisease }) => {
     try {
       const diseaseData = await fetchDiseaseById(values.disease);
       onSelectDisease(diseaseData);
+      onSelectPlant(values.plant)
     } catch (error) {
       console.error("Failed to fetch disease details:", error);
     }

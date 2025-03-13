@@ -1,35 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
+import { getImages } from "../../api/imagesAPI";
 
-const images = [
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj-4n8NUlW2wytb0WhxCTkJ7wJdheraIZYzQ&s",
-  "https://media.istockphoto.com/id/1358387551/fi/valokuva/varsi-ruoste-joka-tunnetaan-my%C3%B6s-nimell%C3%A4-viljan-ruoste-musta-ruoste-punainen-ruoste-tai.jpg?s=612x612&w=0&k=20&c=c_7ifkImBmh8SY1RmGaSSItCpGk1Zt_BfoNa_1SxvQw=",
-  "https://media.istockphoto.com/id/1804099998/fi/valokuva/kuivatut-huonekasvien-lehtien-k%C3%A4rjet.jpg?s=612x612&w=0&k=20&c=gjRKTJ7fHpZjNja_yvSnS8CfpJ4yNc-MwlBX8BeusGc=",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj-4n8NUlW2wytb0WhxCTkJ7wJdheraIZYzQ&s",
-
-  "https://media.istockphoto.com/id/2190710792/fi/valokuva/m%C3%A4d%C3%A4t-satunnaiset-omenat.jpg?s=612x612&w=0&k=20&c=cCRei6SHqn97Cmz7nIcOZogtzQvgjN72wRapTN5p1dg=",
-
-  "https://media.istockphoto.com/id/1358387551/fi/valokuva/varsi-ruoste-joka-tunnetaan-my%C3%B6s-nimell%C3%A4-viljan-ruoste-musta-ruoste-punainen-ruoste-tai.jpg?s=612x612&w=0&k=20&c=c_7ifkImBmh8SY1RmGaSSItCpGk1Zt_BfoNa_1SxvQw=",
-
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj-4n8NUlW2wytb0WhxCTkJ7wJdheraIZYzQ&s",
-
-  "https://media.istockphoto.com/id/2190710792/fi/valokuva/m%C3%A4d%C3%A4t-satunnaiset-omenat.jpg?s=612x612&w=0&k=20&c=cCRei6SHqn97Cmz7nIcOZogtzQvgjN72wRapTN5p1dg=",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj-4n8NUlW2wytb0WhxCTkJ7wJdheraIZYzQ&s",
-
-  "https://media.istockphoto.com/id/1358387551/fi/valokuva/varsi-ruoste-joka-tunnetaan-my%C3%B6s-nimell%C3%A4-viljan-ruoste-musta-ruoste-punainen-ruoste-tai.jpg?s=612x612&w=0&k=20&c=c_7ifkImBmh8SY1RmGaSSItCpGk1Zt_BfoNa_1SxvQw=",
-
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj-4n8NUlW2wytb0WhxCTkJ7wJdheraIZYzQ&s",
-
-  "https://media.istockphoto.com/id/2190710792/fi/valokuva/m%C3%A4d%C3%A4t-satunnaiset-omenat.jpg?s=612x612&w=0&k=20&c=cCRei6SHqn97Cmz7nIcOZogtzQvgjN72wRapTN5p1dg=",
-  "https://media.istockphoto.com/id/1804099998/fi/valokuva/kuivatut-huonekasvien-lehtien-k%C3%A4rjet.jpg?s=612x612&w=0&k=20&c=gjRKTJ7fHpZjNja_yvSnS8CfpJ4yNc-MwlBX8BeusGc=",
-
-  "https://media.istockphoto.com/id/1358387551/fi/valokuva/varsi-ruoste-joka-tunnetaan-my%C3%B6s-nimell%C3%A4-viljan-ruoste-musta-ruoste-punainen-ruoste-tai.jpg?s=612x612&w=0&k=20&c=c_7ifkImBmh8SY1RmGaSSItCpGk1Zt_BfoNa_1SxvQw=",
-];
-
-const ImageGrid = () => {
+const ImageGrid = ({ plantId, diseaseId }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isImageLoading, setIsImageLoading] = useState(true);
+
+  // Fetch images using React Query
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["images", plantId, diseaseId],
+    queryFn: () => getImages({ plantId, diseaseId, limit: 50, offset: 0 }),
+    enabled: !!plantId || !!diseaseId, // Fetch only if plantId or diseaseId is selected
+  });
+
+  // Extract images if available
+  const images = data?.data || [];
 
   const openModal = (index) => {
     setSelectedImage(index);
@@ -61,30 +48,42 @@ const ImageGrid = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedImage]);
 
+  if (isLoading) {
+    return <p className="text-gray-500">Loading images...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">Error fetching images.</p>;
+  }
+
   return (
     <div className="flex flex-wrap justify-between gap-y-8">
-      {images.map((img, index) => (
-        <motion.div
-          key={index}
-          className=" cursor-pointer overflow-hidden rounded-lg"
-          whileHover={{ scale: 1.02 }}
-          onClick={() => openModal(index)}
-        >
-          <img
-            src={img}
-            alt="Grid item"
-            className=" h-60 object-cover  rounded-lg"
-            loading="lazy"
-          />
-        </motion.div>
-      ))}
+      {images.length > 0 ? (
+        images.map((img, index) => (
+          <motion.div
+            key={img.id}
+            className="cursor-pointer overflow-hidden rounded-lg"
+            whileHover={{ scale: 1.02 }}
+            onClick={() => openModal(index)}
+          >
+            <img
+              src={img.url}
+              alt={img.name}
+              className="h-60 object-cover rounded-lg"
+              loading="lazy"
+            />
+          </motion.div>
+        ))
+      ) : (
+        <p className="text-gray-500">No images available.</p>
+      )}
 
       {/* Modal */}
       <AnimatePresence>
         {selectedImage !== null && (
           <motion.div
             className="overlay flex items-center justify-center p-4"
-            onClick={() => closeModal()}
+            onClick={closeModal}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -101,8 +100,8 @@ const ImageGrid = () => {
                 </div>
               )}
               <img
-                src={images[selectedImage]}
-                alt="Selected"
+                src={images[selectedImage]?.url}
+                alt={images[selectedImage]?.name}
                 className="w-full h-auto max-h-[80vh] object-contain"
                 onLoad={() => setIsImageLoading(false)}
               />
