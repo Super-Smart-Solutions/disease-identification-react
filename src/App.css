@@ -23,3 +23,18 @@
   align-items: center; /* Center content vertically */
   z-index: 1000; /* Ensure it's above other content */
 }
+.overlayImg {
+  position: absolute; /* Fixed position to cover the entire screen */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent black background */
+}
+.cardIt {
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); /* shadow-sm */
+  background-color: white; /* bg-white */
+  padding: 1rem; /* p-4 */
+  border: 1px solid rgb(226 232 240); /* border-slate-200 */
+}

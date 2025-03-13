@@ -700,7 +700,7 @@ const PlantDiseaseForm = () => {
       onSubmit={handleSubmit}
     >
       {({ setFieldValue, errors, touched }) => (
-        <Form className="flex items-end justify-between gap-4 w-full p-6 bg-white rounded-lg shadow-md ">
+        <Form className="flex items-end justify-between gap-4 w-full cardIt ">
           {/* Plant Select Input */}
           <div className="w-[40%]">
             <Field name="plant">

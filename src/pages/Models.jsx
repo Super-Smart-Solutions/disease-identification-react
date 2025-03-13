@@ -1,29 +1,46 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import ExpandedStep from "../Components/pages/ExpandedStep";
 import ModelingStepOne from "../Components/pages/modeling stepper/ModelingStepOne";
 import { useTranslation } from "react-i18next";
 import ModelingStepTwo from "../Components/pages/modeling stepper/ModelingStepTwo";
 import ModelingStepThree from "../Components/pages/modeling stepper/ModelingStepThree";
 import ModelingStepFour from "../Components/pages/modeling stepper/ModelingStepFour";
-import VerticalSteps from "../Components/VerticalSteps"; // Import the reusable component
+import VerticalSteps from "../Components/VerticalSteps";
+import DeepAnalysisStep from "../Components/pages/modeling stepper/DeepAnalysisStep";
 
 export default function Models() {
   const { t } = useTranslation();
   const [modelingData, setModelingData] = useState({
     category: {},
     selected_file: [],
-    is_final: false,
+    is_deep: false,
   });
 
-  // Determine the active step based on modelingData
+  const [expandedSteps, setExpandedSteps] = useState({
+    1: true,
+    2: false,
+    3: false,
+    4: false,
+    5: false,
+  });
+
   const activeStep = useMemo(() => {
-    if (!modelingData?.category?.value) return 1; // Step 1: Select Model
-    if (modelingData?.selected_file?.length === 0) return 2; // Step 2: Select Image
-    if (!modelingData?.is_final) return 3; // Step 3: Processing Image
-    return 4; // Step 4: Result
+    if (!modelingData?.category?.value) return 1;
+    if (modelingData?.selected_file?.length === 0) return 2;
+    if (!modelingData?.is_final) return 3;
+    if (!modelingData?.is_deep) return 4;
+    return 5;
   }, [modelingData]);
 
-  const memoizedModelingData = useMemo(() => modelingData, [modelingData]);
+  useEffect(() => {
+    setExpandedSteps((prev) => {
+      const newExpandedSteps = { ...prev };
+      Object.keys(newExpandedSteps).forEach((key) => {
+        newExpandedSteps[key] = parseInt(key) === activeStep;
+      });
+      return newExpandedSteps;
+    });
+  }, [activeStep]);
 
   const isStepTwoDisabled = useMemo(
     () => !modelingData?.category?.value,
@@ -31,7 +48,9 @@ export default function Models() {
   );
 
   const isStepThreeDisabled = useMemo(
-    () => modelingData?.selected_file?.length === 0,
+    () =>
+      modelingData?.selected_file?.length === 0 ||
+      !modelingData?.category?.value,
     [modelingData?.selected_file]
   );
 
@@ -47,15 +66,36 @@ export default function Models() {
     ]
   );
 
+  const isStepFiveDisabled = useMemo(
+    () =>
+      !modelingData?.is_deep ||
+      !modelingData?.is_final ||
+      modelingData?.selected_file?.length === 0 ||
+      !modelingData?.category?.value,
+    [
+      modelingData?.is_deep,
+      modelingData?.is_final,
+      modelingData?.selected_file,
+      modelingData?.category?.value,
+    ]
+  );
+
   const STEP_TITLES = {
     SELECT_MODEL: t("select_model_key"),
     SELECT_IMAGE: t("select_image_key"),
     PROCESSING_IMAGE: t("processing_image_key"),
     RESULT: t("result_key"),
+    DEEB: t("deep_analytics_key"),
   };
 
-  // Define the steps for the VerticalSteps component
-  const steps = new Array(4).fill(null); // Creates an array of 4 empty values
+  const handleToggleExpand = (stepId) => {
+    setExpandedSteps((prev) => ({
+      ...prev,
+      [stepId]: !prev[stepId],
+    }));
+  };
+
+  const steps = new Array(4).fill(null);
 
   return (
     <div className="flex gap-4 justify-start items-start">
@@ -68,40 +108,66 @@ export default function Models() {
           title={STEP_TITLES.SELECT_MODEL}
           expandedContent={
             <ModelingStepOne
-              modelingData={memoizedModelingData}
+              modelingData={modelingData}
               setModelingData={setModelingData}
             />
           }
+          disabled={false}
+          isExpanded={expandedSteps[1]}
+          onToggleExpand={handleToggleExpand}
+          stepId={1}
         />
         <ExpandedStep
           title={STEP_TITLES.SELECT_IMAGE}
           expandedContent={
             <ModelingStepTwo
-              modelingData={memoizedModelingData}
+              modelingData={modelingData}
               setModelingData={setModelingData}
             />
           }
           disabled={isStepTwoDisabled}
+          isExpanded={expandedSteps[2]}
+          onToggleExpand={handleToggleExpand}
+          stepId={2}
         />
         <ExpandedStep
           title={STEP_TITLES.PROCESSING_IMAGE}
           expandedContent={
             <ModelingStepThree
-              modelingData={memoizedModelingData}
+              modelingData={modelingData}
               setModelingData={setModelingData}
             />
           }
           disabled={isStepThreeDisabled}
+          isExpanded={expandedSteps[3]}
+          onToggleExpand={handleToggleExpand}
+          stepId={3}
         />
         <ExpandedStep
           title={STEP_TITLES.RESULT}
           expandedContent={
             <ModelingStepFour
-              modelingData={memoizedModelingData}
+              modelingData={modelingData}
               setModelingData={setModelingData}
             />
           }
           disabled={isStepFourDisabled}
+          isExpanded={expandedSteps[4]}
+          onToggleExpand={handleToggleExpand}
+          stepId={4}
+        />
+        <ExpandedStep
+          title={STEP_TITLES.DEEB}
+          expandedContent={
+            <DeepAnalysisStep
+              modelingData={modelingData}
+              setModelingData={setModelingData}
+            />
+          }
+          disabled={isStepFiveDisabled}
+          isExpanded={expandedSteps[5]}
+          onToggleExpand={handleToggleExpand}
+          stepId={5}
         />
       </div>
     </div>

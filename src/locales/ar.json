@@ -57,6 +57,15 @@
   "category_key": "الفئة",
   "selected_disease": "المرض المحدد",
   "confidence_level": "درجة التأكد",
+  "next_key": "التالي",
+  "reset_key": "إعادة تعيين",
+  "start_detection_key": "بدء الكشف",
+  "please_wait_validating_key": "يرجى الانتظار أثناء التحقق من الصورة",
+  "read_more_about_disease_key": "اقرأ المزيد عن المرض",
+  "deep_analytics_key": "التحليل العميق",
+  "disease_identification_project_key": "مشروع تحديد الأمراض",
+  "disease_identification_description_key": "تحسين تطبيق مرشدك الزراعي باستخدام نماذج التعلم الآلي للتعرف على الأمراض من خلال قاعدة بيانات واسعة للنباتات والأمراض. دراسة أكثر من 50 مرضًا في ست فئات مختلفة، بما في ذلك: الورود، الفواكه، أشجار القهوة، نحل العسل، الحيوانات الماشية، والأسماك.",
+  "disease_identification_guide_key": "دليلك في التعرف على أمراض النبات.",
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },

@@ -24,7 +24,7 @@ const FileUpload = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 grow">
       {/* Dropzone Area */}
       {selectedFile.length === 0 ? (
         <div
@@ -44,23 +44,12 @@ const FileUpload = ({
             {selectedFile.map((file, index) => (
               <div
                 key={index}
-                className="flex items-center p-2 border rounded-lg bg-gray-50"
+                className="flex items-center p-2 bg-gray-50"
               >
                 <img
                   src={URL.createObjectURL(file)}
                   alt={file.name}
-                  className="w-12 h-12 object-cover rounded-md"
-                />
-                <div className="ml-3">
-                  <p className="text-sm font-medium">{file.name}</p>
-                  <p className="text-xs text-gray-500">
-                    {(file.size / 1024).toFixed(2)} KB
-                  </p>
-                </div>
-                <FiX
-                  onClick={() => removeFile(index)}
-                  className="ms-auto cursor-pointer text-gray-500 hover:text-red-500"
-                  title={t("remove_file_key")}
+                  className="w-120 h-80 object-cover rounded-md"
                 />
               </div>
             ))}
