@@ -35,8 +35,8 @@ const MainLayout = () => {
         {/* Render breadcrumbs if not on the home page */}
         <Breadcrumbs items={breadcrumbItems} />
         <Outlet />
-        <Footer />
       </main>
+        <Footer />
     </div>
   );
 };

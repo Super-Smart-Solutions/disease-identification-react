@@ -57,6 +57,12 @@
   "category_key": "الفئة",
   "selected_disease": "المرض المحدد",
   "confidence_level": "درجة التأكد",
+  "next_key": "التالي",
+  "reset_key": "إعادة تعيين",
+  "start_detection_key": "بدء الكشف",
+  "please_wait_validating_key": "يرجى الانتظار أثناء التحقق من الصورة",
+  "read_more_about_disease_key": "اقرأ المزيد عن المرض",
+  "deep_analytics_key": "التحليل العميق",
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },

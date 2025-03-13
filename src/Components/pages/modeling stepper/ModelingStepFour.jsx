@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import Button from "../../Button";
 
 export default function ModelingStepFour({ modelingData, setModelingData }) {
   const { t } = useTranslation();
@@ -25,6 +26,17 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
             <span>{`${t("selected_disease")} varona`}</span>
             <span>{`${t("confidence_level")} : 18%`}</span>
           </div>
+          <Button
+            onClick={() => {
+              setModelingData((prev) => ({
+                ...prev,
+                is_deep: true,
+              }));
+            }}
+          >
+            {" "}
+            {t("read_more_about_disease_key")}
+          </Button>
         </div>
       ))}
     </div>

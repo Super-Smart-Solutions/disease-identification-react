@@ -57,6 +57,12 @@
   "category_key": "Category",
   "selected_disease": "Selected Disease",
   "confidence_level": "Confidence Level",
+  "next_key": "Next",
+  "reset_key": "Reset",
+  "start_detection_key": "Start detection",
+  "please_wait_validating_key": "Please wait while validating image",
+  "read_more_about_disease_key": "Read more about disease",
+  "deep_analytics_key": "Deep analytics",
   "inputs_showcase": {
     "title": "Inputs Showcase"
   },
