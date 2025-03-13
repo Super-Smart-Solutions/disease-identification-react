@@ -11,26 +11,26 @@ export default function Footer() {
           <div className=" sm:flex sm:items-center sm:justify-between ">
             <div className="flex flex-col gap-2">
               {/* Phone */}
-              <div className="flex items-center justify-center sm:justify-start gap-3">
+              {/* <div className="flex items-center justify-center sm:justify-start gap-3">
                 <FaPhoneAlt className="text-xl text-black" />
                 <span dir="ltr" className="text-black font-medium">
                   +20 163549264
                 </span>
-              </div>
+              </div> */}
 
               {/* Email */}
               <div className="flex items-center justify-center sm:justify-start gap-3">
                 <FaEnvelope className="text-xl text-black" />
                 <span className="text-black font-medium">
-                  info@myrsgidk.com
+                  support@ss-solution.org
                 </span>
               </div>
 
               {/* Address */}
               <div className="flex items-center justify-center sm:justify-start gap-3">
-                <FaMapMarkerAlt className="text-xl text-black" />
+                {/* <FaMapMarkerAlt className="text-xl text-black" /> */}
                 <span className="text-black font-medium">
-                  Lorem ipsum dolor sit amet consectetur
+                  Powered by: SuperSmartSolutions{" "}
                 </span>
               </div>
             </div>

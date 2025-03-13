@@ -26,21 +26,24 @@ export default function Landing() {
   };
 
   return (
-    <div
-      className="flex items-center justify-center relative h-[100vh] w-full bg-cover bg-center  "
-     
-    >
+    <div className="flex items-center justify-center relative h-[100vh] w-full bg-cover bg-center  ">
       {/* Overlay */}
       <div className=""></div>
 
       <div className="relative p-5 flex flex-col gap-40 w-full h-full justify-center items-center text-white text-center">
         <div className="font-arabic">
           <span dir="rtl" className="w-10/12 text-6xl ">
-            مرشدك الزراعي - Murshiduk
+            {t("disease_identification_project_key")}
           </span>
-          <span className=" block  text-2xl mt-8">
-            دليلك في التعرف على أمراض النبات
+          <span className="block mt-8 w-6/12 text-center mx-auto opacity-80">
+            {t("disease_identification_description_key")}
           </span>
+          <a
+            href="#"
+            className="mt-8 inline-block rounded-full border border-white px-12 py-3 text-sm font-medium text-white hover:bg-white hover:text-primary hover:border-white"
+          >
+            Get Started
+          </a>
         </div>
 
         {/* Icons section */}
