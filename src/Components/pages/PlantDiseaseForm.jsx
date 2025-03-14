@@ -62,3 +62,5 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant, initialPlant, initia
     </Formik>
   );
 };
+
+export default PlantDiseaseForm;
