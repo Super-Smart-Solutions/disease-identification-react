@@ -33,8 +33,8 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
 
           // Fetch visualization (attention map)
           const visualizationResponse = await visualizeInference(modelingData.inference_id);
-          if (visualizationResponse?.image_url) {
-            setVisualizationUrl(visualizationResponse.image_url);
+          if (visualizationResponse?.attention_map_url) {
+            setVisualizationUrl(visualizationResponse.attention_map_url);
           }
         } else {
           console.warn("Prediction Failed:", response);
@@ -63,7 +63,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
           <img
             src={visualizationUrl || URL.createObjectURL(file)}
             alt={file.name}
-            className="w-120 h-80 object-cover rounded-md"
+            className="w-300 h-80 object-cover rounded-md"
           />
           <span>{t("uploaded_image_key")}</span>
 
