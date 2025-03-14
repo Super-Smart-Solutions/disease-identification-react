@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom"; // For navigation
+import { useNavigate } from "react-router-dom"; // Import for navigation
 import Button from "../../Button";
 import { fetchDiseaseById } from "../../../api/diseaseAPI";
 import { detectDisease, visualizeInference } from "../../../api/inferenceAPI";
 
 export default function ModelingStepFour({ modelingData, setModelingData }) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Navigation function
 
-  const [diseaseName, setDiseaseName] = useState("");
+  const [diseaseData, setDiseaseData] = useState(null);
   const [confidenceScore, setConfidenceScore] = useState(null);
   const [predictionFailed, setPredictionFailed] = useState(false);
-  const [visualizationUrl, setVisualizationUrl] = useState(null);
+  const [visualizationUrl, setVisualizationUrl] = useState(null); // Visualization image URL
 
   useEffect(() => {
     const fetchPrediction = async () => {
@@ -27,9 +27,9 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
           setConfidenceScore(response.confidence_level * 100);
           setPredictionFailed(false);
 
-          // Fetch disease name
-          const diseaseData = await fetchDiseaseById(response.disease_id);
-          setDiseaseName(diseaseData.english_name);
+          // Fetch disease details
+          const diseaseDetails = await fetchDiseaseById(response.disease_id);
+          setDiseaseData(diseaseDetails); // Store full disease data
 
           // Fetch visualization (attention map)
           const visualizationResponse = await visualizeInference(modelingData.inference_id);
@@ -91,12 +91,21 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
             ) : (
               <>
                 <span>{`${t("selected_disease")} : ${
-                  diseaseName || t("loading_key")
+                  diseaseData?.english_name || t("loading_key")
                 }`}</span>
                 <span>{`${t("confidence_level")} : ${
                   confidenceScore !== null ? `${confidenceScore.toFixed(2)}%` : t("loading_key")
                 }`}</span>
-                <Button onClick={() => navigate("/database")}>
+                <Button
+                  onClick={() =>
+                    navigate("/database", {
+                      state: {
+                        selectedPlant: modelingData?.category, // Pass selected plant
+                        selectedDisease: diseaseData, // Pass full disease object
+                      },
+                    })
+                  }
+                >
                   {t("read_more_about_disease_key")}
                 </Button>
               </>
