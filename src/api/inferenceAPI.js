@@ -1,56 +1,33 @@
-import apiClient from "./apiClient";
+import axiosInstance from "../utils/axiosInstance";
 
-// Start inference process
+const INFERENCE_ENDPOINT = "/inferences";
+
+// Start inference on an uploaded image
 export const startInference = async (imageId) => {
-  try {
-    const response = await apiClient.post("/inference/", { image_id: imageId });
-    return response.data;
-  } catch (error) {
-    console.error("Error starting inference:", error);
-    throw error;
-  }
+  const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}?image_id=${imageId}`);
+  return response.data;
 };
 
-// Validate inference progress
+// Validate inference status
 export const validateInference = async (inferenceId) => {
-  try {
-    const response = await apiClient.get(`/inference/${inferenceId}/validate`);
-    return response.data;
-  } catch (error) {
-    console.error("Error validating inference:", error);
-    throw error;
-  }
+  const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/${inferenceId}/validate`);
+  return response.data;
 };
 
-// Run detection
-export const runDetection = async (inferenceId) => {
-  try {
-    const response = await apiClient.get(`/inference/${inferenceId}/detect`);
-    return response.data;
-  } catch (error) {
-    console.error("Error running detection:", error);
-    throw error;
-  }
+// Run disease detection on an inference result
+export const detectDisease = async (inferenceId) => {
+  const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/${inferenceId}/detect`);
+  return response.data;
 };
 
-// Get attention map visualization
-export const getVisualization = async (inferenceId) => {
-  try {
-    const response = await apiClient.get(`/inference/${inferenceId}/visualize`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching visualization:", error);
-    throw error;
-  }
+// Get visualization (attention map) for inference
+export const visualizeInference = async (inferenceId) => {
+  const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/${inferenceId}/attention`);
+  return response.data;
 };
 
-// Get detailed analysis
-export const getAnalysis = async (inferenceId) => {
-  try {
-    const response = await apiClient.get(`/inference/${inferenceId}/analysis`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching analysis:", error);
-    throw error;
-  }
+// Get deep analysis results for inference
+export const analyzeInference = async (inferenceId) => {
+  const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/${inferenceId}/analysis`);
+  return response.data;
 };

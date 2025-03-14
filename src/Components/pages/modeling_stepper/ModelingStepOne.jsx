@@ -2,31 +2,24 @@ import React, { useState } from "react";
 import SelectInput from "../../Formik/SelectInput";
 import { useTranslation } from "react-i18next";
 import Button from "../../Button";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPlants } from "../../../api/plantAPI";
 
 export default function ModelingStepOne({ modelingData, setModelingData }) {
   const { t } = useTranslation();
   const [tempData, setTempData] = useState(modelingData);
 
-  const categoryOptions = [
-    { value: "crops", label: "Crops" },
-    { value: "flowers", label: "Flowers" },
-    { value: "fruits", label: "Fruits" },
-    { value: "vegetables", label: "Vegetables" },
-    { value: "herbs", label: "Herbs" },
-    { value: "grains", label: "Grains" },
-    { value: "fish_farming", label: "Fish Farming" },
-    { value: "livestock", label: "Livestock" },
-    { value: "poultry", label: "Poultry" },
-    { value: "beekeeping", label: "Beekeeping" },
-    { value: "forestry", label: "Forestry" },
-    { value: "organic_farming", label: "Organic Farming" },
-    { value: "hydroponics", label: "Hydroponics" },
-    { value: "aquaponics", label: "Aquaponics" },
-    { value: "soil_management", label: "Soil Management" },
-    { value: "greenhouses", label: "Greenhouses" },
-    { value: "agroforestry", label: "Agroforestry" },
-    { value: "sustainable_farming", label: "Sustainable Farming" },
-  ];
+  // Fetch plants from API
+  const { data: plants = [], isLoading, error } = useQuery({
+    queryKey: ["plants"],
+    queryFn: async () => {
+      const response = await fetchPlants();
+      return response.data.map((plant) => ({
+        value: plant.id,
+        label: plant.english_name,
+      }));
+    },
+  });
 
   const handleSave = () => {
     setModelingData(tempData);
@@ -44,7 +37,8 @@ export default function ModelingStepOne({ modelingData, setModelingData }) {
       <SelectInput
         isClearable={true}
         label={t("select_category_key")}
-        options={categoryOptions}
+        options={plants}
+        isLoading={isLoading}
         value={modelingData?.category?.value || null}
         onChange={(selectedOption) =>
           setTempData((prev) => ({

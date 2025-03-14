@@ -12,7 +12,6 @@ const TEST_TOKEN = import.meta.env.VITE_TEST_TOKEN;
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json",
     Accept: "application/json",
     // "Access-Control-Allow-Origin": "*",
     // "Access-Control-Allow-Credentials": true,
@@ -43,7 +42,8 @@ axiosInstance.interceptors.response.use(
       // Handle unauthorized error (redirect to login)
       if (status === 401 || status === 422) {
         console.warn("Unauthorized! Redirecting to login...");
-        window.location.href = "/login"; // Redirect to login page
+        console.log(error);
+        // window.location.href = "/login"; // Redirect to login page
       }
     }
     return Promise.reject(error);

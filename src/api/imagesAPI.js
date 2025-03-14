@@ -2,7 +2,7 @@ import axiosInstance from "../utils/axiosInstance";
 
 const IMAGE_ENDPOINT = "/images";
 const URL_ENDPOINT = "/images/url";
-const UPLOAD_ENDPOINT = "/images/upload";
+const UPLOAD_ENDPOINT = "/images/uploads";
 
 // Fetch images with optional filters
 export const getImages = async ({ plantId, diseaseId, limit = 10, offset = 0 }) => {
@@ -28,20 +28,26 @@ export const getImageUrls = async ({ plantId, diseaseId, limit = 10, offset = 0 
   return { urls, images: imagesData.data };
 };
 
-// Upload image with metadata
-export const uploadImage = async ({ name, plantId, farmId, imageFile }) => {
+
+export const uploadImage = async ({ name, plantId, imageFile }) => {
   const formData = new FormData();
+
+  // Append JSON fields
   formData.append("name", name);
-  formData.append("farm_id", farmId);
+  formData.append("farm_id", "1"); // Default farm ID as string
   formData.append("plant_id", plantId);
   formData.append("annotated", "false");
+
+  // Append image file
   formData.append("image_file", imageFile);
 
-  const response = await axiosInstance.post(UPLOAD_ENDPOINT, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  // Make POST request
+  const response = await axiosInstance.post(UPLOAD_ENDPOINT, formData);
+
   return response.data;
 };
+
+
 
 // Update image metadata
 export const updateImageMetadata = async ({ imageId, plantId, diseaseId, farmId, metadata }) => {
