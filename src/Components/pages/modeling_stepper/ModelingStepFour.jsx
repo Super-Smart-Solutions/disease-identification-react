@@ -12,6 +12,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
   const [diseaseData, setDiseaseData] = useState(null);
   const [confidenceScore, setConfidenceScore] = useState(null);
   const [predictionFailed, setPredictionFailed] = useState(false);
+  const [predictionHealthy, setPredictionHealthy] = useState(false);
   const [visualizationUrl, setVisualizationUrl] = useState(null); // Visualization image URL
 
   useEffect(() => {
@@ -28,14 +29,21 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
           setPredictionFailed(false);
 
           // Fetch disease details
-          const diseaseDetails = await fetchDiseaseById(response.disease_id);
-          setDiseaseData(diseaseDetails); // Store full disease data
+          if (response.disease_id){
+            const diseaseDetails = await fetchDiseaseById(response.disease_id);
+            setDiseaseData(diseaseDetails);
 
-          // Fetch visualization (attention map)
-          const visualizationResponse = await visualizeInference(modelingData.inference_id);
-          if (visualizationResponse?.attention_map_url) {
-            setVisualizationUrl(visualizationResponse.attention_map_url);
+            // Fetch visualization (attention map)
+            const visualizationResponse = await visualizeInference(modelingData.inference_id);
+            if (visualizationResponse?.attention_map_url) {
+              setVisualizationUrl(visualizationResponse.attention_map_url);
+            }
           }
+          else{
+            console.log("healthy");
+            setPredictionHealthy(true);
+          }
+          
         } else {
           console.warn("Prediction Failed:", response);
           setPredictionFailed(true);
@@ -91,26 +99,41 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
               </>
             ) : (
               <>
-                <span>{`${t("selected_disease")} : ${
-                  diseaseData?.english_name || t("loading_key")
-                }`}</span>
-                <span>{`${t("confidence_level")} : ${
-                  confidenceScore !== null ? `${confidenceScore.toFixed(2)}%` : t("loading_key")
-                }`}</span>
-                <Button
-                  onClick={() =>
-                    navigate("/database", {
-                      state: {
-                        selectedPlant: modelingData?.category, // Pass selected plant
-                        selectedDisease: diseaseData, // Pass full disease object
-                      },
-                    })
-                  }
-                >
-                  {t("read_more_about_disease_key")}
-                </Button>
+              {predictionHealthy===false ? (
+                  <>
+                    <span>{`${t("selected_disease")} : ${
+                      diseaseData?.english_name || t("loading_key")
+                    }`}</span>
+                    <span>{`${t("confidence_level")} : ${
+                      confidenceScore !== null ? `${confidenceScore.toFixed(2)}%` : t("loading_key")
+                    }`}</span>
+                    <Button
+                      onClick={() =>
+                        navigate("/database", {
+                          state: {
+                            selectedPlant: modelingData?.category, // Pass selected plant
+                            selectedDisease: diseaseData, // Pass full disease object
+                          },
+                        })
+                      }
+                    >
+                      {t("read_more_about_disease_key")}
+                    </Button>
 
-              </>
+                  </>
+                ) : (
+                  <>
+                      <span>{`${t("selected_disease")} : ${
+                        "Healthy" || t("loading_key")
+                      }`}</span>
+                      <span>{`${t("confidence_level")} : ${
+                        confidenceScore !== null ? `${confidenceScore.toFixed(2)}%` : t("loading_key")
+                      }`}</span>
+                  </>
+
+
+                )}
+                </>
             )}
           </div>
           {predictionFailed ? (
