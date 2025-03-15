@@ -39,13 +39,14 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
         } else {
           console.warn("Prediction Failed:", response);
           setPredictionFailed(true);
-          setModelingData((prev) => ({
-            ...prev,
-            is_deep: true,
-          }));
+          // setModelingData((prev) => ({
+          //   ...prev,
+          //   is_deep: true,
+          // }));
         }
       } catch (error) {
         console.error("Error in prediction request:", error);
+        // console.log("Error:", error.response.data.detail);
       }
     };
 
@@ -108,9 +109,38 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
                 >
                   {t("read_more_about_disease_key")}
                 </Button>
+
               </>
             )}
           </div>
+          {predictionFailed ? (
+            <>
+            </>
+            ) : (
+              <>
+              <div>
+                <Button
+                  onClick={() => {
+                    setModelingData((prev) => ({
+                      ...prev,
+                      category: {},
+                      selected_file: [],
+                      image_id: null,
+                      inference_id: null,
+                      is_deep: false,
+                      errorMessage: "",
+                      is_final: false,
+                    }));
+                  }}
+                >
+                  {t("try with a different image")}
+                </Button>
+              </div>
+              </>
+              )}
+
+
+
         </div>
       ))}
     </div>

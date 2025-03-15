@@ -28,6 +28,6 @@ export const visualizeInference = async (inferenceId) => {
 
 // Get deep analysis results for inference
 export const analyzeInference = async (inferenceId) => {
-  const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/${inferenceId}/analysis`);
+  const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/${inferenceId}/deep-analysis`);
   return response.data;
 };
