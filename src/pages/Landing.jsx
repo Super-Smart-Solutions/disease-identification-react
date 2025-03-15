@@ -39,7 +39,7 @@ export default function Landing() {
             {t("disease_identification_description_key")}
           </span>
           <a
-            href="#"
+            href="/models"
             className="mt-8 inline-block rounded-full border border-white px-12 py-3 text-sm font-medium text-white hover:bg-white hover:text-primary hover:border-white"
           >
             Get Started
