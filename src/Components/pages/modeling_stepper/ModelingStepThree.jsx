@@ -5,8 +5,9 @@ import { startInference, validateInference } from "../../../api/inferenceAPI";
 
 export default function ModelingStepThree({ modelingData, setModelingData }) {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [notValid, setNotValid] = useState(false);
   const inferenceStarted = useRef(false); // Prevents duplicate calls
 
   useEffect(() => {
@@ -41,9 +42,12 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
             ...prev,
             is_final: true,
           }));
+          setLoading(false);
         } 
         else {
-          throw new Error("Image is not valid, please try a different image");
+          setNotValid(true);
+          setLoading(false);
+          console.log(notValid);
         }
       } catch (err) {
         if (!controller.signal.aborted) {
@@ -65,7 +69,7 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
 
   return (
     <div className="flex items-center p-2 bg-gray-50 flex-col gap-4">
-      {loading ? (
+      {loading===true ? (
         <div className="flex gap-2 items-center">
           <p>{t("please_wait_validating_key")}</p>
           <svg
@@ -99,6 +103,28 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
           >
             {t("reset_key")}
           </Button>
+        </>
+      ) : notValid===true ? (
+        <>
+          <span>{`${t("inValid-message")}`}</span>
+          <div>
+            <Button
+              onClick={() => {
+                setModelingData((prev) => ({
+                  ...prev,
+                  category: {},
+                  selected_file: [],
+                  image_id: null,
+                  inference_id: null,
+                  is_deep: false,
+                  errorMessage: "",
+                  is_final: false,
+                }));
+              }}
+            >
+              {t("try with a different image")}
+            </Button>
+          </div>
         </>
       ) : (
         <Button

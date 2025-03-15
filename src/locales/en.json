@@ -12,6 +12,7 @@
   "default_description_key": "These buttons have a neutral style and are used for generic actions.",
   "loading_key": "Loading...",
   "loading_btn_key": "Loading Buttons",
+  "inValid-message": "Image is not valid, make sure to use clear hight quality image.",
   "loading_description_key": "These buttons show a loading spinner and are disabled while processing.",
   "icon_btn_key": "Buttons with Icons",
   "icon_description_key": "These buttons include an icon alongside the text.",
