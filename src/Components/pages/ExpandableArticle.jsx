@@ -6,7 +6,7 @@ import Button from "../Button";
 
 export default function ExpandableArticle({ article, loading }) {
   const [expanded, setExpanded] = useState(false);
-  const { t } = useTranslation();
+const { t } = useTranslation();
 
   if (loading) {
     return <div className="p-6 cardIt animate-pulse">Loading...</div>;
@@ -28,10 +28,10 @@ export default function ExpandableArticle({ article, loading }) {
 
       {expanded && (
         <div className="mt-4">
-          <h4 className="font-bold">Symptoms:</h4>
+          <h4 className="font-bold">{t("Symptoms")}:</h4>
           <p>{article.symptoms || "N/A"}</p>
 
-          <h4 className="font-bold mt-2">Treatments:</h4>
+          <h4 className="font-bold mt-2">{t("Control Methods:")}:</h4>
           <p>{article.treatments || "N/A"}</p>
         </div>
       )}

@@ -12,32 +12,35 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
   const { t } = useTranslation();
   const [selectedPlant, setSelectedPlant] = useState(null);
 
+
   // Fetch plants
-  const { data: plantOptions = [], isLoading: plantsLoading, error: plantsError } = useQuery({
+  const { data: plantOptions = [], isLoading: plantsLoading } = useQuery({
     queryKey: ["plants"],
     queryFn: async () => {
       const plants = await fetchPlants();
-      console.log("plants: ", plants)
       return plants.data.map((plant) => ({
         value: plant.id,
-        label: plant.english_name,
+        label: t(`plants.${plant.english_name}`, { defaultValue: plant.english_name }),
+        english_name: plant.english_name,
       }));
     },
   });
 
   // Fetch diseases based on selected plant
-  const { data: diseaseOptions = [], isLoading: diseasesLoading, error: diseasesError } = useQuery({
+  const { data: diseaseOptions = [], isLoading: diseasesLoading } = useQuery({
     queryKey: ["diseases", selectedPlant],
     queryFn: async () => {
       if (!selectedPlant) return [];
       const diseases = await fetchDiseasesByPlant(selectedPlant);
       return diseases.map((disease) => ({
         value: disease.id,
-        label: disease.english_name,
+        label: t(`diseases.${disease.english_name}`, { defaultValue: disease.english_name }),
+        english_name: disease.english_name,
       }));
     },
     enabled: !!selectedPlant,
   });
+
 
   const validationSchema = Yup.object().shape({
     plant: Yup.string().required(t("select_plant_required_key")),

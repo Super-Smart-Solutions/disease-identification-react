@@ -101,9 +101,12 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
               <>
               {predictionHealthy===false ? (
                   <>
-                    <span>{`${t("selected_disease")} : ${
-                      diseaseData?.english_name || t("loading_key")
-                    }`}</span>
+                    <span>
+                      {`${t("selected_disease")} : ${
+                        t(`diseases.${diseaseData?.english_name}`, { defaultValue: diseaseData?.english_name || t("loading_key") })
+                      }`}
+                    </span>
+
                     <span>{`${t("confidence_level")} : ${
                       confidenceScore !== null ? `${confidenceScore.toFixed(2)}%` : t("loading_key")
                     }`}</span>
@@ -141,7 +144,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
             </>
             ) : (
               <>
-              <div>
+              <div className="flex gap-2 items-center justify-end mt-4">
                 <Button
                   onClick={() => {
                     setModelingData((prev) => ({
@@ -158,6 +161,19 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
                 >
                   {t("try with a different image")}
                 </Button>
+
+                <Button
+                  onClick={() => {
+                    setModelingData((prev) => ({
+                      ...prev,
+                      is_deep: true,
+                    }));
+                  }}
+                >
+                  {t("go_to_deep_analysis_key")}
+                </Button>
+
+
               </div>
               </>
               )}

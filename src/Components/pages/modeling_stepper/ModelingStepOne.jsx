@@ -16,7 +16,8 @@ export default function ModelingStepOne({ modelingData, setModelingData }) {
       const response = await fetchPlants();
       return response.data.map((plant) => ({
         value: plant.id,
-        label: plant.english_name,
+        label: t(`plants.${plant.english_name}`, { defaultValue: plant.english_name }),
+        english_name: plant.english_name,
       }));
     },
   });

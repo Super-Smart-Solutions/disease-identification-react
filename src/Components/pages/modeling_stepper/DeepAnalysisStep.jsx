@@ -29,14 +29,12 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
           setPredictionFailed(false);
 
           // Fetch disease details
-          const diseaseDetails = await fetchDiseaseById(response.disease_id);
-          setDiseaseData(diseaseDetails); // Store full disease data
-
-          // Fetch visualization (attention map)
-          const visualizationResponse = await visualizeInference(modelingData.inference_id);
-          if (visualizationResponse?.attention_map_url) {
-            setVisualizationUrl(visualizationResponse.attention_map_url);
+          if(response.disease_id){
+            const diseaseDetails = await fetchDiseaseById(response.disease_id);
+            setDiseaseData(diseaseDetails); // Store full disease data
           }
+
+          
         } else {
           console.warn("analysis Failed:", response);
           setPredictionFailed(true);
@@ -44,6 +42,12 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
             ...prev,
             is_deep: true,
           }));
+        }
+
+        // Fetch visualization (attention map)
+        const visualizationResponse = await visualizeInference(modelingData.inference_id);
+        if (visualizationResponse?.attention_map_url) {
+          setVisualizationUrl(visualizationResponse.attention_map_url);
         }
       } catch (error) {
         console.error("Error in analysis request:", error);
@@ -101,9 +105,12 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
               </>
             ) : (
               <>
-                <span>{`${t("selected_disease")} : ${
-                  diseaseData?.english_name || t("loading_key")
-                }`}</span>
+                <span>
+                  {`${t("selected_disease")} : ${
+                    t(`diseases.${diseaseData?.english_name}`, { defaultValue: diseaseData?.english_name || t("loading_key") })
+                  }`}
+                </span>
+
                 <span>{`${t("confidence_level")} : ${
                   confidenceScore !== null ? `${confidenceScore.toFixed(2)}%` : t("loading_key")
                 }`}</span>
