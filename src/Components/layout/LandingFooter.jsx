@@ -1,6 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import logo from "../../assets/logo.jpg"; 
+
 
 export default function LandingFooter() {
   const { t } = useTranslation();
@@ -31,6 +33,9 @@ export default function LandingFooter() {
                   Powered by: SuperSmartSolutions{" "}
                 </span>
               </div>
+
+              
+
             </div>
             <ul className="flex flex-wrap justify-center gap-4 text-xs lg:justify-end">
               <li>
