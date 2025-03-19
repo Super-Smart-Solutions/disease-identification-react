@@ -10,6 +10,7 @@ import InputsShowcase from "../pages/InputsShowcase";
 import DataBase from "../pages/DataBase";
 import Models from "../pages/Models";
 import Register from "../Components/pages/auth/Register";
+import Login from "../Components/pages/auth/Login";
 import { fetchCurrentUser } from "../api/userAPI";
 
 const componentMap = {
@@ -19,6 +20,7 @@ const componentMap = {
   DataBase,
   Models,
   Register,
+  Login,
 };
 
 const AppRoutes = () => {

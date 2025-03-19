@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useSearchParams, useLocation } from "react-router-dom"; // For query params
+import { useSearchParams, useLocation, Link } from "react-router-dom"; // For query params
 import RegisterStepOne from "./RegisterStepOne";
 import RegisterStepTwo from "./RegisterStepTwo";
 import RegisterStepThree from "./RegisterStepThree";
@@ -20,6 +20,7 @@ export default function Register() {
     organization_id: 0,
     first_name: "",
     last_name: "",
+    user_type: null,
   });
 
   // Get step_id from query params or default to 1
@@ -136,6 +137,16 @@ export default function Register() {
           >
             {steps[currentStep - 1].component}
           </motion.div>
+
+          <p className="">
+            {t("have_account_key")}
+            <Link
+              to="/auth/login"
+              className="text-blue-500 hover:underline mx-2"
+            >
+              {t("login_key")}
+            </Link>
+          </p>
         </div>
       </div>
     </div>

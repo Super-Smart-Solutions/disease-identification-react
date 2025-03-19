@@ -6,6 +6,7 @@ import orangeCircular from "../assets/orangeCircular.png";
 import farm from "../assets/farm.jpg";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 export default function Landing() {
   const { t } = useTranslation();
@@ -38,12 +39,12 @@ export default function Landing() {
           <span className="block mt-8 w-6/12 text-center mx-auto opacity-80">
             {t("disease_identification_description_key")}
           </span>
-          <a
-            href="/models"
+          <Link
+            to="/auth/login"
             className="mt-8 inline-block rounded-full border border-white px-12 py-3 text-sm font-medium text-white hover:bg-white hover:text-primary hover:border-white"
           >
             {t("Get Started")}
-          </a>
+          </Link>
         </div>
 
         {/* Icons section */}

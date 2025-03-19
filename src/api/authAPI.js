@@ -10,7 +10,17 @@ export const registerUser = async (userData) => {
 
 // Login user with JWT
 export const loginUser = async (credentials) => {
-    const response = await axiosInstance.post(`${AUTH_ENDPOINT}/jwt/login`, credentials);
+    const formData = new URLSearchParams();
+    Object.entries(credentials).forEach(([key, value]) => {
+        formData.append(key, value);
+    });
+
+    const response = await axiosInstance.post(`${AUTH_ENDPOINT}/jwt/login`, formData, {
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+    });
+
     return response.data;
 };
 
@@ -39,7 +49,7 @@ export const requestVerifyToken = async (email) => {
 };
 
 // Verify email
-export const verifyEmail = async (verificationData) => {
-    const response = await axiosInstance.post(`${AUTH_ENDPOINT}/verify`, verificationData);
+export const verifyEmail = async (token) => {
+    const response = await axiosInstance.post(`${AUTH_ENDPOINT}/verify`, { token });
     return response.data;
 };

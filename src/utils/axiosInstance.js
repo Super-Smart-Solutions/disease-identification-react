@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 
 // Base API URL from environment variables
 const BASE_URL = import.meta.env.VITE_API_URL;
-const TEST_TOKEN = import.meta.env.VITE_TEST_TOKEN;
 
 // Create an Axios instance
 const axiosInstance = axios.create({
@@ -17,7 +16,7 @@ const axiosInstance = axios.create({
 // Request Interceptor (Attach Token Automatically)
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = Cookies.get("token") || TEST_TOKEN; // Retrieve token from cookies
+    const token = Cookies.get("token"); // Retrieve token from cookies
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -40,13 +39,15 @@ axiosInstance.interceptors.response.use(
       const errorMessage = data?.detail || "An unexpected error occurred.";
 
       // Handle unauthorized error (redirect to login)
-      if (status === 401 || status === 422) {
+      if (status === 401) {
         toast.error("Unauthorized! Redirecting to login...");
         console.warn("Unauthorized! Redirecting to login...");
         console.log(error);
         // window.location.href = "/login"; // Uncomment to redirect to login
       } else {
-        toast.error(errorMessage);
+        console.log(errorMessage);
+
+        toast.error(errorMessage[0]?.msg || "An unexpected error occurred.");
       }
     } else {
       toast.error("Network error. Please check your connection.");

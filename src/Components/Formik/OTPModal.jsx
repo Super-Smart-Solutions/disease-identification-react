@@ -69,8 +69,7 @@ export default function OTPModal({ isOpen, onClose, length = 6, onSubmit }) {
     const finalOtp = otp.join("");
     if (finalOtp.length !== length) return;
     setLoading(true);
-    await onSubmit();
-    setLoading(false);
+    await onSubmit(finalOtp);
   };
 
   if (!isOpen) return null;
@@ -92,9 +91,11 @@ export default function OTPModal({ isOpen, onClose, length = 6, onSubmit }) {
           <IoClose size={24} />
         </button>
 
-        <h2 className="text-xl font-semibold text-center mb-4">OTP </h2>
+        <h2 className="text-xl font-semibold text-center mb-4">
+          {t("verification_code")}
+        </h2>
         <p className="text-gray-500 text-center mb-4">
-          {t("otp_description_key")}
+          {t("verification_code_message")}
         </p>
 
         {/* OTP Inputs */}
@@ -117,11 +118,11 @@ export default function OTPModal({ isOpen, onClose, length = 6, onSubmit }) {
         {/* Submit Button */}
         <div className="mt-6 flex justify-center">
           <Button
-            className="w-full"
             onClick={handleSubmit}
+            loading={loading}
             disabled={loading || otp.includes("")}
           >
-            {loading ? t("verifying_key") : t("verify_otp_key")}
+            {t("save_key")}
           </Button>
         </div>
       </motion.div>

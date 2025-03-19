@@ -5,6 +5,12 @@ import PasswordInput from "../../Formik/PasswordInput"; // Import your PasswordI
 import PhoneInput from "../../Formik/PhoneInput"; // Import your PhoneInput component
 import Button from "../../Button";
 import OTPModal from "../../Formik/OTPModal";
+import {
+  registerUser,
+  requestVerifyToken,
+  verifyEmail,
+} from "../../../api/authAPI";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterStepTwo({
   registerData,
@@ -14,6 +20,7 @@ export default function RegisterStepTwo({
 }) {
   const [otpModal, setOtpModal] = useState(false);
   const { t } = useTranslation(); // Translation hook
+  const navigate = useNavigate(); // Translation hook
 
   // Initial form values
   const initialValues = {
@@ -22,7 +29,6 @@ export default function RegisterStepTwo({
     re_password: registerData.re_password || "",
     phone_number: registerData.phone_number || "",
   };
-
   // Validation function
   const validate = (values) => {
     const errors = {};
@@ -57,11 +63,43 @@ export default function RegisterStepTwo({
 
     return errors;
   };
-
   // Handle form submission
-  const onSubmit = (values) => {
-    setRegisterData((prev) => ({ ...prev, ...values })); // Update registerData
-    setOtpModal(true);
+  const onSubmit = async (values) => {
+    setRegisterData((prev) => ({ ...prev, ...values }));
+    const payload = {
+      first_name: registerData?.first_name,
+      last_name: registerData?.last_name,
+      phone_number: values?.phone_number,
+      email: values?.email,
+      password: values?.password,
+      organization_id: null,
+    };
+    try {
+      await registerUser(payload);
+      await requestVerifyToken(payload?.email);
+      setOtpModal(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const onOTPSubmit = async (otp) => {
+    try {
+      await verifyEmail(otp);
+      if (registerData?.user_type === "individual") {
+        navigate("/models");
+      } else {
+        setStep(step + 1);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      if (registerData?.user_type === "individual") {
+        navigate("/models");
+      } else {
+        setStep(step + 1);
+      }
+      setOtpModal(false);
+    }
   };
 
   return (
@@ -72,7 +110,7 @@ export default function RegisterStepTwo({
         validate={validate}
         onSubmit={onSubmit}
       >
-        {({ setFieldValue }) => (
+        {({ setFieldValue, isSubmitting }) => (
           <Form className="flex flex-col gap-4">
             {/* Email Field */}
             <div className="flex flex-col gap-1">
@@ -151,15 +189,17 @@ export default function RegisterStepTwo({
             </div>
 
             {/* Submit Button */}
-            <Button type="submit">{t("complete_data_key")}</Button>
+            <Button loading={isSubmitting} type="submit">
+              {t("complete_data_key")}
+            </Button>
 
             <OTPModal
               isOpen={otpModal}
               onClose={() => {
                 setOtpModal(false);
               }}
-              onSubmit={() => {
-                setOtpModal(false);
+              onSubmit={(otp) => {
+                onOTPSubmit(otp);
               }}
             />
           </Form>
