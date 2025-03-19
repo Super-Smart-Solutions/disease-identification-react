@@ -36,7 +36,7 @@ const MainLayout = () => {
         <Breadcrumbs items={breadcrumbItems} />
         <Outlet />
       </main>
-        <Footer />
+      <Footer />
     </div>
   );
 };

@@ -1,10 +1,5 @@
 [
   {
-    "path": "/",
-    "element": "Landing",
-    "breadcrumb": false
-  },
-  {
     "path": "buttons",
     "element": "ButtonShowcase",
     "breadcrumb": true,

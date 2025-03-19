@@ -1,12 +1,10 @@
 import React from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Navbar from "../Components/layout/Navbar";
 import farm from "../assets/farm.jpg";
 import LandingFooter from "../Components/layout/LandingFooter";
 
 const LandingLayout = () => {
-  const location = useLocation();
-
   return (
     <main className="flex flex-col min-h-screen relative">
       {/* Background Image and Overlay */}
@@ -21,8 +19,8 @@ const LandingLayout = () => {
       ></div>
 
       {/* Content */}
-      <div className="flex-grow relative z-10">
-        <Navbar />
+      <div className="flex-grow relative z-10 flex flex-col justify-between gap-6">
+        <Navbar auth={false} />
         <Outlet />
       </div>
 
