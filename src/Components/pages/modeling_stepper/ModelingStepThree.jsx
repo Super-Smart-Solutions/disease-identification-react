@@ -5,71 +5,87 @@ import { startInference, validateInference } from "../../../api/inferenceAPI";
 
 export default function ModelingStepThree({ modelingData, setModelingData }) {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [notValid, setNotValid] = useState(false);
-  const inferenceStarted = useRef(false); // Prevents duplicate calls
+  const inferenceStarted = useRef(false); // Prevents duplicate API calls
 
   useEffect(() => {
-    if (!modelingData?.image_id || modelingData?.inference_id || inferenceStarted.current) {
+    // Prevent API calls if:
+    // - No image_id is available
+    // - Inference has already started (inference_id exists)
+    // - API request has already been initiated
+    if (
+      !modelingData?.image_id ||
+      modelingData?.inference_id ||
+      inferenceStarted.current
+    ) {
       return;
     }
 
     inferenceStarted.current = true; // Mark inference as started
     setLoading(true);
-    setError("");
-
+    setError(null);
     const controller = new AbortController(); // To handle cleanup
 
     const runInference = async () => {
       try {
-        // Start inference
-        const inferenceResponse = await startInference(modelingData.image_id, { signal: controller.signal });
-        const inferenceId = inferenceResponse?.id;
+        // Step 1: Start inference by sending image_id to API
+        const inferenceResponse = await startInference(modelingData.image_id, {
+          signal: controller.signal,
+        });
 
+        // Extract inference ID from API response
+        const inferenceId = inferenceResponse?.id;
         if (!inferenceId) throw new Error("Failed to start inference");
 
+        // Update state with new inference ID
         setModelingData((prev) => ({
           ...prev,
           inference_id: inferenceId,
         }));
 
-        // Validate inference
-        const validationResponse = await validateInference(inferenceId, { signal: controller.signal });
-        console.log("val res: ", validationResponse.status);
+        // Step 2: Validate inference by checking its status
+        const validationResponse = await validateInference(inferenceId, {
+          signal: controller.signal,
+        });
+
+        console.log("Validation response: ", validationResponse.status);
+
+        // If validation is successful (status === 1), mark modeling as final
         if (validationResponse?.status === 1) {
           setModelingData((prev) => ({
             ...prev,
             is_final: true,
           }));
           setLoading(false);
-        } 
-        else {
+        } else {
+          // If validation fails, mark as not valid
           setNotValid(true);
           setLoading(false);
           console.log(notValid);
         }
       } catch (err) {
-        if (!controller.signal.aborted) {
-          setError(err.message || "Something went wrong");
-        }
+        // Handle API errors
+        setError(err.response?.data?.detail || "Something went wrong");
       } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     };
 
     runInference();
 
     return () => {
-      controller.abort(); // Cleanup API requests on unmount
+      controller.abort(); // Cleanup: Cancel API request if component unmounts
     };
   }, [modelingData?.image_id, modelingData?.inference_id, setModelingData]);
 
+  console.log({ error });
+
   return (
     <div className="flex items-center p-2 bg-gray-50 flex-col gap-4">
-      {loading===true ? (
+      {/* Show loading spinner while inference is in progress */}
+      {loading === true && !error ? (
         <div className="flex gap-2 items-center">
           <p>{t("please_wait_validating_key")}</p>
           <svg
@@ -78,7 +94,14 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
             fill="none"
             viewBox="0 0 24 24"
           >
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
             <path
               className="opacity-75"
               fill="currentColor"
@@ -87,6 +110,7 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
           </svg>
         </div>
       ) : error ? (
+        // Show error message and reset button if an error occurs
         <>
           <p className="text-red-500">{error}</p>
           <Button
@@ -97,6 +121,7 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
               setModelingData((prev) => ({
                 ...prev,
                 inference_id: null,
+                image_id: null,
                 is_final: false,
               }));
             }}
@@ -104,7 +129,8 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
             {t("reset_key")}
           </Button>
         </>
-      ) : notValid===true ? (
+      ) : notValid === true ? (
+        // Show validation failure message and retry button
         <>
           <span>{`${t("inValid-message")}`}</span>
           <div>
@@ -127,6 +153,7 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
           </div>
         </>
       ) : (
+        // Show "Next" button when inference is successful
         <Button
           onClick={() =>
             setModelingData((prev) => ({

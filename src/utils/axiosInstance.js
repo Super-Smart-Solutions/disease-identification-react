@@ -1,22 +1,16 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
-// // Base API URL (use environment variable if available)
-// const BASE_URL = process.env.REACT_APP_API_URL || "https://staging.plant-backend.ss-solution.org/apiv";
-
+// Base API URL from environment variables
 const BASE_URL = import.meta.env.VITE_API_URL;
 const TEST_TOKEN = import.meta.env.VITE_TEST_TOKEN;
-
 
 // Create an Axios instance
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     Accept: "application/json",
-    // "Access-Control-Allow-Origin": "*",
-    // "Access-Control-Allow-Credentials": true,
-    // "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
-    // "Accept-Language": "ar",
   },
 });
 
@@ -29,7 +23,10 @@ axiosInstance.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    toast.error("Request failed. Please try again.");
+    return Promise.reject(error);
+  }
 );
 
 // Response Interceptor (Handle Errors)
@@ -37,15 +34,24 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      const { status } = error.response;
+      const { status, data } = error.response;
+
+      // Show error message from API response
+      const errorMessage = data?.detail || "An unexpected error occurred.";
 
       // Handle unauthorized error (redirect to login)
       if (status === 401 || status === 422) {
+        toast.error("Unauthorized! Redirecting to login...");
         console.warn("Unauthorized! Redirecting to login...");
         console.log(error);
-        // window.location.href = "/login"; // Redirect to login page
+        // window.location.href = "/login"; // Uncomment to redirect to login
+      } else {
+        toast.error(errorMessage);
       }
+    } else {
+      toast.error("Network error. Please check your connection.");
     }
+
     return Promise.reject(error);
   }
 );

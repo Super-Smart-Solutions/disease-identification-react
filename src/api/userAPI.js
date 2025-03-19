@@ -1,0 +1,52 @@
+import axiosInstance from "../utils/axiosInstance";
+
+const USER_ENDPOINT = import.meta.env.VITE_USER_ENDPOINT;
+
+// Fetch current user
+export const fetchCurrentUser = async () => {
+    const response = await axiosInstance.get(`${USER_ENDPOINT}/me`);
+    return response.data;
+};
+
+// Update current user
+export const updateCurrentUser = async (userData) => {
+    const response = await axiosInstance.patch(`${USER_ENDPOINT}/me`, userData);
+    return response.data;
+};
+
+// Fetch a user by ID
+export const fetchUserById = async (userId) => {
+    const response = await axiosInstance.get(`${USER_ENDPOINT}/${userId}`);
+    return response.data;
+};
+
+// Update a user by ID
+export const updateUserById = async (userId, userData) => {
+    const response = await axiosInstance.patch(`${USER_ENDPOINT}/${userId}`, userData);
+    return response.data;
+};
+
+// Delete a user by ID
+export const deleteUserById = async (userId) => {
+    const response = await axiosInstance.delete(`${USER_ENDPOINT}/${userId}`);
+    return response.data;
+};
+
+// Upload user avatar
+export const uploadUserAvatar = async (avatarFile) => {
+    const formData = new FormData();
+    formData.append("avatar", avatarFile);
+
+    const response = await axiosInstance.patch(`${USER_ENDPOINT}/me/avatar`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+    return response.data;
+};
+
+// Fetch all users
+export const fetchUsers = async () => {
+    const response = await axiosInstance.get(USER_ENDPOINT);
+    return response.data;
+};
