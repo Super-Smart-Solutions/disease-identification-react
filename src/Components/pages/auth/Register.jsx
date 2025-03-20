@@ -97,8 +97,8 @@ export default function Register() {
             loading="lazy"
             src={authImage}
             alt="Authentication"
-            className="w-full h-full object-cover"
-          />
+            className="w-full h-full object-cover rtl:rounded-r-lg ltr:rounded-l-lg"
+            />
         </div>
 
         {/* Right: Stepper Content */}

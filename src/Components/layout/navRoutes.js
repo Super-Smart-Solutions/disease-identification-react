@@ -1,6 +1,7 @@
 const navRoutes = [
+
     {
-        needAuth: true,
+        needAuth: false,
         path: "/",
         label: "home_key"
     },

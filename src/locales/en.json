@@ -63,6 +63,7 @@
   "reset_key": "Reset",
   "complete_data_key": "Complete Your Data",
   "create_account_key": "Create Account",
+  "logout_key": "Logout",
   "first_name_key": "First Name",
   "last_name_key": "Last Name",
   "user_type_key": "User Type",
@@ -183,8 +184,7 @@
   },
   "name_key": "Organization Name",
   "describtion_key": "Address",
-  "Get Started" : "Get Started",
+  "Get Started": "Get Started",
   "Symptoms": "Symptoms",
   "Control Methods:": "Control Methods:"
-
 }

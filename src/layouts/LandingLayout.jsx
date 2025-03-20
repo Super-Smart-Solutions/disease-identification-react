@@ -3,24 +3,8 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../Components/layout/Navbar";
 import farm from "../assets/farm.jpg";
 import LandingFooter from "../Components/layout/LandingFooter";
-import { fetchCurrentUser } from "../api/userAPI";
 
-const LandingLayout = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        await fetchCurrentUser();
-        setIsAuthenticated(true);
-      } catch (error) {
-        setIsAuthenticated(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
-
+const LandingLayout = ({ isAuthenticated }) => {
   return (
     <main className="flex flex-col min-h-screen relative">
       {/* Background Image and Overlay */}

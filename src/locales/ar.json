@@ -75,6 +75,7 @@
   "individual_key": "فرد",
   "company_key": "شركة",
   "orgnization_key": "فريق",
+  "logout_key": "تسجيل خروج",
   "email_key": "البريد الإلكتروني",
   "email_required_key": "البريد الإلكتروني مطلوب",
   "email_invalid_key": "بريد إلكتروني غير صالح",
