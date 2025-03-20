@@ -1,7 +1,9 @@
 import axiosInstance from "../utils/axiosInstance";
 
 // Base endpoint for verification
-const VERIFICATION_ENDPOINT = "/api/verification";
+const VERIFICATION_ENDPOINT = import.meta.env.VITE_VERIFICATION_ENDPOINT;
+
+// const VERIFICATION_ENDPOINT = "/verification";
 
 // Generate a verification code
 export const generateVerificationCode = async (email) => {
@@ -10,10 +12,11 @@ export const generateVerificationCode = async (email) => {
 };
 
 // Verify a given code
-export const verifyCode = async (token) => {
-    const response = await axiosInstance.post(`${VERIFICATION_ENDPOINT}/verify`, { token });
+export const verifyCode = async (email, code) => {
+    const response = await axiosInstance.post(`verification/verify`, { email, code });
     return response.data;
 };
+
 
 // Check verification status
 export const checkVerificationStatus = async () => {

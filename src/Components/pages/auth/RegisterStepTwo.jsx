@@ -84,9 +84,9 @@ export default function RegisterStepTwo({
   };
   const onOTPSubmit = async (otp) => {
     try {
-      await verifyCode(otp);
+      await verifyCode(registerData?.email, otp);
       if (registerData?.user_type === "individual") {
-        navigate("/login");
+        navigate("/auth/login");
       } else {
         setStep(step + 1);
       }
@@ -94,7 +94,7 @@ export default function RegisterStepTwo({
       console.log(error);
     } finally {
       if (registerData?.user_type === "individual") {
-        navigate("/login");
+        navigate("/auth/login");
       } else {
         setStep(step + 1);
       }
