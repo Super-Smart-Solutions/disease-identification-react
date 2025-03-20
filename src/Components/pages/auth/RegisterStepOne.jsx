@@ -15,7 +15,7 @@ export default function RegisterStepOne({
   const initialValues = {
     first_name: registerData.first_name || "",
     last_name: registerData.last_name || "",
-    user_type: registerData.user_type || "", // "individual" or "company"
+    user_type: registerData.user_type || "individual", // "individual" or "company"
   };
 
   // Validation function
@@ -84,7 +84,7 @@ export default function RegisterStepOne({
           </div>
 
           {/* User Type Radio Buttons */}
-          <div className="flex flex-col gap-1">
+{/*          <div className="flex flex-col gap-1">
             <label>{t("user_type_key")}</label>
             <div className="flex gap-4">
               <label className="flex items-center gap-2">
@@ -111,7 +111,7 @@ export default function RegisterStepOne({
               component="div"
               className="text-red-500 text-sm"
             />
-          </div>
+          </div>*/}
           <Button type="submit">{t("complete_data_key")}</Button>
         </Form>
       )}

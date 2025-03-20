@@ -10,6 +10,10 @@ const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     Accept: "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+    "Accept-Language": "ar",
   },
 });
 
