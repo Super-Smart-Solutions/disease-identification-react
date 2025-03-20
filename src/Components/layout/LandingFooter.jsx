@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
-import logo from "../../assets/logoDark.jpeg";
+import logo from "../../assets/logoDark.png";
 
 export default function LandingFooter() {
   const { t } = useTranslation();
@@ -33,9 +33,9 @@ export default function LandingFooter() {
                 </span>
               </div>
             </div>
-            {/* <div className="flex justify-center my-4 sm:my-0">
-              <img src={logo} alt="Company Logo" className="h-30 w-auto" />
-            </div> */}
+            <div className="flex justify-center my-4 sm:my-0">
+              <img src={logo} alt="Company Logo" className="h-30 w-auto shadow-2xl contrast-75 opacity-80" />
+            </div>
             <ul className="flex flex-wrap justify-center gap-4 text-xs lg:justify-end">
               <li>
                 <a
