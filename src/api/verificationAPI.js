@@ -4,14 +4,14 @@ import axiosInstance from "../utils/axiosInstance";
 const VERIFICATION_ENDPOINT = "/api/verification";
 
 // Generate a verification code
-export const generateVerificationCode = async (data) => {
-    const response = await axiosInstance.post(`${VERIFICATION_ENDPOINT}/generate`, data);
+export const generateVerificationCode = async (email) => {
+    const response = await axiosInstance.post(`${VERIFICATION_ENDPOINT}/generate`, { email });
     return response.data;
 };
 
 // Verify a given code
-export const verifyCode = async (data) => {
-    const response = await axiosInstance.post(`${VERIFICATION_ENDPOINT}/verify`, data);
+export const verifyCode = async (token) => {
+    const response = await axiosInstance.post(`${VERIFICATION_ENDPOINT}/verify`, { token });
     return response.data;
 };
 
