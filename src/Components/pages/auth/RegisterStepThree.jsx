@@ -38,7 +38,7 @@ export default function RegisterStepThree({
   const onSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await createOrganization(values);
-      navigate("/login");
+      navigate("/auth/login");
     } catch (error) {
       console.error("Login failed", error);
     } finally {

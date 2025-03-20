@@ -7,12 +7,26 @@ import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../Button";
 import { loginUser } from "../../../api/authAPI";
+import { fetchCurrentUser } from "../../../api/userAPI";
+
 import PasswordInput from "../../Formik/PasswordInput";
 import Cookies from "js-cookie";
 
 export default function Login() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
+
+    const checkAuth = async () => {
+      try {
+        await fetchCurrentUser();
+        navigate("/models");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    checkAuth();
 
   const initialValues = {
     username: "",
