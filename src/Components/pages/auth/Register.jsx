@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useSearchParams, useLocation, Link } from "react-router-dom"; // For query params
+import { Link } from "react-router-dom";
 import RegisterStepOne from "./RegisterStepOne";
 import RegisterStepTwo from "./RegisterStepTwo";
 import RegisterStepThree from "./RegisterStepThree";
@@ -9,8 +9,6 @@ import authImage from "../../../assets/auth.png"; // Adjust path if necessary
 
 export default function Register() {
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams(); // For query params
-  const location = useLocation(); // For current location
   const [registerData, setRegisterData] = useState({
     email: "",
     password: "",
@@ -22,21 +20,44 @@ export default function Register() {
     last_name: "",
     user_type: null,
   });
+  const [step, setStep] = useState(1);
 
-  // Get step_id from query params or default to 1
-  const step_id = parseInt(searchParams.get("step_id") || 1, 10);
-  const currentStep = Math.min(Math.max(step_id, 1), 3); // Ensure step is between 1 and 3
+  // Validation functions for each step
+  const validateStepOne = () => {
+    return (
+      registerData.first_name &&
+      registerData.last_name &&
+      registerData.user_type
+    );
+  };
 
-  // Step content mapping
+  const validateStepTwo = () => {
+    return registerData.email && registerData.password;
+  };
+
+  const handleStepClick = (newStep) => {
+    if (newStep < step) {
+      // Allow going back to previous steps without validation
+      setStep(newStep);
+    } else {
+      // Validate current step before proceeding
+      if (step === 1 && validateStepOne()) {
+        setStep(newStep);
+      } else if (step === 2 && validateStepTwo()) {
+        setStep(newStep);
+      } else if (step === 3) {
+        // Handle final submission or next steps
+        setStep(newStep);
+      }
+    }
+  };
+
   const steps = [
     {
       component: (
         <RegisterStepOne
-          step={currentStep}
-          setStep={(step) => {
-            searchParams.set("step_id", step); // Update step_id in query params
-            setSearchParams(searchParams); // Push new query params to URL
-          }}
+          step={step}
+          setStep={handleStepClick}
           registerData={registerData}
           setRegisterData={setRegisterData}
         />
@@ -46,11 +67,8 @@ export default function Register() {
     {
       component: (
         <RegisterStepTwo
-          step={currentStep}
-          setStep={(step) => {
-            searchParams.set("step_id", step); // Update step_id in query params
-            setSearchParams(searchParams); // Push new query params to URL
-          }}
+          step={step}
+          setStep={handleStepClick}
           registerData={registerData}
           setRegisterData={setRegisterData}
         />
@@ -60,11 +78,8 @@ export default function Register() {
     {
       component: (
         <RegisterStepThree
-          step={currentStep}
-          setStep={(step) => {
-            searchParams.set("step_id", step); // Update step_id in query params
-            setSearchParams(searchParams); // Push new query params to URL
-          }}
+          step={step}
+          setStep={handleStepClick}
           registerData={registerData}
           setRegisterData={setRegisterData}
         />
@@ -72,24 +87,6 @@ export default function Register() {
       label: t("Step 3"),
     },
   ];
-
-  // Handle step navigation
-  const handleStepClick = (stepNumber) => {
-    // Prevent navigating to steps that are not yet completed
-    if (stepNumber > currentStep) {
-      return;
-    }
-    searchParams.set("step_id", stepNumber); // Update step_id in query params
-    setSearchParams(searchParams); // Push new query params to URL
-  };
-
-  // Sync step state with URL parameter
-  useEffect(() => {
-    if (!searchParams.get("step_id")) {
-      searchParams.set("step_id", currentStep); // Set default step_id if missing
-      setSearchParams(searchParams); // Push new query params to URL
-    }
-  }, [currentStep, searchParams, setSearchParams]);
 
   return (
     <div className="flex items-center justify-center">
@@ -100,7 +97,7 @@ export default function Register() {
             loading="lazy"
             src={authImage}
             alt="Authentication"
-            className="w-full h-full object-cover  "
+            className="w-full h-full object-cover"
           />
         </div>
 
@@ -113,9 +110,7 @@ export default function Register() {
                 <div
                   key={index}
                   className={`w-8 h-8 flex items-center justify-center rounded-full cursor-pointer ${
-                    index + 1 === currentStep
-                      ? "bg-primary text-white"
-                      : "bg-gray-300"
+                    index + 1 === step ? "bg-primary text-white" : "bg-gray-300"
                   }`}
                   onClick={() => handleStepClick(index + 1)}
                 >
@@ -129,13 +124,13 @@ export default function Register() {
           {/* Step Content with Framer Motion Animation */}
           <motion.div
             className="flex-grow w-full"
-            key={currentStep}
+            key={step}
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -50 }}
             transition={{ duration: 0.5 }}
           >
-            {steps[currentStep - 1].component}
+            {steps[step - 1].component}
           </motion.div>
 
           <p className="">

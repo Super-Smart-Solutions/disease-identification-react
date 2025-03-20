@@ -103,7 +103,7 @@ export default function RegisterStepOne({
                   value="company"
                   className="form-radio"
                 />
-                {t("company_key")}
+                {t("orgnization_key")}
               </label>
             </div>
             <ErrorMessage

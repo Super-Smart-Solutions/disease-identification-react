@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import LandingLayout from "../layouts/LandingLayout";
 import routes from "./routes.json";
@@ -23,28 +23,55 @@ const componentMap = {
   Login,
 };
 
+const ProtectedRoute = ({ children, isAuthenticated }) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/auth/login");
+    }
+  }, [isAuthenticated, navigate]);
+
+  return isAuthenticated ? children : null;
+};
+
 const AppRoutes = () => {
+  const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch current user on component mount
   useEffect(() => {
     const checkAuthentication = async () => {
+      // Skip authentication check for authRoutes
+      const isAuthRoute = authRoutes.some((route) =>
+        location.pathname.startsWith(route.path)
+      );
+
+      if (isAuthRoute) {
+        setIsLoading(false);
+        return;
+      }
+
       try {
-        await fetchCurrentUser(); // Call the endpoint
-        setIsAuthenticated(true); // Set authenticated to true if request succeeds
+        await fetchCurrentUser();
+        setIsAuthenticated(true);
       } catch (error) {
-        setIsAuthenticated(false); // Set authenticated to false if request fails
+        setIsAuthenticated(false);
       } finally {
-        setIsLoading(false); // Set loading to false after request completes
+        setIsLoading(false);
       }
     };
 
     checkAuthentication();
-  }, []);
+  }, [location.pathname]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Routes>
+      {/* Unauthenticated routes use LandingLayout */}
       <Route path="/" element={<LandingLayout />}>
         {authRoutes.map((route, index) => (
           <Route
@@ -55,13 +82,30 @@ const AppRoutes = () => {
         ))}
       </Route>
 
-      {/* All other routes use MainLayout */}
-      <Route path="/" element={<MainLayout />}>
+      {/* Authenticated routes use MainLayout */}
+      <Route
+        path="/"
+        element={
+          isAuthenticated ? (
+            <MainLayout />
+          ) : (
+            <Navigate to="/auth/login" replace />
+          )
+        }
+      >
         {routes.map((route, index) => (
           <Route
             key={index}
             path={route.path}
-            element={React.createElement(componentMap[route.element])}
+            element={
+              route.protected ? (
+                <ProtectedRoute isAuthenticated={isAuthenticated}>
+                  {React.createElement(componentMap[route.element])}
+                </ProtectedRoute>
+              ) : (
+                React.createElement(componentMap[route.element])
+              )
+            }
           />
         ))}
       </Route>

@@ -86,7 +86,7 @@ export default function RegisterStepTwo({
     try {
       await verifyEmail(otp);
       if (registerData?.user_type === "individual") {
-        navigate("/models");
+        navigate("/login");
       } else {
         setStep(step + 1);
       }
@@ -94,7 +94,7 @@ export default function RegisterStepTwo({
       console.log(error);
     } finally {
       if (registerData?.user_type === "individual") {
-        navigate("/models");
+        navigate("/login");
       } else {
         setStep(step + 1);
       }

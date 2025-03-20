@@ -75,14 +75,9 @@ const Navbar = ({ auth = true }) => {
       <div className="container mx-auto flex justify-between items-center">
         {/* Welcome Menu */}
         <div className="relative ml-2">
-          <button
-            ref={welcomeButtonRef}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="cursor-pointer text-center text-lg text-white"
-            type="button"
-          >
+          <span className="text-center text-lg text-white" type="button">
             {t("welcome_key")}
-          </button>
+          </span>
 
           {/* Dropdown Menu */}
           {isMenuOpen && (
@@ -106,22 +101,26 @@ const Navbar = ({ auth = true }) => {
 
         {/* Navigation Links */}
         <div className="flex items-center space-x-6">
-          {navRoutes.map((route) => (
-            <NavLink
-              key={route.path}
-              to={route.path}
-              className="relative text-sm font-medium transition-all hover:text-gray-300"
-            >
-              {t(route.label)}
-              {location.pathname === route.path && (
-                <motion.div
-                  className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-white"
-                  layoutId="underline"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-            </NavLink>
-          ))}
+          {navRoutes
+            .filter((route) =>
+              auth ? route.needAuth === true : route.needAuth === false
+            )
+            .map((route) => (
+              <NavLink
+                key={route.path} // Use the path as the key
+                to={route.path}
+                className="relative text-sm font-medium transition-all hover:text-gray-300"
+              >
+                {t(route.label)} {/* Translate the label */}
+                {location.pathname === route.path && (
+                  <motion.div
+                    className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-white"
+                    layoutId="underline"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+              </NavLink>
+            ))}
         </div>
 
         {/* Language Dropdown */}

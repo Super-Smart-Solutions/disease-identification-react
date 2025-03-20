@@ -74,6 +74,7 @@
   "user_type_key": "نوع المستخدم",
   "individual_key": "فرد",
   "company_key": "شركة",
+  "orgnization_key": "فريق",
   "email_key": "البريد الإلكتروني",
   "email_required_key": "البريد الإلكتروني مطلوب",
   "email_invalid_key": "بريد إلكتروني غير صالح",

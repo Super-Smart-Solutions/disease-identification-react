@@ -68,6 +68,7 @@
   "user_type_key": "User Type",
   "individual_key": "Individual",
   "company_key": "Company",
+  "orgnization_key": "Orgnization",
   "first_name_required_key": "First name is required",
   "last_name_required_key": "Last name is required",
   "email_key": "Email",
