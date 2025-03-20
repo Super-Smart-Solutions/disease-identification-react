@@ -20,30 +20,27 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
       try {
         if (!modelingData?.inference_id) return;
 
-        console.log("Sending prediction request...");
         const response = await detectDisease(modelingData.inference_id);
 
         if (response?.status === 2) {
-          console.log("Prediction Success:", response);
           setConfidenceScore(response.confidence_level * 100);
           setPredictionFailed(false);
 
           // Fetch disease details
-          if (response.disease_id){
+          if (response.disease_id) {
             const diseaseDetails = await fetchDiseaseById(response.disease_id);
             setDiseaseData(diseaseDetails);
 
             // Fetch visualization (attention map)
-            const visualizationResponse = await visualizeInference(modelingData.inference_id);
+            const visualizationResponse = await visualizeInference(
+              modelingData.inference_id
+            );
             if (visualizationResponse?.attention_map_url) {
               setVisualizationUrl(visualizationResponse.attention_map_url);
             }
-          }
-          else{
-            console.log("healthy");
+          } else {
             setPredictionHealthy(true);
           }
-          
         } else {
           console.warn("Prediction Failed:", response);
           setPredictionFailed(true);
@@ -54,7 +51,6 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
         }
       } catch (error) {
         console.error("Error in prediction request:", error);
-        // console.log("Error:", error.response.data.detail);
       }
     };
 
@@ -99,16 +95,22 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
               </>
             ) : (
               <>
-              {predictionHealthy===false ? (
+                {predictionHealthy === false ? (
                   <>
                     <span>
-                      {`${t("selected_disease")} : ${
-                        t(`diseases.${diseaseData?.english_name}`, { defaultValue: diseaseData?.english_name || t("loading_key") })
-                      }`}
+                      {`${t("selected_disease")} : ${t(
+                        `diseases.${diseaseData?.english_name}`,
+                        {
+                          defaultValue:
+                            diseaseData?.english_name || t("loading_key"),
+                        }
+                      )}`}
                     </span>
 
                     <span>{`${t("confidence_level")} : ${
-                      confidenceScore !== null ? `${confidenceScore.toFixed(2)}%` : t("loading_key")
+                      confidenceScore !== null
+                        ? `${confidenceScore.toFixed(2)}%`
+                        : t("loading_key")
                     }`}</span>
                     <Button
                       onClick={() =>
@@ -122,28 +124,26 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
                     >
                       {t("read_more_about_disease_key")}
                     </Button>
-
                   </>
                 ) : (
                   <>
-                      <span>{`${t("selected_disease")} : ${
-                        "Healthy" || t("loading_key")
-                      }`}</span>
-                      <span>{`${t("confidence_level")} : ${
-                        confidenceScore !== null ? `${confidenceScore.toFixed(2)}%` : t("loading_key")
-                      }`}</span>
+                    <span>{`${t("selected_disease")} : ${
+                      "Healthy" || t("loading_key")
+                    }`}</span>
+                    <span>{`${t("confidence_level")} : ${
+                      confidenceScore !== null
+                        ? `${confidenceScore.toFixed(2)}%`
+                        : t("loading_key")
+                    }`}</span>
                   </>
-
-
                 )}
-                </>
+              </>
             )}
           </div>
           {predictionFailed ? (
+            <></>
+          ) : (
             <>
-            </>
-            ) : (
-              <>
               <div className="flex gap-2 items-center justify-end mt-4">
                 <Button
                   onClick={() => {
@@ -172,14 +172,9 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
                 >
                   {t("go_to_deep_analysis_key")}
                 </Button>
-
-
               </div>
-              </>
-              )}
-
-
-
+            </>
+          )}
         </div>
       ))}
     </div>

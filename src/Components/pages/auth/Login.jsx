@@ -29,7 +29,6 @@ export default function Login() {
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await loginUser(values);
-      console.log({ response });
       Cookies.set("token", response.access_token, {
         secure: true,
         sameSite: "Strict",

@@ -8,10 +8,9 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchPlants, fetchDiseasesByPlant } from "../../api/plantAPI";
 import { fetchDiseaseById } from "../../api/diseaseAPI";
 
-const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => { 
+const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
   const { t } = useTranslation();
   const [selectedPlant, setSelectedPlant] = useState(null);
-
 
   // Fetch plants
   const { data: plantOptions = [], isLoading: plantsLoading } = useQuery({
@@ -20,7 +19,9 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
       const plants = await fetchPlants();
       return plants.data.map((plant) => ({
         value: plant.id,
-        label: t(`plants.${plant.english_name}`, { defaultValue: plant.english_name }),
+        label: t(`plants.${plant.english_name}`, {
+          defaultValue: plant.english_name,
+        }),
         english_name: plant.english_name,
       }));
     },
@@ -34,13 +35,14 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
       const diseases = await fetchDiseasesByPlant(selectedPlant);
       return diseases.map((disease) => ({
         value: disease.id,
-        label: t(`diseases.${disease.english_name}`, { defaultValue: disease.english_name }),
+        label: t(`diseases.${disease.english_name}`, {
+          defaultValue: disease.english_name,
+        }),
         english_name: disease.english_name,
       }));
     },
     enabled: !!selectedPlant,
   });
-
 
   const validationSchema = Yup.object().shape({
     plant: Yup.string().required(t("select_plant_required_key")),
@@ -48,11 +50,10 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
   });
 
   const handleSubmit = async (values) => {
-    console.log("Form Values:", values);
     try {
       const diseaseData = await fetchDiseaseById(values.disease);
       onSelectDisease(diseaseData);
-      onSelectPlant(values.plant)
+      onSelectPlant(values.plant);
     } catch (error) {
       console.error("Failed to fetch disease details:", error);
     }
@@ -74,17 +75,23 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
                 <SelectInput
                   label={t("select_plant_key")}
                   options={plantOptions}
-                  value={plantOptions.find((option) => option.value === field.value)}
+                  value={plantOptions.find(
+                    (option) => option.value === field.value
+                  )}
                   onChange={(selectedOption) => {
                     setFieldValue("plant", selectedOption.value);
                     setSelectedPlant(selectedOption.value);
                   }}
-                  placeholder={plantsLoading ? t("loading_key") : t("select_plant_key")}
+                  placeholder={
+                    plantsLoading ? t("loading_key") : t("select_plant_key")
+                  }
                   isLoading={plantsLoading}
                 />
               )}
             </Field>
-            {errors.plant && touched.plant && <div className="text-red-500 text-sm">{errors.plant}</div>}
+            {errors.plant && touched.plant && (
+              <div className="text-red-500 text-sm">{errors.plant}</div>
+            )}
           </div>
 
           {/* Disease Select Input */}
@@ -94,15 +101,23 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
                 <SelectInput
                   label={t("select_disease_key")}
                   options={diseaseOptions}
-                  value={diseaseOptions.find((option) => option.value === field.value)}
-                  onChange={(selectedOption) => setFieldValue("disease", selectedOption.value)}
-                  placeholder={diseasesLoading ? t("loading_key") : t("select_disease_key")}
+                  value={diseaseOptions.find(
+                    (option) => option.value === field.value
+                  )}
+                  onChange={(selectedOption) =>
+                    setFieldValue("disease", selectedOption.value)
+                  }
+                  placeholder={
+                    diseasesLoading ? t("loading_key") : t("select_disease_key")
+                  }
                   isLoading={diseasesLoading}
                   isDisabled={!selectedPlant}
                 />
               )}
             </Field>
-            {errors.disease && touched.disease && <div className="text-red-500 text-sm">{errors.disease}</div>}
+            {errors.disease && touched.disease && (
+              <div className="text-red-500 text-sm">{errors.disease}</div>
+            )}
           </div>
 
           {/* Get Data Button */}

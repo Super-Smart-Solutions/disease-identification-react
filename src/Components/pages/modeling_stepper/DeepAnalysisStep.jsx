@@ -3,7 +3,10 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom"; // Import for navigation
 import Button from "../../Button";
 import { fetchDiseaseById } from "../../../api/diseaseAPI";
-import { analyzeInference, visualizeInference } from "../../../api/inferenceAPI";
+import {
+  analyzeInference,
+  visualizeInference,
+} from "../../../api/inferenceAPI";
 
 export default function DeepAnalysisStep({ modelingData, setModelingData }) {
   const { t } = useTranslation();
@@ -19,22 +22,17 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
       try {
         if (!modelingData?.inference_id) return;
 
-        console.log("Sending analysis request...");
         const response = await analyzeInference(modelingData.inference_id);
-        console.log("response: ", response);
 
         if (response?.status === 3) {
-          console.log("analysis Success:", response);
           setConfidenceScore(response.confidence_level * 100);
           setPredictionFailed(false);
 
           // Fetch disease details
-          if(response.disease_id){
+          if (response.disease_id) {
             const diseaseDetails = await fetchDiseaseById(response.disease_id);
             setDiseaseData(diseaseDetails); // Store full disease data
           }
-
-          
         } else {
           console.warn("analysis Failed:", response);
           setPredictionFailed(true);
@@ -45,7 +43,9 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
         }
 
         // Fetch visualization (attention map)
-        const visualizationResponse = await visualizeInference(modelingData.inference_id);
+        const visualizationResponse = await visualizeInference(
+          modelingData.inference_id
+        );
         if (visualizationResponse?.attention_map_url) {
           setVisualizationUrl(visualizationResponse.attention_map_url);
         }
@@ -64,7 +64,6 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
           key={index}
           className="flex items-center p-2 border rounded-lg bg-gray-50 flex-col gap-4"
         >
-
           {visualizationUrl ? (
             <>
               <img
@@ -76,11 +75,9 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
             </>
           ) : (
             <>
-            <span>{t("loading image.")}</span>
+              <span>{t("loading image.")}</span>
             </>
-
           )}
-
 
           <div className="flex flex-col bg-primaryGray p-4 rounded-2xl">
             <span>{`${t("category_key")} : ${
@@ -106,13 +103,19 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
             ) : (
               <>
                 <span>
-                  {`${t("selected_disease")} : ${
-                    t(`diseases.${diseaseData?.english_name}`, { defaultValue: diseaseData?.english_name || t("loading_key") })
-                  }`}
+                  {`${t("selected_disease")} : ${t(
+                    `diseases.${diseaseData?.english_name}`,
+                    {
+                      defaultValue:
+                        diseaseData?.english_name || t("loading_key"),
+                    }
+                  )}`}
                 </span>
 
                 <span>{`${t("confidence_level")} : ${
-                  confidenceScore !== null ? `${confidenceScore.toFixed(2)}%` : t("loading_key")
+                  confidenceScore !== null
+                    ? `${confidenceScore.toFixed(2)}%`
+                    : t("loading_key")
                 }`}</span>
                 <Button
                   onClick={() =>
@@ -131,10 +134,9 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
           </div>
 
           {predictionFailed ? (
+            <></>
+          ) : (
             <>
-            </>
-            ) : (
-              <>
               <div>
                 <Button
                   onClick={() => {
@@ -153,10 +155,8 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
                   {t("try with a different image")}
                 </Button>
               </div>
-              </>
-              )}
-
-
+            </>
+          )}
         </div>
       ))}
     </div>

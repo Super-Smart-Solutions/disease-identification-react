@@ -42,10 +42,8 @@ axiosInstance.interceptors.response.use(
       if (status === 401) {
         toast.error("Unauthorized! Redirecting to login...");
         console.warn("Unauthorized! Redirecting to login...");
-        console.log(error);
         // window.location.href = "/login"; // Uncomment to redirect to login
       } else {
-        console.log(errorMessage);
 
         toast.error(errorMessage[0]?.msg || "An unexpected error occurred.");
       }

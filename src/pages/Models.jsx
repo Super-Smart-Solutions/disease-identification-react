@@ -36,7 +36,6 @@ export default function Models() {
     if (modelingData?.is_deep) return 5;
     return 5;
   }, [modelingData]);
-  console.log({ activeStep });
 
   useEffect(() => {
     setExpandedSteps((prev) => {

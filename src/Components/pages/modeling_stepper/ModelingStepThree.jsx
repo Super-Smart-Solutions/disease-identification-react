@@ -50,8 +50,6 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
           signal: controller.signal,
         });
 
-        console.log("Validation response: ", validationResponse.status);
-
         // If validation is successful (status === 1), mark modeling as final
         if (validationResponse?.status === 1) {
           setModelingData((prev) => ({
@@ -63,7 +61,6 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
           // If validation fails, mark as not valid
           setNotValid(true);
           setLoading(false);
-          console.log(notValid);
         }
       } catch (err) {
         // Handle API errors
@@ -79,8 +76,6 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
       controller.abort(); // Cleanup: Cancel API request if component unmounts
     };
   }, [modelingData?.image_id, modelingData?.inference_id, setModelingData]);
-
-  console.log({ error });
 
   return (
     <div className="flex items-center p-2 bg-gray-50 flex-col gap-4">
