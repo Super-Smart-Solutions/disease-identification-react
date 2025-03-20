@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import LandingLayout from "../layouts/LandingLayout";
 import routes from "./routes.json";
@@ -42,7 +48,15 @@ const AppRoutes = () => {
 
   useEffect(() => {
     const checkAuthentication = async () => {
-    
+      // Skip authentication check for authRoutes
+      const isAuthRoute = authRoutes.some((route) =>
+        location.pathname.startsWith("/auth")
+      );
+
+      if (isAuthRoute) {
+        setIsLoading(false);
+        return;
+      }
 
       try {
         await fetchCurrentUser();

@@ -5,12 +5,12 @@ import PasswordInput from "../../Formik/PasswordInput"; // Import your PasswordI
 import PhoneInput from "../../Formik/PhoneInput"; // Import your PhoneInput component
 import Button from "../../Button";
 import OTPModal from "../../Formik/OTPModal";
-import {
-  registerUser,
-  requestVerifyToken,
-  verifyEmail,
-} from "../../../api/authAPI";
+import { registerUser } from "../../../api/authAPI";
 import { useNavigate } from "react-router-dom";
+import {
+  generateVerificationCode,
+  verifyCode,
+} from "../../../api/verificationAPI";
 
 export default function RegisterStepTwo({
   registerData,
@@ -76,7 +76,7 @@ export default function RegisterStepTwo({
     };
     try {
       await registerUser(payload);
-      await requestVerifyToken(payload?.email);
+      await generateVerificationCode(payload?.email);
       setOtpModal(true);
     } catch (error) {
       console.log(error);
@@ -84,7 +84,7 @@ export default function RegisterStepTwo({
   };
   const onOTPSubmit = async (otp) => {
     try {
-      await verifyEmail(otp);
+      await verifyCode(otp);
       if (registerData?.user_type === "individual") {
         navigate("/login");
       } else {
