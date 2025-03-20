@@ -5,8 +5,8 @@ import enTranslations from './locales/en.json';
 import arTranslations from './locales/ar.json';
 
 i18n.use(initReactI18next).init({
-    lng: localStorage.getItem("language") || "en",
-    fallbackLng: localStorage.getItem("language") || "en",
+    lng: localStorage.getItem("language") || "ar",
+    fallbackLng: localStorage.getItem("language") || "ar",
     resources: {
         en: {
             translation: enTranslations,

@@ -1,0 +1,19 @@
+[
+  {
+    "path": "/",
+    "element": "Landing",
+    "breadcrumb": false
+  },
+  {
+    "path": "auth/login",
+    "element": "Login",
+    "breadcrumb": false,
+    "label": "login"
+  },
+  {
+    "path": "auth/register",
+    "element": "Register",
+    "breadcrumb": false,
+    "label": "register"
+  }
+]

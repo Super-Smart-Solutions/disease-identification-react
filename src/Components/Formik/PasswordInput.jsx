@@ -15,6 +15,7 @@ const PasswordInput = ({ label, value, onChange, placeholder }) => {
         </label>
       )}
       <input
+        name="password"
         type={showPassword ? "text" : "password"}
         value={value}
         onChange={(e) => onChange(e.target.value)}

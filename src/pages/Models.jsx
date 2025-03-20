@@ -1,19 +1,22 @@
 import React, { useState, useMemo, useEffect } from "react";
 import ExpandedStep from "../Components/pages/ExpandedStep";
-import ModelingStepOne from "../Components/pages/modeling stepper/ModelingStepOne";
+import ModelingStepOne from "../Components/pages/modeling_stepper/ModelingStepOne";
 import { useTranslation } from "react-i18next";
-import ModelingStepTwo from "../Components/pages/modeling stepper/ModelingStepTwo";
-import ModelingStepThree from "../Components/pages/modeling stepper/ModelingStepThree";
-import ModelingStepFour from "../Components/pages/modeling stepper/ModelingStepFour";
+import ModelingStepTwo from "../Components/pages/modeling_stepper/ModelingStepTwo";
+import ModelingStepThree from "../Components/pages/modeling_stepper/ModelingStepThree";
+import ModelingStepFour from "../Components/pages/modeling_stepper/ModelingStepFour";
 import VerticalSteps from "../Components/VerticalSteps";
-import DeepAnalysisStep from "../Components/pages/modeling stepper/DeepAnalysisStep";
-
+import DeepAnalysisStep from "../Components/pages/modeling_stepper/DeepAnalysisStep";
 export default function Models() {
   const { t } = useTranslation();
   const [modelingData, setModelingData] = useState({
     category: {},
     selected_file: [],
+    image_id: null,
+    inference_id: null,
     is_deep: false,
+    errorMessage: "",
+    is_final: false,
   });
 
   const [expandedSteps, setExpandedSteps] = useState({
@@ -26,9 +29,11 @@ export default function Models() {
 
   const activeStep = useMemo(() => {
     if (!modelingData?.category?.value) return 1;
-    if (modelingData?.selected_file?.length === 0) return 2;
-    if (!modelingData?.is_final) return 3;
+    if (!modelingData?.image_id || modelingData?.selected_file?.length === 0)
+      return 2;
+    if (!modelingData?.inference_id || !modelingData?.is_final) return 3;
     if (!modelingData?.is_deep) return 4;
+    if (modelingData?.is_deep) return 5;
     return 5;
   }, [modelingData]);
 

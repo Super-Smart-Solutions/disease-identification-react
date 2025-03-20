@@ -1,11 +1,25 @@
-import React from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import Navbar from "../Components/layout/Navbar";
 import farm from "../assets/farm.jpg";
 import LandingFooter from "../Components/layout/LandingFooter";
+import { fetchCurrentUser } from "../api/userAPI";
 
 const LandingLayout = () => {
-  const location = useLocation();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await fetchCurrentUser();
+        setIsAuthenticated(true);
+      } catch (error) {
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   return (
     <main className="flex flex-col min-h-screen relative">
@@ -21,8 +35,8 @@ const LandingLayout = () => {
       ></div>
 
       {/* Content */}
-      <div className="flex-grow relative z-10">
-        <Navbar />
+      <div className="flex-grow relative z-10 flex flex-col justify-between gap-6">
+        <Navbar auth={isAuthenticated} />
         <Outlet />
       </div>
 

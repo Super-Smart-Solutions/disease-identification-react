@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import logo from "../../assets/logoDark.jpeg";
 
 export default function LandingFooter() {
   const { t } = useTranslation();
@@ -8,7 +9,7 @@ export default function LandingFooter() {
     <>
       <footer className="text-white">
         <div className="mx-auto max-w-screen-xl px-4 pt-16 pb-8 sm:px-6 lg:px-8 lg:pt-24">
-          <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8 ">
+          <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8 flex w-full justify-between items-end ">
             <div className="flex flex-col gap-2">
               {/* Phone */}
               {/* <div className="flex items-center justify-center sm:justify-start gap-3">
@@ -32,6 +33,9 @@ export default function LandingFooter() {
                 </span>
               </div>
             </div>
+            {/* <div className="flex justify-center my-4 sm:my-0">
+              <img src={logo} alt="Company Logo" className="h-30 w-auto" />
+            </div> */}
             <ul className="flex flex-wrap justify-center gap-4 text-xs lg:justify-end">
               <li>
                 <a
