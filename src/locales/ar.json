@@ -184,5 +184,7 @@
     "search_placeholder": "ابحث عن دولة",
     "selected_country": "الدولة المحددة",
     "phone_number": "رقم الهاتف"
-  }
+  },
+  "name_key": "اسم المؤسسه",
+  "describtion_key": "العنوان"
 }

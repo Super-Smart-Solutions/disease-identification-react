@@ -137,6 +137,42 @@
     "female": "Female",
     "other": "Other"
   },
+  "plants": {
+    "Citrus": "Citrus",
+    "Grape": "Grape",
+    "Pomegranate": "Pomegranate",
+    "Roses": "Roses",
+    "Coffee": "Coffee",
+    "Honey Bees": "Honey Bees"
+  },
+  "diseases": {
+    "roses_rust": "roses rust",
+    "citrus_gummosis": "citrus gummosis",
+    "citrus_mealybug": "citrus mealybug",
+    "citrus_mediterranean fruit fly": "citrus mediterranean fruit fly",
+    "citrus_quick decline": "citrus quick decline",
+    "grape_downy mildew": "grape downy mildew",
+    "pomegranate_mediterranean fruit fly": "pomegranate mediterranean fruit fly",
+    "pomegranate_moth": "pomegranate_moth",
+    "roses_western flower thrips": "roses_western flower thrips",
+    "pomegranate_butterfly": "pomegranate_butterfly",
+    "citrus_bacterial canker": "citrus_bacterial canker",
+    "citrus_greening": "citrus_greening",
+    "grape_mealybug": "grape_mealybug",
+    "grape_powdery mildew": "grape_powdery mildew",
+    "honey bees_bee eater": "honey bees_bee eater",
+    "honey bees_bee wolf": "honey bees_bee wolf",
+    "Wax Moth": "Wax Moth",
+    "pomegranate_green peach aphid": "pomegranate_green peach aphid",
+    "roses_black spot": "roses_black spot",
+    "roses_downy mildew": "roses_downy mildew",
+    "roses_powdery mildew": "roses_powdery mildew",
+    "honey bees_bee louse": "honey bees_bee louse",
+    "honey bees_stone brood": "honey bees_stone brood",
+    "honey bees_varroa": "honey bees_varroa",
+    "death's-head hawkmoth": "death's-head hawkmoth",
+    "honey bees_oriental hornet": "honey bees_oriental hornet"
+  },
   "phone_input": {
     "label": "Phone Input",
     "description": "A phone input field with a country dropdown for selecting the country code.",
@@ -144,5 +180,11 @@
     "search_placeholder": "Search for a country",
     "selected_country": "Selected Country",
     "phone_number": "Phone Number"
-  }
+  },
+  "name_key": "Organization Name",
+  "describtion_key": "Address",
+  "Get Started" : "Get Started",
+  "Symptoms": "Symptoms",
+  "Control Methods:": "Control Methods:"
+
 }
