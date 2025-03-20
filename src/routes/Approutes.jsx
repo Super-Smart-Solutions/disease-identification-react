@@ -42,15 +42,7 @@ const AppRoutes = () => {
 
   useEffect(() => {
     const checkAuthentication = async () => {
-      // Skip authentication check for authRoutes
-      const isAuthRoute = authRoutes.some((route) =>
-        location.pathname.startsWith(route.path)
-      );
-
-      if (isAuthRoute) {
-        setIsLoading(false);
-        return;
-      }
+    
 
       try {
         await fetchCurrentUser();
