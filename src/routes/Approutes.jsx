@@ -86,9 +86,13 @@ const AppRoutes = () => {
             key={index}
             path={route.path}
             element={
-              <ForbiddenRoute isAuthenticated={isAuthenticated}>
-                {React.createElement(componentMap[route.element])}
-              </ForbiddenRoute>
+              !route.protected ? (
+                <ForbiddenRoute isAuthenticated={isAuthenticated}>
+                  {React.createElement(componentMap[route.element])}
+                </ForbiddenRoute>
+              ) : (
+                React.createElement(componentMap[route.element])
+              )
             }
           />
         ))}

@@ -73,8 +73,8 @@ const Navbar = React.memo(({ auth = true }) => {
 
   return (
     <nav
-      className={`p-4 text-white sticky top-0 z-20 bg-blend-color-burn ${
-        auth ? "bg-primary" : "bg-black opacity-80"
+      className={`p-4 text-white sticky top-0 z-20 bg-blend-color-burn will-change-auto ${
+        auth && location.pathname !== "/" ? "bg-primary" : "bg-black opacity-80"
       }`}
     >
       <div className="container mx-auto flex justify-between items-center">
@@ -111,26 +111,22 @@ const Navbar = React.memo(({ auth = true }) => {
 
         {/* Navigation Links */}
         <div className="flex items-center space-x-6">
-          {navRoutes
-            .filter((route) =>
-              auth ? route.needAuth === true : route.needAuth === false
-            )
-            .map((route) => (
-              <NavLink
-                key={route.path}
-                to={route.path}
-                className="relative text-sm font-medium transition-all hover:text-gray-300"
-              >
-                {t(route.label)} {/* Translate the label */}
-                {location.pathname === route.path && (
-                  <motion.div
-                    className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-white"
-                    layoutId="underline"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                  />
-                )}
-              </NavLink>
-            ))}
+          {navRoutes.map((route) => (
+            <NavLink
+              key={route.path}
+              to={route.path}
+              className="relative text-sm font-medium transition-all hover:text-gray-300"
+            >
+              {t(route.label)} {/* Translate the label */}
+              {location.pathname === route.path && (
+                <motion.div
+                  className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-white"
+                  layoutId="underline"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+            </NavLink>
+          ))}
         </div>
 
         {/* Language Dropdown */}

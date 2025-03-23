@@ -1,28 +1,21 @@
 [
   {
+    "protected": false,
     "path": "/",
     "element": "Landing",
     "breadcrumb": false
   },
+
   {
-    "path": "buttons",
-    "element": "ButtonShowcase",
-    "breadcrumb": true,
-    "label": "buttons"
-  },
-  {
+    "protected": true,
     "path": "models",
     "element": "Models",
     "breadcrumb": true,
     "label": "models"
   },
+
   {
-    "path": "inputs",
-    "element": "InputsShowcase",
-    "breadcrumb": true,
-    "label": "inputs"
-  },
-  {
+    "protected": true,
     "path": "database",
     "element": "DataBase",
     "breadcrumb": true,
