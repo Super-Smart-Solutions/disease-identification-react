@@ -6,7 +6,7 @@ import Button from "../Button";
 
 export default function ExpandableArticle({ article, loading }) {
   const [expanded, setExpanded] = useState(false);
-const { t } = useTranslation();
+  const { t } = useTranslation();
 
   if (loading) {
     return <div className="p-6 cardIt animate-pulse">Loading...</div>;
@@ -22,17 +22,21 @@ const { t } = useTranslation();
         {article.arabic_name || t("no_arabic_name_key")}
       </h3>
 
+      <h4 className="text-lg font-semibold text-gray-700 mt-2">
+        {article.scientific_name || ""}
+      </h4>
+
       <motion.p className="text-gray-600 mt-3">
-        {article.description || t("no_description_key")}
+        {t(`${article.english_name.replace(/\s+/g, '_').toLowerCase()}_description`) || t("no_description_key")}
       </motion.p>
 
       {expanded && (
         <div className="mt-4">
           <h4 className="font-bold">{t("Symptoms")}:</h4>
-          <p>{article.symptoms || "N/A"}</p>
+          <p>{t(`${article.english_name.replace(/\s+/g, '_').toLowerCase()}_symptoms`) || "N/A"}</p>
 
           <h4 className="font-bold mt-2">{t("Control Methods:")}:</h4>
-          <p>{article.treatments || "N/A"}</p>
+          <p>{t(`${article.english_name.replace(/\s+/g, '_').toLowerCase()}_treatments`) || "N/A"}</p>
         </div>
       )}
 
