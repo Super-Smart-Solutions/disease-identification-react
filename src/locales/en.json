@@ -88,6 +88,7 @@
   "otp_description_key": "Please enter the OTP sent to your phone.",
   "verifying_key": "Verifying...",
   "verify_otp_key": "Verify OTP",
+  "profile_picture_key": "Profile picture",
   "invalid_email_key": "Invalid email",
   "login_key": "Login",
   "username_key": "Username",

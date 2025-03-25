@@ -18,6 +18,14 @@ export default function OTPModal({ isOpen, onClose, length = 6, onSubmit }) {
     }
   }, [isOpen, length]);
 
+  // Auto-submit when all digits are filled
+  useEffect(() => {
+    const isComplete = otp.every((digit) => digit !== "");
+    if (isComplete) {
+      handleSubmit();
+    }
+  }, [otp]); // This effect runs whenever otp changes
+
   // Close modal when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -68,8 +76,16 @@ export default function OTPModal({ isOpen, onClose, length = 6, onSubmit }) {
   const handleSubmit = async () => {
     const finalOtp = otp.join("");
     if (finalOtp.length !== length) return;
+
+    // Prevent multiple submissions
+    if (loading) return;
+
     setLoading(true);
-    await onSubmit(finalOtp);
+    try {
+      await onSubmit(finalOtp);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isOpen) return null;

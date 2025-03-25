@@ -20,7 +20,6 @@ export default function RegisterStepTwo({
 }) {
   const [otpModal, setOtpModal] = useState(false);
   const { t } = useTranslation(); // Translation hook
-  const navigate = useNavigate(); // Translation hook
 
   // Initial form values
   const initialValues = {
@@ -80,25 +79,16 @@ export default function RegisterStepTwo({
       setOtpModal(true);
     } catch (error) {
       console.log(error);
+      setOtpModal(true);
     }
   };
   const onOTPSubmit = async (otp) => {
     try {
       await verifyCode(registerData?.email, otp);
-      if (registerData?.user_type === "individual") {
-        navigate("/auth/login");
-      } else {
-        setStep(step + 1);
-      }
+      setStep(step + 1);
     } catch (error) {
       console.log(error);
-    } finally {
-      if (registerData?.user_type === "individual") {
-        navigate("/auth/login");
-      } else {
-        setStep(step + 1);
-      }
-      setOtpModal(false);
+      setStep(step + 1);
     }
   };
 
@@ -173,7 +163,7 @@ export default function RegisterStepTwo({
               <Field name="phone_number">
                 {({ field }) => (
                   <PhoneInput
-                    value={field.value}
+                    initialPhoneNumber={field.value}
                     onChange={({ phoneNumber }) =>
                       setFieldValue("phone_number", phoneNumber)
                     }

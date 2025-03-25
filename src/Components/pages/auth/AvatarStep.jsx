@@ -1,0 +1,156 @@
+import React, { useState, useRef } from "react";
+import AvatarEditor from "react-avatar-editor";
+import FileUpload from "../../FileUpload";
+import Button from "../../Button";
+import { IoClose } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { uploadUserAvatar } from "../../../api/userAPI";
+
+const AvatarStep = () => {
+  const { t } = useTranslation();
+  const editorRef = useRef(null);
+  const navigate = useNavigate();
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [tempSelectedFile, setTempSelectedFile] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [scale, setScale] = useState(1.2);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSave = async () => {
+    if (!editorRef.current || isLoading) return;
+    
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const canvas = editorRef.current.getImageScaledToCanvas();
+      const blob = await new Promise((resolve) => {
+        canvas.toBlob((blob) => resolve(blob), "image/png", 1);
+      });
+
+      if (!blob) {
+        throw new Error(t("avatar_upload_failed"));
+      }
+
+      const file = new File([blob], "avatar.png", {
+        type: "image/png",
+        lastModified: Date.now(),
+      });
+
+      await uploadUserAvatar(file);
+      setSelectedFile(file);
+      setShowModal(false);
+      navigate("/models");
+    } catch (error) {
+      console.error("Error saving avatar:", error);
+      setError(error.message || t("avatar_upload_error"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleFileSelect = (files) => {
+    if (files.length > 0) {
+      setTempSelectedFile(files[0]);
+      setSelectedFile(files[0]);
+      setShowModal(true);
+      setError(null);
+    }
+  };
+
+  const handleCancel = () => {
+    setShowModal(false);
+    setTempSelectedFile(null);
+    setError(null);
+  };
+
+  return (
+    <div className="flex flex-col items-center space-y-4">
+      <label
+        htmlFor="profile_picture"
+        className="block text-sm font-medium text-gray-700 mb-2 me-auto"
+      >
+        {t("profile_picture_key")}
+      </label>
+      
+      <FileUpload
+        allowRemove={true}
+        accept="image/*"
+        multiple={false}
+        selectedFile={selectedFile ? [selectedFile] : []}
+        setSelectedFile={handleFileSelect}
+      />
+
+      {showModal && tempSelectedFile && (
+        <div className="overlay">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative">
+            <button
+              onClick={handleCancel}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+              disabled={isLoading}
+            >
+              <IoClose size={24} />
+            </button>
+            
+            <div className="flex flex-col items-center space-y-4">
+              <AvatarEditor
+                ref={editorRef}
+                image={tempSelectedFile}
+                width={200}
+                height={200}
+                border={50}
+                borderRadius={100}
+                color={[255, 255, 255, 0.6]}
+                scale={scale}
+                rotate={0}
+              />
+
+              <div className="w-full max-w-xs">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {t("zoom_key")}
+                </label>
+                <input
+                  type="range"
+                  min="1"
+                  max="3"
+                  step="0.1"
+                  value={scale}
+                  onChange={(e) => setScale(parseFloat(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                  disabled={isLoading}
+                />
+              </div>
+
+              {error && (
+                <div className="text-red-500 text-sm mt-2">
+                  {error}
+                </div>
+              )}
+
+              <div className="flex space-x-3 pt-2">
+                <Button 
+                  variant="outline" 
+                  onClick={handleCancel}
+                  disabled={isLoading}
+                >
+                  {t("close_key")}
+                </Button>
+                <Button 
+                  onClick={handleSave}
+                  loading={isLoading}
+                  disabled={isLoading}
+                >
+                  {t("save_key")}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AvatarStep;
