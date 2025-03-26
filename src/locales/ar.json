@@ -36,7 +36,7 @@
   "select_disease_key": "حدد المرض",
   "select_plant_required_key": "يرجى اختيار نبات.",
   "select_disease_required_key": "يرجى اختيار مرض.",
-  "get_data_key": "الحصول علي البيانات",
+  "get_data_key": "الحصول على البيانات",
   "plants_animals_key": "النباتات والحيوانات",
   "models_key": "النماذج",
   "database_key": "قاعدة البيانات",
@@ -110,8 +110,8 @@
   "profile_picture_key": "الصورة الشخصية",
 
   "logging_in_key": "جار تسجيل الدخول...",
-  "disease_identification_project_key": "مشروع الصحة النباتية",
-  "disease_identification_description_key": "تطوير تطبيق مرشدك الزراعي باستخدام نماذج التعلم الآلي للتعرف على الأمراض من خلال قاعدة بيانات واسعة لأمراض الورد، الفاكه، البن، النحل، الماشيه، و الاسماك.",
+  "disease_identification_project_key": "منصة الصحة الزراعية",
+  "disease_identification_description_key": "تطوير منصة الصحة الزراعية باستخدام نماذج التعلم الآلي للتعرف على الأمراض من خلال قاعدة بيانات واسعة لأمراض الورد، الفاكه، البن، النحل، الماشيه، و الاسماك.",
   "disease_identification_guide_key": "دليلك في التعرف على أمراض النبات.",
   "inputs_showcase": {
     "title": "عرض المدخلات"

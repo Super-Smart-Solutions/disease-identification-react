@@ -105,8 +105,8 @@
   "please_wait_validating_key": "Please wait while validating image",
   "read_more_about_disease_key": "Read more about disease",
   "deep_analytics_key": "Deep analytics",
-  "disease_identification_project_key": "Disease Identification Project",
-  "disease_identification_description_key": "Improving Morshidik-Elzeraai app with machine learning models for disease identification using an extensive database for plants and diseases. Studying more than 50 diseases in six different classes, including: Roses, Fruits, Coffee Trees, Honey Bees, Livestock Animals, and Fish.",
+  "disease_identification_project_key": "Agricultural Health Platform",
+  "disease_identification_description_key": "Improving the Agricultural Health Platform with machine learning models for disease identification using an extensive database for plants and diseases. Studying many diseases in six different classes, including: Roses, Fruits, Coffee Trees, Honey Bees, Livestock Animals, and Fish.",
   "disease_identification_guide_key": "Your guide to identifying plant diseases.",
   "inputs_showcase": {
     "title": "Inputs Showcase"
