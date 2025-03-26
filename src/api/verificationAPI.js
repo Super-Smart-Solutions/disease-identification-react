@@ -13,7 +13,7 @@ export const generateVerificationCode = async (email) => {
 
 // Verify a given code
 export const verifyCode = async (email, code) => {
-    const response = await axiosInstance.post(`verification/verify`, { email, code });
+    const response = await axiosInstance.post(`${VERIFICATION_ENDPOINT}/verify`, { email, code });
     return response.data;
 };
 

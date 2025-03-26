@@ -2,8 +2,6 @@ import React from "react";
 import { FaFish } from "react-icons/fa";
 import { GiPlantRoots } from "react-icons/gi";
 import { FaCow } from "react-icons/fa6";
-import orangeCircular from "../assets/orangeCircular.png";
-import farm from "../assets/farm.jpg";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";

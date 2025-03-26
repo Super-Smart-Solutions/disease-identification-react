@@ -6,27 +6,12 @@ import authImage from "../../../assets/auth.png";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../Button";
-import { loginUser } from "../../../api/authAPI";
-import { fetchCurrentUser } from "../../../api/userAPI";
-
 import PasswordInput from "../../Formik/PasswordInput";
-import Cookies from "js-cookie";
+import { login } from "../../helpers/authHelpers";
 
 export default function Login() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-
-
-    const checkAuth = async () => {
-      try {
-        await fetchCurrentUser();
-        navigate("/models");
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    checkAuth();
 
   const initialValues = {
     username: "",
@@ -42,11 +27,7 @@ export default function Login() {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const response = await loginUser(values);
-      Cookies.set("token", response.access_token, {
-        secure: true,
-        sameSite: "Strict",
-      });
+      await login(values);
       navigate("/models");
     } catch (error) {
       console.error("Login failed", error);
@@ -71,7 +52,7 @@ export default function Login() {
               loading="lazy"
               src={authImage}
               alt="Authentication"
-              className="w-full h-full object-cover rtl:rounded-r-lg ltr:rounded-r-lg"
+              className="w-full h-full object-cover rtl:rounded-r-lg ltr:rounded-l-lg"
             />
           </div>
 

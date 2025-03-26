@@ -6,6 +6,7 @@ import RegisterStepTwo from "./RegisterStepTwo";
 import RegisterStepThree from "./RegisterStepThree";
 import { useTranslation } from "react-i18next";
 import authImage from "../../../assets/auth.png"; // Adjust path if necessary
+import AvatarStep from "./AvatarStep";
 
 export default function Register() {
   const { t } = useTranslation();
@@ -19,6 +20,7 @@ export default function Register() {
     first_name: "",
     last_name: "",
     user_type: null,
+    token: null,
   });
   const [step, setStep] = useState(1);
 
@@ -76,14 +78,7 @@ export default function Register() {
       label: t("Step 2"),
     },
     {
-      component: (
-        <RegisterStepThree
-          step={step}
-          setStep={handleStepClick}
-          registerData={registerData}
-          setRegisterData={setRegisterData}
-        />
-      ),
+      component: <AvatarStep registerData={registerData} />,
       label: t("Step 3"),
     },
   ];
@@ -97,7 +92,7 @@ export default function Register() {
             loading="lazy"
             src={authImage}
             alt="Authentication"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover rtl:rounded-r-lg ltr:rounded-l-lg"
           />
         </div>
 

@@ -10,6 +10,10 @@ const axiosInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
     Accept: "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+    "Accept-Language": "ar",
   },
 });
 
@@ -42,7 +46,7 @@ axiosInstance.interceptors.response.use(
       if (status === 401) {
         //toast.error("Unauthorized! Redirecting to login...");
         console.warn("Unauthorized! Redirecting to login...");
-        // window.location.href = "/login"; // Uncomment to redirect to login
+        // window.location.href = "/auth/login"; // Uncomment to redirect to login
       } else {
 
         toast.error(errorMessage[0]?.msg || "An unexpected error occurred.");

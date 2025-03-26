@@ -17,7 +17,7 @@ import DataBase from "../pages/DataBase";
 import Models from "../pages/Models";
 import Register from "../Components/pages/auth/Register";
 import Login from "../Components/pages/auth/Login";
-import { fetchCurrentUser } from "../api/userAPI";
+import Cookies from "js-cookie"; // Import the Cookies library
 
 const componentMap = {
   Landing,
@@ -31,7 +31,6 @@ const componentMap = {
 
 const ProtectedRoute = ({ children, isAuthenticated }) => {
   const navigate = useNavigate();
-
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/auth/login");
@@ -41,31 +40,31 @@ const ProtectedRoute = ({ children, isAuthenticated }) => {
   return isAuthenticated ? children : null;
 };
 
+const ForbiddenRoute = ({ children, isAuthenticated }) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/models");
+    }
+  }, [isAuthenticated, navigate]);
+
+  return !isAuthenticated ? children : null;
+};
+
 const AppRoutes = () => {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuthentication = async () => {
-      // Skip authentication check for authRoutes
-      const isAuthRoute = authRoutes.some((route) =>
-        location.pathname.startsWith("/auth")
-      );
-
-      if (isAuthRoute) {
-        setIsLoading(false);
-        return;
+    const checkAuthentication = () => {
+      const token = Cookies.get("token");
+      if (token) {
+        setIsAuthenticated(true); // User is authenticated
+      } else {
+        setIsAuthenticated(false); // User is not authenticated
       }
-
-      try {
-        await fetchCurrentUser();
-        setIsAuthenticated(true);
-      } catch (error) {
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
-      }
+      setIsLoading(false);
     };
 
     checkAuthentication();
@@ -78,12 +77,23 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* Unauthenticated routes use LandingLayout */}
-      <Route path="/" element={<LandingLayout />}>
+      <Route
+        path="/"
+        element={<LandingLayout isAuthenticated={isAuthenticated} />}
+      >
         {authRoutes.map((route, index) => (
           <Route
             key={index}
             path={route.path}
-            element={React.createElement(componentMap[route.element])}
+            element={
+              !route.protected ? (
+                <ForbiddenRoute isAuthenticated={isAuthenticated}>
+                  {React.createElement(componentMap[route.element])}
+                </ForbiddenRoute>
+              ) : (
+                React.createElement(componentMap[route.element])
+              )
+            }
           />
         ))}
       </Route>
@@ -93,7 +103,7 @@ const AppRoutes = () => {
         path="/"
         element={
           isAuthenticated ? (
-            <MainLayout />
+            <MainLayout isAuthenticated={isAuthenticated} />
           ) : (
             <Navigate to="/auth/login" replace />
           )

@@ -1,25 +1,84 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import Cookies from "js-cookie";
 import navRoutes from "./navRoutes";
+import { logout } from "../helpers/authHelpers";
+import {
+  FaChevronDown,
+  FaChevronUp,
+  FaSignOutAlt,
+  FaGlobe,
+  FaUserCircle,
+} from "react-icons/fa";
 
-const Navbar = ({ auth = true }) => {
+// Dropdown Component
+const DropdownMenu = ({
+  buttonRef,
+  menuRef,
+  isOpen,
+  toggle,
+  buttonContent,
+  options,
+  position = "left",
+  buttonClassName = "",
+  menuClassName = "",
+}) => {
+  return (
+    <div className="relative">
+      <button
+        ref={buttonRef}
+        onClick={toggle}
+        className={`flex items-center gap-2 ${buttonClassName}`}
+        type="button"
+      >
+        {buttonContent}
+        {isOpen ? <FaChevronUp size={14} /> : <FaChevronDown size={14} />}
+      </button>
+
+      {isOpen && (
+        <ul
+          ref={menuRef}
+          className={`absolute z-10 min-w-[160px] overflow-auto rounded-lg border border-slate-200 bg-white shadow-md mt-2 ${
+            position === "right" ? "-right-6" : "left-0"
+          } ${menuClassName}`}
+        >
+          {options.map((option, index) => (
+            <li
+              key={index}
+              className="cursor-pointer text-slate-800 flex items-center gap-2 text-sm p-3 transition-all hover:bg-slate-100"
+              onClick={option.onClick}
+            >
+              {option.icon && (
+                <span className="text-gray-500">{option.icon}</span>
+              )}
+              {option.label}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+const Navbar = React.memo(({ auth = true }) => {
   const { t, i18n } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const location = useLocation();
-
-  // Refs for menus and buttons
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user")) || {};
+  const firstName = user?.first_name || "";
+  const userAvatar = user?.avatar;
   const welcomeMenuRef = useRef(null);
   const welcomeButtonRef = useRef(null);
   const languageMenuRef = useRef(null);
   const languageButtonRef = useRef(null);
 
-  // Handle clicks outside the menus
+  // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Close welcome menu if clicked outside
       if (
         welcomeMenuRef.current &&
         !welcomeMenuRef.current.contains(event.target) &&
@@ -29,7 +88,6 @@ const Navbar = ({ auth = true }) => {
         setIsMenuOpen(false);
       }
 
-      // Close language menu if clicked outside
       if (
         languageMenuRef.current &&
         !languageMenuRef.current.contains(event.target) &&
@@ -40,16 +98,24 @@ const Navbar = ({ auth = true }) => {
       }
     };
 
-    // Add event listener
     document.addEventListener("mousedown", handleClickOutside);
-
-    // Cleanup
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Handle language and font changes
+  const toggleLanguage = useCallback(
+    (lang) => {
+      i18n.changeLanguage(lang);
+      Cookies.set("language", lang, { expires: 365 });
+      setIsLanguageMenuOpen(false);
+    },
+    [i18n]
+  );
+
+  const handleLogout = useCallback(() => {
+    logout();
+    navigate("/auth/login");
+  }, [navigate]);
+
   useEffect(() => {
     if (i18n.language === "ar") {
       document.documentElement.setAttribute("dir", "rtl");
@@ -60,108 +126,108 @@ const Navbar = ({ auth = true }) => {
     }
   }, [i18n.language]);
 
-  // Toggle language
-  const toggleLanguage = (lang) => {
-    i18n.changeLanguage(lang);
-    setIsLanguageMenuOpen(false);
-  };
+  // Welcome dropdown options
+  const welcomeOptions = [
+    {
+      label: t("logout_key"),
+      icon: <FaSignOutAlt />,
+      onClick: handleLogout,
+    },
+  ];
+
+  // Language dropdown options
+  const languageOptions = [
+    {
+      label: "English",
+      onClick: () => toggleLanguage("en"),
+    },
+    {
+      label: "العربية",
+      onClick: () => toggleLanguage("ar"),
+    },
+  ];
 
   return (
     <nav
-      className={`p-4 text-white sticky top-0 z-20 bg-blend-color-burn ${
-        auth ? "bg-primary" : "bg-black opacity-80"
+      className={`p-4 text-white sticky top-0 z-20 bg-blend-color-burn will-change-auto ${
+        auth && location.pathname !== "/" ? "bg-primary" : "bg-black opacity-80"
       }`}
     >
       <div className="container mx-auto flex justify-between items-center">
         {/* Welcome Menu */}
-        <div className="relative ml-2">
-          <span className="text-center text-lg text-white" type="button">
-            {t("welcome_key")}
-          </span>
-
-          {/* Dropdown Menu */}
-          {isMenuOpen && (
-            <ul
-              id="welcome-menu"
-              ref={welcomeMenuRef}
-              role="menu"
-              className="absolute z-10 min-w-[90px] overflow-auto rounded-lg border border-slate-200 bg-white p-1.5 shadow-md focus:outline-none mt-2"
-            >
-              <li
-                role="menuitem"
-                className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100 text-nowrap"
-              >
-                <NavLink to={"/auth/register"}>
-                  {t("create_account_key")}
-                </NavLink>
-              </li>
-            </ul>
-          )}
-        </div>
+        {auth ? (
+          <DropdownMenu
+            buttonRef={welcomeButtonRef}
+            menuRef={welcomeMenuRef}
+            isOpen={isMenuOpen}
+            toggle={() => setIsMenuOpen(!isMenuOpen)}
+            buttonContent={
+              <div className="flex items-center gap-2">
+                {userAvatar ? (
+                  <img
+                    src={userAvatar}
+                    alt="User avatar"
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <FaUserCircle size={24} />
+                )}
+                <span className="text-lg text-white">
+                  {t("welcome_key")}{" "}
+                  {firstName && <span className="font-bold">{firstName}</span>}
+                </span>
+              </div>
+            }
+            options={welcomeOptions}
+            position="left"
+            buttonClassName="text-white"
+          />
+        ) : (
+          <>
+            {" "}
+            <span className="text-lg text-white">{t("welcome_key")} </span>
+          </>
+        )}
 
         {/* Navigation Links */}
         <div className="flex items-center space-x-6">
-          {navRoutes
-            .filter((route) =>
-              auth ? route.needAuth === true : route.needAuth === false
-            )
-            .map((route) => (
-              <NavLink
-                key={route.path} // Use the path as the key
-                to={route.path}
-                className="relative text-sm font-medium transition-all hover:text-gray-300"
-              >
-                {t(route.label)} {/* Translate the label */}
-                {location.pathname === route.path && (
-                  <motion.div
-                    className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-white"
-                    layoutId="underline"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                  />
-                )}
-              </NavLink>
-            ))}
+          {navRoutes.map((route) => (
+            <NavLink
+              key={route.path}
+              to={route.path}
+              className="relative text-sm font-medium transition-all hover:text-gray-300"
+            >
+              {t(route.label)}
+              {location.pathname === route.path && (
+                <motion.div
+                  className="absolute bottom-[-4px] left-0 w-full h-[2px] bg-white"
+                  layoutId="underline"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+            </NavLink>
+          ))}
         </div>
 
         {/* Language Dropdown */}
-        <div className="relative ml-2">
-          <button
-            ref={languageButtonRef}
-            onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
-            className="cursor-pointer text-center text-sm text-white"
-            type="button"
-          >
-            {i18n.language === "en" ? "English" : "العربية"}
-          </button>
-
-          {/* Dropdown Menu */}
-          {isLanguageMenuOpen && (
-            <ul
-              id="language-menu"
-              ref={languageMenuRef}
-              role="menu"
-              className="absolute z-10 min-w-[60px] overflow-auto rounded-lg border border-slate-200 bg-white p-1.5 shadow-md focus:outline-none mt-2"
-            >
-              <li
-                role="menuitem"
-                className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
-                onClick={() => toggleLanguage("en")}
-              >
-                English
-              </li>
-              <li
-                role="menuitem"
-                className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
-                onClick={() => toggleLanguage("ar")}
-              >
-                العربية
-              </li>
-            </ul>
-          )}
-        </div>
+        <DropdownMenu
+          buttonRef={languageButtonRef}
+          menuRef={languageMenuRef}
+          isOpen={isLanguageMenuOpen}
+          toggle={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
+          buttonContent={
+            <div className="flex items-center gap-2 text-sm text-white">
+              <FaGlobe size={16} />
+              {i18n.language === "en" ? "English" : "العربية"}
+            </div>
+          }
+          options={languageOptions}
+          position="right"
+          buttonClassName="text-white"
+        />
       </div>
     </nav>
   );
-};
+});
 
 export default Navbar;

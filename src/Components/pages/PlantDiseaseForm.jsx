@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import SelectInput from "../Formik/SelectInput";
@@ -9,21 +9,17 @@ import { fetchPlants, fetchDiseasesByPlant } from "../../api/plantAPI";
 import { fetchDiseaseById } from "../../api/diseaseAPI";
 
 const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [selectedPlant, setSelectedPlant] = useState(null);
+  const [translatedPlants, setTranslatedPlants] = useState([]);
+  const [translatedDiseases, setTranslatedDiseases] = useState([]);
 
   // Fetch plants
   const { data: plantOptions = [], isLoading: plantsLoading } = useQuery({
     queryKey: ["plants"],
     queryFn: async () => {
       const plants = await fetchPlants();
-      return plants.data.map((plant) => ({
-        value: plant.id,
-        label: t(`plants.${plant.english_name}`, {
-          defaultValue: plant.english_name,
-        }),
-        english_name: plant.english_name,
-      }));
+      return plants.data;
     },
   });
 
@@ -32,17 +28,40 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
     queryKey: ["diseases", selectedPlant],
     queryFn: async () => {
       if (!selectedPlant) return [];
-      const diseases = await fetchDiseasesByPlant(selectedPlant);
-      return diseases.map((disease) => ({
-        value: disease.id,
-        label: t(`diseases.${disease.english_name}`, {
-          defaultValue: disease.english_name,
-        }),
-        english_name: disease.english_name,
-      }));
+      return await fetchDiseasesByPlant(selectedPlant);
     },
     enabled: !!selectedPlant,
   });
+
+  // Translate plant names on language change
+  useEffect(() => {
+    if (plantOptions.length > 0) {
+      setTranslatedPlants(
+        plantOptions.map((plant) => ({
+          value: plant.id,
+          label: t(`plants.${plant.english_name}`, {
+            defaultValue: plant.english_name,
+          }),
+          english_name: plant.english_name,
+        }))
+      );
+    }
+  }, [plantOptions, i18n.language]);
+
+  // Translate disease names on language change
+  useEffect(() => {
+    if (diseaseOptions.length > 0) {
+      setTranslatedDiseases(
+        diseaseOptions.map((disease) => ({
+          value: disease.id,
+          label: t(`diseases.${disease.english_name}`, {
+            defaultValue: disease.english_name,
+          }),
+          english_name: disease.english_name,
+        }))
+      );
+    }
+  }, [diseaseOptions, i18n.language]);
 
   const validationSchema = Yup.object().shape({
     plant: Yup.string().required(t("select_plant_required_key")),
@@ -74,8 +93,8 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
               {({ field }) => (
                 <SelectInput
                   label={t("select_plant_key")}
-                  options={plantOptions}
-                  value={plantOptions.find(
+                  options={translatedPlants}
+                  value={translatedPlants.find(
                     (option) => option.value === field.value
                   )}
                   onChange={(selectedOption) => {
@@ -100,8 +119,8 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
               {({ field }) => (
                 <SelectInput
                   label={t("select_disease_key")}
-                  options={diseaseOptions}
-                  value={diseaseOptions.find(
+                  options={translatedDiseases}
+                  value={translatedDiseases.find(
                     (option) => option.value === field.value
                   )}
                   onChange={(selectedOption) =>

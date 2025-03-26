@@ -6,7 +6,6 @@ import PhoneInput from "../../Formik/PhoneInput"; // Import your PhoneInput comp
 import Button from "../../Button";
 import OTPModal from "../../Formik/OTPModal";
 import { registerUser } from "../../../api/authAPI";
-import { useNavigate } from "react-router-dom";
 import {
   generateVerificationCode,
   verifyCode,
@@ -20,7 +19,6 @@ export default function RegisterStepTwo({
 }) {
   const [otpModal, setOtpModal] = useState(false);
   const { t } = useTranslation(); // Translation hook
-  const navigate = useNavigate(); // Translation hook
 
   // Initial form values
   const initialValues = {
@@ -84,24 +82,15 @@ export default function RegisterStepTwo({
   };
   const onOTPSubmit = async (otp) => {
     try {
-      await verifyCode(registerData?.email, otp);
-      if (registerData?.user_type === "individual") {
-        navigate("/auth/login");
-      } else {
-        setStep(step + 1);
-      }
+      const response = await verifyCode(registerData?.email, otp);
+      console.log({ response });
+
+      setStep(step + 1);
+      setRegisterData((prev) => ({ ...prev, token: response?.access_token }));
     } catch (error) {
       console.log(error);
-    } finally {
-      if (registerData?.user_type === "individual") {
-        navigate("/auth/login");
-      } else {
-        setStep(step + 1);
-      }
-      setOtpModal(false);
     }
   };
-
   return (
     <>
       {" "}
@@ -173,7 +162,7 @@ export default function RegisterStepTwo({
               <Field name="phone_number">
                 {({ field }) => (
                   <PhoneInput
-                    value={field.value}
+                    initialPhoneNumber={field.value}
                     onChange={({ phoneNumber }) =>
                       setFieldValue("phone_number", phoneNumber)
                     }
