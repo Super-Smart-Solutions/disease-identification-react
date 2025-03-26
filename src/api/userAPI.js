@@ -33,13 +33,14 @@ export const deleteUserById = async (userId) => {
 };
 
 // Upload user avatar
-export const uploadUserAvatar = async (avatarFile) => {
+export const uploadUserAvatar = async (avatarFile, token) => {
     const formData = new FormData();
-    formData.append("avatar", avatarFile);
+    formData.append("file", avatarFile);
 
     const response = await axiosInstance.patch(`${USER_ENDPOINT}/me/avatar`, formData, {
         headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`
         },
     });
     return response.data;

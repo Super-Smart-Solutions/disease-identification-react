@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { uploadUserAvatar } from "../../../api/userAPI";
 
-const AvatarStep = () => {
+const AvatarStep = ({ registerData }) => {
   const { t } = useTranslation();
   const editorRef = useRef(null);
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const AvatarStep = () => {
 
   const handleSave = async () => {
     if (!editorRef.current || isLoading) return;
-    
+
     setIsLoading(true);
     setError(null);
 
@@ -39,7 +39,7 @@ const AvatarStep = () => {
         lastModified: Date.now(),
       });
 
-      await uploadUserAvatar(file);
+      await uploadUserAvatar(file, registerData?.token);
       setSelectedFile(file);
       setShowModal(false);
       navigate("/models");
@@ -74,7 +74,7 @@ const AvatarStep = () => {
       >
         {t("profile_picture_key")}
       </label>
-      
+
       <FileUpload
         allowRemove={true}
         accept="image/*"
@@ -93,7 +93,7 @@ const AvatarStep = () => {
             >
               <IoClose size={24} />
             </button>
-            
+
             <div className="flex flex-col items-center space-y-4">
               <AvatarEditor
                 ref={editorRef}
@@ -124,20 +124,18 @@ const AvatarStep = () => {
               </div>
 
               {error && (
-                <div className="text-red-500 text-sm mt-2">
-                  {error}
-                </div>
+                <div className="text-red-500 text-sm mt-2">{error}</div>
               )}
 
               <div className="flex space-x-3 pt-2">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={handleCancel}
                   disabled={isLoading}
                 >
                   {t("close_key")}
                 </Button>
-                <Button 
+                <Button
                   onClick={handleSave}
                   loading={isLoading}
                   disabled={isLoading}

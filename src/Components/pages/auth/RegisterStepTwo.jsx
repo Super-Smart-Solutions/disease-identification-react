@@ -6,7 +6,6 @@ import PhoneInput from "../../Formik/PhoneInput"; // Import your PhoneInput comp
 import Button from "../../Button";
 import OTPModal from "../../Formik/OTPModal";
 import { registerUser } from "../../../api/authAPI";
-import { useNavigate } from "react-router-dom";
 import {
   generateVerificationCode,
   verifyCode,
@@ -79,19 +78,19 @@ export default function RegisterStepTwo({
       setOtpModal(true);
     } catch (error) {
       console.log(error);
-      setOtpModal(true);
     }
   };
   const onOTPSubmit = async (otp) => {
     try {
-      await verifyCode(registerData?.email, otp);
+      const response = await verifyCode(registerData?.email, otp);
+      console.log({ response });
+
       setStep(step + 1);
+      setRegisterData((prev) => ({ ...prev, token: response?.access_token }));
     } catch (error) {
       console.log(error);
-      setStep(step + 1);
     }
   };
-
   return (
     <>
       {" "}

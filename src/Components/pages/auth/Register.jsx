@@ -20,6 +20,7 @@ export default function Register() {
     first_name: "",
     last_name: "",
     user_type: null,
+    token: null,
   });
   const [step, setStep] = useState(1);
 
@@ -77,7 +78,7 @@ export default function Register() {
       label: t("Step 2"),
     },
     {
-      component: <AvatarStep />,
+      component: <AvatarStep registerData={registerData} />,
       label: t("Step 3"),
     },
   ];

@@ -26,22 +26,6 @@ export default function OTPModal({ isOpen, onClose, length = 6, onSubmit }) {
     }
   }, [otp]); // This effect runs whenever otp changes
 
-  // Close modal when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen, onClose]);
-
   // Handle input change
   const handleChange = (index, value) => {
     if (!/^\d*$/.test(value)) return; // Allow only numbers
