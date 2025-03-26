@@ -6,6 +6,7 @@ import { IoClose } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { uploadUserAvatar } from "../../../api/userAPI";
+import { toast } from "react-toastify";
 
 const AvatarStep = ({ registerData }) => {
   const { t } = useTranslation();
@@ -42,7 +43,8 @@ const AvatarStep = ({ registerData }) => {
       await uploadUserAvatar(file, registerData?.token);
       setSelectedFile(file);
       setShowModal(false);
-      navigate("/models");
+      toast.success(t("account_created_succefully_key"))
+      navigate("/auth/login"); 
     } catch (error) {
       console.error("Error saving avatar:", error);
       setError(error.message || t("avatar_upload_error"));

@@ -63,6 +63,7 @@
   "reset_key": "Reset",
   "complete_data_key": "Complete Your Data",
   "create_account_key": "Create Account",
+  "account_created_succefully_key": "Account created successfully, please login",
   "logout_key": "Logout",
   "first_name_key": "First Name",
   "last_name_key": "Last Name",
