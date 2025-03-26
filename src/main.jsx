@@ -1,8 +1,8 @@
 // src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
-import "react-toastify/dist/ReactToastify.css";
+import App from "./App"; 
+import "react-toastify/dist/ReactToastify.css"; 
 import "./index.css";
 import "./App.css";
 import "./i18n"; // Import i18n configuration

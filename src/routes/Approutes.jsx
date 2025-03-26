@@ -18,6 +18,7 @@ import Models from "../pages/Models";
 import Register from "../Components/pages/auth/Register";
 import Login from "../Components/pages/auth/Login";
 import Cookies from "js-cookie"; // Import the Cookies library
+import Dashboard from "../pages/Dashboard";
 
 const componentMap = {
   Landing,
@@ -27,6 +28,7 @@ const componentMap = {
   Models,
   Register,
   Login,
+  Dashboard,
 };
 
 const ProtectedRoute = ({ children, isAuthenticated }) => {
