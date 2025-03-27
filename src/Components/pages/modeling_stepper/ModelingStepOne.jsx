@@ -14,7 +14,7 @@ export default function ModelingStepOne({ modelingData, setModelingData }) {
     queryKey: ["plants"],
     queryFn: async () => {
       const response = await fetchPlants();
-      return response.data.map((plant) => ({
+      return response.items.map((plant) => ({
         value: plant.id,
         label: t(`plants.${plant.english_name}`, { defaultValue: plant.english_name }),
         english_name: plant.english_name,

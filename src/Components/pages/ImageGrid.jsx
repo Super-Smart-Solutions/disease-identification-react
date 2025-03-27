@@ -16,7 +16,7 @@ const ImageGrid = ({ plantId, diseaseId }) => {
   });
 
   // Extract images if available
-  const images = data?.data || [];
+  const images = data?.items || [];
 
   const openModal = (index) => {
     setSelectedImage(index);

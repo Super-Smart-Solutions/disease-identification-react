@@ -19,7 +19,7 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
     queryKey: ["plants"],
     queryFn: async () => {
       const plants = await fetchPlants();
-      return plants.data;
+      return plants.items;
     },
   });
 
@@ -28,7 +28,8 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
     queryKey: ["diseases", selectedPlant],
     queryFn: async () => {
       if (!selectedPlant) return [];
-      return await fetchDiseasesByPlant(selectedPlant);
+      const diseases = await fetchDiseasesByPlant(selectedPlant);
+      return diseases.items;
     },
     enabled: !!selectedPlant,
   });
