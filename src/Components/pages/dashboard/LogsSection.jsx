@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import DataGrid from "../../DataGrid";
-import Button from "../../Button";
 import { getInferences } from "../../../api/inferenceAPI";
 import { fetchDiseases } from "../../../api/diseaseAPI";
 import { fetchPlants } from "../../../api/plantAPI";
 import ImageById from "./ImageById";
 import useSavedState from "../../../hooks/UseSavedState";
+import { getStatusTranslation } from "../../../utils/statusTranslations";
 
 export default function LogsSection() {
   const { t, i18n } = useTranslation();
@@ -45,6 +45,7 @@ export default function LogsSection() {
                 ? disease.arabic_name
                 : disease.english_name
               : "----",
+            status_text: getStatusTranslation(inference.status, t),
           };
         });
         setInferences(enrichedInferences || []);
@@ -70,6 +71,10 @@ export default function LogsSection() {
         }
         return "----";
       },
+    },
+    {
+      field: "status_text",
+      headerName: t("status_key"),
     },
     {
       field: "image_id",

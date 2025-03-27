@@ -135,6 +135,15 @@
   "invite_sent_successfully_key": "تم إرسال الدعوة بنجاح!",
   "invite_failed_key": "فشل إرسال الدعوة",
   "invite_key": "دعوة",
+  "created_key": "تم الإنشاء",
+  "image_valid_key": "صورة صالحة",
+  "image_invalid_key": "صورة غير صالحة",
+  "detection_completed_key": "تم الكشف بنجاح",
+  "detection_inconclusive_key": "كشف غير حاسم",
+  "deep_analysis_completed_key": "تم التحليل العميق بنجاح",
+  "deep_analysis_failed_key": "فشل التحليل العميق",
+  "attention_analysis_completed_key": "تم تحليل الانتباه بنجاح",
+  "attention_analysis_failed_key": "فشل تحليل الانتباه",
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },
