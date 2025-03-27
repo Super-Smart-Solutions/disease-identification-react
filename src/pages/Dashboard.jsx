@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import React from "react";
 import TeamSection from "../Components/pages/dashboard/TeamSection";
+import LogsSection from "../Components/pages/dashboard/LogsSection";
 
 export default function Dashboard() {
-  const { t } = useTranslation();
   return (
-    <div className=" flex flex-col gap-2">
-      <div className=" flex flex-col gap-2">
-        <TeamSection />
-      </div>
+    <div className="space-y-6">
+      <TeamSection />
+      <LogsSection />
     </div>
   );
 }
