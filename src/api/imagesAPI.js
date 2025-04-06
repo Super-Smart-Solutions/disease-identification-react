@@ -26,7 +26,11 @@ export const getImageUrls = async ({ plantId, diseaseId, limit = 10, offset = 0 
   );
   return { urls, images: imagesData.data };
 };
-
+// Fetch an image by ID
+export const fetchImageById = async (imageId) => {
+  const response = await axiosInstance.get(`${IMAGE_ENDPOINT}/${imageId}`);
+  return response.data;
+};
 
 export const uploadImage = async ({ name, plantId, imageFile }) => {
   const formData = new FormData();

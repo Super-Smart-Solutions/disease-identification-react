@@ -20,5 +20,12 @@
     "element": "DataBase",
     "breadcrumb": true,
     "label": "database"
+  },
+  {
+    "protected": true,
+    "path": "dashboard",
+    "element": "Dashboard",
+    "breadcrumb": true,
+    "label": "dashboard"
   }
 ]

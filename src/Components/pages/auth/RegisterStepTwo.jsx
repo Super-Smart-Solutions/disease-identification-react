@@ -83,8 +83,6 @@ export default function RegisterStepTwo({
   const onOTPSubmit = async (otp) => {
     try {
       const response = await verifyCode(registerData?.email, otp);
-      console.log({ response });
-
       setStep(step + 1);
       setRegisterData((prev) => ({ ...prev, token: response?.access_token }));
     } catch (error) {
