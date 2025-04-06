@@ -114,6 +114,10 @@
   "disease_identification_project_key": "منصة الصحة الزراعية",
   "disease_identification_description_key": "تطوير منصة الصحة الزراعية باستخدام نماذج التعلم الآلي للتعرف على الأمراض من خلال قاعدة بيانات واسعة لأمراض الورد، الفاكه، البن، النحل، الماشيه، و الاسماك.",
   "disease_identification_guide_key": "دليلك في التعرف على أمراض النبات.",
+  "showing_key": "عرض {{from}} إلى {{to}} من {{total}} عنصر",
+  "show_key": "عرض",
+  "previous_page_key": "الصفحة السابقة",
+  "next_page_key": "الصفحة التالية",
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },

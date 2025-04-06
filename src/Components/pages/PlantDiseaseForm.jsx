@@ -19,7 +19,7 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
     queryKey: ["plants"],
     queryFn: async () => {
       const plants = await fetchPlants();
-      return plants.data;
+      return plants.items;
     },
   });
 
@@ -28,7 +28,8 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
     queryKey: ["diseases", selectedPlant],
     queryFn: async () => {
       if (!selectedPlant) return [];
-      return await fetchDiseasesByPlant(selectedPlant);
+      const diseases = await fetchDiseasesByPlant(selectedPlant);
+      return diseases?.items;
     },
     enabled: !!selectedPlant,
   });
@@ -94,16 +95,13 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
                 <SelectInput
                   label={t("select_plant_key")}
                   options={translatedPlants}
-                  value={translatedPlants.find(
-                    (option) => option.value === field.value
-                  )}
+                  value={field?.value}
                   onChange={(selectedOption) => {
                     setFieldValue("plant", selectedOption.value);
                     setSelectedPlant(selectedOption.value);
+                    setFieldValue("disease", null);
                   }}
-                  placeholder={
-                    plantsLoading ? t("loading_key") : t("select_plant_key")
-                  }
+                  placeholder={t("select_plant_key")}
                   isLoading={plantsLoading}
                 />
               )}
@@ -120,9 +118,7 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
                 <SelectInput
                   label={t("select_disease_key")}
                   options={translatedDiseases}
-                  value={translatedDiseases.find(
-                    (option) => option.value === field.value
-                  )}
+                  value={field?.value || null}
                   onChange={(selectedOption) =>
                     setFieldValue("disease", selectedOption.value)
                   }

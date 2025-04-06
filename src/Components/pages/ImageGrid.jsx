@@ -1,22 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { getImages } from "../../api/imagesAPI";
+import Pagination from "../Pagination";
 
 const ImageGrid = ({ plantId, diseaseId }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isImageLoading, setIsImageLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const [loadedImages, setLoadedImages] = useState({});
 
-  // Fetch images using React Query
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["images", plantId, diseaseId],
-    queryFn: () => getImages({ plantId, diseaseId, limit: 50, offset: 0 }),
-    enabled: !!plantId || !!diseaseId, // Fetch only if plantId or diseaseId is selected
+  
+  // Memoize the query function to prevent unnecessary re-renders
+  const fetchImages = useCallback(
+    () => getImages({ plantId, diseaseId, size: pageSize, page }),
+    [plantId, diseaseId, pageSize, page]
+  );
+
+  const { data, isLoading, error, isFetching } = useQuery({
+    queryKey: ["images", plantId, diseaseId, page, pageSize],
+    queryFn: fetchImages,
+    enabled: !!plantId || !!diseaseId,
+    staleTime: 1000 * 60 * 5, 
+    // 5 minutes stale time
   });
 
-  // Extract images if available
-  const images = data?.data || [];
+  const images = data?.items || [];
+  const totalItems = data?.total || 0;
+  const totalPages = data?.pages || 1;
+
+  
+  // Skeleton loading array
+  const skeletonItems = Array(6).fill(null);
 
   const openModal = (index) => {
     setSelectedImage(index);
@@ -35,91 +52,188 @@ const ImageGrid = ({ plantId, diseaseId }) => {
     setIsImageLoading(true);
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
+  
+  // Track loaded images
+  const handleImageLoad = (id) => {
+    setLoadedImages((prev) => ({ ...prev, [id]: true }));
+  };
+
+  
+  // Generate low quality placeholder URL (assuming your API supports it)
+  const getLowQualityUrl = (url) => {
+    if (!url) return "";
+    
+    // Example: Add query params for image compression
+    return `${url}?w=50&q=10`; 
+    // Adjust based on your API
+  };
+
+  
+  // Keyboard navigation handler
+  const handleKeyDown = useCallback(
+    (e) => {
       if (selectedImage !== null) {
         if (e.key === "ArrowLeft") prevImage();
         else if (e.key === "ArrowRight") nextImage();
         else if (e.key === "Escape") closeModal();
       }
-    };
+    },
+    [selectedImage]
+  );
 
+  useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedImage]);
+  }, [handleKeyDown]);
 
-  if (isLoading) {
-    return <p className="text-gray-500">Loading images...</p>;
-  }
+  
+  // Reset to page 1 when plantId or diseaseId changes
+  useEffect(() => {
+    setPage(1);
+    setLoadedImages({}); 
+    // Reset loaded images when filters change
+  }, [plantId, diseaseId]);
 
   if (error) {
     return <p className="text-red-500">Error fetching images.</p>;
   }
 
   return (
-    <div className="flex flex-wrap justify-between gap-y-8">
-      {images.length > 0 ? (
-        images.map((img, index) => (
-          <motion.div
-            key={img.id}
-            className="cursor-pointer overflow-hidden rounded-lg"
-            whileHover={{ scale: 1.02 }}
-            onClick={() => openModal(index)}
-          >
-            <img
-              src={img.url}
-              alt={img.name}
-              className="h-60 object-cover rounded-lg"
-              loading="lazy"
+    <div>
+      <div className="flex flex-wrap justify-start gap-8">
+        {/* Skeleton loading */}
+        {(isLoading || isFetching) &&
+          skeletonItems.map((_, index) => (
+            <div
+              key={`skeleton-${index}`}
+              className="aspect-square bg-gray-200 animate-pulse rounded-lg"
             />
-          </motion.div>
-        ))
-      ) : (
-        <p className="text-gray-500">No images available.</p>
+          ))}
+
+        {/* Actual images with progressive loading */}
+        {!isLoading &&
+          !isFetching &&
+          images.length > 0 &&
+          images.map((img, index) => (
+            <motion.div
+              key={img.id}
+              className="relative overflow-hidden rounded-lg"
+              whileHover={{ scale: 1.02 }}
+              onClick={() => openModal(index)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              {/* Low quality placeholder */}
+              {!loadedImages[img.id] && (
+                <img
+                  src={getLowQualityUrl(img.url)}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover blur-sm"
+                  loading="lazy"
+                />
+              )}
+
+              {/* Full quality image */}
+              <img
+                src={img.url}
+                alt={img.name}
+                className={`h-60 w-full object-cover rounded-lg cursor-pointer transition-opacity duration-300 ${
+                  loadedImages[img.id] ? "opacity-100" : "opacity-0"
+                }`}
+                loading="lazy"
+                onLoad={() => handleImageLoad(img.id)}
+              />
+            </motion.div>
+          ))}
+
+        {/* Empty state */}
+        {!isLoading && !isFetching && images.length === 0 && (
+          <div className="col-span-full text-center py-12">
+            <p className="text-gray-500">No images available.</p>
+          </div>
+        )}
+      </div>
+
+      {/* Pagination */}
+      {totalItems > 0 && (
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          totalItems={totalItems}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+        />
       )}
 
-      {/* Modal */}
+      {/* Image modal with enhanced loading */}
       <AnimatePresence>
         {selectedImage !== null && (
           <motion.div
-            className="overlay flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
             onClick={closeModal}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="relative w-full max-w-3xl"
-              initial={{ scale: 0.8 }}
+              className="relative w-full max-w-4xl"
+              initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
-              exit={{ scale: 0.8 }}
+              exit={{ scale: 0.9 }}
+              onClick={(e) => e.stopPropagation()}
             >
+              {/* Blurred low-quality background */}
               {isImageLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-200 animate-pulse rounded-lg">
-                  <p className="text-gray-500">Loading...</p>
+                <div className="absolute inset-0 overflow-hidden">
+                  <img
+                    src={getLowQualityUrl(images[selectedImage]?.url)}
+                    alt=""
+                    className="w-full h-full object-contain blur-xl opacity-50"
+                  />
                 </div>
               )}
+
+              {/* Loading indicator */}
+              {isImageLoading && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
+                </div>
+              )}
+
+              {/* Main image */}
               <img
                 src={images[selectedImage]?.url}
                 alt={images[selectedImage]?.name}
-                className="w-full h-auto max-h-[80vh] object-contain"
+                className={`w-full h-auto max-h-[80vh] object-contain transition-opacity duration-300 ${
+                  isImageLoading ? "opacity-0" : "opacity-100"
+                }`}
                 onLoad={() => setIsImageLoading(false)}
               />
+
+              {/* Navigation controls */}
               <button
-                className="absolute top-4 right-4 text-white text-2xl"
+                className="absolute top-4 right-4 text-white text-2xl bg-black/50 rounded-full p-2 hover:bg-black/75 transition-colors"
                 onClick={closeModal}
               >
                 <FaTimes />
               </button>
               <button
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-2xl"
-                onClick={prevImage}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-2xl bg-black/50 rounded-full p-2 hover:bg-black/75 transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevImage();
+                }}
               >
                 <FaArrowLeft />
               </button>
               <button
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-2xl"
-                onClick={nextImage}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white text-2xl bg-black/50 rounded-full p-2 hover:bg-black/75 transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextImage();
+                }}
               >
                 <FaArrowRight />
               </button>
