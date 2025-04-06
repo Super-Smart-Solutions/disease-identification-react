@@ -12,7 +12,6 @@ const ImageGrid = ({ plantId, diseaseId }) => {
   const [pageSize, setPageSize] = useState(20);
   const [loadedImages, setLoadedImages] = useState({});
 
-  
   // Memoize the query function to prevent unnecessary re-renders
   const fetchImages = useCallback(
     () => getImages({ plantId, diseaseId, size: pageSize, page }),
@@ -23,7 +22,7 @@ const ImageGrid = ({ plantId, diseaseId }) => {
     queryKey: ["images", plantId, diseaseId, page, pageSize],
     queryFn: fetchImages,
     enabled: !!plantId || !!diseaseId,
-    staleTime: 1000 * 60 * 5, 
+    staleTime: 1000 * 60 * 5,
     // 5 minutes stale time
   });
 
@@ -31,7 +30,6 @@ const ImageGrid = ({ plantId, diseaseId }) => {
   const totalItems = data?.total || 0;
   const totalPages = data?.pages || 1;
 
-  
   // Skeleton loading array
   const skeletonItems = Array(6).fill(null);
 
@@ -52,23 +50,11 @@ const ImageGrid = ({ plantId, diseaseId }) => {
     setIsImageLoading(true);
   };
 
-  
   // Track loaded images
   const handleImageLoad = (id) => {
     setLoadedImages((prev) => ({ ...prev, [id]: true }));
   };
 
-  
-  // Generate low quality placeholder URL (assuming your API supports it)
-  const getLowQualityUrl = (url) => {
-    if (!url) return "";
-    
-    // Example: Add query params for image compression
-    return `${url}?w=50&q=10`; 
-    // Adjust based on your API
-  };
-
-  
   // Keyboard navigation handler
   const handleKeyDown = useCallback(
     (e) => {
@@ -86,11 +72,10 @@ const ImageGrid = ({ plantId, diseaseId }) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
-  
   // Reset to page 1 when plantId or diseaseId changes
   useEffect(() => {
     setPage(1);
-    setLoadedImages({}); 
+    setLoadedImages({});
     // Reset loaded images when filters change
   }, [plantId, diseaseId]);
 
@@ -106,7 +91,7 @@ const ImageGrid = ({ plantId, diseaseId }) => {
           skeletonItems.map((_, index) => (
             <div
               key={`skeleton-${index}`}
-              className="aspect-square bg-gray-200 animate-pulse rounded-lg"
+              className="bg-gray-200 animate-pulse rounded-lg h-60 w-3/12"
             />
           ))}
 
@@ -127,9 +112,9 @@ const ImageGrid = ({ plantId, diseaseId }) => {
               {/* Low quality placeholder */}
               {!loadedImages[img.id] && (
                 <img
-                  src={getLowQualityUrl(img.url)}
+                  src={img.url}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover blur-sm"
+                  className="h-60 w-full object-cover rounded-lg cursor-pointer transition-opacity duration-300"
                   loading="lazy"
                 />
               )}
@@ -188,7 +173,7 @@ const ImageGrid = ({ plantId, diseaseId }) => {
               {isImageLoading && (
                 <div className="absolute inset-0 overflow-hidden">
                   <img
-                    src={getLowQualityUrl(images[selectedImage]?.url)}
+                    src={images[selectedImage]?.url}
                     alt=""
                     className="w-full h-full object-contain blur-xl opacity-50"
                   />
