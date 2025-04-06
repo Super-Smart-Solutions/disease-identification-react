@@ -10,8 +10,12 @@ export default function DataBase() {
   const { state } = useLocation(); // Get the state from navigation
   const { t } = useTranslation();
 
-  const [selectedDisease, setSelectedDisease] = useState(state?.selectedDisease || null);
-  const [selectedPlant, setSelectedPlant] = useState(state?.selectedPlant || null);
+  const [selectedDisease, setSelectedDisease] = useState(
+    state?.selectedDisease || null
+  );
+  const [selectedPlant, setSelectedPlant] = useState(
+    state?.selectedPlant || null
+  );
 
   useEffect(() => {
     if (state?.selectedDisease) {
@@ -32,10 +36,15 @@ export default function DataBase() {
           initialDisease={selectedDisease}
         />
         <ExpandableArticle
-          article={selectedDisease || { english_name: t("select_disease_message") }}
+          article={
+            selectedDisease || { english_name: t("select_disease_message") }
+          }
           loading={!selectedDisease}
         />
-        <ImageGrid plantId={selectedPlant?.id} diseaseId={selectedDisease?.id} />
+        <ImageGrid
+          plantId={selectedPlant?.id}
+          diseaseId={selectedDisease?.id}
+        />
       </div>
     </div>
   );

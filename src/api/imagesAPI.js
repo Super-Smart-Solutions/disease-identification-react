@@ -5,12 +5,11 @@ const URL_ENDPOINT = "/images/url";
 const UPLOAD_ENDPOINT = "/images/uploads";
 
 // Fetch images with optional filters
-export const getImages = async ({ plantId, diseaseId, limit = 10, offset = 0 }) => {
+export const getImages = async ({ plantId, diseaseId, size = 10, }) => {
   const params = {
     plant_id: plantId,
     disease_id: diseaseId,
-    limit,
-    offset,
+    size,
   };
   const response = await axiosInstance.get(IMAGE_ENDPOINT, { params });
   return response.data;

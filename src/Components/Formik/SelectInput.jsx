@@ -18,7 +18,7 @@ const SelectInput = ({
       )}
       <Select
         options={options}
-        value={options.find((option) => option.value === value || null)}
+        value={options.find((option) => option.value === value) || null}
         onChange={(selectedOption) => onChange(selectedOption)}
         placeholder={placeholder}
         className="react-select-container"
