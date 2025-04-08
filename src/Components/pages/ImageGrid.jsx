@@ -85,7 +85,7 @@ const ImageGrid = ({ plantId, diseaseId }) => {
 
   return (
     <div>
-      <div className="flex justify-center flex-wrap gap-8">
+      <div className="flex justify-center flex-wrap gap-8 w-full">
         {/* Skeleton loading */}
         {(isLoading || isFetching) &&
           skeletonItems.map((_, index) => (
@@ -96,41 +96,42 @@ const ImageGrid = ({ plantId, diseaseId }) => {
           ))}
 
         {/* Actual images with progressive loading */}
-        {!isLoading &&
-          !isFetching &&
-          images.length > 0 &&
-          images.map((img, index) => (
-            <motion.div
-              key={img.id}
-              className="relative overflow-hidden rounded-lg"
-              whileHover={{ scale: 1.02 }}
-              onClick={() => openModal(index)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              {/* Low quality placeholder */}
-              {!loadedImages[img.id] && (
+        {!isLoading && !isFetching && images.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 w-10/12">
+            {images.map((img, index) => (
+              <motion.div
+                key={img.id}
+                className="relative overflow-hidden rounded-lg"
+                whileHover={{ scale: 1.02 }}
+                onClick={() => openModal(index)}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                {/* Low quality placeholder */}
+                {!loadedImages[img.id] && (
+                  <img
+                    src={img.url}
+                    alt=""
+                    className="h-60 w-full object-cover rounded-lg cursor-pointer transition-opacity duration-300"
+                    loading="lazy"
+                  />
+                )}
+
+                {/* Full quality image */}
                 <img
                   src={img.url}
-                  alt=""
-                  className="h-60 w-3/12 object-cover rounded-lg cursor-pointer transition-opacity duration-300"
+                  alt={img.name}
+                  className={`h-60 w-full object-cover rounded-lg cursor-pointer transition-opacity duration-300 ${
+                    loadedImages[img.id] ? "opacity-100" : "opacity-0"
+                  }`}
                   loading="lazy"
+                  onLoad={() => handleImageLoad(img.id)}
                 />
-              )}
-
-              {/* Full quality image */}
-              <img
-                src={img.url}
-                alt={img.name}
-                className={`h-60 w-full object-cover rounded-lg cursor-pointer transition-opacity duration-300 ${
-                  loadedImages[img.id] ? "opacity-100" : "opacity-0"
-                }`}
-                loading="lazy"
-                onLoad={() => handleImageLoad(img.id)}
-              />
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
+        )}
 
         {/* Empty state */}
         {!isLoading && !isFetching && images.length === 0 && (
@@ -141,17 +142,18 @@ const ImageGrid = ({ plantId, diseaseId }) => {
       </div>
 
       {/* Pagination */}
-      {totalItems > 0 && (
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          pageSize={pageSize}
-          totalItems={totalItems}
-          onPageChange={setPage}
-          onPageSizeChange={setPageSize}
-        />
-      )}
-
+      <div className="w-10/12 mx-auto">
+        {totalItems > 0 && (
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            totalItems={totalItems}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+          />
+        )}
+      </div>
       {/* Image modal with enhanced loading */}
       <AnimatePresence>
         {selectedImage !== null && (

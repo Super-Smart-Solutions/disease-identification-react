@@ -147,6 +147,13 @@
   "confirm_remove_user_key": "Remove User",
   "are_you_sure_delete_user_key": "Are you sure you want to remove this user?",
   "remove_user_key": "Remove",
+  "no_disease_selected_key": "No disease selected",
+  "arabic_name_key": "Arabic Name",
+  "scientific_name_key": "Scientific Name",
+  "no_symptoms_key": "No symptoms available",
+  "no_treatment_key": "No treatments available",
+  "description_key": "Description",
+
   "inputs_showcase": {
     "title": "Inputs Showcase"
   },

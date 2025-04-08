@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom"; // Import for retrieving state
 import ImageGrid from "../Components/pages/ImageGrid";
 import ExpandableArticle from "../Components/pages/ExpandableArticle";
 import PlantDiseaseForm from "../Components/pages/PlantDiseaseForm";
-import Breadcrumbs from "../Components/layout/BreadCrumbs";
 import { useTranslation } from "react-i18next";
 
 export default function DataBase() {

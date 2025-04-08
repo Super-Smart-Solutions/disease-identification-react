@@ -151,6 +151,12 @@
   "confirm_remove_user_key": "حذف المستخدم",
   "are_you_sure_delete_user_key": "هل أنت متأكد أنك تريد حذف هذا المستخدم؟",
   "remove_user_key": "حذف",
+  "no_disease_selected_key": "لم يتم اختيار مرض",
+  "arabic_name_key": "الاسم بالعربية",
+  "scientific_name_key": "الاسم العلمي",
+  "no_symptoms_key": "لا توجد أعراض متوفرة",
+  "no_treatment_key": "لا توجد طرق علاج متوفرة",
+  "description_key": "الوصف",
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },

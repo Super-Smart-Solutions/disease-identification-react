@@ -79,7 +79,7 @@ const Pagination = ({
         <button
           onClick={handlePrevious}
           disabled={currentPage === 1}
-          className={`p-2 rounded-md border ${
+          className={`p-2 rounded-md border cursor-pointer ${
             currentPage === 1
               ? "border-gray-200 text-gray-400 cursor-not-allowed"
               : "border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -93,7 +93,7 @@ const Pagination = ({
           <>
             <button
               onClick={() => onPageChange(1)}
-              className={`w-10 h-10 rounded-md border text-sm ${
+              className={`w-10 h-10 rounded-md border text-sm cursor-pointer ${
                 1 === currentPage
                   ? "border-primary bg-primary text-white"
                   : "border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -109,7 +109,7 @@ const Pagination = ({
           <button
             key={number}
             onClick={() => onPageChange(number)}
-            className={`w-10 h-10 rounded-md border text-sm ${
+            className={`w-10 h-10 rounded-md border text-sm cursor-pointer ${
               number === currentPage
                 ? "border-primary bg-primary text-white"
                 : "border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -126,7 +126,7 @@ const Pagination = ({
             )}
             <button
               onClick={() => onPageChange(totalPages)}
-              className={`w-10 h-10 rounded-md border text-sm ${
+              className={`w-10 h-10 rounded-md border text-sm cursor-pointer ${
                 totalPages === currentPage
                   ? "border-primary bg-primary text-white"
                   : "border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -140,7 +140,7 @@ const Pagination = ({
         <button
           onClick={handleNext}
           disabled={currentPage === totalPages}
-          className={`p-2 rounded-md border ${
+          className={`p-2 rounded-md border cursor-pointer ${
             currentPage === totalPages
               ? "border-gray-200 text-gray-400 cursor-not-allowed"
               : "border-gray-300 text-gray-700 hover:bg-gray-50"
