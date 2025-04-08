@@ -144,6 +144,9 @@
   "deep_analysis_failed_key": "deep analysis failed",
   "attention_analysis_completed_key": "attention analysis completed",
   "attention_analysis_failed_key": "attention analysis failed",
+  "confirm_remove_user_key": "Remove User",
+  "are_you_sure_delete_user_key": "Are you sure you want to remove this user?",
+  "remove_user_key": "Remove",
   "inputs_showcase": {
     "title": "Inputs Showcase"
   },

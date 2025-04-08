@@ -85,7 +85,7 @@ const ImageGrid = ({ plantId, diseaseId }) => {
 
   return (
     <div>
-      <div className="flex flex-wrap justify-start gap-8">
+      <div className="flex justify-center flex-wrap gap-8">
         {/* Skeleton loading */}
         {(isLoading || isFetching) &&
           skeletonItems.map((_, index) => (
@@ -114,7 +114,7 @@ const ImageGrid = ({ plantId, diseaseId }) => {
                 <img
                   src={img.url}
                   alt=""
-                  className="h-60 w-full object-cover rounded-lg cursor-pointer transition-opacity duration-300"
+                  className="h-60 w-3/12 object-cover rounded-lg cursor-pointer transition-opacity duration-300"
                   loading="lazy"
                 />
               )}

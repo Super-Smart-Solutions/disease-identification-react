@@ -11,11 +11,10 @@ const Pagination = ({
   onPageSizeChange,
 }) => {
   const { t, i18n } = useTranslation();
-  const isRTL = i18n.dir() === "rtl"; // Use i18n.dir() to detect text direction
+  const isRTL = i18n.dir() === "rtl";
   const pageNumbers = [];
   const maxVisiblePages = 5;
 
-  // Calculate visible page numbers
   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
@@ -41,17 +40,16 @@ const Pagination = ({
 
   const handlePageSizeChange = (e) => {
     onPageSizeChange(Number(e.target.value));
-    onPageChange(1); // Reset to first page when page size changes
+    onPageChange(1);
   };
 
-  // Determine which chevron icons to use based on direction
   const PreviousIcon = isRTL ? FaChevronRight : FaChevronLeft;
   const NextIcon = isRTL ? FaChevronLeft : FaChevronRight;
 
   return (
     <div
       className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6"
-      dir={i18n.dir()} // Use i18n.dir() for consistent direction handling
+      dir={i18n.dir()}
     >
       <div className="flex items-center gap-2">
         <span className="text-sm text-gray-600">

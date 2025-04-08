@@ -148,6 +148,9 @@
   "deep_analysis_failed_key": "فشل التحليل العميق",
   "attention_analysis_completed_key": "تم تحليل الانتباه بنجاح",
   "attention_analysis_failed_key": "فشل تحليل الانتباه",
+  "confirm_remove_user_key": "حذف المستخدم",
+  "are_you_sure_delete_user_key": "هل أنت متأكد أنك تريد حذف هذا المستخدم؟",
+  "remove_user_key": "حذف",
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },

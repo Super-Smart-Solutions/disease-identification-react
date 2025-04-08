@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useUserData } from "../../../hooks/useUserData";
 import { useTranslation } from "react-i18next";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -7,40 +8,52 @@ import Button from "../../Button";
 import CreateOrganization from "./CreateOrganization";
 import DataGrid from "../../DataGrid";
 import noDataImg from "../../../assets/no-data.png";
-import { fetchUsers } from "../../../api/userAPI";
+import { deleteUserById, fetchUsers } from "../../../api/userAPI";
+import { FiTrash } from "react-icons/fi";
+import ConfirmationModal from "../../ConfirmationModal";
+import { useUserTeam } from "../../../api/useUserTeam";
 
 export default function TeamSection() {
   const { t } = useTranslation();
   const { user, refetchUserData } = useUserData();
+  const { data: teamData } = useUserTeam(user?.organization_id);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [inviteLoading, setInviteLoading] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deletingUser, setDeletingUser] = useState(false);
 
-  useEffect(() => {
-    if (user?.organization_id) {
-      fetchUserData();
-    }
-  }, [user?.organization_id]);
+  const fetchUsersData = useCallback(
+    () =>
+      fetchUsers({
+        organizationId: user?.organization_id,
+        page,
+        size: pageSize,
+      }),
+    [user?.organization_id, page, pageSize]
+  );
 
-  const fetchUserData = async () => {
-    try {
-      setLoading(true);
-      const response = await fetchUsers();
-      setUsers(response?.items);
-    } catch (error) {
-      console.error("Failed to fetch organization data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    data: usersData,
+    isLoading,
+    error,
+    refetch: refetchUsers,
+  } = useQuery({
+    queryKey: ["organizationUsers", user?.organization_id, page, pageSize],
+    queryFn: fetchUsersData,
+    enabled: !!user?.organization_id,
+    staleTime: 1000 * 60 * 5, // 5 minutes stale time
+  });
 
   const handleSuccess = () => {
     setIsModalOpen(false);
     refetchUserData().then(() => {
       if (user?.organization_id) {
-        fetchUserData();
+        refetchUsers();
       }
     });
   };
@@ -61,7 +74,7 @@ export default function TeamSection() {
       setStatus({ success: true });
       resetForm();
       setTimeout(() => {
-        fetchUserData();
+        refetchUsers();
       }, 500);
       setIsInviteModalOpen(false);
     } catch (error) {
@@ -72,15 +85,76 @@ export default function TeamSection() {
     }
   };
 
+  const handleRemoveUser = (userId) => {
+    setUserToDelete(userId);
+    setIsDeleteModalOpen(true);
+  };
+  const confirmDeleteUser = async () => {
+    if (!userToDelete) return;
+    try {
+      setDeletingUser(true);
+      await deleteUserById(userToDelete);
+      setIsDeleteModalOpen(false);
+      setUserToDelete(null);
+      refetchUsers(); // Refresh list
+    } catch (err) {
+      console.error("Failed to delete user:", err);
+    } finally {
+      setDeletingUser(false);
+    }
+  };
   const columnDefs = [
-    { field: "name", headerName: t("name_key") },
-    { field: "email", headerName: t("email_key") },
+    {
+      field: "first_name",
+      headerName: t("name_key"),
+    },
+    {
+      field: "email",
+      headerName: t("email_key"),
+    },
+    {
+      field: "is_active",
+      headerName: t("status_key"),
+      cellRenderer: (params) => {
+        const status = params?.value;
+
+        return (
+          <span
+            className={`px-3 py-1 rounded-full text-xs font-medium  ${
+              status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+            }`}
+          >
+            {t(status ? "active_key" : "inactive_key")}
+          </span>
+        );
+      },
+    },
+    {
+      field: "remove",
+      headerName: t("actions_key"), // No header for icon actions
+      width: 80,
+      cellRenderer: (params) => (
+        <>
+          {params?.data?.id !== user?.id && (
+            <button
+              className="text-gray-600 hover:text-gray-800 transition cursor-pointer p-2 hover:bg-gray-200 rounded-full"
+              onClick={() => handleRemoveUser(params?.data?.id)}
+              title={t("remove_user_key")}
+            >
+              <FiTrash size={18} />
+            </button>
+          )}
+        </>
+      ),
+    },
   ];
 
   return (
     <div className="space-y-4">
       <div className="flex justify-between">
-        <h2 className="text-2xl font-semibold">{t("team_key")}</h2>
+        <h2 className="text-2xl font-semibold">
+          {`${t("team_key")}  ${teamData?.name}`}{" "}
+        </h2>
         {user?.organization_id && (
           <Button onClick={() => setIsInviteModalOpen(true)}>
             {t("invite_key")}
@@ -111,16 +185,23 @@ export default function TeamSection() {
         </>
       ) : (
         <>
-          {loading ? (
-            <div className="flex justify-center items-center h-40">
-              <p>{t("loading_key")}...</p>
-            </div>
-          ) : users.length ? (
-            <div className="space-y-4">
-              <DataGrid rowData={users || []} colDefs={columnDefs} />
-            </div>
-          ) : (
+          {error ? (
             <div className="text-red-500">{t("failed_to_load_team_key")}</div>
+          ) : (
+            <div className="space-y-4">
+              <DataGrid
+                rowData={usersData?.items || []}
+                colDefs={columnDefs}
+                loading={isLoading}
+                pagination={true}
+                currentPage={page}
+                pageSize={pageSize}
+                totalItems={usersData?.total}
+                totalPages={usersData?.pages}
+                onPageChange={setPage}
+                onPageSizeChange={setPageSize}
+              />
+            </div>
           )}
         </>
       )}
@@ -196,6 +277,15 @@ export default function TeamSection() {
             </Formik>
           </div>
         </div>
+      )}
+      {isDeleteModalOpen && (
+        <ConfirmationModal
+          title={t("confirm_remove_user_key")}
+          message={t("are_you_sure_delete_user_key")}
+          onConfirm={confirmDeleteUser}
+          onCancel={() => setIsDeleteModalOpen(false)}
+          loading={deletingUser}
+        />
       )}
     </div>
   );
