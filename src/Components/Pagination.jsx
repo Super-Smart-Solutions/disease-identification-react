@@ -48,7 +48,7 @@ const Pagination = ({
 
   return (
     <div
-      className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6"
+      className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 w-full"
       dir={i18n.dir()}
     >
       <div className="flex items-center gap-2">
@@ -67,7 +67,7 @@ const Pagination = ({
             isRTL ? "text-right" : "text-left"
           }`}
         >
-          {[10, 20, 50, 100].map((size) => (
+          {[20, 50, 100].map((size) => (
             <option key={size} value={size}>
               {t("show_key")} {size}
             </option>

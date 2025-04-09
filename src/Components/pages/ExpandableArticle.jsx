@@ -43,7 +43,7 @@ export default function ExpandableArticle({ article, loading }) {
           </motion.p>
         </div>
         <img
-          src={farm}
+          src={article?.image || farm}
           alt="Disease"
           className="w-64 h-64 object-cover relative bottom-10 rounded-2xl  shadow-2xl hidden md:block "
         />

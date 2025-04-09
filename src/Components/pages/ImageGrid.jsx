@@ -31,7 +31,7 @@ const ImageGrid = ({ plantId, diseaseId }) => {
   const totalPages = data?.pages || 1;
 
   // Skeleton loading array
-  const skeletonItems = Array(6).fill(null);
+  const skeletonItems = Array(8).fill(null);
 
   const openModal = (index) => {
     setSelectedImage(index);
@@ -85,53 +85,75 @@ const ImageGrid = ({ plantId, diseaseId }) => {
 
   return (
     <div>
-      <div className="flex justify-center flex-wrap gap-8 w-full">
-        {/* Skeleton loading */}
-        {(isLoading || isFetching) &&
-          skeletonItems.map((_, index) => (
-            <div
-              key={`skeleton-${index}`}
-              className="bg-gray-200 animate-pulse rounded-lg h-60 w-3/12"
-            />
-          ))}
-
-        {/* Actual images with progressive loading */}
-        {!isLoading && !isFetching && images.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 w-10/12">
-            {images.map((img, index) => (
-              <motion.div
-                key={img.id}
-                className="relative overflow-hidden rounded-lg"
-                whileHover={{ scale: 1.02 }}
-                onClick={() => openModal(index)}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                {/* Low quality placeholder */}
-                {!loadedImages[img.id] && (
-                  <img
-                    src={img.url}
-                    alt=""
-                    className="h-60 w-full object-cover rounded-lg cursor-pointer transition-opacity duration-300"
-                    loading="lazy"
-                  />
-                )}
-
-                {/* Full quality image */}
-                <img
-                  src={img.url}
-                  alt={img.name}
-                  className={`h-60 w-full object-cover rounded-lg cursor-pointer transition-opacity duration-300 ${
-                    loadedImages[img.id] ? "opacity-100" : "opacity-0"
-                  }`}
-                  loading="lazy"
-                  onLoad={() => handleImageLoad(img.id)}
-                />
-              </motion.div>
-            ))}
+      <div className="flex justify-center flex-wrap gap-8  w-full">
+        <>
+          {/* Pagination */}
+          <div className=" mx-auto sticky top-14 z-10 bg-slate-50 py-5 w-full">
+            {totalItems > 0 && (
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                totalItems={totalItems}
+                onPageChange={setPage}
+                onPageSizeChange={setPageSize}
+              />
+            )}
           </div>
-        )}
+
+          <div className="w-full flex flex-col items-center gap-6">
+            {/* Loading or Images */}
+            {isLoading || isFetching ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+                {skeletonItems.map((_, index) => (
+                  <div
+                    key={`skeleton-${index}`}
+                    className="bg-gray-200 animate-pulse rounded-lg h-60"
+                  />
+                ))}
+              </div>
+            ) : images.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+                {images.map((img, index) => (
+                  <motion.div
+                    key={img.id}
+                    className="relative overflow-hidden rounded-lg"
+                    whileHover={{ scale: 1.02 }}
+                    onClick={() => openModal(index)}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {/* Low quality placeholder */}
+                    {!loadedImages[img.id] && (
+                      <img
+                        src={img.url}
+                        alt=""
+                        className="h-60 w-full object-cover rounded-lg cursor-pointer transition-opacity duration-300"
+                        loading="lazy"
+                      />
+                    )}
+
+                    {/* Full quality image */}
+                    <img
+                      src={img.url}
+                      alt={img.name}
+                      className={`h-60 w-full object-cover rounded-lg cursor-pointer transition-opacity duration-300 ${
+                        loadedImages[img.id] ? "opacity-100" : "opacity-0"
+                      }`}
+                      loading="lazy"
+                      onLoad={() => handleImageLoad(img.id)}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500">No images available.</p>
+              </div>
+            )}
+          </div>
+        </>
 
         {/* Empty state */}
         {!isLoading && !isFetching && images.length === 0 && (
@@ -141,19 +163,6 @@ const ImageGrid = ({ plantId, diseaseId }) => {
         )}
       </div>
 
-      {/* Pagination */}
-      <div className="w-10/12 mx-auto">
-        {totalItems > 0 && (
-          <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            pageSize={pageSize}
-            totalItems={totalItems}
-            onPageChange={setPage}
-            onPageSizeChange={setPageSize}
-          />
-        )}
-      </div>
       {/* Image modal with enhanced loading */}
       <AnimatePresence>
         {selectedImage !== null && (
