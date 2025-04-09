@@ -153,6 +153,7 @@
   "no_symptoms_key": "No symptoms available",
   "no_treatment_key": "No treatments available",
   "description_key": "Description",
+  "created_at_key": "Created at",
 
   "inputs_showcase": {
     "title": "Inputs Showcase"

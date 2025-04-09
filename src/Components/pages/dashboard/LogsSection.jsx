@@ -7,6 +7,7 @@ import { fetchDiseases } from "../../../api/diseaseAPI";
 import { fetchPlants } from "../../../api/plantAPI";
 import ImageById from "./ImageById";
 import { getStatusTranslation } from "../../../utils/statusTranslations";
+import moment from "moment/moment";
 
 export default function LogsSection() {
   const { t, i18n } = useTranslation();
@@ -75,6 +76,12 @@ export default function LogsSection() {
       field: "image_id",
       headerName: t("image_key"),
       cellRenderer: (params) => <ImageById id={params?.data?.image_id} />,
+    },
+    {
+      field: "created_at",
+      headerName: t("created_at_key"),
+      valueFormatter: ({ value }) =>
+        value && moment(value).format("YYYY-MM-DD"),
     },
   ];
 

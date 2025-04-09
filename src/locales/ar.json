@@ -156,7 +156,9 @@
   "scientific_name_key": "الاسم العلمي",
   "no_symptoms_key": "لا توجد أعراض متوفرة",
   "no_treatment_key": "لا توجد طرق علاج متوفرة",
-  "description_key": "الوصف",
+  "description_key": "الوصف", 
+  "created_at_key": "أنشأ في",
+
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },
