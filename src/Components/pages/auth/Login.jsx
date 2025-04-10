@@ -38,7 +38,7 @@ export default function Login() {
 
   return (
     <motion.div
-      className="flex-grow w-full"
+      className="w-full py-6"
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -50 }}
@@ -57,7 +57,7 @@ export default function Login() {
           </div>
 
           {/* Right: Login Form */}
-          <div className="w-full md:w-1/2 p-6 flex flex-col justify-center items-center">
+          <div className="w-full md:w-2/3 p-6 flex flex-col justify-center items-center">
             <h2 className="text-2xl font-bold mb-6 me-auto">
               {t("login_key")}
             </h2>

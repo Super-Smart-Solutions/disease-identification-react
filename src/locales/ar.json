@@ -156,9 +156,19 @@
   "scientific_name_key": "الاسم العلمي",
   "no_symptoms_key": "لا توجد أعراض متوفرة",
   "no_treatment_key": "لا توجد طرق علاج متوفرة",
-  "description_key": "الوصف", 
+  "description_key": "الوصف",
   "created_at_key": "أنشأ في",
-
+  "soil_calculator_key": "حاسبة التربة",
+  "oil_test_key": "اختبار الزيت",
+  "coming_soon_key": "قريبًا",
+  "download_title_key": "حمل تطبيق الزراعة الخاص بنا",
+  "download_subtitle_key": "قم بإدارة مزرعتك بكفاءة مع تطبيقنا المتنقل!",
+  "app_store_key": "متجر التطبيقات",
+  "google_play_key": "متجر جوجل بلاي",
+  "phone_alt_key": "هاتف يعرض تطبيق الزراعة",
+  "get_diagnosis_key": "احصل على تشخيص",
+  "take_photo_key": "التقط صورة",
+  "choose_plant_key": "اختر النبات",
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },
