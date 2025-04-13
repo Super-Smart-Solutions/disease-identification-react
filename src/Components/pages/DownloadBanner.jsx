@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FaApple, FaGooglePlay } from "react-icons/fa";
 import FarmingVectorIllustration from "../../assets/FarmingVectorIllustration.jpg";
-import PhoneImage from "../../assets/Phone.png";
+import PhoneImage from "../../assets/phone.png";
 import { useTranslation } from "react-i18next";
 
 export default function DownloadBanner() {
