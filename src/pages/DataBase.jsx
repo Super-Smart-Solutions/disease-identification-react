@@ -16,6 +16,7 @@ export default function DataBase() {
     state?.selectedPlant || null
   );
 
+
   useEffect(() => {
     if (state?.selectedDisease) {
       setSelectedDisease(state.selectedDisease);
@@ -35,6 +36,7 @@ export default function DataBase() {
           initialDisease={selectedDisease}
         />
         <ExpandableArticle
+          plant_id = {selectedPlant}
           article={
             selectedDisease || { english_name: t("select_disease_message") }
           }

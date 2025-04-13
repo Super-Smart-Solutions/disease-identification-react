@@ -6,7 +6,7 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Arrow icons
 import { ArticleSkeleton } from "./ArticleSkeleton";
 import farm from "../../assets/farm.jpg";
 
-export default function ExpandableArticle({ article, loading }) {
+export default function ExpandableArticle({ plant_id, article, loading }) {
   const [expanded, setExpanded] = useState(false);
   const { t } = useTranslation();
 
@@ -43,7 +43,7 @@ export default function ExpandableArticle({ article, loading }) {
           </motion.p>
         </div>
         <img
-          src={article?.image || farm}
+          src={plant_id ? `${plant_id}.jpg` : farm}
           alt="Disease"
           className="w-64 h-64 object-cover relative bottom-10 rounded-2xl  shadow-2xl hidden md:block "
         />
