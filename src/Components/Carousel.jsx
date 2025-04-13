@@ -8,7 +8,7 @@ export default function Carousel({ cards }) {
     dots: true,
     infinite: true,
     slidesToShow: 3,
-    slidesToScroll: 1,
+    slidesToScroll: 3,
     autoplay: true,
     speed: 300,
     autoplaySpeed: 2000,

@@ -12,7 +12,8 @@ export default function Infographics() {
 
   const cards = [
     {
-      percent: 50,
+      image: PlantImage1,
+      icon: <FaSearch className="text-white text-4xl" />,
       title: t("get_diagnosis_key"),
     },
     {
@@ -23,6 +24,14 @@ export default function Infographics() {
     {
       image: PlantImage3,
       icon: <FaSeedling className="text-white text-4xl" />,
+      title: t("choose_plant_key"),
+    },
+    {
+      percent: 50,
+      title: t("choose_plant_key"),
+    },
+    {
+      percent: 60,
       title: t("choose_plant_key"),
     },
     {
