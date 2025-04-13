@@ -29,14 +29,22 @@ export default function DownloadBanner() {
           transition={{ duration: 0.8 }}
           className="flex gap-4 justify-center"
         >
-          <button className="bg-white text-black px-5 py-3 rounded-2xl flex items-center gap-2 hover:bg-gray-200 transition">
+          <a
+            target="_blank"
+            href="https://apps.apple.com/us/app/murshiduk-%D9%85%D8%B1%D8%B4%D8%AF%D9%83-%D8%A7%D9%84%D8%B2%D8%B1%D8%A7%D8%B9%D9%8A/id1500889672"
+            className="bg-white text-black px-5 py-3 rounded-2xl flex items-center gap-2 hover:bg-gray-200 transition"
+          >
             <FaApple className="text-2xl" />
             <span>{t("app_store_key")}</span>
-          </button>
-          <button className="bg-white text-black px-5 py-3 rounded-2xl flex items-center gap-2 hover:bg-gray-200 transition">
+          </a>
+          <a
+            target="_blank"
+            href="https://play.google.com/store/apps/details?id=com.saatco.murshadik&hl=ar&pli=1"
+            className="bg-white text-black px-5 py-3 rounded-2xl flex items-center gap-2 hover:bg-gray-200 transition"
+          >
             <FaGooglePlay className="text-2xl" />
             <span>{t("google_play_key")}</span>
-          </button>
+          </a>
         </motion.div>
       </div>
 

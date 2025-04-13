@@ -157,7 +157,7 @@
   "soil_calculator_key": "Soil calculator",
   "oil_test_key": "Oil test",
   "coming_soon_key": "Coming Soon",
-  "download_title_key": "Download Our Farming App",
+  "download_title_key": "Download Our Murshiduk App",
   "download_subtitle_key": "Manage your farm efficiently with our mobile app!",
   "app_store_key": "App Store",
   "google_play_key": "Google Play",
@@ -165,6 +165,8 @@
   "get_diagnosis_key": "Get diagnosis",
   "take_photo_key": "Take photo",
   "choose_plant_key": "Choose plant",
+  "extra_feature_key": "Extra Feature",
+  "infographics_key": "Infographics",
 
   "inputs_showcase": {
     "title": "Inputs Showcase"

@@ -161,7 +161,7 @@
   "soil_calculator_key": "حاسبة التربة",
   "oil_test_key": "اختبار الزيت",
   "coming_soon_key": "قريبًا",
-  "download_title_key": "حمل تطبيق الزراعة الخاص بنا",
+  "download_title_key": "حمل تطبيق مرشدك الزراعي الخاص بنا",
   "download_subtitle_key": "قم بإدارة مزرعتك بكفاءة مع تطبيقنا المتنقل!",
   "app_store_key": "متجر التطبيقات",
   "google_play_key": "متجر جوجل بلاي",
@@ -169,6 +169,9 @@
   "get_diagnosis_key": "احصل على تشخيص",
   "take_photo_key": "التقط صورة",
   "choose_plant_key": "اختر النبات",
+  "extra_feature_key": "مميزات اضافية",
+  "infographics_key": "الاحصائيات",
+
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },
