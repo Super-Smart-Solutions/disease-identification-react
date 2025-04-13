@@ -171,6 +171,9 @@
   "choose_plant_key": "اختر النبات",
   "extra_feature_key": "مميزات اضافية",
   "infographics_key": "الاحصائيات",
+  "total_images_collected": "عدد الصور التي تم جمعها",
+  "number_classes": "عدد المجالات المتضمنه في المشروع",
+  "number_diseases": "عدد الأمراض التي تم دراستها",
 
   "inputs_showcase": {
     "title": "عرض المدخلات"

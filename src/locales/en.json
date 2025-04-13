@@ -248,6 +248,9 @@
   "Get Started": "Get Started",
   "Symptoms": "Symptoms",
   "Control Methods:": "Control Methods:",
+  "total_images_collected": "Total images collected",
+  "number_classes": "Number of classes studied. ",
+  "number_diseases": "Number of diseases studied",
 
   "team_key": "Team",
   "no_such_team_key": "You don't belong to any team yet",

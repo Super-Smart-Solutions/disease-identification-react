@@ -43,7 +43,7 @@ export default function CircularProgress({ percent }) {
           fontSize="14px"
           fontWeight="bold"
         >
-          {percent}%
+          {percent}
         </text>
       </svg>
     </div>

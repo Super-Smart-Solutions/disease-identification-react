@@ -27,16 +27,16 @@ export default function Infographics() {
       title: t("choose_plant_key"),
     },
     {
-      percent: 50,
-      title: t("choose_plant_key"),
+      value: 33.997,
+      title: t("total_images_collected"),
     },
     {
-      percent: 60,
-      title: t("choose_plant_key"),
+      value: 6,
+      title: t("number_classes"),
     },
     {
-      percent: 70,
-      title: t("choose_plant_key"),
+      value: 39,
+      title: t("number_diseases"),
     },
   ];
 
@@ -46,8 +46,8 @@ export default function Infographics() {
     component: (
       <div className="w-full">
         <div className="relative w-full h-48 rounded-2xl flex items-center justify-center bg-gray-100 overflow-hidden">
-          {card.percent !== undefined ? (
-            <CircularProgress percent={card.percent} />
+          {card.value !== undefined ? (
+            <CircularProgress percent={card.value} />
           ) : (
             <>
               <img
