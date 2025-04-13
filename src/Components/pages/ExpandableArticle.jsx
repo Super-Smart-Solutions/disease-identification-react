@@ -1,48 +1,96 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Import arrow icons
 import Button from "../Button";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Arrow icons
+import { ArticleSkeleton } from "./ArticleSkeleton";
+import farm from "../../assets/farm.jpg";
 
-export default function ExpandableArticle({ article, loading }) {
+export default function ExpandableArticle({ plant_id, article, loading }) {
   const [expanded, setExpanded] = useState(false);
   const { t } = useTranslation();
 
+  const formatKey = (str) => str?.replace(/\s+/g, "_").toLowerCase();
+
   if (loading) {
-    return <div className="p-6 cardIt animate-pulse">Loading...</div>;
+    return <ArticleSkeleton />;
   }
 
   return (
-    <motion.div className="w-full p-6 cardIt">
-      <h2 className="text-2xl font-bold text-gray-900">
-        {article.english_name || "No disease selected"}
-      </h2>
+    <motion.div className="w-full p-6 cardIt space-y-4">
+      <div className="flex items-start justify-between space-x-4">
+        {/* Static image beside the English name */}
 
-      <h3 className="text-lg font-semibold text-gray-700 mt-2">
-        {article.arabic_name || t("no_arabic_name_key")}
-      </h3>
+        <div className=" space-y-6">
+          <h2 className="text-3xl font-bold me-2 text-gray-900">
+            {article.english_name || t("no_disease_selected_key")}
+          </h2>
+          {article.arabic_name && (
+            <h3 className="text-xl font-bold me-2 text-gray-900">
+              {t("arabic_name_key")}: {article.arabic_name}
+            </h3>
+          )}
 
-      <h4 className="text-lg font-semibold text-gray-700 mt-2">
-        {article.scientific_name || ""}
-      </h4>
-
-      <motion.p className="text-gray-600 mt-3">
-        {t(`${article.english_name.replace(/\s+/g, '_').toLowerCase()}_description`) || t("no_description_key")}
-      </motion.p>
-
-      {expanded && (
-        <div className="mt-4">
-          <h4 className="font-bold">{t("Symptoms")}:</h4>
-          <p>{t(`${article.english_name.replace(/\s+/g, '_').toLowerCase()}_symptoms`) || "N/A"}</p>
-
-          <h4 className="font-bold mt-2">{t("Control Methods:")}:</h4>
-          <p>{t(`${article.english_name.replace(/\s+/g, '_').toLowerCase()}_treatments`) || "N/A"}</p>
+          {article.scientific_name && (
+            <h4 className="text-lg font-bold me-2 text-gray-900">
+              {t("scientific_name_key")}: {article.scientific_name}
+            </h4>
+          )}
+          <motion.p className="text-base text-gray-700 leading-relaxed">
+            <span className="font-bold me-2">{t("description_key")}:</span>
+            {t(`${formatKey(article.english_name)}_description`) ||
+              t("no_description_key")}
+          </motion.p>
         </div>
-      )}
+        <img
+          src={plant_id ? `${plant_id}.jpg` : farm}
+          alt="Disease"
+          className="w-64 h-64 object-cover relative bottom-10 rounded-2xl  shadow-2xl hidden md:block "
+        />
+      </div>
 
-      <Button onClick={() => setExpanded(!expanded)}>
-        {expanded ? t("close_key") : t("read_more_key")}
-      </Button>
+      <motion.div
+        initial={{ height: 0 }}
+        animate={{ height: expanded ? "auto" : 0 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="overflow-hidden"
+      >
+        {expanded && (
+          <div className="space-y-3 mt-4">
+            <div>
+              <h4 className="text-lg font-bold me-2 text-gray-800">
+                {t("Symptoms")}
+              </h4>
+              <p className="text-gray-700 text-base leading-relaxed">
+                {t(`${formatKey(article.english_name)}_symptoms`) ||
+                  t("no_symptoms_key")}
+              </p>
+            </div>
+
+            <div>
+              <h4 className="text-lg font-bold me-2 text-gray-800">
+                {t("Control Methods:")}
+              </h4>
+              <p className="text-gray-700 text-base leading-relaxed">
+                {t(`${formatKey(article.english_name)}_treatments`) ||
+                  t("no_treatment_key")}
+              </p>
+            </div>
+          </div>
+        )}
+      </motion.div>
+
+      <div className="pt-2 flex items-center space-x-2">
+        <Button
+          className="flex gap-2 items-center"
+          onClick={() => setExpanded(!expanded)}
+        >
+          {expanded ? t("close_key") : t("read_more_key")}
+          <FaChevronUp
+            className={`${expanded ? "" : "rotate-180 duration-300 transform"}`}
+          />
+        </Button>
+      </div>
     </motion.div>
   );
 }

@@ -38,3 +38,7 @@
   padding: 1rem; /* p-4 */
   border: 1px solid rgb(226 232 240); /* border-slate-200 */
 }
+.slick-prev:before,
+.slick-next:before {
+  color: #416a00 !important;
+}

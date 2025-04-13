@@ -12,6 +12,7 @@ import {
   FaGlobe,
   FaUserCircle,
 } from "react-icons/fa";
+import { RxDashboard } from "react-icons/rx";
 
 // Dropdown Component
 const DropdownMenu = ({
@@ -26,7 +27,7 @@ const DropdownMenu = ({
   menuClassName = "",
 }) => {
   return (
-    <div className="relative">
+    <div className="relative ">
       <button
         ref={buttonRef}
         onClick={toggle}
@@ -128,6 +129,13 @@ const Navbar = React.memo(({ auth = true }) => {
 
   // Welcome dropdown options
   const welcomeOptions = [
+    {
+      label: t("dashboard_key"),
+      icon: <RxDashboard />,
+      onClick: () => {
+        navigate("/dashboard");
+      },
+    },
     {
       label: t("logout_key"),
       icon: <FaSignOutAlt />,

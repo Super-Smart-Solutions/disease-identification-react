@@ -2,6 +2,15 @@ import axiosInstance from "../utils/axiosInstance";
 
 const INFERENCE_ENDPOINT = "/inferences";
 
+// Get inferences
+export const getInferences = async ({ size = 10, page = 1 }) => {
+  const params = {
+    page,
+    size,
+  };
+  const response = await axiosInstance.get(`${INFERENCE_ENDPOINT}`, { params });
+  return response.data;
+};
 // Start inference on an uploaded image
 export const startInference = async (imageId) => {
   const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}?image_id=${imageId}`);
