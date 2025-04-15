@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -31,9 +31,26 @@ const popupVariants = {
   },
 };
 
-export default function InvitationPopup({ inviteId, onClose }) {
+export default function InvitationPopup({ onClose }) {
+  const inviteId = localStorage.getItem("invite_id");
   const { t, i18n } = useTranslation();
-  const { refetchUserData } = useUserData();
+  const { user, refetchUserData } = useUserData();
+  const popupRef = useRef(null);
+
+  // Click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
+
   // Fetch invitation data
   const {
     data: invitation,
@@ -42,7 +59,7 @@ export default function InvitationPopup({ inviteId, onClose }) {
   } = useQuery({
     queryKey: ["invitation", inviteId],
     queryFn: () => fetchInvitationById(inviteId),
-    enabled: !!inviteId,
+    enabled: !!inviteId && !user?.organization_id,
     onError: () => {
       localStorage.removeItem("invite_id");
     },
@@ -58,6 +75,7 @@ export default function InvitationPopup({ inviteId, onClose }) {
       onClose();
     },
     onError: () => {
+      toast.error(t("invitation_accept_error_key"));
       onClose();
     },
   });
@@ -71,6 +89,7 @@ export default function InvitationPopup({ inviteId, onClose }) {
       onClose();
     },
     onError: () => {
+      toast.error(t("invitation_reject_error_key"));
       onClose();
     },
   });
@@ -83,12 +102,13 @@ export default function InvitationPopup({ inviteId, onClose }) {
     rejectMutate();
   };
 
-  if (!inviteId || isError) return null;
+  if (!inviteId || isError || user?.organization_id) return null;
 
   return (
     <div className="overlay">
       <motion.div
-        className={`bg-white  rounded-lg shadow-xl p-6 w-full max-w-md ${
+        ref={popupRef}
+        className={`bg-white rounded-lg shadow-xl p-6 w-full max-w-md ${
           i18n.dir() === "rtl" ? "text-right" : "text-left"
         }`}
         variants={popupVariants}
@@ -102,36 +122,36 @@ export default function InvitationPopup({ inviteId, onClose }) {
           </div>
         ) : (
           <>
-            <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">
+            <h3 className="text-xl font-bold mb-4 text-gray-800 ">
               {t("invitation_title_key")}
             </h3>
 
             <div className="space-y-4 mb-6">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-300">
+                <p className="text-sm text-gray-500 ">
                   {t("invitation_from_key")}
                 </p>
-                <p className="font-medium text-gray-800 dark:text-white">
+                <p className="font-medium text-gray-800 ">
                   {invitation?.organization?.name ||
                     t("unknown_organization_key")}
                 </p>
               </div>
 
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-300">
+                <p className="text-sm text-gray-500 ">
                   {t("invitation_role_key")}
                 </p>
-                <p className="font-medium text-gray-800 dark:text-white">
+                <p className="font-medium text-gray-800 ">
                   {invitation?.role || t("unknown_role_key")}
                 </p>
               </div>
 
               {invitation?.message && (
                 <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-300">
+                  <p className="text-sm text-gray-500 ">
                     {t("invitation_message_key")}
                   </p>
-                  <p className="font-medium text-gray-800 dark:text-white">
+                  <p className="font-medium text-gray-800 ">
                     {invitation.message}
                   </p>
                 </div>

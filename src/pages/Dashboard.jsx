@@ -28,21 +28,8 @@ const sectionVariants = {
 };
 
 export default function Dashboard() {
-  const [inviteId, setInviteId] = useState(null);
-  const [showPopup, setShowPopup] = useState(false);
-
-  useEffect(() => {
-    const inviteId = localStorage.getItem("invite_id");
-    if (inviteId) {
-      setInviteId(inviteId);
-      setShowPopup(true);
-    }
-  }, []);
-
-  const handleClosePopup = () => {
-    setShowPopup(false);
-    setInviteId(null);
-  };
+  const [showInvitationPopup, setShowInvitationPopup] = useState(true);
+  console.log(localStorage.getItem("invite_id"));
 
   return (
     <>
@@ -60,10 +47,9 @@ export default function Dashboard() {
           <LogsSection />
         </motion.div>
       </motion.div>
-
-      {showPopup && (
-        <InvitationPopup inviteId={inviteId} onClose={handleClosePopup} />
-      )}
+      {showInvitationPopup && (
+        <InvitationPopup onClose={() => setShowInvitationPopup(false)} />
+      )}{" "}
     </>
   );
 }

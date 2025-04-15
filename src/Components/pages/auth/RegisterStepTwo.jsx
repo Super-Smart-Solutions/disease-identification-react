@@ -33,12 +33,10 @@ export default function RegisterStepTwo({
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const email = params.get("email");
-    const invite_id = params.get("invite_id");
     if (email) {
       setPrefilledEmail(email);
     }
     setRegisterData((prev) => ({ ...prev, email: email }));
-    localStorage.setItem("invite_id", invite_id);
   }, [location.search, step]);
 
   const validate = (values) => {
