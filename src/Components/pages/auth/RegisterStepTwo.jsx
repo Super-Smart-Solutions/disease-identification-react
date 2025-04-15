@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, ErrorMessage, Form } from "formik";
 import { useTranslation } from "react-i18next";
-import PasswordInput from "../../Formik/PasswordInput"; // Import your PasswordInput component
-import PhoneInput from "../../Formik/PhoneInput"; // Import your PhoneInput component
+import PasswordInput from "../../Formik/PasswordInput";
+import PhoneInput from "../../Formik/PhoneInput";
 import Button from "../../Button";
 import OTPModal from "../../Formik/OTPModal";
+import { useLocation } from "react-router-dom";
+
 import { registerUser } from "../../../api/authAPI";
 import {
   generateVerificationCode,
@@ -18,41 +20,48 @@ export default function RegisterStepTwo({
   setStep,
 }) {
   const [otpModal, setOtpModal] = useState(false);
-  const { t } = useTranslation(); // Translation hook
+  const { t } = useTranslation();
+  const location = useLocation();
+  const [prefilledEmail, setPrefilledEmail] = useState("");
 
-  // Initial form values
   const initialValues = {
-    email: registerData.email || "",
+    email: prefilledEmail || registerData.email || "",
     password: registerData.password || "",
     re_password: registerData.re_password || "",
     phone_number: registerData.phone_number || "",
   };
-  // Validation function
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const email = params.get("email");
+    const invite_id = params.get("invite_id");
+    if (email) {
+      setPrefilledEmail(email);
+    }
+    setRegisterData((prev) => ({ ...prev, email: email }));
+    localStorage.setItem("invite_id", invite_id);
+  }, [location.search, step]);
+
   const validate = (values) => {
     const errors = {};
 
-    // Email validation
     if (!values.email) {
       errors.email = t("email_required_key");
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
       errors.email = t("email_invalid_key");
     }
 
-    // Password validation
     if (!values.password) {
       errors.password = t("password_required_key");
     } else if (values.password.length < 8) {
       errors.password = t("password_min_length_key");
     }
 
-    // Confirm password validation
     if (!values.re_password) {
       errors.re_password = t("re_password_required_key");
     } else if (values.re_password !== values.password) {
       errors.re_password = t("passwords_do_not_match_key");
     }
 
-    // Phone number validation
     if (!values.phone_number) {
       errors.phone_number = t("phone_number_required_key");
     } else if (!/^\d+$/.test(values.phone_number)) {
@@ -61,7 +70,7 @@ export default function RegisterStepTwo({
 
     return errors;
   };
-  // Handle form submission
+
   const onSubmit = async (values) => {
     setRegisterData((prev) => ({ ...prev, ...values }));
     const payload = {
@@ -89,6 +98,7 @@ export default function RegisterStepTwo({
       console.log(error);
     }
   };
+
   return (
     <>
       {" "}
@@ -96,6 +106,7 @@ export default function RegisterStepTwo({
         initialValues={initialValues}
         validate={validate}
         onSubmit={onSubmit}
+        enableReinitialize
       >
         {({ setFieldValue, isSubmitting }) => (
           <Form className="flex flex-col gap-4">
@@ -108,6 +119,7 @@ export default function RegisterStepTwo({
                 name="email"
                 className="custom-input"
                 placeholder={t("email_key")}
+                readOnly={!!prefilledEmail}
               />
               <ErrorMessage
                 name="email"

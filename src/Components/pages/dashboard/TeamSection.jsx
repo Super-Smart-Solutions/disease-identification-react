@@ -12,11 +12,16 @@ import { deleteUserById, fetchUsers } from "../../../api/userAPI";
 import { FiTrash } from "react-icons/fi";
 import ConfirmationModal from "../../ConfirmationModal";
 import { useUserTeam } from "../../../api/useUserTeam";
+import { createInvitation } from "../../../api/inviteApi";
+import { toast } from "react-toastify";
 
 export default function TeamSection() {
   const { t } = useTranslation();
   const { user, refetchUserData } = useUserData();
   const { data: teamData } = useUserTeam(user?.organization_id);
+
+  const isInOrganization = !!user?.organization_id;
+  const isAdmin = user?.is_org_admin;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
@@ -45,17 +50,13 @@ export default function TeamSection() {
   } = useQuery({
     queryKey: ["organizationUsers", user?.organization_id, page, pageSize],
     queryFn: fetchUsersData,
-    enabled: !!user?.organization_id,
-    staleTime: 1000 * 60 * 5, // 5 minutes stale time
+    enabled: isInOrganization && isAdmin, // Only fetch if user is admin in organization
+    staleTime: 1000 * 60 * 5,
   });
 
   const handleSuccess = () => {
     setIsModalOpen(false);
-    refetchUserData().then(() => {
-      if (user?.organization_id) {
-        refetchUsers();
-      }
-    });
+    refetchUserData();
   };
 
   const inviteSchema = Yup.object().shape({
@@ -64,21 +65,18 @@ export default function TeamSection() {
       .required(t("email_required_key")),
   });
 
-  const handleInviteSubmit = async (
-    values,
-    { setSubmitting, resetForm, setStatus }
-  ) => {
+  const handleInviteSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       setInviteLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setStatus({ success: true });
+      await createInvitation({ invitee_email: values.email });
+      toast.success(t("invite_sent_successfully_key"));
       resetForm();
-      setTimeout(() => {
-        refetchUsers();
-      }, 500);
+      refetchUsers();
       setIsInviteModalOpen(false);
     } catch (error) {
-      setStatus({ error: error.message || t("invite_failed_key") });
+      toast.error(
+        error?.response?.data?.detail || error.message || t("invite_failed_key")
+      );
     } finally {
       setSubmitting(false);
       setInviteLoading(false);
@@ -89,6 +87,7 @@ export default function TeamSection() {
     setUserToDelete(userId);
     setIsDeleteModalOpen(true);
   };
+
   const confirmDeleteUser = async () => {
     if (!userToDelete) return;
     try {
@@ -96,13 +95,14 @@ export default function TeamSection() {
       await deleteUserById(userToDelete);
       setIsDeleteModalOpen(false);
       setUserToDelete(null);
-      refetchUsers(); // Refresh list
+      refetchUsers();
     } catch (err) {
       console.error("Failed to delete user:", err);
     } finally {
       setDeletingUser(false);
     }
   };
+
   const columnDefs = [
     {
       field: "first_name",
@@ -117,10 +117,9 @@ export default function TeamSection() {
       headerName: t("status_key"),
       cellRenderer: (params) => {
         const status = params?.value;
-
         return (
           <span
-            className={`px-3 py-1 rounded-full text-xs font-medium  ${
+            className={`px-3 py-1 rounded-full text-xs font-medium ${
               status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
             }`}
           >
@@ -129,63 +128,56 @@ export default function TeamSection() {
         );
       },
     },
-    {
-      field: "remove",
-      headerName: t("actions_key"), // No header for icon actions
-      width: 80,
-      cellRenderer: (params) => (
-        <>
-          {params?.data?.id !== user?.id && (
-            <button
-              className="text-gray-600 hover:text-gray-800 transition cursor-pointer p-2 hover:bg-gray-200 rounded-full"
-              onClick={() => handleRemoveUser(params?.data?.id)}
-              title={t("remove_user_key")}
-            >
-              <FiTrash size={18} />
-            </button>
-          )}
-        </>
-      ),
-    },
+    ...(isAdmin
+      ? [
+          {
+            field: "remove",
+            headerName: t("actions_key"),
+            width: 80,
+            cellRenderer: (params) =>
+              params?.data?.id !== user?.id && (
+                <button
+                  className="text-gray-600 hover:text-gray-800 transition cursor-pointer p-2 hover:bg-gray-200 rounded-full"
+                  onClick={() => handleRemoveUser(params?.data?.id)}
+                  title={t("remove_user_key")}
+                >
+                  <FiTrash size={18} />
+                </button>
+              ),
+          },
+        ]
+      : []),
   ];
 
-  return (
-    <div className="space-y-4">
-      <div className="flex justify-between">
-        <h2 className="text-2xl font-semibold">
-          {`${t("team_key")}  ${teamData?.name}`}{" "}
-        </h2>
-        {user?.organization_id && (
-          <Button onClick={() => setIsInviteModalOpen(true)}>
-            {t("invite_key")}
+  // Render based on user's organization status
+  const renderContent = () => {
+    if (!isInOrganization) {
+      return (
+        <div className="cardIt flex flex-col gap-4 items-center text-center">
+          <img src={noDataImg} alt="" className="max-h-60" />
+          <span className="text-xl">{t("no_such_team_key")}</span>
+          <Button onClick={() => setIsModalOpen(true)}>
+            {t("create_team_key")}
           </Button>
-        )}
-      </div>
-      {!user?.organization_id ? (
-        <>
-          <div className="cardIt flex flex-col gap-4 items-center text-center">
-            <img src={noDataImg} alt="" className="max-h-60" />
-            <span className="text-xl">{t("no_such_team_key")}</span>
-            <Button onClick={() => setIsModalOpen(true)}>
-              {t("create_team_key")}
-            </Button>
-          </div>
+        </div>
+      );
+    }
 
-          {/* Create Organization Modal */}
-          {isModalOpen && (
-            <div className="overlay">
-              <div className="bg-white rounded-lg p-6 w-full max-w-md">
-                <CreateOrganization
-                  onSuccess={handleSuccess}
-                  onCancel={() => setIsModalOpen(false)}
-                />
-              </div>
-            </div>
+    return (
+      <>
+        <div className="flex justify-between">
+          <h2 className="text-2xl font-semibold">
+            {`${t("team_key")} ${teamData?.name}`}
+          </h2>
+          {isAdmin && (
+            <Button onClick={() => setIsInviteModalOpen(true)}>
+              {t("invite_key")}
+            </Button>
           )}
-        </>
-      ) : (
-        <>
-          {error ? (
+        </div>
+
+        {isAdmin ? (
+          error ? (
             <div className="text-red-500">{t("failed_to_load_team_key")}</div>
           ) : (
             <div className="space-y-4">
@@ -202,8 +194,30 @@ export default function TeamSection() {
                 onPageSizeChange={setPageSize}
               />
             </div>
-          )}
-        </>
+          )
+        ) : (
+          <div className="text-lg text-gray-600">
+            {t("member_of_team_key")} <strong>{teamData?.name}</strong>
+          </div>
+        )}
+      </>
+    );
+  };
+
+  return (
+    <div className="space-y-4">
+      {renderContent()}
+
+      {/* Create Organization Modal */}
+      {isModalOpen && (
+        <div className="overlay">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <CreateOrganization
+              onSuccess={handleSuccess}
+              onCancel={() => setIsModalOpen(false)}
+            />
+          </div>
+        </div>
       )}
 
       {/* Invite User Modal */}
@@ -219,7 +233,7 @@ export default function TeamSection() {
               validationSchema={inviteSchema}
               onSubmit={handleInviteSubmit}
             >
-              {({ status, isSubmitting }) => (
+              {({ isSubmitting }) => (
                 <Form>
                   <div className="mb-4">
                     <label
@@ -242,25 +256,11 @@ export default function TeamSection() {
                     />
                   </div>
 
-                  {status?.error && (
-                    <div className="mb-4 text-red-500 text-sm">
-                      {status.error}
-                    </div>
-                  )}
-
-                  {status?.success && (
-                    <div className="mb-4 text-green-500 text-sm">
-                      {t("invite_sent_successfully_key")}
-                    </div>
-                  )}
-
                   <div className="flex justify-end space-x-3">
                     <Button
                       type="button"
                       variant="outlined"
-                      onClick={() => {
-                        setIsInviteModalOpen(false);
-                      }}
+                      onClick={() => setIsInviteModalOpen(false)}
                       disabled={isSubmitting || inviteLoading}
                     >
                       {t("cancel_key")}
@@ -278,6 +278,8 @@ export default function TeamSection() {
           </div>
         </div>
       )}
+
+      {/* Delete User Confirmation Modal */}
       {isDeleteModalOpen && (
         <ConfirmationModal
           title={t("confirm_remove_user_key")}
