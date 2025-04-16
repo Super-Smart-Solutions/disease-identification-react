@@ -10,6 +10,8 @@ import {
 import Button from "../../Button";
 import { toast } from "react-toastify";
 import { useUserData } from "../../../hooks/useUserData";
+import moment from "moment";
+import familyImage from "../../../assets/family.png";
 
 const popupVariants = {
   hidden: { opacity: 0, scale: 0.9 },
@@ -121,42 +123,21 @@ export default function InvitationPopup({ onClose }) {
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-500"></div>
           </div>
         ) : (
-          <>
-            <h3 className="text-xl font-bold mb-4 text-gray-800 ">
+          <div className=" space-y-2">
+            <h3 className="text-xl font-bold text-gray-800">
               {t("invitation_title_key")}
             </h3>
-
-            <div className="space-y-4 mb-6">
-              <div>
-                <p className="text-sm text-gray-500 ">
-                  {t("invitation_from_key")}
-                </p>
-                <p className="font-medium text-gray-800 ">
-                  {invitation?.organization?.name ||
-                    t("unknown_organization_key")}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-sm text-gray-500 ">
-                  {t("invitation_role_key")}
-                </p>
-                <p className="font-medium text-gray-800 ">
-                  {invitation?.role || t("unknown_role_key")}
-                </p>
-              </div>
-
-              {invitation?.message && (
-                <div>
-                  <p className="text-sm text-gray-500 ">
-                    {t("invitation_message_key")}
-                  </p>
-                  <p className="font-medium text-gray-800 ">
-                    {invitation.message}
-                  </p>
-                </div>
-              )}
-            </div>
+            <p className=" text-lg font-medium text-gray-800 text-center capitalize ">
+              {t("invitation_message_key", {
+                name: invitation?.organization_admin_name,
+                team: invitation?.organization_name,
+              })}
+            </p>
+            <img
+              src={familyImage}
+              alt="Organization"
+              className="w-10/12 max-h-60  mx-auto object-cover "
+            />
 
             <div
               className={`flex gap-4 ${
@@ -181,7 +162,7 @@ export default function InvitationPopup({ onClose }) {
                 {t("accept_key")}
               </Button>
             </div>
-          </>
+          </div>
         )}
       </motion.div>
     </div>

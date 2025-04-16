@@ -177,7 +177,6 @@
   "invitation_title_key": "دعوة فريق",
   "invitation_from_key": "دعوة من:",
   "invitation_role_key": "الدور:",
-  "invitation_message_key": "الرسالة:",
   "unknown_organization_key": "منظمة غير معروفة",
   "unknown_role_key": "دور غير معروف",
   "accept_key": "قبول",
@@ -188,6 +187,7 @@
   "invitation_accept_error_key": "فشل قبول الدعوة",
   "invitation_reject_error_key": "فشل رفض الدعوة",
   "member_of_team_key": "عضو في فريق",
+  "invitation_message_key": "{{name}} يريد دعوتك لتكون جزءًا من فريقه ({{team}})",
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },

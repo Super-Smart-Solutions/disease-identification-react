@@ -170,7 +170,6 @@
   "invitation_title_key": "Team Invitation",
   "invitation_from_key": "Invitation from:",
   "invitation_role_key": "Role:",
-  "invitation_message_key": "Message:",
   "unknown_organization_key": "Unknown Organization",
   "unknown_role_key": "Unknown Role",
   "accept_key": "Accept",
@@ -181,6 +180,8 @@
   "invitation_accept_error_key": "Failed to accept invitation",
   "invitation_reject_error_key": "Failed to decline invitation",
   "member_of_team_key": "Member of team",
+
+  "invitation_message_key": "{{name}} wants to invite you to be part of their team ({{team}})",
   "inputs_showcase": {
     "title": "Inputs Showcase"
   },
