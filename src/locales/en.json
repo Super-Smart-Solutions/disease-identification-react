@@ -167,6 +167,15 @@
   "choose_plant_key": "Choose plant",
   "extra_feature_key": "Extra Feature",
   "infographics_key": "Infographics",
+  "profile_picture_setup": "Profile Picture Setup",
+  "profile_picture_instruction": "Upload a profile picture or skip to continue to login",
+  "upload_profile_picture": "Upload Profile Picture",
+  "skip_and_login": "Skip and Login",
+  "continue_to_crop": "Continue to Crop",
+  "adjust_profile_picture": "Adjust Your Profile Picture",
+  "zoom_level": "Zoom Level",
+  "save_changes": "Save Changes",
+  "account_created_successfully": "Account created successfully!",
   "instruction_modal": {
     "help_button_label": "Help Instructions",
 

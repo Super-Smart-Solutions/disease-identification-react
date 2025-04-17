@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { uploadUserAvatar } from "../../../api/userAPI";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 const AvatarStep = ({ registerData }) => {
   const { t } = useTranslation();
@@ -43,8 +44,8 @@ const AvatarStep = ({ registerData }) => {
       await uploadUserAvatar(file, registerData?.token);
       setSelectedFile(file);
       setShowModal(false);
-      toast.success(t("account_created_succefully_key"))
-      navigate("/auth/login"); 
+      toast.success(t("account_created_successfully"));
+      navigate("/auth/login");
     } catch (error) {
       console.error("Error saving avatar:", error);
       setError(error.message || t("avatar_upload_error"));
@@ -68,33 +69,73 @@ const AvatarStep = ({ registerData }) => {
     setError(null);
   };
 
-  return (
-    <div className="flex flex-col items-center space-y-4">
-      <label
-        htmlFor="profile_picture"
-        className="block text-sm font-medium text-gray-700 mb-2 me-auto"
-      >
-        {t("profile_picture_key")}
-      </label>
+  const handleSkip = () => {
+    toast.success(t("account_created_successfully"));
+    navigate("/auth/login");
+  };
 
-      <FileUpload
-        allowRemove={true}
-        accept="image/*"
-        multiple={false}
-        selectedFile={selectedFile ? [selectedFile] : []}
-        setSelectedFile={handleFileSelect}
-      />
+  return (
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+        {t("profile_picture_setup")}
+      </h2>
+
+      <p className="text-gray-600 mb-6 text-center">
+        {t("profile_picture_instruction")}
+      </p>
+
+      <div className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            {t("upload_profile_picture")}
+          </label>
+          <FileUpload
+            allowRemove={true}
+            accept="image/*"
+            multiple={false}
+            selectedFile={selectedFile ? [selectedFile] : []}
+            setSelectedFile={handleFileSelect}
+          />
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-4 pt-4">
+          <Button variant="outline" onClick={handleSkip} className="flex-1">
+            {t("skip_and_login")}
+          </Button>
+          <Button
+            onClick={() => selectedFile && setShowModal(true)}
+            disabled={!selectedFile}
+            className="flex-1"
+          >
+            {t("continue_to_crop")}
+          </Button>
+        </div>
+      </div>
 
       {showModal && tempSelectedFile && (
-        <div className="overlay">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative">
-            <button
-              onClick={handleCancel}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-              disabled={isLoading}
-            >
-              <IoClose size={24} />
-            </button>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="overlay"
+        >
+          <motion.div
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-800">
+                {t("adjust_profile_picture")}
+              </h3>
+              <button
+                onClick={handleCancel}
+                className="text-gray-500 hover:text-gray-700"
+                disabled={isLoading}
+              >
+                <IoClose size={24} />
+              </button>
+            </div>
 
             <div className="flex flex-col items-center space-y-4">
               <AvatarEditor
@@ -111,7 +152,7 @@ const AvatarStep = ({ registerData }) => {
 
               <div className="w-full max-w-xs">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {t("zoom_key")}
+                  {t("zoom_level")}
                 </label>
                 <input
                   type="range"
@@ -129,25 +170,25 @@ const AvatarStep = ({ registerData }) => {
                 <div className="text-red-500 text-sm mt-2">{error}</div>
               )}
 
-              <div className="flex space-x-3 pt-2">
+              <div className="flex space-x-3 pt-4 w-full justify-end">
                 <Button
                   variant="outline"
                   onClick={handleCancel}
                   disabled={isLoading}
                 >
-                  {t("close_key")}
+                  {t("cancel")}
                 </Button>
                 <Button
                   onClick={handleSave}
                   loading={isLoading}
                   disabled={isLoading}
                 >
-                  {t("save_key")}
+                  {t("save_changes")}
                 </Button>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
     </div>
   );
