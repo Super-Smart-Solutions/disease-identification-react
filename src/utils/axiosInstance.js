@@ -49,7 +49,7 @@ axiosInstance.interceptors.response.use(
         // window.location.href = "/auth/login"; // Uncomment to redirect to login
       } else {
 
-        toast.error(errorMessage[0]?.msg || "An unexpected error occurred.");
+        toast.error(errorMessage || errorMessage[0]?.msg || "An unexpected error occurred.");
       }
     } else {
       toast.error("Network error. Please check your connection.");

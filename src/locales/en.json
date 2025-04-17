@@ -167,7 +167,34 @@
   "choose_plant_key": "Choose plant",
   "extra_feature_key": "Extra Feature",
   "infographics_key": "Infographics",
+  "instruction_modal": {
+    "help_button_label": "Help Instructions",
 
+    "step_1_title": "Instructions",
+    "step_2_title": "Examples",
+    "step_3_title": "Confirmation",
+
+    "step_1_content": "For accurate results, please ensure:",
+    "rule_select_plant": "Select the correct plant",
+    "rule_image_quality": "Image is clear and high quality",
+    "rule_select_affected_part": "Select the affected part of the plant",
+    "rule_single_plant": "Image contains only one plant/fruit",
+    "rule_position_near_camera": "Place the affected part close to the camera",
+
+    "good_example_title": "Good Example",
+    "good_example_alt": "Proper plant image example",
+    "good_example_description": "Image meets all requirements for analysis",
+
+    "bad_example_title": "Bad Example",
+    "bad_example_alt": "Improper plant image example",
+    "bad_example_description": "Image doesn't meet analysis requirements",
+
+    "confirmation_text": "I agree to the terms and conditions",
+
+    "back_button": "Back",
+    "next_button": "Next",
+    "finish_button": "Finish"
+  },
   "inputs_showcase": {
     "title": "Inputs Showcase"
   },

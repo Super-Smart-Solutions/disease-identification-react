@@ -1,12 +1,13 @@
 import React, { useState, useMemo, useEffect } from "react";
 import ExpandedStep from "../Components/pages/ExpandedStep";
-import ModelingStepOne from "../Components/pages/modeling_stepper/ModelingStepOne";
+import ModelingStepOne from "../Components/pages/models/ModelingStepOne";
 import { useTranslation } from "react-i18next";
-import ModelingStepTwo from "../Components/pages/modeling_stepper/ModelingStepTwo";
-import ModelingStepThree from "../Components/pages/modeling_stepper/ModelingStepThree";
-import ModelingStepFour from "../Components/pages/modeling_stepper/ModelingStepFour";
+import ModelingStepTwo from "../Components/pages/models/ModelingStepTwo";
+import ModelingStepThree from "../Components/pages/models/ModelingStepThree";
+import ModelingStepFour from "../Components/pages/models/ModelingStepFour";
 import VerticalSteps from "../Components/VerticalSteps";
-import DeepAnalysisStep from "../Components/pages/modeling_stepper/DeepAnalysisStep";
+import DeepAnalysisStep from "../Components/pages/models/DeepAnalysisStep";
+import InstructionModal from "../Components/pages/models/InstructionModal";
 export default function Models() {
   const { t } = useTranslation();
   const [modelingData, setModelingData] = useState({
@@ -109,19 +110,24 @@ export default function Models() {
 
       {/* Expanded Steps */}
       <div className="flex-1 space-y-6">
-        <ExpandedStep
-          title={STEP_TITLES.SELECT_MODEL}
-          expandedContent={
-            <ModelingStepOne
-              modelingData={modelingData}
-              setModelingData={setModelingData}
-            />
-          }
-          disabled={false}
-          isExpanded={expandedSteps[1]}
-          onToggleExpand={handleToggleExpand}
-          stepId={1}
-        />
+        <div className=" flex gap-4 justify-end items-start">
+          <div className=" grow"> 
+          <ExpandedStep
+            title={STEP_TITLES.SELECT_MODEL}
+            expandedContent={
+              <ModelingStepOne
+                modelingData={modelingData}
+                setModelingData={setModelingData}
+              />
+            }
+            disabled={false}
+            isExpanded={expandedSteps[1]}
+            onToggleExpand={handleToggleExpand}
+            stepId={1}
+          />
+          </div>
+          <InstructionModal />
+        </div>
         <ExpandedStep
           title={STEP_TITLES.SELECT_IMAGE}
           expandedContent={

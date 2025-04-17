@@ -174,7 +174,34 @@
   "total_images_collected": "عدد الصور التي تم جمعها",
   "number_classes": "عدد المجالات المتضمنه في المشروع",
   "number_diseases": "عدد الأمراض التي تم دراستها",
+  "instruction_modal": {
+    "help_button_label": "تعليمات المساعدة",
 
+    "step_1_title": "التعليمات",
+    "step_2_title": "أمثلة",
+    "step_3_title": "تأكيد",
+
+    "step_1_content": "للحصول على نتائج دقيقة، تأكد من:",
+    "rule_select_plant": "حدد النبات الصحيح",
+    "rule_image_quality": "الصورة واضحة وذات جودة عالية",
+    "rule_select_affected_part": "حدد الجزء المصاب من النبات",
+    "rule_single_plant": "تحتوي الصورة على نبات واحد / فاكهة فقط",
+    "rule_position_near_camera": "ضع الجزء الممتأثر بالقرب من الكاميرا",
+
+    "good_example_title": "مثال جيد",
+    "good_example_alt": "مثال صورة نبات صحيحة",
+    "good_example_description": "الصورة تفي بجميع متطلبات التحليل",
+
+    "bad_example_title": "مثال سيء",
+    "bad_example_alt": "مثال صورة نبات غير صحيحة",
+    "bad_example_description": "الصورة لا تفي بمتطلبات التحليل",
+
+    "confirmation_text": "أنا أوافق على الشروط والأحكام",
+
+    "back_button": "رجوع",
+    "next_button": "التالي",
+    "finish_button": "إنهاء"
+  },
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },
