@@ -1,9 +1,16 @@
 import React from "react";
 import Select from "react-select";
 
-const SelectInput = ({ label, options, value, onChange, placeholder }) => {
+const SelectInput = ({
+  label,
+  options,
+  value,
+  onChange,
+  placeholder,
+  ...props
+}) => {
   return (
-    <div>
+    <div className=" grow">
       {label && (
         <label className="block text-sm font-medium text-gray-700 mb-1">
           {label}
@@ -11,8 +18,8 @@ const SelectInput = ({ label, options, value, onChange, placeholder }) => {
       )}
       <Select
         options={options}
-        value={options.find((option) => option.value === value || null)}
-        onChange={(selectedOption) => onChange(selectedOption.value)}
+        value={options.find((option) => option.value === value) || null}
+        onChange={(selectedOption) => onChange(selectedOption)}
         placeholder={placeholder}
         className="react-select-container"
         classNamePrefix="react-select"
@@ -39,6 +46,7 @@ const SelectInput = ({ label, options, value, onChange, placeholder }) => {
             borderColor: "#416a00",
           }),
         }}
+        {...props}
       />
     </div>
   );

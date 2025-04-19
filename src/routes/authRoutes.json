@@ -1,0 +1,22 @@
+[
+  {
+    "protected": false,
+    "path": "auth/login",
+    "element": "Login",
+    "breadcrumb": false,
+    "label": "login"
+  },
+  {
+    "protected": false,
+    "path": "auth/register",
+    "element": "Register",
+    "breadcrumb": false,
+    "label": "register"
+  },
+  {
+    "protected": true,
+    "path": "/",
+    "element": "Landing",
+    "breadcrumb": false
+  }
+]

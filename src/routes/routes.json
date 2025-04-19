@@ -1,0 +1,31 @@
+[
+  {
+    "protected": false,
+    "path": "/",
+    "element": "Landing",
+    "breadcrumb": false
+  },
+
+  {
+    "protected": true,
+    "path": "models",
+    "element": "Models",
+    "breadcrumb": true,
+    "label": "models"
+  },
+
+  {
+    "protected": true,
+    "path": "database",
+    "element": "DataBase",
+    "breadcrumb": true,
+    "label": "database"
+  },
+  {
+    "protected": true,
+    "path": "dashboard",
+    "element": "Dashboard",
+    "breadcrumb": true,
+    "label": "dashboard"
+  }
+]
