@@ -174,7 +174,20 @@
   "total_images_collected": "عدد الصور التي تم جمعها",
   "number_classes": "عدد المجالات المتضمنه في المشروع",
   "number_diseases": "عدد الأمراض التي تم دراستها",
-
+  "invitation_title_key": "دعوة فريق",
+  "invitation_from_key": "دعوة من:",
+  "invitation_role_key": "الدور:",
+  "unknown_organization_key": "منظمة غير معروفة",
+  "unknown_role_key": "دور غير معروف",
+  "accept_key": "قبول",
+  "decline_key": "رفض",
+  "invitation_accepted_key": "تم قبول الدعوة بنجاح!",
+  "invitation_rejected_key": "تم رفض الدعوة",
+  "invitation_fetch_error_key": "فشل تحميل الدعوة",
+  "invitation_accept_error_key": "فشل قبول الدعوة",
+  "invitation_reject_error_key": "فشل رفض الدعوة",
+  "member_of_team_key": "عضو في فريق",
+  "invitation_message_key": "{{name}} يريد دعوتك لتكون جزءًا من فريقه ({{team}})",
   "inputs_showcase": {
     "title": "عرض المدخلات"
   },

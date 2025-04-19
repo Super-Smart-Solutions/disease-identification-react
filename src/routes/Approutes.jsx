@@ -70,8 +70,13 @@ const AppRoutes = () => {
     };
 
     checkAuthentication();
-  }, [location.pathname]);
+    const params = new URLSearchParams(location.search);
+    const inviteId = params.get("invite_id");
 
+    if (inviteId) {
+      localStorage.setItem("invite_id", inviteId);
+    }
+  }, [location.pathname]);
   if (isLoading) {
     return <div>Loading...</div>;
   }
