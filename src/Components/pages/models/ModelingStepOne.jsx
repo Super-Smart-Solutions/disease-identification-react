@@ -40,7 +40,7 @@ export default function ModelingStepOne({ modelingData, setModelingData }) {
         label={t("select_category_key")}
         options={plants}
         isLoading={isLoading}
-        value={modelingData?.category?.value || null}
+        value={tempData?.category?.value || null}
         onChange={(selectedOption) =>
           setTempData((prev) => ({
             ...prev,
