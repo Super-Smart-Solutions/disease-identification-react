@@ -44,6 +44,7 @@
   "database_key": "Database",
   "close_key": "Close",
   "read_more_key": "Read More",
+  "more_info_key": "More Info",
   "no_arabic_name_key": "No Arabic Name",
   "no_description_key": "No description available.",
   "drag_drop_key": "Drag & drop files here, or click to select files",
@@ -203,6 +204,7 @@
     "bad_example_description": "Image doesn't meet analysis requirements",
 
     "confirmation_text": "I agree to the terms and conditions",
+    "confirmation_error": "you have to agree to the terms and conditions",
 
     "back_button": "Back",
     "next_button": "Next",
@@ -292,14 +294,14 @@
   "number_classes": "Number of classes studied. ",
   "number_diseases": "Number of diseases studied",
 
-  "bad_1_caption" :"Bad Quality",
-  "bad_2_caption" :"Blurry Image",
-  "bad_3_caption" :"The affected part is not clear.",
-  "good_1_caption" :"Good Quality.",
-  "good_2_caption" :"Sharp Image",
-  "good_3_caption" :"The affected part is isolated",
-  "instruction_1_caption" :"If the part highlighted in red is the disease, the leaf should be isolated from the rest of the leaves.",
-  "instruction_2_caption" :"If you cannot isolate the plant from the tree, you can cut it off at the place where the red mark appears and then place it on the soil to isolate it from the rest of the healthy leaves and take pictures of it.",
+  "bad_1_caption": "Bad Quality",
+  "bad_2_caption": "Blurry Image",
+  "bad_3_caption": "The affected part is not clear.",
+  "good_1_caption": "Good Quality.",
+  "good_2_caption": "Sharp Image",
+  "good_3_caption": "The affected part is isolated",
+  "instruction_1_caption": "If the part highlighted in red is the disease, the leaf should be isolated from the rest of the leaves.",
+  "instruction_2_caption": "If you cannot isolate the plant from the tree, you can cut it off at the place where the red mark appears and then place it on the soil to isolate it from the rest of the healthy leaves and take pictures of it.",
 
   "team_key": "Team",
   "no_such_team_key": "You don't belong to any team yet",
