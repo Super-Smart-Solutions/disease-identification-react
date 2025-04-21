@@ -3,6 +3,15 @@ import { useTranslation } from "react-i18next";
 import Cookies from "js-cookie";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "../../Button";
+import good_1 from "../../../assets/good_1.png"
+import good_2 from "../../../assets/good_2.png"
+import good_3 from "../../../assets/good_3.png"
+import bad_1 from "../../../assets/bad_1.png"
+import bad_2 from "../../../assets/bad_2.png"
+import bad_3 from "../../../assets/bad_3.png"
+import inst_1 from "../../../assets/instruction_1.png"
+import inst_2 from "../../../assets/instruction_2.png"
+
 
 const InstructionModal = () => {
   const { t } = useTranslation();
@@ -19,13 +28,13 @@ const InstructionModal = () => {
 
   const handleClose = () => {
     setIsOpen(false);
-    if (currentStep === 3 && confirmed) {
+    if (currentStep === 7 && confirmed) {
       Cookies.set("instructions_shown", "true", { expires: 30, path: "/" });
     }
   };
 
   const handleNext = () => {
-    if (currentStep < 3) {
+    if (currentStep < 7) {
       setCurrentStep(currentStep + 1);
     } else if (confirmed) {
       handleClose();
@@ -171,12 +180,13 @@ const InstructionModal = () => {
                             whileHover={{ scale: 1.01 }}
                           >
                             <img
-                              src="/images/good-example.jpg"
+                              src={good_1}
                               alt={t("instruction_modal.good_example_alt")}
-                              className="w-full h-auto rounded"
+                              className="w-80 h-50 rounded"
                             />
                             <p className="mt-2 text-sm text-green-700">
-                              {t("instruction_modal.good_example_description")}
+                              {t("good_1_caption")}
+
                             </p>
                           </motion.div>
                         </div>
@@ -190,19 +200,146 @@ const InstructionModal = () => {
                             whileHover={{ scale: 1.01 }}
                           >
                             <img
-                              src="/images/bad-example.jpg"
+                              src={bad_1}
                               alt={t("instruction_modal.bad_example_alt")}
-                              className="w-full h-auto rounded"
+                              className="w-80 h-50 rounded"
                             />
                             <p className="mt-2 text-sm text-red-700">
-                              {t("instruction_modal.bad_example_description")}
+                              {t("bad_1_caption")}
                             </p>
                           </motion.div>
                         </div>
                       </div>
                     )}
 
+
                     {currentStep === 3 && (
+                      <div className=" flex gap-2 p-2">
+                        <div>
+                          <h4 className="font-medium text-green-600 mb-2">
+                            {t("instruction_modal.good_example_title")}
+                          </h4>
+                          <motion.div
+                            className="border border-green-300 rounded-lg p-2 bg-green-50"
+                            whileHover={{ scale: 1.01 }}
+                          >
+                            <img
+                              src={good_2}
+                              alt={t("instruction_modal.good_example_alt")}
+                              className="w-80 h-50 rounded"
+                            />
+                            <p className="mt-2 text-sm text-green-700">
+                              {t("good_2_caption")}
+
+                            </p>
+                          </motion.div>
+                        </div>
+
+                        <div>
+                          <h4 className="font-medium text-red-600 mb-2">
+                            {t("instruction_modal.bad_example_title")}
+                          </h4>
+                          <motion.div
+                            className="border border-red-300 rounded-lg p-2 bg-red-50"
+                            whileHover={{ scale: 1.01 }}
+                          >
+                            <img
+                              src={bad_2}
+                              alt={t("instruction_modal.bad_example_alt")}
+                              className="w-80 h-50 rounded"
+                            />
+                            <p className="mt-2 text-sm text-red-700">
+                              {t("bad_2_caption")}
+                            </p>
+                          </motion.div>
+                        </div>
+                      </div>
+                    )}
+
+                    {currentStep === 4 && (
+                      <div className=" flex gap-2 p-2">
+                        <div>
+                          <h4 className="font-medium text-green-600 mb-2">
+                            {t("instruction_modal.good_example_title")}
+                          </h4>
+                          <motion.div
+                            className="border border-green-300 rounded-lg p-2 bg-green-50"
+                            whileHover={{ scale: 1.01 }}
+                          >
+                            <img
+                              src={good_3}
+                              alt={t("instruction_modal.good_example_alt")}
+                              className="w-80 h-50 rounded"
+                            />
+                            <p className="mt-2 text-sm text-green-700">
+                              {t("good_3_caption")}
+
+                            </p>
+                          </motion.div>
+                        </div>
+
+                        <div>
+                          <h4 className="font-medium text-red-600 mb-2">
+                            {t("instruction_modal.bad_example_title")}
+                          </h4>
+                          <motion.div
+                            className="border border-red-300 rounded-lg p-2 bg-red-50"
+                            whileHover={{ scale: 1.01 }}
+                          >
+                            <img
+                              src={bad_3}
+                              alt={t("instruction_modal.bad_example_alt")}
+                              className="w-80 h-50 rounded"
+                            />
+                            <p className="mt-2 text-sm text-red-700">
+                              {t("bad_3_caption")}
+                            </p>
+                          </motion.div>
+                        </div>
+                      </div>
+                    )}
+
+                    {currentStep === 5 && (
+                      <div className=" flex gap-2 p-2">
+                        <div>
+                          <h4 className="font-medium text-green-600 mb-2">
+                            {t("instruction_1_caption")}
+                          </h4>
+                          <motion.div
+                            className="border border-green-300 rounded-lg p-2 bg-green-50"
+                            whileHover={{ scale: 1.01 }}
+                          >
+                            <img
+                              src={inst_1}
+                              alt={t("instruction_modal.good_example_alt")}
+                              className="w-90 h-90 rounded"
+                            />
+                          </motion.div>
+                        </div>
+                      </div>
+                    )}
+
+                    {currentStep === 6 && (
+                      <div className=" flex gap-2 p-2">
+                        <div>
+                          <h4 className="font-medium text-green-600 mb-2">
+                            {t("instruction_2_caption")}
+                          </h4>
+                          <motion.div
+                            className="border border-green-300 rounded-lg p-2 bg-green-50"
+                            whileHover={{ scale: 1.01 }}
+                          >
+                            <img
+                              src={inst_2}
+                              alt={t("instruction_modal.good_example_alt")}
+                              className="w-90 h-90 rounded"
+                            />
+                          </motion.div>
+                        </div>
+                      </div>
+                    )}
+
+                    {currentStep === 7 && (
                       <div className="space-y-4 p-2">
                         <motion.div
                           className="flex items-start"
@@ -244,9 +381,9 @@ const InstructionModal = () => {
 
               <Button
                 onClick={handleNext}
-                disabled={currentStep === 3 && !confirmed}
+                disabled={currentStep === 7 && !confirmed}
               >
-                {currentStep === 3
+                {currentStep === 7
                   ? t("instruction_modal.finish_button")
                   : t("instruction_modal.next_button")}
               </Button>
