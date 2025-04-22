@@ -5,12 +5,24 @@ import Carousel from "../Carousel";
 import PlantImage1 from "../../assets/feature1.png";
 import PlantImage2 from "../../assets/feature2.png";
 import PlantImage3 from "../../assets/feature3.png";
-import CircularProgress from "../CircularProgress";
+import NumberProgress from "../NumberProgress";
 
 export default function Infographics() {
   const { t } = useTranslation();
 
   const cards = [
+    {
+      value: 33.997,
+      title: t("total_images_collected"),
+    },
+    {
+      value: 6,
+      title: t("number_classes"),
+    },
+    {
+      value: 39,
+      title: t("number_diseases"),
+    },
     {
       image: PlantImage1,
       icon: <FaSearch className="text-white text-4xl" />,
@@ -26,18 +38,6 @@ export default function Infographics() {
       icon: <FaSeedling className="text-white text-4xl" />,
       title: t("choose_plant_key"),
     },
-    {
-      value: 33.997,
-      title: t("total_images_collected"),
-    },
-    {
-      value: 6,
-      title: t("number_classes"),
-    },
-    {
-      value: 39,
-      title: t("number_diseases"),
-    },
   ];
 
   const cardComponents = cards.map((card, index) => ({
@@ -47,7 +47,7 @@ export default function Infographics() {
       <div className="w-full">
         <div className="relative w-full h-48 rounded-2xl flex items-center justify-center bg-gray-100 overflow-hidden">
           {card.value !== undefined ? (
-            <CircularProgress percent={card.value} />
+            <NumberProgress value={card.value} />
           ) : (
             <>
               <img
