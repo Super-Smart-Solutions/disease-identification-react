@@ -4,9 +4,10 @@ import ImageGrid from "../Components/pages/ImageGrid";
 import ExpandableArticle from "../Components/pages/ExpandableArticle";
 import PlantDiseaseForm from "../Components/pages/PlantDiseaseForm";
 import { useTranslation } from "react-i18next";
+import DiseaseSearchDropdown from "../Components/pages/DiseaseSearchDropdown";
 
 export default function DataBase() {
-  const { state } = useLocation(); // Get the state from navigation
+  const { state } = useLocation();
   const { t } = useTranslation();
 
   const [selectedDisease, setSelectedDisease] = useState(
@@ -15,7 +16,6 @@ export default function DataBase() {
   const [selectedPlant, setSelectedPlant] = useState(
     state?.selectedPlant || null
   );
-
 
   useEffect(() => {
     if (state?.selectedDisease) {
@@ -26,17 +26,24 @@ export default function DataBase() {
     }
   }, [state]);
 
+  console.log({ selectedDisease });
+  console.log({ selectedPlant });
+
   return (
     <div>
       <div className="space-y-8">
+        <div className="w-[100%]">
+          <DiseaseSearchDropdown
+            onSelectDisease={setSelectedDisease}
+            onSelectPlant={setSelectedPlant}
+          />
+        </div>
         <PlantDiseaseForm
           onSelectDisease={setSelectedDisease}
           onSelectPlant={setSelectedPlant}
-          initialPlant={selectedPlant}
-          initialDisease={selectedDisease}
         />
         <ExpandableArticle
-          plant_id = {selectedPlant}
+          plant_id={selectedPlant}
           article={
             selectedDisease || { english_name: t("select_disease_message") }
           }

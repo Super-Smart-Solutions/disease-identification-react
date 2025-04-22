@@ -88,14 +88,6 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
     >
       {({ setFieldValue, values, errors, touched }) => (
         <Form className="flex flex-wrap items-end justify-between gap-4 w-full cardIt">
-          <div className="w-[100%]">
-            <label className=" " htmlFor=""> {t("search_about_data_key")}</label>
-            <input
-              type="text"
-              className="custom-input w-full mt-2"
-              placeholder={t("search_about_data_key")} // Add the appropriate key for search placeholder
-            />
-          </div>
           {/* Plant Select Input */}
           <div className="w-[40%]">
             <Field name="plant">

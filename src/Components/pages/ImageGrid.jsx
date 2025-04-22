@@ -154,13 +154,6 @@ const ImageGrid = ({ plantId, diseaseId }) => {
             )}
           </div>
         </>
-
-        {/* Empty state */}
-        {!isLoading && !isFetching && images.length === 0 && (
-          <div className="col-span-full text-center py-12">
-            <p className="text-gray-500">No images available.</p>
-          </div>
-        )}
       </div>
 
       {/* Image modal with enhanced loading */}
