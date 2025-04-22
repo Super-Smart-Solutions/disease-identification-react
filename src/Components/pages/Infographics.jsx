@@ -12,7 +12,7 @@ export default function Infographics() {
 
   const cards = [
     {
-      value: 33.997,
+      value: 33997,
       title: t("total_images_collected"),
     },
     {
