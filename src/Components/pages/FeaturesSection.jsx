@@ -44,10 +44,10 @@ export default function FeaturesSection() {
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8 bg-slate-50 flex flex-col items-center gap-4 border border-b border-slate-200">
       <span className="text-3xl">{t("extra_feature_key")}</span>
-      <span className="text-lg bg-amber-100 text-amber-950 px-2 py-1 rounded-2xl">
+      {/*<span className="text-lg bg-amber-100 text-amber-950 px-2 py-1 rounded-2xl">
         {t("coming_soon_key")}
       </span>
-
+*/}
       <div className="w-11/12 mx-auto grid gap-6 sm:grid-cols-2">
         {features.map((feature, index) => (
           <motion.div
