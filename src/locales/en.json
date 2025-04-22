@@ -44,6 +44,7 @@
   "database_key": "Database",
   "close_key": "Close",
   "read_more_key": "Read More",
+  "more_info_key": "More Info",
   "no_arabic_name_key": "No Arabic Name",
   "no_description_key": "No description available.",
   "drag_drop_key": "Drag & drop files here, or click to select files",
@@ -107,7 +108,7 @@
   "read_more_about_disease_key": "Read more about disease",
   "deep_analytics_key": "Deep analytics",
   "disease_identification_project_key": "Agricultural Health Platform",
-  "disease_identification_description_key": "Improving the Agricultural Health Platform with machine learning models for disease identification using an extensive database for plants and diseases. Studying many diseases in six different classes, including: Roses, Fruits, Coffee Trees, Honey Bees, Livestock Animals, and Fish.",
+  "disease_identification_description_key": "The Agricultural Health Platform use machine learning models for disease identification using an extensive database for plants and diseases. Studying many diseases in six different classes, including: Roses, Fruits, Coffee Trees, Honey Bees, Livestock Animals, and Fish.",
   "disease_identification_guide_key": "Your guide to identifying plant diseases.",
   "showing_key": "Showing {{from}} to {{to}} of {{total}} items",
   "show_key": "Show",
@@ -167,6 +168,50 @@
   "choose_plant_key": "Choose plant",
   "extra_feature_key": "Extra Feature",
   "infographics_key": "Infographics",
+
+  "profile_picture_setup": "Profile Picture Setup",
+  "profile_picture_instruction": "Upload a profile picture or skip to continue to login",
+  "upload_profile_picture": "Upload Profile Picture",
+  "skip_and_login": "Skip and Login",
+  "continue_to_crop": "Continue to Crop",
+  "adjust_profile_picture": "Adjust Your Profile Picture",
+  "zoom_level": "Zoom Level",
+  "save_changes": "Save Changes",
+  "account_created_successfully": "Account created successfully!",
+  "instruction_modal": {
+    "help_button_label": "Help Instructions",
+
+    "step_1_title": "Instructions",
+    "step_2_title": "Examples",
+    "step_3_title": "Examples",
+    "step_4_title": "Examples",
+    "step_5_title": "Examples",
+    "step_6_title": "Examples",
+    "step_7_title": "Confirmation",
+
+    "step_1_content": "For accurate results, please ensure:",
+    "rule_select_plant": "Select the correct plant",
+    "rule_image_quality": "Image is clear and high quality",
+    "rule_select_affected_part": "Select the affected part of the plant",
+    "rule_single_plant": "Image contains only one plant/fruit",
+    "rule_position_near_camera": "Place the affected part close to the camera",
+
+    "good_example_title": "Good Example",
+    "good_example_alt": "Proper plant image example",
+    "good_example_description": "Image meets all requirements for analysis",
+
+    "bad_example_title": "Bad Example",
+    "bad_example_alt": "Improper plant image example",
+    "bad_example_description": "Image doesn't meet analysis requirements",
+
+    "confirmation_text": "I agree to the terms and conditions",
+    "confirmation_error": "you have to agree to the terms and conditions",
+
+    "back_button": "Back",
+    "next_button": "Next",
+    "finish_button": "Finish"
+  },
+
   "invitation_title_key": "Team Invitation",
   "invitation_from_key": "Invitation from:",
   "invitation_role_key": "Role:",
@@ -187,6 +232,7 @@
   "arabic_key": "Arabic",
   "english_name_key": "English name",
   "invitation_message_key": "{{name}} wants to invite you to be part of their team ({{team}})",
+
   "inputs_showcase": {
     "title": "Inputs Showcase"
   },
@@ -270,6 +316,17 @@
   "total_images_collected": "Total images collected",
   "number_classes": "Number of classes studied. ",
   "number_diseases": "Number of diseases studied",
+
+  "bad_1_caption": "Bad Quality",
+  "bad_2_caption": "Blurry Image",
+  "bad_3_caption": "The affected part is not clear.",
+  "good_1_caption": "Good Quality.",
+  "good_2_caption": "Sharp Image",
+  "good_3_caption": "The affected part is isolated",
+  "instruction_1_caption": "If the part highlighted in red is the disease, the leaf should be isolated from the rest of the leaves.",
+  "instruction_2_caption": "If you cannot isolate the plant from the tree, you can cut it off at the place where the red mark appears and then place it on the soil to isolate it from the rest of the healthy leaves and take pictures of it.",
+  "confirmation_caption": "Finally, if a disease is discovered, an agricultural expert should be consulted to review the treatment procedures.",
+
 
   "team_key": "Team",
   "no_such_team_key": "You don't belong to any team yet",
