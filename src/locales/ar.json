@@ -175,6 +175,7 @@
   "total_images_collected": "عدد الصور التي تم جمعها",
   "number_classes": "عدد المجالات المتضمنه في المشروع",
   "number_diseases": "عدد الأمراض التي تم دراستها",
+
   "profile_picture_setup": "إعداد صورة الملف الشخصي",
   "profile_picture_instruction": "قم برفع صورة شخصية أو تخطّ للانتقال إلى تسجيل الدخول",
   "upload_profile_picture": "رفع صورة الملف الشخصي",
@@ -227,6 +228,21 @@
   "instruction_1_caption": "إذا كان الجزء المحدد باللون الأحمر هو المرض فيجب عزل الورقة عن باقي الأوراق",
   "instruction_2_caption": "إذا لم تتمكن من عزل النبات عن الشجرة، يمكنك قطعه من العلامة الحمراء ثم وضعه على التربة لعزله عن باقي الأوراق السليمة والتقاط صور له.",
   "confirmation_caption":"و أخيرا، في حالة اكتشاف مرض، يجب مراجعة خبير زراعي لمراجعة الاجراءات العلاجية", 
+
+  "invitation_title_key": "دعوة فريق",
+  "invitation_from_key": "دعوة من:",
+  "invitation_role_key": "الدور:",
+  "unknown_organization_key": "منظمة غير معروفة",
+  "unknown_role_key": "دور غير معروف",
+  "accept_key": "قبول",
+  "decline_key": "رفض",
+  "invitation_accepted_key": "تم قبول الدعوة بنجاح!",
+  "invitation_rejected_key": "تم رفض الدعوة",
+  "invitation_fetch_error_key": "فشل تحميل الدعوة",
+  "invitation_accept_error_key": "فشل قبول الدعوة",
+  "invitation_reject_error_key": "فشل رفض الدعوة",
+  "member_of_team_key": "عضو في فريق",
+  "invitation_message_key": "{{name}} يريد دعوتك لتكون جزءًا من فريقه ({{team}})",
 
   "inputs_showcase": {
     "title": "عرض المدخلات"

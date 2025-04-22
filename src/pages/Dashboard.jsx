@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import TeamSection from "../Components/pages/dashboard/TeamSection";
 import LogsSection from "../Components/pages/dashboard/LogsSection";
+import InvitationPopup from "../Components/pages/dashboard/InvitationPopup";
 
-// Animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -28,20 +28,28 @@ const sectionVariants = {
 };
 
 export default function Dashboard() {
-  return (
-    <motion.div
-      className="space-y-6"
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-    >
-      <motion.div variants={sectionVariants}>
-        <TeamSection />
-      </motion.div>
+  const [showInvitationPopup, setShowInvitationPopup] = useState(true);
+  console.log(localStorage.getItem("invite_id"));
 
-      <motion.div variants={sectionVariants}>
-        <LogsSection />
+  return (
+    <>
+      <motion.div
+        className="space-y-6"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        <motion.div variants={sectionVariants}>
+          <TeamSection />
+        </motion.div>
+
+        <motion.div variants={sectionVariants}>
+          <LogsSection />
+        </motion.div>
       </motion.div>
-    </motion.div>
+      {showInvitationPopup && (
+        <InvitationPopup onClose={() => setShowInvitationPopup(false)} />
+      )}{" "}
+    </>
   );
 }

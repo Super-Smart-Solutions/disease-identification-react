@@ -1,29 +1,46 @@
-import { useState, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchCurrentUser } from '../api/userAPI';
 
 export const useUserData = () => {
-    const [user, setUser] = useState(() => {
-        // Initialize from localStorage if available
-        const storedUser = localStorage.getItem('user');
-        return storedUser ? JSON.parse(storedUser) : null;
+    const queryClient = useQueryClient();
+
+
+    const { data: user, isLoading, isError, refetch } = useQuery({
+        queryKey: ['currentUser'],
+        queryFn: fetchCurrentUser,
+        initialData: () => {
+
+            const storedUser = localStorage.getItem('user');
+            return storedUser ? JSON.parse(storedUser) : null;
+        },
+        staleTime: 1000 * 60 * 5,
+        cacheTime: 1000 * 60 * 30,
+        onSuccess: (data) => {
+            if (data) {
+                localStorage.setItem('user', JSON.stringify(data));
+            }
+        },
+        onError: (error) => {
+            console.error('Failed to fetch user data', error);
+        }
     });
 
-    const refetchUserData = useCallback(async () => {
-        try {
-            const userResponse = await fetchCurrentUser();
-            localStorage.setItem('user', JSON.stringify(userResponse));
-            setUser(userResponse);
-            return userResponse;
-        } catch (error) {
-            console.error('Failed to fetch user data', error);
-            throw error;
+
+    const { mutate: clearUserData } = useMutation({
+        mutationFn: () => {
+            localStorage.removeItem('user');
+            return Promise.resolve(null);
+        },
+        onSuccess: () => {
+            queryClient.setQueryData(['currentUser'], null);
         }
-    }, []);
+    });
 
-    const clearUserData = useCallback(() => {
-        localStorage.removeItem('user');
-        setUser(null);
-    }, []);
-
-    return { user, refetchUserData, clearUserData };
+    return {
+        user,
+        isLoading,
+        isError,
+        refetchUserData: refetch,
+        clearUserData
+    };
 };
