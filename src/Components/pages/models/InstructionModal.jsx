@@ -327,6 +327,12 @@ const InstructionModal = () => {
 
                       {currentStep === 7 && (
                         <div className="space-y-4 p-2">
+
+
+                          <h4 className="font-medium text-green-600 mb-2">
+                              {t("confirmation_caption")}
+                          </h4>
+
                           <input
                             id="confirm-checkbox"
                             type="checkbox"
@@ -339,6 +345,8 @@ const InstructionModal = () => {
                             }
                             className="mt-1 me-2"
                           />
+
+
                           <label
                             htmlFor="confirm-checkbox"
                             className="text-gray-700"
