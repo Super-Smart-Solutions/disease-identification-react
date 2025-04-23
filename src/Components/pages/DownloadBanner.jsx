@@ -52,7 +52,7 @@ export default function DownloadBanner() {
       <motion.img
         src={PhoneImage}
         alt={t("phone_alt_key")}
-        className="absolute bottom-50 right-40 w-[100px] md:w-[250px] z-10"
+        className="absolute bottom-62 end-30 w-[100px] md:w-[220px] z-10"
         initial={{ opacity: 0, x: 100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1 }}

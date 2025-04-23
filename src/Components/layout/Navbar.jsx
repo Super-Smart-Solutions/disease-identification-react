@@ -1,3 +1,4 @@
+// components/Navbar.js
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -5,63 +6,9 @@ import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 import navRoutes from "./navRoutes";
 import { logout } from "../helpers/authHelpers";
-import {
-  FaChevronDown,
-  FaChevronUp,
-  FaSignOutAlt,
-  FaGlobe,
-  FaUserCircle,
-} from "react-icons/fa";
+import { FaGlobe, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
-
-// Dropdown Component
-const DropdownMenu = ({
-  buttonRef,
-  menuRef,
-  isOpen,
-  toggle,
-  buttonContent,
-  options,
-  position = "left",
-  buttonClassName = "",
-  menuClassName = "",
-}) => {
-  return (
-    <div className="relative ">
-      <button
-        ref={buttonRef}
-        onClick={toggle}
-        className={`flex items-center gap-2 ${buttonClassName}`}
-        type="button"
-      >
-        {buttonContent}
-        {isOpen ? <FaChevronUp size={14} /> : <FaChevronDown size={14} />}
-      </button>
-
-      {isOpen && (
-        <ul
-          ref={menuRef}
-          className={`absolute z-10 min-w-[160px] overflow-auto rounded-lg border border-slate-200 bg-white shadow-md mt-2 ${
-            position === "right" ? "-right-6" : "left-0"
-          } ${menuClassName}`}
-        >
-          {options.map((option, index) => (
-            <li
-              key={index}
-              className="cursor-pointer text-slate-800 flex items-center gap-2 text-sm p-3 transition-all hover:bg-slate-100"
-              onClick={option.onClick}
-            >
-              {option.icon && (
-                <span className="text-gray-500">{option.icon}</span>
-              )}
-              {option.label}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-};
+import DropdownMenu from "../DropdownMenu"; // Import the reusable component
 
 const Navbar = React.memo(({ auth = true }) => {
   const { t, i18n } = useTranslation();
@@ -148,10 +95,12 @@ const Navbar = React.memo(({ auth = true }) => {
     {
       label: "English",
       onClick: () => toggleLanguage("en"),
+      isSelected: i18n.language === "en",
     },
     {
       label: "العربية",
       onClick: () => toggleLanguage("ar"),
+      isSelected: i18n.language === "ar",
     },
   ];
 
@@ -161,7 +110,7 @@ const Navbar = React.memo(({ auth = true }) => {
         auth && location.pathname !== "/" ? "bg-primary" : "bg-black opacity-80"
       }`}
     >
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="w-full flex justify-between items-center px-6">
         {/* Welcome Menu */}
         {auth ? (
           <DropdownMenu
@@ -176,6 +125,10 @@ const Navbar = React.memo(({ auth = true }) => {
                     src={userAvatar}
                     alt="User avatar"
                     className="w-8 h-8 rounded-full object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "user-avatar.png";
+                    }}
                   />
                 ) : (
                   <FaUserCircle size={24} />
@@ -191,14 +144,11 @@ const Navbar = React.memo(({ auth = true }) => {
             buttonClassName="text-white"
           />
         ) : (
-          <>
-            {" "}
-            <span className="text-lg text-white">{t("welcome_key")} </span>
-          </>
+          <span className="text-lg text-white w-1/3">{t("welcome_key")}</span>
         )}
 
         {/* Navigation Links */}
-        <div className="flex items-center space-x-6">
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-6">
           {navRoutes.map((route) => (
             <NavLink
               key={route.path}
@@ -230,7 +180,7 @@ const Navbar = React.memo(({ auth = true }) => {
             </div>
           }
           options={languageOptions}
-          position="right"
+          position={i18n.language === "en" ? "right" : "left"}
           buttonClassName="text-white"
         />
       </div>

@@ -1,6 +1,7 @@
-import React from "react";
+import { useState, useRef } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import DropdownMenu from "./DropdownMenu";
 
 const Pagination = ({
   currentPage,
@@ -14,6 +15,9 @@ const Pagination = ({
   const isRTL = i18n.dir() === "rtl";
   const pageNumbers = [];
   const maxVisiblePages = 5;
+  const [isPageSizeMenuOpen, setIsPageSizeMenuOpen] = useState(false);
+  const pageSizeMenuRef = useRef(null);
+  const pageSizeButtonRef = useRef(null);
 
   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
@@ -38,10 +42,17 @@ const Pagination = ({
     }
   };
 
-  const handlePageSizeChange = (e) => {
-    onPageSizeChange(Number(e.target.value));
+  const handlePageSizeSelect = (size) => {
+    onPageSizeChange(size);
     onPageChange(1);
+    setIsPageSizeMenuOpen(false);
   };
+
+  const pageSizeOptions = [20, 50, 100].map((size) => ({
+    label: `${t("show_key")} ${size}`,
+    onClick: () => handlePageSizeSelect(size),
+    isSelected: pageSize === size,
+  }));
 
   const PreviousIcon = isRTL ? FaChevronRight : FaChevronLeft;
   const NextIcon = isRTL ? FaChevronLeft : FaChevronRight;
@@ -60,19 +71,24 @@ const Pagination = ({
           })}
         </span>
 
-        <select
-          value={pageSize}
-          onChange={handlePageSizeChange}
-          className={`border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
+        {/* Replace select with DropdownMenu */}
+        <DropdownMenu
+          buttonRef={pageSizeButtonRef}
+          menuRef={pageSizeMenuRef}
+          isOpen={isPageSizeMenuOpen}
+          toggle={() => setIsPageSizeMenuOpen(!isPageSizeMenuOpen)}
+          buttonContent={
+            <span className="text-sm">
+              {t("show_key")} {pageSize}
+            </span>
+          }
+          options={pageSizeOptions}
+          position={isRTL ? "left" : "right"}
+          buttonClassName={`border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
             isRTL ? "text-right" : "text-left"
           }`}
-        >
-          {[20, 50, 100].map((size) => (
-            <option key={size} value={size}>
-              {t("show_key")} {size}
-            </option>
-          ))}
-        </select>
+          menuClassName="min-w-[100px]"
+        />
       </div>
 
       <nav className="flex items-center gap-1">
