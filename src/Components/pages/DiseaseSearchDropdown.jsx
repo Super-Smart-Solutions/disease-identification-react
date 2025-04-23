@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchDiseaseById, fetchDiseases } from "../../api/diseaseAPI";
 import { useTranslation } from "react-i18next";
 import { usePlantByDiseases } from "../../hooks/usePlants";
-import { FiChevronDown, FiX } from "react-icons/fi"; // Import icons from react-icons
+import { FiChevronDown, FiX } from "react-icons/fi";
 
 const CustomDropdown = ({
   options,
@@ -18,35 +18,80 @@ const CustomDropdown = ({
   t,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
   const dropdownRef = useRef(null);
+  const inputRef = useRef(null);
+  const optionsRef = useRef([]);
 
   const handleInputChange = (e) => {
     const newValue = e.target.value;
     setInputValue(newValue);
     onInputChange(newValue);
     setIsOpen(true);
+    setFocusedIndex(-1);
+    if (value && newValue !== value.label) {
+      onChange(null);
+    }
   };
 
   const handleSelect = (option) => {
     onChange(option);
     setIsOpen(false);
-    setInputValue("");
-  };
-
-  const handleClear = () => {
-    onChange(null);
-    setInputValue("");
+    setInputValue(option.label);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   };
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
+    setFocusedIndex(-1);
   };
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsOpen(false);
+      setFocusedIndex(-1);
     }
   };
+
+  const handleKeyDown = (e) => {
+    if (!isOpen) return;
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setFocusedIndex((prev) =>
+          prev < options.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setFocusedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+        break;
+      case "Enter":
+        e.preventDefault();
+        if (focusedIndex >= 0 && focusedIndex < options.length) {
+          handleSelect(options[focusedIndex]);
+        }
+        break;
+      case "Escape":
+        e.preventDefault();
+        setIsOpen(false);
+        setFocusedIndex(-1);
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    if (focusedIndex >= 0 && optionsRef.current[focusedIndex]) {
+      optionsRef.current[focusedIndex].scrollIntoView({
+        block: "nearest",
+      });
+    }
+  }, [focusedIndex]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -56,8 +101,8 @@ const CustomDropdown = ({
   }, []);
 
   return (
-    <div className=" w-full ">
-      <div className=" w-full cardIt">
+    <div className="w-full">
+      <div className="w-full cardIt">
         <label
           htmlFor="search"
           className="block text-sm font-medium text-gray-700 mb-1"
@@ -66,23 +111,21 @@ const CustomDropdown = ({
         </label>
         <div className="relative" ref={dropdownRef}>
           <input
+            ref={inputRef}
             type="text"
-            value={value ? value.label : inputValue}
+            value={inputValue}
             onChange={handleInputChange}
-            onFocus={() => setIsOpen(true)}
+            onFocus={() => {
+              setIsOpen(true);
+              setFocusedIndex(-1);
+            }}
+            onKeyDown={handleKeyDown}
             placeholder={t("search_diseases_placeholder_key")}
             className="custom-input"
           />
           <div className="absolute end-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
-            {value && (
-              <button
-                onClick={handleClear}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <FiX className="w-4 h-4 cursor-pointer" />
-              </button>
-            )}
             <button
+              type="button"
               onClick={toggleDropdown}
               className="text-gray-500 hover:text-gray-700"
             >
@@ -94,7 +137,7 @@ const CustomDropdown = ({
             </button>
           </div>
           {isOpen && (
-            <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto ">
+            <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
               {isLoading ? (
                 <li className="px-4 py-2 text-gray-500">Loading...</li>
               ) : options.length === 0 ? (
@@ -104,12 +147,17 @@ const CustomDropdown = ({
                     : t("search_diseases_placeholder_key")}
                 </li>
               ) : (
-                options.map((option) => (
+                options.map((option, index) => (
                   <li
                     key={option.value}
+                    ref={(el) => (optionsRef.current[index] = el)}
                     onClick={() => handleSelect(option)}
                     className={`px-4 py-2 cursor-pointer hover:bg-primary-20 ${
                       value?.value === option.value ? "bg-primary-50" : ""
+                    } ${
+                      focusedIndex === index
+                        ? "bg-primary-20 ring-2 ring-primary-100"
+                        : ""
                     }`}
                   >
                     {formatOptionLabel(option)}
@@ -227,7 +275,7 @@ const DiseaseSearchDropdown = ({ onSelectDisease, onSelectPlant }) => {
     const label =
       selectedLang === "ar"
         ? selectedOption.arabicName
-        : selectedOption.name || selectedOption.englishName;
+        : selectedOption.englishName;
 
     setSelectedDisease({ ...selectedOption, label });
     if (!selectedOption) {
@@ -246,8 +294,6 @@ const DiseaseSearchDropdown = ({ onSelectDisease, onSelectPlant }) => {
       onChange={handleChange}
       onInputChange={handleInputChange}
       isLoading={isDiseasesLoading || isPlantsLoading}
-      placeholder={t("search_diseases_placeholder_key")}
-      noOptionsMessage={t("no_matching_diseases_key")}
       formatOptionLabel={formatOptionLabel}
     />
   );
