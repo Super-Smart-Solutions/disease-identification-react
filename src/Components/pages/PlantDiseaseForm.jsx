@@ -13,8 +13,8 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
   const [selectedPlant, setSelectedPlant] = useState(null);
   const [translatedPlants, setTranslatedPlants] = useState([]);
   const [translatedDiseases, setTranslatedDiseases] = useState([]);
+  const [hasData, setHasData] = useState(false);
 
-  // Fetch plants
   const { data: plantOptions = [], isLoading: plantsLoading } = useQuery({
     queryKey: ["plants"],
     queryFn: async () => {
@@ -23,7 +23,6 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
     },
   });
 
-  // Fetch diseases based on selected plant
   const { data: diseaseOptions = [], isLoading: diseasesLoading } = useQuery({
     queryKey: ["diseases", selectedPlant],
     queryFn: async () => {
@@ -34,7 +33,6 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
     enabled: !!selectedPlant,
   });
 
-  // Translate plant names on language change
   useEffect(() => {
     if (plantOptions.length > 0) {
       setTranslatedPlants(
@@ -49,7 +47,6 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
     }
   }, [plantOptions, i18n.language]);
 
-  // Translate disease names on language change
   useEffect(() => {
     if (diseaseOptions.length > 0) {
       setTranslatedDiseases(
@@ -74,9 +71,18 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
       const diseaseData = await fetchDiseaseById(values.disease);
       onSelectDisease(diseaseData);
       onSelectPlant(values.plant);
+      setHasData(true);
     } catch (error) {
       console.error("Failed to fetch disease details:", error);
     }
+  };
+
+  const handleReset = (resetForm) => {
+    resetForm();
+    setSelectedPlant(null);
+    onSelectDisease(null);
+    onSelectPlant(null);
+    setHasData(false);
   };
 
   return (
@@ -86,7 +92,7 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      {({ setFieldValue, values, errors, touched }) => (
+      {({ setFieldValue, values, errors, touched, resetForm }) => (
         <Form className="flex flex-wrap items-end justify-between gap-4 w-full cardIt">
           {/* Plant Select Input */}
           <div className="w-[40%]">
@@ -103,6 +109,7 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
                   }}
                   placeholder={t("select_plant_key")}
                   isLoading={plantsLoading}
+                  isDisabled={hasData}
                 />
               )}
             </Field>
@@ -126,7 +133,7 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
                     diseasesLoading ? t("loading_key") : t("select_disease_key")
                   }
                   isLoading={diseasesLoading}
-                  isDisabled={!selectedPlant}
+                  isDisabled={!selectedPlant || hasData}
                 />
               )}
             </Field>
@@ -135,10 +142,20 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
             )}
           </div>
 
-          {/* Get Data Button */}
-          <Button type="submit" className="w-full">
-            {t("get_data_key")}
-          </Button>
+          {/* Conditional Button */}
+          {hasData ? (
+            <Button
+              type="button"
+              onClick={() => handleReset(resetForm)}
+              className="w-full bg-gray-500 hover:bg-gray-600"
+            >
+              {t("reset_key")}
+            </Button>
+          ) : (
+            <Button type="submit" className="w-full">
+              {t("get_data_key")}
+            </Button>
+          )}
         </Form>
       )}
     </Formik>

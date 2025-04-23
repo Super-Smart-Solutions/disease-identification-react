@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getImages } from "../../api/imagesAPI";
 import Pagination from "../Pagination";
 
-const ImageGrid = ({ plantId, diseaseId }) => {
+const ImageGrid = ({ plant_id, diseaseId }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -14,14 +14,14 @@ const ImageGrid = ({ plantId, diseaseId }) => {
 
   // Memoize the query function to prevent unnecessary re-renders
   const fetchImages = useCallback(
-    () => getImages({ plantId, diseaseId, size: pageSize, page }),
-    [plantId, diseaseId, pageSize, page]
+    () => getImages({ plant_id, diseaseId, size: pageSize, page }),
+    [plant_id, diseaseId, pageSize, page]
   );
 
   const { data, isLoading, error, isFetching } = useQuery({
-    queryKey: ["images", plantId, diseaseId, page, pageSize],
+    queryKey: ["images", plant_id, diseaseId, page, pageSize],
     queryFn: fetchImages,
-    enabled: !!plantId || !!diseaseId,
+    enabled: !!plant_id || !!diseaseId,
     staleTime: 1000 * 60 * 5,
     // 5 minutes stale time
   });
@@ -72,12 +72,12 @@ const ImageGrid = ({ plantId, diseaseId }) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
-  // Reset to page 1 when plantId or diseaseId changes
+  // Reset to page 1 when plant_id or diseaseId changes
   useEffect(() => {
     setPage(1);
     setLoadedImages({});
     // Reset loaded images when filters change
-  }, [plantId, diseaseId]);
+  }, [plant_id, diseaseId]);
 
   if (error) {
     return <p className="text-red-500">Error fetching images.</p>;
@@ -115,14 +115,10 @@ const ImageGrid = ({ plantId, diseaseId }) => {
             ) : images.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
                 {images.map((img, index) => (
-                  <motion.div
+                  <div
                     key={img.id}
                     className="relative overflow-hidden rounded-lg"
-                    whileHover={{ scale: 1.02 }}
                     onClick={() => openModal(index)}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
                   >
                     {/* Low quality placeholder */}
                     {!loadedImages[img.id] && (
@@ -144,7 +140,7 @@ const ImageGrid = ({ plantId, diseaseId }) => {
                       loading="lazy"
                       onLoad={() => handleImageLoad(img.id)}
                     />
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             ) : (

@@ -228,6 +228,9 @@
   "search_diseases_placeholder_key": "Search by name, scientific name, Arabic name, or symptoms...",
   "no_matching_diseases_key": "No matching diseases found",
   "type_to_search_key": "Type to search...",
+
+  "search_in_database_key": "Search in Database",
+  "select_by_plant_key": "Select by Plant",
   "scientific_key": "Scientific",
   "arabic_key": "Arabic",
   "english_name_key": "English name",
@@ -326,7 +329,6 @@
   "instruction_1_caption": "If the part highlighted in red is the disease, the leaf should be isolated from the rest of the leaves.",
   "instruction_2_caption": "If you cannot isolate the plant from the tree, you can cut it off at the place where the red mark appears and then place it on the soil to isolate it from the rest of the healthy leaves and take pictures of it.",
   "confirmation_caption": "Finally, if a disease is discovered, an agricultural expert should be consulted to review the treatment procedures.",
-
 
   "team_key": "Team",
   "no_such_team_key": "You don't belong to any team yet",
