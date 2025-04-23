@@ -12,8 +12,6 @@ const CustomDropdown = ({
   onChange,
   onInputChange,
   isLoading,
-  placeholder,
-  noOptionsMessage,
   formatOptionLabel,
   inputValue,
   setInputValue,
@@ -127,7 +125,7 @@ const CustomDropdown = ({
 };
 
 const DiseaseSearchDropdown = ({ onSelectDisease, onSelectPlant }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [selectedDisease, setSelectedDisease] = useState(null);
   const [inputValue, setInputValue] = useState("");
 
@@ -190,14 +188,17 @@ const DiseaseSearchDropdown = ({ onSelectDisease, onSelectPlant }) => {
   const selectOptions = useMemo(() => {
     return filteredOptions.map((disease) => ({
       value: disease.id,
-      label: disease.english_name || "Unnamed Disease",
+      label:
+        i18n.language === "ar"
+          ? disease.arabic_name
+          : disease.english_name || "Unnamed Disease",
       scientificName: disease.scientific_name,
       arabicName: disease.arabic_name,
       englishName: disease.english_name,
       symptoms: disease.symptoms,
       description: disease.description,
     }));
-  }, [filteredOptions]);
+  }, [filteredOptions, i18n.language]);
 
   const formatOptionLabel = ({ label, scientificName, arabicName }) => {
     return (
@@ -222,7 +223,13 @@ const DiseaseSearchDropdown = ({ onSelectDisease, onSelectPlant }) => {
   };
 
   const handleChange = (selectedOption) => {
-    setSelectedDisease(selectedOption);
+    const selectedLang = i18n.language;
+    const label =
+      selectedLang === "ar"
+        ? selectedOption.arabicName
+        : selectedOption.name || selectedOption.englishName;
+
+    setSelectedDisease({ ...selectedOption, label });
     if (!selectedOption) {
       onSelectDisease(null);
       onSelectPlant(null);

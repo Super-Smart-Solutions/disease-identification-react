@@ -106,10 +106,10 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
                     setFieldValue("plant", selectedOption.value);
                     setSelectedPlant(selectedOption.value);
                     setFieldValue("disease", null);
+                    setHasData(false);
                   }}
                   placeholder={t("select_plant_key")}
                   isLoading={plantsLoading}
-                  isDisabled={hasData}
                 />
               )}
             </Field>
@@ -126,14 +126,14 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
                   label={t("select_disease_key")}
                   options={translatedDiseases}
                   value={field?.value || null}
-                  onChange={(selectedOption) =>
-                    setFieldValue("disease", selectedOption.value)
-                  }
+                  onChange={(selectedOption) => {
+                    setFieldValue("disease", selectedOption.value);
+                    setHasData(false);
+                  }}
                   placeholder={
                     diseasesLoading ? t("loading_key") : t("select_disease_key")
                   }
                   isLoading={diseasesLoading}
-                  isDisabled={!selectedPlant || hasData}
                 />
               )}
             </Field>

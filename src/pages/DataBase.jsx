@@ -56,7 +56,7 @@ export default function DataBase() {
       {/* Search Method Selection */}
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <div
-          className={`flex items-center justify-between px-6 py-4 rounded-lg w-6/12 cursor-pointer ${
+          className={`flex items-center justify-between px-6 py-4 rounded-lg w-full md:w-6/12 cursor-pointer ${
             searchMethod === "database"
               ? "border-1 border-primary bg-primary-10"
               : "border-1 border-slate-300"
@@ -70,7 +70,7 @@ export default function DataBase() {
         </div>
 
         <div
-          className={`flex items-center justify-between px-6 py-4 rounded-lg w-6/12 cursor-pointer ${
+          className={`flex items-center justify-between px-6 py-4 rounded-lg w-full md:w-6/12 cursor-pointer ${
             searchMethod === "plant"
               ? "border-1 border-primary bg-primary-10"
               : "border-1 border-slate-300"
