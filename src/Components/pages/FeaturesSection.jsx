@@ -27,7 +27,6 @@ export default function FeaturesSection() {
       label: t("soil_calculator_key"),
       icon: (
         <IoIosCalculator
-          title={t("coming_soon_key")}
           className="text-4xl text-primaryDarker cursor-pointer"
           onClick={handleOpenModal}
         />
