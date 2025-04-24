@@ -5,6 +5,7 @@ import Footer from "../Components/layout/Footer";
 import Breadcrumbs from "../Components/layout/BreadCrumbs";
 import routes from "../routes/routes";
 import { useTranslation } from "react-i18next";
+import SoilCalculator from "../Components/pages/soil-calculator/SoilCalculator";
 
 const MainLayout = () => {
   const location = useLocation();
@@ -37,6 +38,7 @@ const MainLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      <SoilCalculator />
     </div>
   );
 };
