@@ -4,7 +4,6 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 import navRoutes from "./navRoutes";
-import { logout } from "../helpers/authHelpers";
 import {
   FaChevronDown,
   FaChevronUp,
@@ -13,6 +12,7 @@ import {
   FaUserCircle,
 } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
+import { useAuthActions } from "../helpers/authHelpers";
 
 // Dropdown Component
 const DropdownMenu = ({
@@ -65,6 +65,7 @@ const DropdownMenu = ({
 
 const Navbar = React.memo(({ auth = true }) => {
   const { t, i18n } = useTranslation();
+  const { logout } = useAuthActions();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const location = useLocation();
@@ -112,11 +113,6 @@ const Navbar = React.memo(({ auth = true }) => {
     [i18n]
   );
 
-  const handleLogout = useCallback(() => {
-    logout();
-    navigate("/auth/login");
-  }, [navigate]);
-
   useEffect(() => {
     if (i18n.language === "ar") {
       document.documentElement.setAttribute("dir", "rtl");
@@ -139,7 +135,10 @@ const Navbar = React.memo(({ auth = true }) => {
     {
       label: t("logout_key"),
       icon: <FaSignOutAlt />,
-      onClick: handleLogout,
+      onClick: () => {
+        logout();
+        window.location.href = "/";
+      },
     },
   ];
 

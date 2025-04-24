@@ -483,14 +483,13 @@
   "death's-head_hawkmoth_description": "- Infection with this butterfly is less common compared to other insects, but it occurs when beehives are located in moist or unclean environments.",
   "death's-head_hawkmoth_symptoms": "- damage to the grains and waxy tablets.      The presence of butterfly larvae inside the tablets or inside the honey stock.",
   "death's-head_hawkmoth_treatments": "Improving storage and cleaning conditions in cells.\r\n     Use traps or traps to attract and eliminate butterflies.\r\n     Use natural pesticides in case of injury.",
-  "invalid_number_error_key": "Please enter valid numbers",
-  "min_gt_max_error_key": "Minimum value ({{min}}) cannot be greater than maximum value ({{max}})",
-  "out_of_range_error_key": "Values ({{minValue}}-{{maxValue}}) must be between {{minAllowed}} and {{maxAllowed}}",
-  "min_placeholder_key": "Min ({{min}})",
-  "max_placeholder_key": "Max ({{max}})",
-  "salinity_key": "Salinity Range",
-  "ph_key": "pH Range",
-  "to_key": "To",
+  "required_field_key": "This field is required",
+  "ph_min_error_key": "pH must be at least 0",
+  "ph_max_error_key": "pH must be at most 14",
+  "salinity_min_error_key": "Salinity must be at least 5",
+  "salinity_max_error_key": "Salinity must be at most 18",
   "crop_key": "Crop",
-  "select_crop_key": "select crop"
+  "type_crop_key": "type a crop",
+  "ph_key": "pH Level",
+  "salinity_key": "Salinity"
 }

@@ -1,46 +1,21 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchCurrentUser } from '../api/userAPI';
+// src/hooks/useUserData.js
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUser } from '../redux/features/userSlice';
 
 export const useUserData = () => {
-    const queryClient = useQueryClient();
+    const dispatch = useDispatch();
+    const { user, isLoading, isError } = useSelector((state) => state.user);
+
+    const refetchUserData = () => {
+        dispatch(fetchUser());
+    };
 
 
-    const { data: user, isLoading, isError, refetch } = useQuery({
-        queryKey: ['currentUser'],
-        queryFn: fetchCurrentUser,
-        initialData: () => {
-
-            const storedUser = localStorage.getItem('user');
-            return storedUser ? JSON.parse(storedUser) : null;
-        },
-        staleTime: 1000 * 60 * 5,
-        cacheTime: 1000 * 60 * 30,
-        onSuccess: (data) => {
-            if (data) {
-                localStorage.setItem('user', JSON.stringify(data));
-            }
-        },
-        onError: (error) => {
-            console.error('Failed to fetch user data', error);
-        }
-    });
-
-
-    const { mutate: clearUserData } = useMutation({
-        mutationFn: () => {
-            localStorage.removeItem('user');
-            return Promise.resolve(null);
-        },
-        onSuccess: () => {
-            queryClient.setQueryData(['currentUser'], null);
-        }
-    });
 
     return {
         user,
         isLoading,
         isError,
-        refetchUserData: refetch,
-        clearUserData
+        refetchUserData,
     };
 };

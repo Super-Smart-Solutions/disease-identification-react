@@ -1,11 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosCalculator } from "react-icons/io";
 import { FaOilCan } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { setSoilCalculatorOpen } from "../../redux/features/soilCalculatorSlice";
+import { useNavigate } from "react-router-dom";
+import { useUserData } from "../../hooks/useUserData";
 
 export default function FeaturesSection() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useUserData();
+
+  const handleOpenModal = () => {
+    if (!user?.id) {
+      navigate("/auth/login");
+      return;
+    }
+    dispatch(setSoilCalculatorOpen(true));
+  };
 
   const features = [
     {
@@ -14,6 +29,7 @@ export default function FeaturesSection() {
         <IoIosCalculator
           title={t("coming_soon_key")}
           className="text-4xl text-primaryDarker cursor-pointer"
+          onClick={handleOpenModal}
         />
       ),
     },

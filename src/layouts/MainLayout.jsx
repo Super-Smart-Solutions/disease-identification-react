@@ -38,7 +38,6 @@ const MainLayout = () => {
         <Outlet />
       </main>
       <Footer />
-      <SoilCalculator />
     </div>
   );
 };
