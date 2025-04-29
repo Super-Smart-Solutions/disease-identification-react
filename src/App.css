@@ -52,3 +52,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+input::placeholder {
+  font: 0.8rem/3  "Roboto", sans-serif;
+}

@@ -8,6 +8,7 @@ const Button = ({
   size = "medium",
   loading = false,
   className,
+  width = "auto",
   ...props
 }) => {
   const { t } = useTranslation();
@@ -31,7 +32,7 @@ const Button = ({
   };
 
   // Define responsive styles
-  const responsiveStyles = "w-full sm:w-auto";
+  const responsiveStyles = `w-full sm:w-${width}`;
 
   // Combine all styles using classnames
   const buttonClasses = classNames(

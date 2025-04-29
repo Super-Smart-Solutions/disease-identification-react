@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../Components/layout/Navbar";
 import Footer from "../Components/layout/Footer";
+import SoilCalculator from "../Components/pages/soil-calculator/SoilCalculator";
 
 const LandingLayout = ({ isAuthenticated }) => {
   return (
@@ -11,7 +12,6 @@ const LandingLayout = ({ isAuthenticated }) => {
         <Navbar auth={isAuthenticated} />
         <Outlet />
       </div>
-
       <Footer />
     </main>
   );

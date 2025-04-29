@@ -5,13 +5,76 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 import navRoutes from "./navRoutes";
+
+{/* 
+import {
+  FaChevronDown,
+  FaChevronUp,
+  FaSignOutAlt,
+  FaGlobe,
+  FaUserCircle,
+} from "react-icons/fa";
+import { RxDashboard } from "react-icons/rx";
+import { useAuthActions } from "../helpers/authHelpers";
+
+// Dropdown Component
+const DropdownMenu = ({
+  buttonRef,
+  menuRef,
+  isOpen,
+  toggle,
+  buttonContent,
+  options,
+  position = "left",
+  buttonClassName = "",
+  menuClassName = "",
+}) => {
+  return (
+    <div className="relative ">
+      <button
+        ref={buttonRef}
+        onClick={toggle}
+        className={`flex items-center gap-2 ${buttonClassName}`}
+        type="button"
+      >
+        {buttonContent}
+        {isOpen ? <FaChevronUp size={14} /> : <FaChevronDown size={14} />}
+      </button>
+
+      {isOpen && (
+        <ul
+          ref={menuRef}
+          className={`absolute z-10 min-w-[160px] overflow-auto rounded-lg border border-slate-200 bg-white shadow-md mt-2 ${
+            position === "right" ? "-right-6" : "left-0"
+          } ${menuClassName}`}
+        >
+          {options.map((option, index) => (
+            <li
+              key={index}
+              className="cursor-pointer text-slate-800 flex items-center gap-2 text-sm p-3 transition-all hover:bg-slate-100"
+              onClick={option.onClick}
+            >
+              {option.icon && (
+                <span className="text-gray-500">{option.icon}</span>
+              )}
+              {option.label}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+*/} 
 import { logout } from "../helpers/authHelpers";
 import { FaGlobe, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import DropdownMenu from "../DropdownMenu"; // Import the reusable component
 
+
 const Navbar = React.memo(({ auth = true }) => {
   const { t, i18n } = useTranslation();
+  const { logout } = useAuthActions();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const location = useLocation();
@@ -59,11 +122,6 @@ const Navbar = React.memo(({ auth = true }) => {
     [i18n]
   );
 
-  const handleLogout = useCallback(() => {
-    logout();
-    navigate("/auth/login");
-  }, [navigate]);
-
   useEffect(() => {
     if (i18n.language === "ar") {
       document.documentElement.setAttribute("dir", "rtl");
@@ -86,7 +144,10 @@ const Navbar = React.memo(({ auth = true }) => {
     {
       label: t("logout_key"),
       icon: <FaSignOutAlt />,
-      onClick: handleLogout,
+      onClick: () => {
+        logout();
+        window.location.href = "/";
+      },
     },
   ];
 

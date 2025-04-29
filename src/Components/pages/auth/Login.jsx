@@ -7,11 +7,12 @@ import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../Button";
 import PasswordInput from "../../Formik/PasswordInput";
-import { login } from "../../helpers/authHelpers";
+import { useAuthActions } from "../../helpers/authHelpers";
 
 export default function Login() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { login } = useAuthActions();
 
   const initialValues = {
     username: "",
