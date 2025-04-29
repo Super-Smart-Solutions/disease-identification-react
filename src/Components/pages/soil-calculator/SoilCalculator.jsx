@@ -11,6 +11,9 @@ import { setSoilCalculatorOpen } from "../../../redux/features/soilCalculatorSli
 import { useMutation } from "@tanstack/react-query";
 import { assessSoil } from "../../../api/soilApi";
 import { useNavigate } from "react-router-dom";
+import { fetchCrops } from "../../../api/soilApi";
+import { useState } from "react";
+
 
 export default function SoilCalculator() {
   const { t } = useTranslation();
@@ -18,6 +21,9 @@ export default function SoilCalculator() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isModalOpen = useSelector((state) => state.soilCalculator.isOpen);
+
+  const [assessmentResult, setAssessmentResult] = useState(null);
+  const [searchError, setSearchError] = React.useState(null);
 
   const validationSchema = Yup.object().shape({
     crop_name: Yup.string().required(t("required_field_key")),
@@ -46,20 +52,66 @@ export default function SoilCalculator() {
     mutationFn: assessSoil,
     onSuccess: (data) => {
       console.log("Assessment Success:", data);
+      setAssessmentResult(data);
     },
     onError: (error) => {
       console.error("Assessment Error:", error);
+      setAssessmentResult(null);
     },
   });
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    submitAssessment({
-      crop_name: values.crop_name,
+  // const handleSubmit = (values, { setSubmitting }) => {
+  //   submitAssessment({
+  //     crop_name: values.crop_name,
+  //     ph: parseFloat(values.ph),
+  //     salinity: parseFloat(values.salinity),
+  //     temperature: parseFloat(values.temperature),
+  //   });
+  //   setSubmitting(false);
+  // };
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+
+    setAssessmentResult(null);
+    setSearchError(null);
+    try {
+      const cropsResponse = await fetchCrops({ name: values.crop_name });
+
+      if (cropsResponse.items.length === 0) {
+        setSearchError("No crop was found, make sure to check the spelling.");
+        console.error("No crops found matching the name");
+        setSubmitting(false);
+        return;
+      }
+
+      const crop = cropsResponse.items[0];
+
+      // submitAssessment({
+      //   crop_id: crop.id,
+      //   ph: parseFloat(values.ph),
+      //   salinity: parseFloat(values.salinity),
+      //   temperature: parseFloat(values.temperature),
+      // });
+      submitAssessment({
+      crop_id: crop.id,
       ph: parseFloat(values.ph),
       salinity: parseFloat(values.salinity),
       temperature: parseFloat(values.temperature),
-    });
-    setSubmitting(false);
+      }, {
+        onSuccess: (data) => {
+          setAssessmentResult(data);
+        },
+        onError: (error) => {
+          console.error("Assessment Error:", error);
+          setSearchError("An error occurred during soil assessment.");
+        }
+      });
+
+    } catch (error) {
+      console.error("Error during soil assessment:", error);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleOpenModal = () => {
@@ -72,7 +124,10 @@ export default function SoilCalculator() {
 
   const handleCloseModal = () => {
     dispatch(setSoilCalculatorOpen(false));
+    setAssessmentResult(null);
+    setSearchError(null);
   };
+
 
   return (
     <div>
@@ -191,8 +246,57 @@ export default function SoilCalculator() {
 
 
                 <div className="cardIt w-full md:w-6/12">
-                  {/* Empty cardIt div as requested */}
+
+                  {searchError && (
+                    <div className="p-4 border rounded shadow-md text-red-500">
+                      {searchError}
+                    </div>
+                  )}
+
+
+                  {assessmentResult && !searchError && (
+                    <div className="p-4 border rounded shadow-md space-y-6">
+                      {/* Results */}
+                      <div className="space-y-4">
+                        {Object.entries(assessmentResult.assessment.results).map(([parameter, details]) => (
+                          <div key={parameter} className="space-y-1">
+                            {/* Top line: Parameter name + Status */}
+                            <div className="flex items-center gap-2">
+                              <div className="font-semibold capitalize">{parameter}</div>
+                              <span
+                                className={`px-2 py-1 rounded-full text-white text-xs ${
+                                  details.status.toLowerCase() === "optimal" ? "bg-green-500" : "bg-red-500"
+                                }`}
+                              >
+                                {details.status}
+                              </span>
+                            </div>
+
+                            {/* Second line: Values */}
+                            <div className="text-sm">
+                              Your value: {details.user_value} (Optimal: {details.range[0]}–{details.range[1]})
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Recommendations */}
+                      <div className="mt-4">
+                        <h4 className="font-semibold mb-2">Recommendations:</h4>
+                        <ul className="list-disc list-inside space-y-1">
+                          {assessmentResult.assessment.recommendations.map((rec, index) => (
+                            <li key={index} className="text-sm">{rec}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+
+
+
+
               </div>
 
               <Button

@@ -6,7 +6,7 @@ const SOIL_ENDPOINT = import.meta.env.VITE_SOIL_ENDPOINT;
 
 // Fetch crops with optional query parameters
 export const fetchCrops = async (params = {}) => {
-  const response = await axiosInstance.get('/api/soil/crops', {
+  const response = await axiosInstance.get(`${SOIL_ENDPOINT}/crops`, {
     params,
   });
   return response.data;
