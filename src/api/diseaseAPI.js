@@ -27,3 +27,8 @@ export const addDisease = async (diseaseData) => {
   const response = await axiosInstance.post(DISEASE_ENDPOINT, diseaseData);
   return response.data;
 };
+
+export const fetchPlantsByDisease = async (diseaseId) => {
+  const response = await axiosInstance.get(`${DISEASE_ENDPOINT}/${diseaseId}/plants`);
+  return response.data;
+};

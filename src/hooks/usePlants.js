@@ -1,5 +1,6 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { fetchPlants, fetchPlantById, fetchPlantByName, addPlant, fetchDiseasesByPlant } from "../api/plantAPI";
+import { fetchPlantsByDisease } from "../api/diseaseAPI";
 
 // Hook to get all plants
 export const usePlants = () => {
@@ -40,5 +41,12 @@ export const useDiseasesByPlant = (plantId) => {
     queryKey: ["plantDiseases", plantId],
     queryFn: () => fetchDiseasesByPlant(plantId),
     enabled: !!plantId, // Only run if plantId is available
+  });
+};
+export const usePlantByDiseases = (diseaseId) => {
+  return useQuery({
+    queryKey: ["diseasesPlant", diseaseId],
+    queryFn: () => fetchPlantsByDisease(diseaseId),
+    enabled: !!diseaseId, // Only run if plantId is available
   });
 };

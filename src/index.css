@@ -3,11 +3,45 @@
   --color-primary: #416a00;
   --color-primaryDarker: #2b4700;
   --color-primaryGray: #b7b7b7;
+  
+  /* Define color opacity variants */
+  --color-primary-10: rgba(65, 106, 0, 0.1);
+  --color-primary-20: rgba(65, 106, 0, 0.2);
+  --color-primary-30: rgba(65, 106, 0, 0.3);
+  --color-primary-40: rgba(65, 106, 0, 0.4);
+  --color-primary-50: rgba(65, 106, 0, 0.5);
+  --color-primary-60: rgba(65, 106, 0, 0.6);
+  --color-primary-70: rgba(65, 106, 0, 0.7);
+  --color-primary-80: rgba(65, 106, 0, 0.8);
+  --color-primary-90: rgba(65, 106, 0, 0.9);
+  
+  --color-primaryDarker-10: rgba(43, 71, 0, 0.1);
+  --color-primaryDarker-20: rgba(43, 71, 0, 0.2);
+  --color-primaryDarker-30: rgba(43, 71, 0, 0.3);
+  --color-primaryDarker-40: rgba(43, 71, 0, 0.4);
+  --color-primaryDarker-50: rgba(43, 71, 0, 0.5);
+  --color-primaryDarker-60: rgba(43, 71, 0, 0.6);
+  --color-primaryDarker-70: rgba(43, 71, 0, 0.7);
+  --color-primaryDarker-80: rgba(43, 71, 0, 0.8);
+  --color-primaryDarker-90: rgba(43, 71, 0, 0.9);
+  
+  --color-primaryGray-10: rgba(183, 183, 183, 0.1);
+  --color-primaryGray-20: rgba(183, 183, 183, 0.2);
+  --color-primaryGray-30: rgba(183, 183, 183, 0.3);
+  --color-primaryGray-40: rgba(183, 183, 183, 0.4);
+  --color-primaryGray-50: rgba(183, 183, 183, 0.5);
+  --color-primaryGray-60: rgba(183, 183, 183, 0.6);
+  --color-primaryGray-70: rgba(183, 183, 183, 0.7);
+  --color-primaryGray-80: rgba(183, 183, 183, 0.8);
+  --color-primaryGray-90: rgba(183, 183, 183, 0.9);
 }
+
 body {
   font-family: "Roboto", sans-serif; /* Default for English */
 }
 
 body {
+
   font-family: "Cascadia Code", serif; /* Apply Arabic font for RTL direction */
 }
+
