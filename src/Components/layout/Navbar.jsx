@@ -67,7 +67,7 @@ const Navbar = React.memo(({ auth = true }) => {
   useEffect(() => {
     if (i18n.language === "ar") {
       document.documentElement.setAttribute("dir", "rtl");
-      document.documentElement.style.fontFamily = "'Noto Kufi Arabic', serif";
+      document.documentElement.style.fontFamily = "'Cascadia Code', serif";
     } else {
       document.documentElement.setAttribute("dir", "ltr");
       document.documentElement.style.fontFamily = "'Roboto', sans-serif";
