@@ -29,12 +29,17 @@ export default function SoilCalculator() {
       .min(5, t("salinity_min_error_key"))
       .max(18, t("salinity_max_error_key"))
       .required(t("required_field_key")),
+    temperature: Yup.number(t("must_be_a_number_key"))
+      .min(5, t("temperature_min_error_key"))
+      .max(18, t("temperature_max_error_key"))
+      .required(t("required_field_key")),
   });
 
   const initialValues = {
     crop_name: "",
     ph: "",
     salinity: "",
+    temperature:"",
   };
 
   const { mutate: submitAssessment, isPending } = useMutation({
@@ -52,6 +57,7 @@ export default function SoilCalculator() {
       crop_name: values.crop_name,
       ph: parseFloat(values.ph),
       salinity: parseFloat(values.salinity),
+      temperature: parseFloat(values.temperature),
     });
     setSubmitting(false);
   };
@@ -157,7 +163,32 @@ export default function SoilCalculator() {
                       className="text-red-500 text-xs mt-1"
                     />
                   </div>
+
+                  <div className="form-group">
+                    <label
+                      htmlFor="temperature"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      {t("temperature_key")}
+                    </label>
+                    <Field
+                      placeholder="(5-18)"
+                      type="text"
+                      name="temperature"
+                      id="temperature"
+                      className="custom-input w-full p-2 border rounded"
+                    />
+                    <ErrorMessage
+                      name="temperature"
+                      component="div"
+                      className="text-red-500 text-xs mt-1"
+                    />
+                  </div>
+
+
                 </div>
+
+
 
                 <div className="cardIt w-full md:w-6/12">
                   {/* Empty cardIt div as requested */}
