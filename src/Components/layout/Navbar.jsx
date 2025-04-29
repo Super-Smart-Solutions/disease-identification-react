@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 import navRoutes from "./navRoutes";
 
-{/* 
+
 import {
   FaChevronDown,
   FaChevronUp,
@@ -65,11 +65,11 @@ const DropdownMenu = ({
     </div>
   );
 };
-*/} 
-import { logout } from "../helpers/authHelpers";
-import { FaGlobe, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
-import { RxDashboard } from "react-icons/rx";
-import DropdownMenu from "../DropdownMenu"; // Import the reusable component
+
+// import { logout } from "../helpers/authHelpers";
+// import { FaGlobe, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
+// import { RxDashboard } from "react-icons/rx";
+// import DropdownMenu from "../DropdownMenu"; // Import the reusable component
 
 
 const Navbar = React.memo(({ auth = true }) => {
