@@ -80,7 +80,7 @@ const InstructionModal = () => {
     <>
       <motion.button
         onClick={handleOpen}
-        className=" bg-slate-50 text-slate-600 p-1 rounded-full hover:bg-slate-200 z-40 mt-3"
+        className=" bg-slate-50 text-slate-600 p-1 rounded-full hover:bg-slate-200  mt-3"
         aria-label={t("instruction_modal.help_button_label")}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}

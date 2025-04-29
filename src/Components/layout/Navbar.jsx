@@ -1,9 +1,12 @@
+// components/Navbar.js
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 import navRoutes from "./navRoutes";
+
+{/* 
 import {
   FaChevronDown,
   FaChevronUp,
@@ -62,6 +65,12 @@ const DropdownMenu = ({
     </div>
   );
 };
+*/} 
+import { logout } from "../helpers/authHelpers";
+import { FaGlobe, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
+import { RxDashboard } from "react-icons/rx";
+import DropdownMenu from "../DropdownMenu"; // Import the reusable component
+
 
 const Navbar = React.memo(({ auth = true }) => {
   const { t, i18n } = useTranslation();
@@ -116,7 +125,7 @@ const Navbar = React.memo(({ auth = true }) => {
   useEffect(() => {
     if (i18n.language === "ar") {
       document.documentElement.setAttribute("dir", "rtl");
-      document.documentElement.style.fontFamily = "'Noto Kufi Arabic', serif";
+      document.documentElement.style.fontFamily = "'Cascadia Code', serif";
     } else {
       document.documentElement.setAttribute("dir", "ltr");
       document.documentElement.style.fontFamily = "'Roboto', sans-serif";
@@ -147,10 +156,12 @@ const Navbar = React.memo(({ auth = true }) => {
     {
       label: "English",
       onClick: () => toggleLanguage("en"),
+      isSelected: i18n.language === "en",
     },
     {
       label: "العربية",
       onClick: () => toggleLanguage("ar"),
+      isSelected: i18n.language === "ar",
     },
   ];
 
@@ -160,7 +171,7 @@ const Navbar = React.memo(({ auth = true }) => {
         auth && location.pathname !== "/" ? "bg-primary" : "bg-black opacity-80"
       }`}
     >
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="w-full flex justify-between items-center px-6">
         {/* Welcome Menu */}
         {auth ? (
           <DropdownMenu
@@ -175,6 +186,10 @@ const Navbar = React.memo(({ auth = true }) => {
                     src={userAvatar}
                     alt="User avatar"
                     className="w-8 h-8 rounded-full object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "user-avatar.png";
+                    }}
                   />
                 ) : (
                   <FaUserCircle size={24} />
@@ -190,14 +205,11 @@ const Navbar = React.memo(({ auth = true }) => {
             buttonClassName="text-white"
           />
         ) : (
-          <>
-            {" "}
-            <span className="text-lg text-white">{t("welcome_key")} </span>
-          </>
+          <span className="text-lg text-white w-1/3">{t("welcome_key")}</span>
         )}
 
         {/* Navigation Links */}
-        <div className="flex items-center space-x-6">
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-6">
           {navRoutes.map((route) => (
             <NavLink
               key={route.path}
@@ -229,7 +241,7 @@ const Navbar = React.memo(({ auth = true }) => {
             </div>
           }
           options={languageOptions}
-          position="right"
+          position={i18n.language === "en" ? "right" : "left"}
           buttonClassName="text-white"
         />
       </div>

@@ -30,7 +30,7 @@ export default function Carousel({ cards }) {
   };
 
   return (
-    <div className="">
+    <div className="px-8">
       <Slider {...settings}>
         {cards.map((card, index) => (
           <div key={index} onClick={card.onClick} className="px-2">

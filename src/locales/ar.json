@@ -229,6 +229,9 @@
   "instruction_2_caption": "إذا لم تتمكن من عزل النبات عن الشجرة، يمكنك قطعه من العلامة الحمراء ثم وضعه على التربة لعزله عن باقي الأوراق السليمة والتقاط صور له.",
   "confirmation_caption": "و أخيرا، في حالة اكتشاف مرض، يجب مراجعة خبير زراعي لمراجعة الاجراءات العلاجية",
 
+  "search_in_database_key": "ابحث في قاعدة البيانات",
+  "select_by_plant_key": "اختر من النباتات",
+
   "invitation_title_key": "دعوة فريق",
   "invitation_from_key": "دعوة من:",
   "invitation_role_key": "الدور:",
@@ -243,6 +246,13 @@
   "invitation_reject_error_key": "فشل رفض الدعوة",
   "member_of_team_key": "عضو في فريق",
   "invitation_message_key": "{{name}} يريد دعوتك لتكون جزءًا من فريقه ({{team}})",
+
+  "search_diseases_placeholder_key": "ابحث بالاسم، الاسم العلمي، الاسم العربي، أو الأعراض...",
+  "no_matching_diseases_key": "لا توجد أمراض مطابقة",
+  "type_to_search_key": "اكتب للبحث...",
+  "scientific_key": "علمي",
+  "arabic_key": "عربي",
+  "english_name_key": "الاسم بالانجليزية",
 
   "inputs_showcase": {
     "title": "عرض المدخلات"

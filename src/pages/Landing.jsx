@@ -44,7 +44,7 @@ export default function Landing() {
       <div
         style={{
           backgroundColor: "#2b4700",
-          backgroundImage: `url(${farm})`,
+          backgroundImage: `url(farm.jpeg)`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

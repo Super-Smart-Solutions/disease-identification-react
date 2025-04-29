@@ -23,22 +23,22 @@ export default function ExpandableArticle({ plant_id, article, loading }) {
 
         <div className=" space-y-6">
           <h2 className="text-3xl font-bold me-2 text-gray-900">
-            {article.english_name || t("no_disease_selected_key")}
+            {article?.english_name || t("no_disease_selected_key")}
           </h2>
-          {article.arabic_name && (
+          {article?.arabic_name && (
             <h3 className="text-xl font-bold me-2 text-gray-900">
-              {t("arabic_name_key")}: {article.arabic_name}
+              {t("arabic_name_key")}: {article?.arabic_name}
             </h3>
           )}
 
-          {article.scientific_name && (
+          {article?.scientific_name && (
             <h4 className="text-lg font-bold me-2 text-gray-900">
-              {t("scientific_name_key")}: {article.scientific_name}
+              {t("scientific_name_key")}: {article?.scientific_name}
             </h4>
           )}
           <motion.p className="text-base text-gray-700 leading-relaxed">
             <span className="font-bold me-2">{t("description_key")}:</span>
-            {t(`${formatKey(article.english_name)}_description`) ||
+            {t(`${formatKey(article?.english_name)}_description`) ||
               t("no_description_key")}
           </motion.p>
         </div>
@@ -62,7 +62,7 @@ export default function ExpandableArticle({ plant_id, article, loading }) {
                 {t("Symptoms")}
               </h4>
               <p className="text-gray-700 text-base leading-relaxed">
-                {t(`${formatKey(article.english_name)}_symptoms`) ||
+                {t(`${formatKey(article?.english_name)}_symptoms`) ||
                   t("no_symptoms_key")}
               </p>
             </div>
@@ -72,7 +72,7 @@ export default function ExpandableArticle({ plant_id, article, loading }) {
                 {t("Control Methods:")}
               </h4>
               <p className="text-gray-700 text-base leading-relaxed">
-                {t(`${formatKey(article.english_name)}_treatments`) ||
+                {t(`${formatKey(article?.english_name)}_treatments`) ||
                   t("no_treatment_key")}
               </p>
             </div>

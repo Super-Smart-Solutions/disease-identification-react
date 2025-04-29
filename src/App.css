@@ -40,7 +40,17 @@
 }
 .slick-prev:before,
 .slick-next:before {
-  color: #416a00 !important;
+  color: #00000083 !important; 
+}
+
+.slick-prev:before,
+.slick-next:before {
+  font-family: "slick";
+  line-height: 1;
+  opacity: 0.75;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 input::placeholder {
   font: 0.8rem/3  "Roboto", sans-serif;
