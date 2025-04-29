@@ -116,7 +116,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
                       onClick={() =>
                         navigate("/database", {
                           state: {
-                            selectedPlant: modelingData?.category, // Pass selected plant
+                            selectedPlantName: modelingData?.category, // Pass selected plant
                             selectedDisease: diseaseData, // Pass full disease object
                           },
                         })

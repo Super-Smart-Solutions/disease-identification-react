@@ -6,12 +6,25 @@ import ExpandableArticle from "../Components/pages/ExpandableArticle";
 import PlantDiseaseForm from "../Components/pages/PlantDiseaseForm";
 import { useTranslation } from "react-i18next";
 import DiseaseSearchDropdown from "../Components/pages/DiseaseSearchDropdown";
+import { useLocation } from "react-router-dom";
+import { fetchPlantByName } from "../api/plantAPI";
+
 
 export default function DataBase() {
   const { t, i18n } = useTranslation();
+  const { state } = useLocation();
 
-  const [selectedDisease, setSelectedDisease] = useState(null);
-  const [selectedPlant, setSelectedPlant] = useState(null);
+  const [selectedDisease, setSelectedDisease] = useState(
+    state?.selectedDisease || null
+  );
+  const [selectedPlantName, setSelectedPlantName] = useState(
+    state?.selectedPlantName || null
+  );
+
+  // const [selectedDisease, setSelectedDisease] = useState(null);
+  const [selectedPlant, setSelectedPlant] = useState(
+    selectedPlantName?.value || null
+    );
   const [searchMethod, setSearchMethod] = useState("database");
   const [isLoading, setIsLoading] = useState(false);
   const [prevDisease, setPrevDisease] = useState(null);
