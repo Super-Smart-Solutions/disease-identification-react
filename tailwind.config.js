@@ -10,7 +10,7 @@ module.exports = {
                 secondary: '#DB2777',
             },
             fontFamily: {
-                arabic: ["Noto Kufi Arabic", "serif"],
+                arabic: ["Cascadia Code", "serif"],
                 english: ['Roboto', 'sans-serif'],
             },
         },
