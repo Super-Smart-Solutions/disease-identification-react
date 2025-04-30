@@ -510,5 +510,11 @@
   "recommendations_key": "Recommendations",
   "your_value_key": "Your value",
   "optimal_key": "Optimal",
-  "optimal_value_key": "Optimal"
+  "optimal_value_key": "Optimal",
+  "form_key": "Form",
+  "results_key": "Results",
+  "summary_key": "Summary",
+  "assess_key": "Assess",
+  "finish_key": "Finish",
+  "download_key": "Download"
 }

@@ -512,5 +512,11 @@
   "recommendations_key": "الاقتراحات",
   "your_value_key": "القيمة المدخلة",
   "optimal_value_key": "القيمة المثالية",
-  "optimal_key": "مثالي"
+  "optimal_key": "مثالي",
+  "form_key": "ادخال القيم",
+  "results_key": "النتائج",
+  "summary_key": "ملخص",
+  "assess_key": "تقييم",
+  "finish_key": "إنهاء",
+  "download_key": "تحميل pdf"
 }
