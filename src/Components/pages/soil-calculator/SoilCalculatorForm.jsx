@@ -128,6 +128,7 @@ export const SoilCalculatorForm = ({
 
         <div className="w-full md:w-6/12">
           <ResultsCard
+            isSubmitting={isSubmitting}
             assessmentResult={assessmentResult}
             searchError={searchError}
             onNextStep={handleNextStep}

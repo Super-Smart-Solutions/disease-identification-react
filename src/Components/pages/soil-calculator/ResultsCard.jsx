@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import Button from "../../Button";
 
 const stepVariants = {
   hidden: { x: 50, opacity: 0 },
@@ -16,6 +15,7 @@ export const ResultsCard = ({
   onPrevStep,
   currentStep,
   totalSteps,
+  isSubmitting,
 }) => {
   const { t } = useTranslation();
 
@@ -27,17 +27,19 @@ export const ResultsCard = ({
     );
   }
 
-  if (!assessmentResult) {
+  if (!assessmentResult || isSubmitting) {
     return (
       <div className="cardIt h-full">
-        <div className="space-y-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="space-y-2">
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-            </div>
-          ))}
-        </div>
+        {isSubmitting && (
+          <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="space-y-2">
+                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   }
@@ -99,8 +101,8 @@ export const ResultsCard = ({
                 </span>
                 <span>
                   {t("optimal_value_key")}:{" "}
-                  {assessmentResult.assessment.results[currentParam].range[0]}–
-                  {assessmentResult.assessment.results[currentParam].range[1]}{" "}
+                  {assessmentResult.assessment.results[currentParam].range[0]} –{" "}
+                  {assessmentResult.assessment.results[currentParam].range[1]}
                 </span>
               </div>
             </div>
@@ -127,7 +129,7 @@ export const ResultsCard = ({
           <span
             type="button"
             onClick={onPrevStep}
-            className="text-sm text-primary hover:underline cursor-pointer "
+            className="text-sm text-primary hover:underline cursor-pointer select-none "
           >
             {t("previous_key")}
           </span>
@@ -136,7 +138,7 @@ export const ResultsCard = ({
           <span
             type="button"
             onClick={onNextStep}
-            className="text-sm text-primary hover:underline  ms-auto cursor-pointer"
+            className="text-sm text-primary hover:underline  ms-auto cursor-pointer select-none"
           >
             {t("next_key")}
           </span>
