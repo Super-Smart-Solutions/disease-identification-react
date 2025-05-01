@@ -1,6 +1,21 @@
-// components/DropdownMenu.js
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+
+// Custom hook to detect clicks outside the component
+const useClickOutside = (ref, callback) => {
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        callback();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref, callback]);
+};
 
 const DropdownMenu = ({
   buttonRef,
@@ -14,8 +29,21 @@ const DropdownMenu = ({
   menuClassName = "",
   align = "start",
 }) => {
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useClickOutside(dropdownRef, () => {
+    if (isOpen) toggle();
+  });
+
+  // Handle option click
+  const handleOptionClick = (option) => {
+    option.onClick();
+    toggle(); // Close menu after selection
+  };
+
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         ref={buttonRef}
         onClick={toggle}
@@ -43,7 +71,7 @@ const DropdownMenu = ({
                   ? "bg-slate-100 font-semibold text-primary"
                   : "text-slate-800"
               }`}
-              onClick={option.onClick}
+              onClick={() => handleOptionClick(option)}
             >
               {option.icon && (
                 <span

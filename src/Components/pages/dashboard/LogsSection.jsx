@@ -59,9 +59,12 @@ export default function LogsSection() {
   });
 
   const columnDefs = [
-    { field: "id", headerName: "#", width: 100 },
-    { field: "plant_name", headerName: t("plant_key") },
-    { field: "disease_name", headerName: t("disease_key") },
+    { field: "id", headerName: "#" },
+    {
+      field: "plant_name",
+      headerName: t("plant_key"),
+    },
+    { field: "disease_name", headerName: t("disease_key"), flex: 2 },
     {
       field: "confidence_level",
       headerName: t("confidence_key"),
@@ -71,11 +74,13 @@ export default function LogsSection() {
     {
       field: "status_text",
       headerName: t("status_key"),
+      flex: 2,
     },
     {
       field: "image_id",
       headerName: t("image_key"),
       cellRenderer: (params) => <ImageById id={params?.data?.image_id} />,
+      flex: 2,
     },
     {
       field: "created_at",

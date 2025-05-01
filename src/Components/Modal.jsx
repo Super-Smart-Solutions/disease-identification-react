@@ -36,7 +36,7 @@ const Modal = ({ isOpen, onClose, children, title }) => {
       >
         {/* Modal header with title and close button */}
         <div className="flex items-center justify-between p-4 border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+          <h3 className="text-lg font-semibold text-gray-900 truncate max-w-full ">{title}</h3>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-500 focus:outline-none cursor-pointer"

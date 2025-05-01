@@ -3,8 +3,8 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import Button from "../Button";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Arrow icons
-import { ArticleSkeleton } from "./ArticleSkeleton";
 import farm from "../../assets/farm.jpg";
+import { ArticleSkeleton } from "../skeltons/ArticleSkeleton";
 
 export default function ExpandableArticle({ plant_id, article, loading }) {
   const [expanded, setExpanded] = useState(false);

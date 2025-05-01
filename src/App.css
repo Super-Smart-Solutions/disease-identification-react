@@ -40,7 +40,7 @@
 }
 .slick-prev:before,
 .slick-next:before {
-  color: #00000083 !important; 
+  color: #00000083 !important;
 }
 
 .slick-prev:before,
@@ -53,5 +53,28 @@
   -moz-osx-font-smoothing: grayscale;
 }
 input::placeholder {
-  font: 0.8rem/3  "Roboto", sans-serif;
+  font: 0.8rem/3 "Roboto", sans-serif;
+}
+
+
+.ag-row {
+  display: flex;
+  justify-content: start !important; /* Center row items */
+  align-items: center; /* Vertically align row items */
+  border: 0.5px solid #f0f0f0;
+}
+.ag-cell {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: none !important;
+  overflow: hidden;
+}
+
+.ag-body-viewport {
+  border: none !important;
+}
+
+.ag-root-wrapper {
+  border: none !important;
 }

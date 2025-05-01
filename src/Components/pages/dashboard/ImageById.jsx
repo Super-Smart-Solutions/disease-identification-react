@@ -3,13 +3,35 @@ import { useTranslation } from "react-i18next";
 import { fetchImageById } from "../../../api/imagesAPI";
 import { IoClose } from "react-icons/io5";
 import { FaCloudDownloadAlt } from "react-icons/fa";
+import { createPortal } from "react-dom";
+import Modal from "../../Modal";
+import Button from "../../Button";
 
-export default function ImageById({ id }) {
+export default function ImageById({ id, tableId }) {
   const { t } = useTranslation();
   const [imageData, setImageData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [showOverlay, setShowOverlay] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalRoot, setModalRoot] = useState(null);
+
+  useEffect(() => {
+    // Create a portal root for the modal if it doesn't exist
+    let root = document.getElementById(`modal-root-${tableId}`);
+    if (!root) {
+      root = document.createElement("div");
+      root.id = `modal-root-${tableId}`;
+      document.body.appendChild(root);
+    }
+    setModalRoot(root);
+
+    return () => {
+      // Clean up the portal root when component unmounts
+      if (root && document.body.contains(root)) {
+        document.body.removeChild(root);
+      }
+    };
+  }, [tableId]);
 
   useEffect(() => {
     const loadImage = async () => {
@@ -31,7 +53,6 @@ export default function ImageById({ id }) {
 
   const getDisplayName = (fullPath) => {
     if (!fullPath) return "---";
-    // Split by slashes and take the last part
     const filename = fullPath.split("/").pop();
     return filename;
   };
@@ -76,43 +97,40 @@ export default function ImageById({ id }) {
       {/* Thumbnail Image */}
       <div
         className="group cursor-pointer"
-        onClick={() => setShowOverlay(true)}
+        onClick={() => setIsModalOpen(true)}
       >
         <p className="mt-1 text-sm text-gray-600 truncate max-w-60">
           {getDisplayName(imageData.name)}
         </p>
       </div>
 
-      {/* Overlay */}
-      {showOverlay && (
-        <div className="overlay" onClick={() => setShowOverlay(false)}>
-          <div
-            className="relative max-w-[90vw] max-h-[90vh]"
-            onClick={(e) => e.stopPropagation()}
+      {/* Modal for full-size image - rendered via portal */}
+      {modalRoot &&
+        isModalOpen &&
+        createPortal(
+          <Modal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            title={getDisplayName(imageData.name)}
+            container={modalRoot}
           >
-            <img
-              src={imageData.url}
-              alt={getDisplayName(imageData.name)}
-              className="max-w-[80vw] max-h-[80vh] object-contain mx-auto"
-            />
-            <p className="text-white font-medium text-center">
-              {getDisplayName(imageData.name)}
-            </p>
-            <button
-              onClick={() => setShowOverlay(false)}
-              className="absolute top-2 right-2 bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-colors"
-            >
-              <IoClose />
-            </button>
-            <button
-              onClick={handleDownload}
-              className="absolute top-2 left-2 bg-gray-200 hover:bg-gray-300 rounded-full p-2 transition-colors"
-            >
-              <FaCloudDownloadAlt />
-            </button>
-          </div>
-        </div>
-      )}
+            <div className="relative flex flex-col justify-center items-center gap-4">
+              <img
+                src={imageData.url}
+                alt={getDisplayName(imageData.name)}
+                className="max-w-[60vw] max-h-[60vh] object-contain mx-auto"
+              />
+              <Button
+                className={` flex justify-between items-center gap-2`}
+                onClick={handleDownload}
+              >
+                <FaCloudDownloadAlt />
+                {t("download_key")}
+              </Button>
+            </div>
+          </Modal>,
+          modalRoot
+        )}
     </div>
   );
 }

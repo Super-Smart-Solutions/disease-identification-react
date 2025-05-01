@@ -11,8 +11,6 @@ import LandingLayout from "../layouts/LandingLayout";
 import routes from "./routes.json";
 import authRoutes from "./authRoutes.json";
 import Landing from "../pages/Landing";
-import ButtonShowcase from "../pages/ButtonShowcase";
-import InputsShowcase from "../pages/InputsShowcase";
 import DataBase from "../pages/DataBase";
 import Models from "../pages/Models";
 import Register from "../Components/pages/auth/Register";
@@ -22,8 +20,6 @@ import Dashboard from "../pages/Dashboard";
 
 const componentMap = {
   Landing,
-  ButtonShowcase,
-  InputsShowcase,
   DataBase,
   Models,
   Register,
