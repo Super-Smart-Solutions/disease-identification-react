@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ExpandedStep from "../Components/pages/ExpandedStep";
 import ModelingStepOne from "../Components/pages/models/ModelingStepOne";
 import { useTranslation } from "react-i18next";
@@ -8,17 +9,36 @@ import ModelingStepFour from "../Components/pages/models/ModelingStepFour";
 import VerticalSteps from "../Components/VerticalSteps";
 import DeepAnalysisStep from "../Components/pages/models/DeepAnalysisStep";
 import InstructionModal from "../Components/pages/models/InstructionModal";
+
+const MODELING_DATA_CACHE_KEY = "modelingData";
+const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
+
 export default function Models() {
   const { t } = useTranslation();
-  const [modelingData, setModelingData] = useState({
-    category: {},
-    selected_file: [],
-    image_id: null,
-    inference_id: null,
-    is_deep: false,
-    errorMessage: "",
-    is_final: false,
+  const queryClient = useQueryClient();
+  const initialModelingData = useMemo(
+    () => ({
+      category: {},
+      selected_file: [],
+      image_id: null,
+      inference_id: null,
+      is_deep: false,
+      errorMessage: "",
+      is_final: false,
+    }),
+    []
+  );
+
+  const { data: cachedModelingData } = useQuery({
+    queryKey: [MODELING_DATA_CACHE_KEY],
+    queryFn: () => initialModelingData,
+    staleTime: ONE_DAY_IN_MS,
+    cacheTime: ONE_DAY_IN_MS,
   });
+
+  const [modelingData, setModelingData] = useState(
+    cachedModelingData || initialModelingData
+  );
 
   const [expandedSteps, setExpandedSteps] = useState({
     1: true,
@@ -27,6 +47,10 @@ export default function Models() {
     4: false,
     5: false,
   });
+
+  useEffect(() => {
+    queryClient.setQueryData([MODELING_DATA_CACHE_KEY], modelingData);
+  }, [modelingData, queryClient]);
 
   const activeStep = useMemo(() => {
     if (!modelingData?.category?.value) return 1;
@@ -103,6 +127,11 @@ export default function Models() {
 
   const steps = new Array(4).fill(null);
 
+  const clearModelingCache = () => {
+    queryClient.removeQueries([MODELING_DATA_CACHE_KEY]);
+    setModelingData(initialModelingData);
+  };
+
   return (
     <div className="flex gap-4 justify-start items-start">
       {/* Vertical Steps */}
@@ -110,21 +139,21 @@ export default function Models() {
 
       {/* Expanded Steps */}
       <div className="flex-1 space-y-6">
-        <div className=" flex gap-4 justify-end items-start">
-          <div className=" grow"> 
-          <ExpandedStep
-            title={STEP_TITLES.SELECT_MODEL}
-            expandedContent={
-              <ModelingStepOne
-                modelingData={modelingData}
-                setModelingData={setModelingData}
-              />
-            }
-            disabled={false}
-            isExpanded={expandedSteps[1]}
-            onToggleExpand={handleToggleExpand}
-            stepId={1}
-          />
+        <div className="flex gap-4 justify-end items-start">
+          <div className="grow">
+            <ExpandedStep
+              title={STEP_TITLES.SELECT_MODEL}
+              expandedContent={
+                <ModelingStepOne
+                  modelingData={modelingData}
+                  setModelingData={setModelingData}
+                />
+              }
+              disabled={false}
+              isExpanded={expandedSteps[1]}
+              onToggleExpand={handleToggleExpand}
+              stepId={1}
+            />
           </div>
           <InstructionModal />
         </div>
