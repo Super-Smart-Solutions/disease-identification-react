@@ -1,18 +1,27 @@
 import React, { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { FaCheckCircle } from "react-icons/fa";
 import DataGrid from "../../DataGrid";
-import { getInferences } from "../../../api/inferenceAPI";
+import {
+  getInferences,
+  updateInferenceVerify,
+} from "../../../api/inferenceAPI";
 import { fetchDiseases } from "../../../api/diseaseAPI";
 import { fetchPlants } from "../../../api/plantAPI";
 import ImageById from "./ImageById";
 import { getStatusTranslation } from "../../../utils/statusTranslations";
 import moment from "moment/moment";
+import { useUserData } from "../../../hooks/useUserData";
+import { toast } from "react-toastify";
 
 export default function LogsSection() {
+  const queryClient = useQueryClient();
   const { t, i18n } = useTranslation();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const { user } = useUserData();
+  const isAdmin = user?.is_org_admin;
 
   const fetchLogs = useCallback(async () => {
     const [inferencesData, diseasesData, plantsData] = await Promise.all([
@@ -55,8 +64,36 @@ export default function LogsSection() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["logs", page, pageSize, i18n.language],
     queryFn: fetchLogs,
-    staleTime: 1000 * 60 * 5, // 5 mins
   });
+  const verifyMutation = useMutation({
+    mutationFn: async ({ id, is_verify }) => {
+      // Assuming you have an API function called `updateInferenceVerify`
+      return await updateInferenceVerify(id, !is_verify);
+    },
+    onSuccess: (variables) => {
+      // Update the specific inference in the cache
+      queryClient.setQueryData(
+        ["logs", page, pageSize, i18n.language],
+        (oldData) => {
+          if (!oldData) return oldData;
+          return {
+            ...oldData,
+            items: oldData.items.map((log) =>
+              log.id === variables.id
+                ? { ...log, is_verify: !variables.is_verify }
+                : log
+            ),
+          };
+        }
+      );
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+  const handleVerify = (is_verify, id) => {
+    verifyMutation.mutate({ id, is_verify });
+  };
 
   const columnDefs = [
     { field: "id", headerName: "#" },
@@ -65,12 +102,28 @@ export default function LogsSection() {
       headerName: t("plant_key"),
     },
     { field: "disease_name", headerName: t("disease_key"), flex: 2 },
-    {
-      field: "confidence_level",
-      headerName: t("confidence_key"),
-      valueFormatter: ({ value }) =>
-        value && value > 0 ? `${(value * 100).toFixed(2)}%` : "----",
-    },
+    ...(isAdmin
+      ? [
+          {
+            field: "is_verify",
+            headerName: t("verify_key"),
+            cellRenderer: (params) => (
+              <span
+                className="cursor-pointer"
+                onClick={() =>
+                  handleVerify(params?.data?.is_verify, params?.data?.id)
+                }
+                title={t("remove_user_key")}
+              >
+                <FaCheckCircle
+                  color={params?.value ? "green" : "gray"}
+                  size={18}
+                />
+              </span>
+            ),
+          },
+        ]
+      : []),
     {
       field: "status_text",
       headerName: t("status_key"),

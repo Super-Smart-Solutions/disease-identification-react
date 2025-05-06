@@ -500,5 +500,6 @@
   "crop_key": "Crop",
   "type_crop_key": "type a crop",
   "ph_key": "pH Level",
-  "salinity_key": "Salinity"
+  "salinity_key": "Salinity" , 
+  "verify_key" :"Verify"
 }

@@ -502,5 +502,7 @@
   "crop_key": "المحصول",
   "type_crop_key": "ادخل المحصول",
   "ph_key": "نطاق الرقم الهيدروجيني",
-  "salinity_key": "الملوحة"
+  "salinity_key": "الملوحة" , 
+  "verify_key" :"التحقق"
+
 }
