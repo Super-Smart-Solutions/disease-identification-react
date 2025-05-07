@@ -37,7 +37,10 @@ export default function ExpandedStep({
   }, [isExpanded]);
 
   return (
-    <div className=" overflow-hidden px-4 select-none" ref={contentRef}>
+    <div
+      className={`${isExpanded ? "" : "overflow-hidden"} px-4 select-none`}
+      ref={contentRef}
+    >
       {/* Header */}
       <motion.div
         onClick={toggleExpand}

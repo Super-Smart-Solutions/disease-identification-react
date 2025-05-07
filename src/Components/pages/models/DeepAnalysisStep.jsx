@@ -79,7 +79,7 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
             </>
           )}
 
-          <div className="flex flex-col bg-primaryGray p-4 rounded-2xl">
+          <div className="flex flex-col  p-4 rounded-2xl">
             <span>{`${t("category_key")} : ${
               modelingData?.category?.label
             }`}</span>

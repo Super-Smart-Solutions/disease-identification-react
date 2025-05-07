@@ -499,5 +499,7 @@
   "crop_key": "Crop",
   "type_crop_key": "type a crop",
   "ph_key": "pH Level",
-  "salinity_key": "Salinity"
+  "salinity_key": "Salinity",
+  "prediction_failed_message_key": "Prediction failed message ",
+  "try_with_a_different_image_key": "try with a different image "
 }
