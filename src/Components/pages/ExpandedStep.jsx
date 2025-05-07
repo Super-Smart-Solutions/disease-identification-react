@@ -37,11 +37,11 @@ export default function ExpandedStep({
   }, [isExpanded]);
 
   return (
-    <div ref={contentRef}>
+    <div className=" overflow-hidden px-4 select-none" ref={contentRef}>
       {/* Header */}
       <motion.div
         onClick={toggleExpand}
-        className={`p-4 flex justify-between items-center rounded-xl bg-[#758F4C] transition-colors text-white ${
+        className={`p-4 flex justify-between items-center rounded-xl bg-[#758F4C] transition-colors text-white  ${
           disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
         }`}
         whileHover={!disabled ? { scale: 1.02 } : {}}
