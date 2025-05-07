@@ -518,5 +518,7 @@
   "summary_key": "ملخص",
   "assess_key": "تقييم",
   "finish_key": "إنهاء",
-  "download_key": "تحميل pdf"
+  "download_key": "تحميل pdf",
+  "min_key": "الصغري",
+  "max_key": "العظمي"
 }

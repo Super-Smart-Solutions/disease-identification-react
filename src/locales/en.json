@@ -516,5 +516,7 @@
   "summary_key": "Summary",
   "assess_key": "Assess",
   "finish_key": "Finish",
-  "download_key": "Download"
+  "download_key": "Download",
+  "min_key": "min",
+  "max_key": "max"
 }
