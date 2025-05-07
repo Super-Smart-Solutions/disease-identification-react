@@ -3,6 +3,7 @@ import Button from "../../Button";
 import { useTranslation } from "react-i18next";
 import { startInference, validateInference } from "../../../api/inferenceAPI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { RiImageEditLine } from "react-icons/ri";
 
 export default function ModelingStepThree({ modelingData, setModelingData }) {
   const { t } = useTranslation();
@@ -56,14 +57,10 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
   };
 
   const handleTryDifferentImage = () => {
-    setModelingData({
+    setModelingData((prev) => ({
+      category: prev.category,
       selected_file: [],
-      image_id: null,
-      inference_id: null,
-      is_deep: false,
-      errorMessage: "",
-      is_final: false,
-    });
+    }));
   };
 
   return (
@@ -84,9 +81,16 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
       ) : modelingData.inference_id && !modelingData.is_final ? (
         <>
           <span>{t("inValid-message")}</span>
-          <Button onClick={handleTryDifferentImage}>
-            {t("try_with_a_different_image")}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              className="flex items-center gap-2"
+              onClick={handleTryDifferentImage}
+              variant="outlined"
+            >
+              <RiImageEditLine size={22} />
+              {t("try_with_a_different_image_key")}
+            </Button>
+          </div>
         </>
       ) : (
         <Button

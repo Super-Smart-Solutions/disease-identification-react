@@ -101,7 +101,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
           </div>
 
           {/* Results Panel */}
-          <div className="p-4 bg-gray-100 rounded-lg space-y-3">
+          <div className="p-4 bg-gray-100 rounded-lg flex flex-col  gap-4 items-center ">
             <div className="font-medium">
               {t("category_key")}: {modelingData?.category?.label}
             </div>
@@ -124,28 +124,21 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
               </div>
             ) : (
               <div className="space-y-3">
-                <div>
-                  {t("selected_disease")}:{" "}
-                  {isHealthy
-                    ? t("healthy")
-                    : t(`diseases.${diseaseData?.english_name}`, {
-                        defaultValue: diseaseData?.english_name || t("loading"),
-                      })}
-                </div>
-
-                {confidenceScore && (
-                  <div className="flex justify-between w-full items-center">
-                    {!isHealthy && diseaseData && (
-                      <Button
-                        className="flex items-center gap-2"
-                        onClick={navigateToDatabase}
-                        variant="outlined"
-                      >
-                        <GiNotebook size={22} />
-                        {t("read_more_about_disease_key")}
-                      </Button>
-                    )}
-                  </div>
+                {t("selected_disease")}:{" "}
+                {isHealthy
+                  ? t("healthy")
+                  : t(`diseases.${diseaseData?.english_name}`, {
+                      defaultValue: diseaseData?.english_name || t("loading"),
+                    })}
+                {confidenceScore && !isHealthy && diseaseData && (
+                  <Button
+                    className="flex items-center gap-2 mx-auto mt-2"
+                    onClick={navigateToDatabase}
+                    variant="outlined"
+                  >
+                    <GiNotebook size={22} />
+                    {t("read_more_about_disease_key")}
+                  </Button>
                 )}
               </div>
             )}
@@ -161,16 +154,6 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
               <RiImageEditLine size={22} />
               {t("try_with_a_different_image_key")}
             </Button>
-
-            {!predictionFailed && (
-              <Button
-                className="flex items-center gap-2"
-                onClick={handleDeepAnalysis}
-              >
-                <DiGoogleAnalytics size={22} />
-                {t("go_to_deep_analysis_key")}
-              </Button>
-            )}
           </div>
         </div>
       ))}

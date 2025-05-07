@@ -7,6 +7,8 @@ import {
   analyzeInference,
   visualizeInference,
 } from "../../../api/inferenceAPI";
+import { RiImageEditLine } from "react-icons/ri";
+import { GiNotebook } from "react-icons/gi";
 
 export default function DeepAnalysisStep({ modelingData, setModelingData }) {
   const { t } = useTranslation();
@@ -56,6 +58,20 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
 
     fetchPrediction();
   }, [modelingData?.inference_id]);
+  const navigateToDatabase = () => {
+    navigate("/database", {
+      state: {
+        selectedPlantName: modelingData?.category,
+        selectedDisease: diseaseData,
+      },
+    });
+  };
+  const handleTryDifferentImage = () => {
+    setModelingData((prev) => ({
+      category: prev.category,
+      selected_file: [],
+    }));
+  };
 
   return (
     <div>
@@ -118,15 +134,11 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
                     : t("loading_key")
                 }`}</span>
                 <Button
-                  onClick={() =>
-                    navigate("/database", {
-                      state: {
-                        selectedPlant: modelingData?.category, // Pass selected plant
-                        selectedDisease: diseaseData, // Pass full disease object
-                      },
-                    })
-                  }
+                  className="flex items-center gap-2 mx-auto mt-2"
+                  onClick={navigateToDatabase}
+                  variant="outlined"
                 >
+                  <GiNotebook size={22} />
                   {t("read_more_about_disease_key")}
                 </Button>
               </>
@@ -138,22 +150,16 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
           ) : (
             <>
               <div>
-                <Button
-                  onClick={() => {
-                    setModelingData((prev) => ({
-                      ...prev,
-                      category: {},
-                      selected_file: [],
-                      image_id: null,
-                      inference_id: null,
-                      is_deep: false,
-                      errorMessage: "",
-                      is_final: false,
-                    }));
-                  }}
-                >
-                  {t("try with a different image")}
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    className="flex items-center gap-2"
+                    onClick={handleTryDifferentImage}
+                    variant="outlined"
+                  >
+                    <RiImageEditLine size={22} />
+                    {t("try_with_a_different_image_key")}
+                  </Button>
+                </div>
               </div>
             </>
           )}
