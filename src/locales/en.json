@@ -279,7 +279,9 @@
     "Pomegranate": "Pomegranate",
     "Roses": "Roses",
     "Coffee": "Coffee",
-    "Honey Bees": "Honey Bees"
+    "Honey Bees": "Honey Bees",
+    "Fish": "Fish",
+    "Animals": "Animals"
   },
   "diseases": {
     "roses_rust": "roses rust",
@@ -307,7 +309,10 @@
     "honey bees_stone brood": "honey bees_stone brood",
     "honey bees_varroa": "honey bees_varroa",
     "death's-head hawkmoth": "death's-head hawkmoth",
-    "honey bees_oriental hornet": "honey bees_oriental hornet"
+    "honey bees_oriental hornet": "honey bees_oriental hornet",
+    "PARASITIC": "parasitic diseases",
+    "bacterial":"bacterial diseases",
+    "virus":"viral diseases"
   },
   "phone_input": {
     "label": "Phone Input",

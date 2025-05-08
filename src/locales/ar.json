@@ -269,7 +269,9 @@
     "Pomegranate": "الرمان",
     "Roses": "الورد",
     "Coffee": "القهوه",
-    "Honey Bees": "نحل العسل"
+    "Honey Bees": "نحل العسل",
+    "Fish":"السمك",
+    "Animals":"الماشية"
   },
   "diseases": {
     "roses_rust": "صدأ الورد",
@@ -297,7 +299,11 @@
     "honey bees_stone brood": "تحجر الحضنة",
     "honey bees_varroa": "الفاروا المدمرة",
     "death's-head hawkmoth": "فراشة السمسم",
-    "honey bees_oriental hornet": "الدبور الشرقي"
+    "honey bees_oriental hornet": "الدبور الشرقي",
+    "PARASITIC": "الأمراض الطفيلية",
+    "bacterial":"الأمراض البكتيرية",
+    "virus":"الأمراض الفيروسية"
+
   },
   "text_input": {
     "label": "حقل إدخال نصي",
