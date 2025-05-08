@@ -5,7 +5,7 @@ import jsPDF from "jspdf";
 import { useQuery } from "@tanstack/react-query";
 import Button from "../../Button";
 import { FaFilePdf } from "react-icons/fa6";
-import { fetchCropById } from "../../../api/soilAPI"; // Adjust the import path
+import { fetchCropById } from "../../../api/soilApi";
 
 export const SummaryStep = ({ assessmentResult }) => {
   const { t } = useTranslation();
@@ -42,7 +42,7 @@ export const SummaryStep = ({ assessmentResult }) => {
     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("assessment_summary.pdf");
+    pdf.save(`${cropData?.name.split(",")[0]}-ecology.pdf`);
   };
 
   if (!assessmentResult) return null;
@@ -94,20 +94,20 @@ export const SummaryStep = ({ assessmentResult }) => {
   ];
   return (
     <div className="space-y-3 h-[60vh] overflow-y-auto">
-      <div className="print-header flex justify-between items-center">
+      <div className="print-header flex justify-between items-center p-4">
         <h2 className="text-xl font-bold">{t("summary_key")}</h2>
         <Button
           className="flex items-center gap-2"
           variant="outlined"
           onClick={handleDownloadPDF}
         >
-          {t("download_key")} <FaFilePdf size={18} />
+          {t("download_key")} <FaFilePdf size={16} />
         </Button>
       </div>
 
       <div
         ref={summaryRef}
-        className="p-6 bg-white rounded-md shadow-md text-sm"
+        className="bg-white rounded-md shadow-md text-sm p-4"
         style={{
           fontFamily: "Arial, sans-serif",
           color: "#333",
@@ -172,7 +172,7 @@ export const SummaryStep = ({ assessmentResult }) => {
               {/* First Table Section */}
               <th style={cellStyle} className="w-1/6"></th> {/* Empty */}
               <th style={cellStyle} className="w-1/6">
-                {t("optimal_key")}
+                {t("optimal_value_key")}
               </th>
               <th style={cellStyle} className="w-1/6">
                 {t("your_value_key")}
@@ -180,7 +180,7 @@ export const SummaryStep = ({ assessmentResult }) => {
               {/* Second Table Section */}
               <th style={cellStyle} className="w-1/6"></th> {/* Empty */}
               <th colSpan={2} style={cellStyle} className="w-1/6">
-                {t("optimal_key")}
+                {t("optimal_value_key")}
               </th>
             </tr>
             <tr style={{ backgroundColor: "white", fontWeight: "bold" }}>

@@ -2,7 +2,7 @@ import React from "react";
 import { Field, ErrorMessage } from "formik";
 import { motion } from "framer-motion";
 
-export const SoilCalculatorForm = ({ t }) => {
+export const SoilCalculatorForm = ({ t, searchError }) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -26,6 +26,10 @@ export const SoilCalculatorForm = ({ t }) => {
             id="crop_name"
             className="custom-input w-full p-2 border"
           />
+          {/* Display search error if it exists */}
+          {searchError && (
+            <div className="text-red-500 text-sm mb-4">{searchError}</div>
+          )}
           <ErrorMessage
             name="crop_name"
             component="div"
