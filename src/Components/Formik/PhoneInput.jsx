@@ -1,38 +1,55 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import classNames from "classnames";
 import countries from "world-countries";
+import Fuse from "fuse.js";
 
 const PhoneInput = ({
   className = "",
   onChange,
-  initialCountry = "",
+  initialCountry = "SA", // Default to Saudi Arabia
   initialPhoneNumber = "",
   countryDropdownClassName = "",
   placeholder = "Phone number",
   dropdownVisible = false,
   onDropdownToggle,
 }) => {
-  // Filter countries to only include Saudi Arabia and Egypt
-  const filteredCountries = countries
-    .filter((country) => ["SA", "EG"].includes(country.cca2))
-    .map((country) => ({
+  // Filter and format countries
+  const filteredCountries = useMemo(() => {
+    return countries.map((country) => ({
       value: country.cca2,
       label: country.name.common,
       countryCallingCode: `${country.idd.root}${country.idd.suffixes[0]}`,
       flag: `https://flagcdn.com/w320/${country.cca2.toLowerCase()}.png`,
     }));
+  }, []);
+
+  // Set up Fuse.js for search
+  const fuse = useMemo(() => {
+    return new Fuse(filteredCountries, {
+      keys: ["label", "countryCallingCode", "value"],
+      threshold: 0.3,
+      includeScore: true,
+    });
+  }, [filteredCountries]);
 
   const [selectedCountry, setSelectedCountry] = useState(
     () =>
-      filteredCountries.find(
-        (country) => country.countryCallingCode === initialCountry
-      ) || filteredCountries[0]
+      filteredCountries.find((country) => country.value === initialCountry) ||
+      filteredCountries.find((country) => country.value === "SA") // Fallback to Saudi Arabia
   );
   const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber);
   const [isDropdownVisible, setIsDropdownVisible] = useState(dropdownVisible);
   const [dropdownDirection, setDropdownDirection] = useState("down");
+  const [searchQuery, setSearchQuery] = useState("");
   const dropdownRef = useRef(null);
   const containerRef = useRef(null);
+  const searchInputRef = useRef(null);
+
+  // Filter countries based on search query
+  const displayedCountries = useMemo(() => {
+    if (!searchQuery) return filteredCountries;
+    return fuse.search(searchQuery).map((result) => result.item);
+  }, [searchQuery, fuse, filteredCountries]);
 
   const handleCountryChange = (country) => {
     setSelectedCountry(country);
@@ -49,8 +66,12 @@ const PhoneInput = ({
   };
 
   const toggleDropdown = () => {
-    setIsDropdownVisible(!isDropdownVisible);
-    onDropdownToggle?.(!isDropdownVisible);
+    const newVisibility = !isDropdownVisible;
+    setIsDropdownVisible(newVisibility);
+    onDropdownToggle?.(newVisibility);
+    if (newVisibility && searchInputRef.current) {
+      setTimeout(() => searchInputRef.current.focus(), 0);
+    }
   };
 
   useEffect(() => {
@@ -63,6 +84,7 @@ const PhoneInput = ({
       ) {
         setIsDropdownVisible(false);
         onDropdownToggle?.(false);
+        setSearchQuery("");
       }
     };
 
@@ -134,31 +156,53 @@ const PhoneInput = ({
               }
             )}
           >
-            <ul className="py-2 max-h-40 overflow-auto text-sm text-gray-700 px-0">
-              {filteredCountries.map((country) => (
-                <li
-                  key={country.countryCallingCode}
-                  className={classNames(
-                    "px-4 py-2 cursor-pointer flex items-center",
-                    {
-                      "bg-[#416a00] bg-opacity-80 text-white":
-                        selectedCountry?.countryCallingCode ===
-                        country?.countryCallingCode,
-                      "hover:bg-[#416a00] hover:text-white": true,
-                    }
-                  )}
-                  onClick={() => handleCountryChange(country)}
-                >
-                  <img
-                    src={country.flag}
-                    className={classNames("w-4 rounded", {
-                      "rtl:ml-2 ltr:mr-2": true,
-                    })}
-                    alt=""
-                  />
-                  <span>{country.label}</span>
+            {/* Search Input */}
+            {/* <div className="p-2 border-b">
+              <input
+                type="text"
+                ref={searchInputRef}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search country..."
+                className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-[#416a00]"
+              />
+            </div> */}
+
+            {/* Country List */}
+            <ul className="py-2 max-h-60 overflow-auto text-sm text-gray-700 px-0">
+              {displayedCountries.length > 0 ? (
+                displayedCountries.map((country) => (
+                  <li
+                    key={country.countryCallingCode}
+                    className={classNames(
+                      "px-4 py-2 cursor-pointer flex items-center",
+                      {
+                        "bg-[#416a00] bg-opacity-80 text-white":
+                          selectedCountry?.countryCallingCode ===
+                          country?.countryCallingCode,
+                        "hover:bg-[#416a00] hover:text-white": true,
+                      }
+                    )}
+                    onClick={() => handleCountryChange(country)}
+                  >
+                    <img
+                      src={country.flag}
+                      className={classNames("w-4 rounded", {
+                        "rtl:ml-2 ltr:mr-2": true,
+                      })}
+                      alt=""
+                    />
+                    <span className="flex-1">{country.label}</span>
+                    <span className="text-xs opacity-70">
+                      {country.countryCallingCode}
+                    </span>
+                  </li>
+                ))
+              ) : (
+                <li className="px-4 py-2 text-center text-gray-500">
+                  No countries found
                 </li>
-              ))}
+              )}
             </ul>
           </div>
         )}

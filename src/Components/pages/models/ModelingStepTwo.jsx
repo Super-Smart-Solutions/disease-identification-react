@@ -74,7 +74,7 @@ export default function ModelingStepTwo({ modelingData, setModelingData }) {
       />
       <div className="flex gap-2 items-center justify-end mt-4">
         <Button onClick={handleSave} disabled={isUploading}>
-          {isUploading ? t("uploading_key") : t("start_detection_key")}
+          {isUploading ? t("loading_key") : t("start_detection_key")}
         </Button>
         <Button variant="outlined" onClick={handleReset} disabled={isUploading}>
           {t("reset_key")}

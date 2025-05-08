@@ -1,179 +1,161 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom"; // Import for navigation
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import Button from "../../Button";
 import { fetchDiseaseById } from "../../../api/diseaseAPI";
 import { detectDisease, visualizeInference } from "../../../api/inferenceAPI";
+import { GiNotebook } from "react-icons/gi";
+import { DiGoogleAnalytics } from "react-icons/di";
+import { RiImageEditLine } from "react-icons/ri";
 
 export default function ModelingStepFour({ modelingData, setModelingData }) {
   const { t } = useTranslation();
-  const navigate = useNavigate(); // Navigation function
+  const navigate = useNavigate();
 
-  const [diseaseData, setDiseaseData] = useState(null);
-  const [confidenceScore, setConfidenceScore] = useState(null);
-  const [predictionFailed, setPredictionFailed] = useState(false);
-  const [predictionHealthy, setPredictionHealthy] = useState(false);
-  const [visualizationUrl, setVisualizationUrl] = useState(null); // Visualization image URL
+  // Fetch disease prediction
+  const {
+    data: prediction,
+    isLoading: isPredicting,
+    error: predictionError,
+    isError: isPredictionError,
+  } = useQuery({
+    queryKey: ["diseasePrediction", modelingData.inference_id],
+    queryFn: () => detectDisease(modelingData.inference_id),
+    enabled: !!modelingData?.inference_id,
+    retry: false,
+    staleTime: Infinity,
+  });
 
-  useEffect(() => {
-    const fetchPrediction = async () => {
-      try {
-        if (!modelingData?.inference_id) return;
+  // Fetch disease details if prediction is successful
+  const {
+    data: diseaseData,
+    isLoading: isDiseaseLoading,
+    isError: isDiseaseError,
+  } = useQuery({
+    queryKey: ["diseaseDetails", prediction?.disease_id],
+    queryFn: () => fetchDiseaseById(prediction.disease_id),
+    enabled: !!prediction?.disease_id,
+    staleTime: 60 * 60 * 1000,
+    retry: false,
+  });
 
-        const response = await detectDisease(modelingData.inference_id);
+  // Fetch visualization if prediction is successful
+  const {
+    data: visualization,
+    isLoading: isVisualizing,
+    isError: isVisualizationError,
+  } = useQuery({
+    queryKey: ["visualization", modelingData.inference_id],
+    queryFn: () => visualizeInference(modelingData.inference_id),
+    enabled: !!modelingData?.inference_id && !!prediction?.disease_id,
+    staleTime: 60 * 60 * 1000,
+    retry: false,
+  });
 
-        if (response?.status === 2) {
-          setConfidenceScore(response.confidence_level * 100);
-          setPredictionFailed(false);
+  const isHealthy = prediction?.status === 2 && !prediction?.disease_id;
+  const predictionFailed = prediction?.status !== 2 || isPredictionError;
+  const confidenceScore = prediction?.confidence_level * 100;
+  const visualizationUrl = visualization?.attention_map_url;
 
-          // Fetch disease details
-          if (response.disease_id) {
-            const diseaseDetails = await fetchDiseaseById(response.disease_id);
-            setDiseaseData(diseaseDetails);
+  const handleTryDifferentImage = () => {
+    setModelingData((prev) => ({
+      category: prev.category,
+      selected_file: [],
+      category: {},
+    }));
+  };
 
-            // Fetch visualization (attention map)
-            const visualizationResponse = await visualizeInference(
-              modelingData.inference_id
-            );
-            if (visualizationResponse?.attention_map_url) {
-              setVisualizationUrl(visualizationResponse.attention_map_url);
-            }
-          } else {
-            setPredictionHealthy(true);
-          }
-        } else {
-          console.warn("Prediction Failed:", response);
-          setPredictionFailed(true);
-          // setModelingData((prev) => ({
-          //   ...prev,
-          //   is_deep: true,
-          // }));
-        }
-      } catch (error) {
-        console.error("Error in prediction request:", error);
-      }
-    };
+  const handleDeepAnalysis = () => {
+    setModelingData((prev) => ({ ...prev, is_deep: true }));
+  };
 
-    fetchPrediction();
-  }, [modelingData?.inference_id]);
+  const navigateToDatabase = () => {
+    navigate("/database", {
+      state: {
+        selectedPlantName: modelingData?.category,
+        selectedDisease: diseaseData,
+      },
+    });
+  };
+
+  if (!modelingData?.selected_file?.length) {
+    return <div>{t("no_image_selected")}</div>;
+  }
+  console.log(predictionError);
 
   return (
-    <div>
-      {modelingData?.selected_file.map((file, index) => (
-        <div
-          key={index}
-          className="flex items-center p-2 border rounded-lg bg-gray-50 flex-col gap-4"
-        >
-          {/* Display Attention Map if available, else show uploaded image */}
-          <img
-            src={visualizationUrl || URL.createObjectURL(file)}
-            alt={file.name}
-            className="w-300 h-80 object-cover rounded-md"
-          />
-          <span>{t("uploaded_image_key")}</span>
+    <div className="space-y-4">
+      {modelingData.selected_file.map((file, index) => (
+        <div key={index} className="p-4 border rounded-lg bg-gray-50 space-y-4">
+          {/* Image Display */}
+          <div className="flex flex-col items-center">
+            <img
+              loading="lazy"
+              src={visualizationUrl || URL.createObjectURL(file)}
+              alt={file.name}
+              className="h-80 object-contain rounded-md transition duration-300"
+            />
+            <span className="text-sm text-gray-500 mt-2">
+              {t("uploaded_image_key")}
+            </span>
+          </div>
 
-          <div className="flex flex-col bg-primaryGray p-4 rounded-2xl">
-            <span>{`${t("category_key")} : ${
-              modelingData?.category?.label
-            }`}</span>
+          {/* Results Panel */}
+          <div className="p-4 bg-gray-100 rounded-lg flex flex-col  gap-4 items-center ">
+            <div className="font-medium">
+              {t("category_key")}: {modelingData?.category?.label}
+            </div>
 
-            {predictionFailed ? (
-              <>
-                <span className="text-red-500">
-                  {t("detection_inconclusive_message")}
-                </span>
-                <Button
-                  onClick={() => {
-                    setModelingData((prev) => ({
-                      ...prev,
-                      is_deep: true,
-                    }));
-                  }}
-                >
-                  {t("go_to_deep_analysis_key")}
-                </Button>
-              </>
+            {isPredicting ? (
+              <span>{t("analyzing_image")}</span>
+            ) : isPredictionError ? (
+              <div className="text-red-500">
+                {t("prediction_failed_message_key")}:{" "}
+                {predictionError.response?.data?.detail}
+              </div>
             ) : (
-              <>
-                {predictionHealthy === false ? (
-                  <>
-                    <span>
-                      {`${t("selected_disease")} : ${t(
-                        `diseases.${diseaseData?.english_name}`,
-                        {
-                          defaultValue:
-                            diseaseData?.english_name || t("loading_key"),
-                        }
-                      )}`}
-                    </span>
-
-                    <span>{`${t("confidence_level")} : ${
-                      confidenceScore !== null
-                        ? `${confidenceScore.toFixed(2)}%`
-                        : t("loading_key")
-                    }`}</span>
-                    <Button
-                      onClick={() =>
-                        navigate("/database", {
-                          state: {
-                            selectedDisease: diseaseData,
-                          },
-                        })
-                      }
-                    >
-                      {t("read_more_about_disease_key")}
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <span>{`${t("selected_disease")} : ${
-                      "Healthy" || t("loading_key")
-                    }`}</span>
-                    <span>{`${t("confidence_level")} : ${
-                      confidenceScore !== null
-                        ? `${confidenceScore.toFixed(2)}%`
-                        : t("loading_key")
-                    }`}</span>
-                  </>
+              <div className="space-y-3">
+                {t("selected_disease")}:{" "}
+                {isHealthy
+                  ? t("healthy")
+                  : t(`diseases.${diseaseData?.english_name}`, {
+                      defaultValue: diseaseData?.english_name || t("loading"),
+                    })}
+                {confidenceScore && !isHealthy && diseaseData && (
+                  <Button
+                    className="flex items-center gap-2 mx-auto mt-2"
+                    onClick={navigateToDatabase}
+                  >
+                    <GiNotebook size={22} />
+                    {t("read_more_about_disease_key")}
+                  </Button>
                 )}
-              </>
+              </div>
             )}
           </div>
-          {predictionFailed ? (
-            <></>
-          ) : (
-            <>
-              <div className="flex gap-2 items-center justify-end mt-4">
-                <Button
-                  onClick={() => {
-                    setModelingData((prev) => ({
-                      ...prev,
-                      category: {},
-                      selected_file: [],
-                      image_id: null,
-                      inference_id: null,
-                      is_deep: false,
-                      errorMessage: "",
-                      is_final: false,
-                    }));
-                  }}
-                >
-                  {t("try with a different image")}
-                </Button>
 
-                <Button
-                  onClick={() => {
-                    setModelingData((prev) => ({
-                      ...prev,
-                      is_deep: true,
-                    }));
-                  }}
-                >
+          {/* Action Buttons */}
+          <div className="flex gap-2 justify-center items-center  
+          ">
+            <Button
+              className="flex items-center gap-2 "
+              onClick={handleTryDifferentImage}
+            >
+              <RiImageEditLine size={22} />
+              {t("try_with_a_different_image_key")}
+            </Button>
+            {predictionFailed && (
+              <div className="space-y-2">
+                <div className="text-red-500">
+                  {t("detection_inconclusive_message")}
+                </div>
+                <Button onClick={handleDeepAnalysis}>
                   {t("go_to_deep_analysis_key")}
                 </Button>
               </div>
-            </>
-          )}
+            )}
+          </div>
         </div>
       ))}
     </div>
