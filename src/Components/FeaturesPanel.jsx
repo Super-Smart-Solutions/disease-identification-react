@@ -33,7 +33,7 @@ const FeaturesPanel = () => {
         whileTap={{ scale: 0.95 }}
         className="bg-primary cursor-pointer p-1 rounded-full shadow-md flex items-center justify-center"
       >
-        <WiStars title={t("extra_feature_key")} size={38} color="white" />
+        <WiStars title={t("extra_feature_key")} size={42} color="white" />
       </motion.div>
     </motion.div>
   );

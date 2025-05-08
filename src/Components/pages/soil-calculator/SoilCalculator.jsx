@@ -41,7 +41,7 @@ export default function SoilCalculator() {
         className=" bg-primary cursor-pointer p-2 rounded-full shadow-md  w-fit"
         onClick={handleOpenModal}
       >
-        <IoCalculator title={t("soil_calculator_key")} size={24} color="white" />
+        <IoCalculator title={t("soil_calculator_key")} size={32} color="white" />
       </div>
 
       <Modal

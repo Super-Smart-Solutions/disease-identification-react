@@ -36,7 +36,7 @@ export default function ReviewFormModal() {
         onClick={handleOpenModal}
         className="bg-primary cursor-pointer p-2 rounded-full shadow-md  w-fit"
       >
-        <GiStarsStack title={t("rate_key")} size={24} color="white" />
+        <GiStarsStack title={t("rate_key")} size={32} color="white" />
       </div>
       <Modal
         isOpen={isModalOpen}
