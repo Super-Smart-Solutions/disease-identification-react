@@ -60,6 +60,7 @@
   "selected_disease": "المرض المحدد",
   "confidence_level": "درجة التأكد",
   "next_key": "التالي",
+  "previous_key": "السابق",
   "go_to_deep_analysis_key": "تجربه التحليل العميق",
   "detection_inconclusive_message": "لم يتمكن النموذج من تحديد المرض بدقه، هذا قد يعني ان المرض في مرحله مبكره، او ان الصوره غير واضحه بدرجه عاليه. نقترح استخدام تقنيه التحليل العميق.",
   "try with a different image": "جرب باستخدام صوره جديده",
@@ -218,7 +219,12 @@
     "next_button": "التالي",
     "finish_button": "إنهاء"
   },
-
+  "status": {
+    "optimal": "مثالي",
+    "suboptimal": "غير مثالي",
+    "too_high": "مرتفع جداً",
+    "too_low": "منخفض جداً"
+  },
   "bad_1_caption": "الجودة سيئه",
   "bad_2_caption": "الصورة غير واضحة",
   "bad_3_caption": "الجزء المصاب غير واضح",
@@ -501,5 +507,18 @@
   "crop_key": "المحصول",
   "type_crop_key": "ادخل المحصول",
   "ph_key": "نطاق الرقم الهيدروجيني",
-  "salinity_key": "الملوحة"
+  "salinity_key": "الملوحة",
+  "temperature_key": "درجة الحرارة",
+  "recommendations_key": "الاقتراحات",
+  "your_value_key": "القيمة المدخلة",
+  "optimal_value_key": "القيمة المثالية",
+  "optimal_key": "مثالي",
+  "form_key": "ادخال القيم",
+  "results_key": "النتائج",
+  "summary_key": "ملخص",
+  "assess_key": "تقييم",
+  "finish_key": "إنهاء",
+  "download_key": "تحميل pdf",
+  "min_key": "الصغري",
+  "max_key": "العظمي"
 }

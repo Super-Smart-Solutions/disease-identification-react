@@ -47,7 +47,7 @@ const Modal = ({ isOpen, onClose, children, title }) => {
         </div>
 
         {/* Modal content */}
-        <div className="p-6">{children}</div>
+        <div className="px-4 pb-2">{children}</div>
       </motion.div>
     </div>
   );
