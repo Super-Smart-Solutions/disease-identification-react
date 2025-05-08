@@ -56,6 +56,27 @@ input::placeholder {
   font: 0.8rem/3 "Roboto", sans-serif;
 }
 
+.ag-row {
+  display: flex;
+  justify-content: start !important; /* Center row items */
+  align-items: center; /* Vertically align row items */
+  border: 0.5px solid #f0f0f0;
+}
+.ag-cell {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: none !important;
+  overflow: hidden;
+}
+
+.ag-body-viewport {
+  border: none !important;
+}
+
+.ag-root-wrapper {
+  border: none !important;
+}
 .badge {
   display: inline-flex;
   align-items: center;

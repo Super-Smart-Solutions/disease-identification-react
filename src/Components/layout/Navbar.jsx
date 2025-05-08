@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 import navRoutes from "./navRoutes";
 
-
 import {
   FaChevronDown,
   FaChevronUp,
@@ -16,6 +15,7 @@ import {
 } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import { useAuthActions } from "../helpers/authHelpers";
+import { RiAdminFill } from "react-icons/ri";
 
 // Dropdown Component
 const DropdownMenu = ({
@@ -66,12 +66,6 @@ const DropdownMenu = ({
   );
 };
 
-// import { logout } from "../helpers/authHelpers";
-// import { FaGlobe, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
-// import { RxDashboard } from "react-icons/rx";
-// import DropdownMenu from "../DropdownMenu"; // Import the reusable component
-
-
 const Navbar = React.memo(({ auth = true }) => {
   const { t, i18n } = useTranslation();
   const { logout } = useAuthActions();
@@ -86,6 +80,7 @@ const Navbar = React.memo(({ auth = true }) => {
   const welcomeButtonRef = useRef(null);
   const languageMenuRef = useRef(null);
   const languageButtonRef = useRef(null);
+  const ADMIN_URL = import.meta.env.VITE_ADMIN_URL;
 
   // Close menus when clicking outside
   useEffect(() => {
@@ -149,6 +144,17 @@ const Navbar = React.memo(({ auth = true }) => {
         window.location.href = "/";
       },
     },
+    ...(Array.isArray(user?.roles) && user.roles[0]?.name === "super_user"
+      ? [
+          {
+            label: t("admin_key"),
+            icon: <RiAdminFill />,
+            onClick: () => {
+              window.open(ADMIN_URL, "_blank"); // open in new tab
+            },
+          },
+        ]
+      : []),
   ];
 
   // Language dropdown options

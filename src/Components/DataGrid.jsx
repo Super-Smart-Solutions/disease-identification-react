@@ -1,8 +1,17 @@
-import React, { useState } from "react";
-import { FaArrowAltCircleDown } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
+import { ModuleRegistry } from "ag-grid-community";
+import { ClientSideRowModelModule } from "ag-grid-community";
+import { useTranslation } from "react-i18next";
+import { FiSearch } from "react-icons/fi";
+import noDataImg from "../assets/no-data.png";
+
+ModuleRegistry.registerModules([ClientSideRowModelModule]);
+
 import Pagination from "./Pagination";
-import { TableSkeleton } from "./TableSkeleton";
+import TableSkeleton from "./skeltons/TableSkeleton";
 
 export default function DataGrid({
   rowData = [],
@@ -15,150 +24,173 @@ export default function DataGrid({
   totalPages = 1,
   onPageChange,
   onPageSizeChange,
+  title = "",
+  onSearch,
+  searchPlaceholder = "Search...",
 }) {
-  const [sortConfig, setSortConfig] = useState(null);
+  const { t, i18n } = useTranslation();
+  const [searchValue, setSearchValue] = useState("");
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
 
-  const sortedData = React.useMemo(() => {
-    if (!sortConfig || !rowData) return rowData;
-    return [...rowData].sort((a, b) => {
-      const aValue = a[sortConfig.key];
-      const bValue = b[sortConfig.key];
-      if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
-      if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
-      return 0;
-    });
-  }, [rowData, sortConfig]);
+  // Constants for height calculation
+  const ROW_HEIGHT = 50;
+  const HEADER_HEIGHT = 50;
+  const MIN_HEIGHT = 200;
+  const MAX_HEIGHT = 600;
+  const MAX_VISIBLE_ROWS = 10;
 
-  const requestSort = (key) => {
-    const column = colDefs.find((col) => col.field === key);
-    if (!column?.sortable) return;
-    let direction = "asc";
-    if (sortConfig?.key === key && sortConfig?.direction === "asc") {
-      direction = "desc";
+  // Debounce search input
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchValue(searchValue);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchValue]);
+
+  useEffect(() => {
+    if (onSearch) {
+      onSearch(debouncedSearchValue);
     }
-    setSortConfig({ key, direction });
+  }, [debouncedSearchValue, onSearch]);
+
+  // Calculate dynamic grid height
+  const gridHeight = useMemo(() => {
+    if (loading) return MIN_HEIGHT;
+
+    const rowCount = rowData?.length || 0;
+    const contentHeight =
+      HEADER_HEIGHT + Math.min(rowCount, MAX_VISIBLE_ROWS) * ROW_HEIGHT;
+    return Math.min(Math.max(contentHeight, MIN_HEIGHT), MAX_HEIGHT);
+  }, [rowData?.length, loading]);
+
+  const defaultColDef = useMemo(
+    () => ({
+      sortable: true,
+      resizable: true,
+      filter: true,
+      flex: 1,
+      minWidth: 100,
+    }),
+    []
+  );
+
+  const processedColDefs = useMemo(() => {
+    return colDefs.map((col) => ({
+      ...col,
+      headerName: col.headerName || col.field,
+      sortable: col.sortable !== false,
+    }));
+  }, [colDefs]);
+
+  const gridOptions = {
+    animateRows: true,
+    suppressCellFocus: true,
+    headerHeight: HEADER_HEIGHT,
+    rowHeight: ROW_HEIGHT,
   };
 
-  const formatValue = (col, value, row) => {
-    if (col.valueFormatter) return col.valueFormatter({ value, data: row });
-    return value;
-  };
-
-  if (loading) {
-    return <TableSkeleton columns={colDefs.length} rows={pageSize} />;
-  }
-
-  // Animation variants
-  const tableVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        when: "beforeChildren",
-        staggerChildren: 0.05,
-      },
-    },
-  };
-
-  const rowVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.3 },
-    },
-    exit: { opacity: 0, y: -10 },
-  };
+  const valueFormatter = useCallback((params) => {
+    const colDef = params.colDef;
+    if (colDef.valueFormatter) {
+      return colDef.valueFormatter({
+        value: params.value,
+        data: params.data,
+      });
+    }
+    return params.value;
+  }, []);
 
   return (
     <div className="space-y-4">
-      <div className="overflow-x-auto border border-gray-300 rounded-lg">
-        <motion.table
-          className="min-w-full border-gray-300"
-          initial="hidden"
-          animate="visible"
-          variants={tableVariants}
-        >
-          <thead className="bg-gray-100">
-            <tr>
-              {colDefs.map((col) => (
-                <th key={col.field} className="px-4 py-2 text-left">
-                  <motion.div className="flex items-center gap-1">
-                    {col.headerName}
-                    {col.sortable && (
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => requestSort(col.field)}
-                      >
-                        <FaArrowAltCircleDown className="w-4 h-4 cursor-pointer" />
-                      </motion.button>
-                    )}
-                  </motion.div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <AnimatePresence>
-              {sortedData?.length > 0 ? (
-                sortedData.map((row, rowIndex) => (
-                  <motion.tr
-                    key={rowIndex}
-                    variants={rowVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    className="border border-gray-300 odd:bg-gray-50"
-                    layout // This enables layout animations
-                  >
-                    {colDefs.map((col) => (
-                      <td
-                        key={col.field}
-                        className={`border border-gray-300 px-4 py-2 ${
-                          col.disabled ? "opacity-50 cursor-not-allowed" : ""
-                        }`}
-                      >
-                        {col.cellRenderer ? (
-                          col.cellRenderer({ value: row[col.field], data: row })
-                        ) : (
-                          <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            {formatValue(col, row[col.field], row)}
-                          </motion.div>
-                        )}
-                      </td>
-                    ))}
-                  </motion.tr>
-                ))
-              ) : (
-                <motion.tr
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <td colSpan={colDefs.length} className="text-center py-4">
-                    No data available
-                  </td>
-                </motion.tr>
-              )}
-            </AnimatePresence>
-          </tbody>
-        </motion.table>
+      {/* Header with title and search */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        {title && (
+          <h2 className="text-xl font-semibold text-gray-800">
+            {loading ? <Skeleton className="h-8 w-48" /> : title}
+          </h2>
+        )}
+
+        {onSearch && (
+          <div className="relative w-full sm:w-64">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <FiSearch className="text-gray-400" />
+            </div>
+            <input
+              type="text"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder={loading ? "" : searchPlaceholder}
+              disabled={loading}
+              className={`block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
+                loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+            />
+          </div>
+        )}
       </div>
 
-      {pagination && totalItems > 0 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          pageSize={pageSize}
-          totalItems={totalItems}
-          onPageChange={onPageChange}
-          onPageSizeChange={onPageSizeChange}
-        />
+      {/* Grid Container */}
+      <div
+        className="ag-theme-alpine relative"
+        style={{
+          width: "100%",
+          height: `${gridHeight}px`,
+          minHeight: `${MIN_HEIGHT}px`,
+          overflow: "auto",
+        }}
+      >
+        {loading ? (
+          <TableSkeleton
+            columns={colDefs.length}
+            rows={Math.min(totalItems || MAX_VISIBLE_ROWS, MAX_VISIBLE_ROWS)}
+          />
+        ) : rowData?.length > 0 ? (
+          <AgGridReact
+            enableRtl={i18n.language === "ar"}
+            rowData={rowData}
+            columnDefs={processedColDefs}
+            defaultColDef={defaultColDef}
+            gridOptions={gridOptions}
+            valueFormatter={valueFormatter}
+            suppressNoRowsOverlay={true}
+            domLayout={
+              rowData.length > MAX_VISIBLE_ROWS ? "normal" : "autoHeight"
+            }
+            modules={[ClientSideRowModelModule]}
+            onGridReady={(params) => {
+              params.api.sizeColumnsToFit();
+            }}
+          />
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+            <img
+              src={noDataImg}
+              alt="No data"
+              className="max-h-60 object-contain opacity-75"
+            />
+            <p className="text-gray-500 text-lg relative bottom-12">
+              {t("no_data_available_key")}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Pagination - show when there are more than 10 items */}
+      {pagination && totalItems > 10 && (
+        <div className={loading ? "opacity-50" : ""}>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            totalItems={totalItems}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
+            disabled={loading}
+          />
+        </div>
       )}
     </div>
   );

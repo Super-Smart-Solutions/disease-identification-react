@@ -11,6 +11,12 @@ export const getInferences = async ({ size = 10, page = 1 }) => {
   const response = await axiosInstance.get(`${INFERENCE_ENDPOINT}`, { params });
   return response.data;
 };
+export const updateInferenceVerify = async (id) => {
+  const response = await axiosInstance.put(
+    `${INFERENCE_ENDPOINT}/${id}/toggle-approved`
+  );
+  return response.data;
+};
 // Start inference on an uploaded image
 export const startInference = async (imageId) => {
   const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}?image_id=${imageId}`);
