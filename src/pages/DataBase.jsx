@@ -9,25 +9,21 @@ import DiseaseSearchDropdown from "../Components/pages/DiseaseSearchDropdown";
 import { useLocation } from "react-router-dom";
 import { fetchPlantByName } from "../api/plantAPI";
 
-
 export default function DataBase() {
   const { t, i18n } = useTranslation();
   const { state } = useLocation();
-
+  const [searchMethod, setSearchMethod] = useState("database");
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedDisease, setSelectedDisease] = useState(
     state?.selectedDisease || null
   );
-  const [selectedPlantName, setSelectedPlantName] = useState(
-    state?.selectedPlantName || null
-  );
+  const [selectedPlant, setSelectedPlant] = useState(null);
 
-  // const [selectedDisease, setSelectedDisease] = useState(null);
-  const [selectedPlant, setSelectedPlant] = useState(
-    selectedPlantName?.value || null
-    );
-  const [searchMethod, setSearchMethod] = useState("database");
-  const [isLoading, setIsLoading] = useState(false);
-  const [prevDisease, setPrevDisease] = useState(null);
+  useEffect(() => {
+    if (state?.selectedDisease) {
+      setSelectedDisease(state.selectedDisease);
+    }
+  }, [state]);
 
   const containerVariants = {
     hidden: { opacity: 0, height: 0 },
@@ -53,9 +49,7 @@ export default function DataBase() {
   const handleDiseaseChange = (disease) => {
     if (disease?.id !== selectedDisease?.id) {
       setIsLoading(true);
-      setPrevDisease(selectedDisease); // Store previous disease
       setSelectedDisease(disease);
-
       // Simulate loading for 1-2 seconds
       const loadingTime = Math.random() * 1000 + 1000; // Between 1-2 seconds
       setTimeout(() => {
@@ -148,7 +142,7 @@ export default function DataBase() {
             loading={isLoading}
           />
           <ImageGrid
-            plant_id={selectedPlant?.id}
+            plant_id={selectedPlant}
             diseaseId={selectedDisease?.id}
             loading={isLoading}
           />
