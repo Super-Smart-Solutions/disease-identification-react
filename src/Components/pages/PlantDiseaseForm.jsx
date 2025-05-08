@@ -93,69 +93,75 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
       onSubmit={handleSubmit}
     >
       {({ setFieldValue, values, errors, touched, resetForm }) => (
-        <Form className="flex flex-wrap items-end justify-between gap-4 w-full cardIt">
-          {/* Plant Select Input */}
-          <div className="w-[40%]">
-            <Field name="plant">
-              {({ field }) => (
-                <SelectInput
-                  label={t("select_plant_key")}
-                  options={translatedPlants}
-                  value={field?.value}
-                  onChange={(selectedOption) => {
-                    setFieldValue("plant", selectedOption.value);
-                    setSelectedPlant(selectedOption.value);
-                    setFieldValue("disease", null);
-                    setHasData(false);
-                  }}
-                  placeholder={t("select_plant_key")}
-                  isLoading={plantsLoading}
-                />
+        <Form className="w-full cardIt">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+            {/* Plant Select Input */}
+            <div className="md:col-span-2">
+              <Field name="plant">
+                {({ field }) => (
+                  <SelectInput
+                    label={t("select_plant_key")}
+                    options={translatedPlants}
+                    value={field?.value}
+                    onChange={(selectedOption) => {
+                      setFieldValue("plant", selectedOption.value);
+                      setSelectedPlant(selectedOption.value);
+                      setFieldValue("disease", null);
+                      setHasData(false);
+                    }}
+                    placeholder={t("select_plant_key")}
+                    isLoading={plantsLoading}
+                  />
+                )}
+              </Field>
+              {errors.plant && touched.plant && (
+                <div className="text-red-500 text-sm">{errors.plant}</div>
               )}
-            </Field>
-            {errors.plant && touched.plant && (
-              <div className="text-red-500 text-sm">{errors.plant}</div>
-            )}
-          </div>
+            </div>
 
-          {/* Disease Select Input */}
-          <div className="w-[40%]">
-            <Field name="disease">
-              {({ field }) => (
-                <SelectInput
-                  label={t("select_disease_key")}
-                  options={translatedDiseases}
-                  value={field?.value || null}
-                  onChange={(selectedOption) => {
-                    setFieldValue("disease", selectedOption.value);
-                    setHasData(false);
-                  }}
-                  placeholder={
-                    diseasesLoading ? t("loading_key") : t("select_disease_key")
-                  }
-                  isLoading={diseasesLoading}
-                />
+            {/* Disease Select Input */}
+            <div className="md:col-span-2">
+              <Field name="disease">
+                {({ field }) => (
+                  <SelectInput
+                    label={t("select_disease_key")}
+                    options={translatedDiseases}
+                    value={field?.value || null}
+                    onChange={(selectedOption) => {
+                      setFieldValue("disease", selectedOption.value);
+                      setHasData(false);
+                    }}
+                    placeholder={
+                      diseasesLoading
+                        ? t("loading_key")
+                        : t("select_disease_key")
+                    }
+                    isLoading={diseasesLoading}
+                  />
+                )}
+              </Field>
+              {errors.disease && touched.disease && (
+                <div className="text-red-500 text-sm">{errors.disease}</div>
               )}
-            </Field>
-            {errors.disease && touched.disease && (
-              <div className="text-red-500 text-sm">{errors.disease}</div>
-            )}
-          </div>
+            </div>
 
-          {/* Conditional Button */}
-          {hasData ? (
-            <Button
-              type="button"
-              onClick={() => handleReset(resetForm)}
-              className="w-full bg-gray-500 hover:bg-gray-600"
-            >
-              {t("reset_key")}
-            </Button>
-          ) : (
-            <Button type="submit" className="w-full">
-              {t("get_data_key")}
-            </Button>
-          )}
+            {/* Conditional Button */}
+            <div className="md:col-span-1">
+              {hasData ? (
+                <Button
+                  type="button"
+                  onClick={() => handleReset(resetForm)}
+                  width="full"
+                >
+                  {t("reset_key")}
+                </Button>
+              ) : (
+                <Button type="submit" width="full">
+                  {t("get_data_key")}
+                </Button>
+              )}
+            </div>
+          </div>
         </Form>
       )}
     </Formik>
