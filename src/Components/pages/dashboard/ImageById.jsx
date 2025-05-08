@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { fetchImageById } from "../../../api/imagesAPI";
-import { IoClose } from "react-icons/io5";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import { createPortal } from "react-dom";
 import Modal from "../../Modal";

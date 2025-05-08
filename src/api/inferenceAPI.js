@@ -11,10 +11,9 @@ export const getInferences = async ({ size = 10, page = 1 }) => {
   const response = await axiosInstance.get(`${INFERENCE_ENDPOINT}`, { params });
   return response.data;
 };
-export const updateInferenceVerify = async (id, is_verify) => {
-  const params = { is_verify };
+export const updateInferenceVerify = async (id) => {
   const response = await axiosInstance.put(
-    `${INFERENCE_ENDPOINT}/${id}/verify`, params
+    `${INFERENCE_ENDPOINT}/${id}/toggle-approved`
   );
   return response.data;
 };

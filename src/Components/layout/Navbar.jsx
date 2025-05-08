@@ -136,15 +136,7 @@ const Navbar = React.memo(({ auth = true }) => {
         navigate("/dashboard");
       },
     },
-    {
-      label: t("logout_key"),
-      icon: <FaSignOutAlt />,
-      onClick: () => {
-        logout();
-        window.location.href = "/";
-      },
-    },
-    ...(user?.is_org_admin
+    ...(user?.roles[0]?.name === "super_user"
       ? [
           {
             label: t("admin_key"),
@@ -155,6 +147,14 @@ const Navbar = React.memo(({ auth = true }) => {
           },
         ]
       : []),
+    {
+      label: t("logout_key"),
+      icon: <FaSignOutAlt />,
+      onClick: () => {
+        logout();
+        window.location.href = "/";
+      },
+    },
   ];
 
   // Language dropdown options

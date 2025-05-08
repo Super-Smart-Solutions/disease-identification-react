@@ -66,9 +66,9 @@ export default function LogsSection() {
     queryFn: fetchLogs,
   });
   const verifyMutation = useMutation({
-    mutationFn: async ({ id, is_verify }) => {
+    mutationFn: async ({ id }) => {
       // Assuming you have an API function called `updateInferenceVerify`
-      return await updateInferenceVerify(id, !is_verify);
+      return await updateInferenceVerify(id);
     },
     onSuccess: (variables) => {
       // Update the specific inference in the cache
@@ -80,7 +80,7 @@ export default function LogsSection() {
             ...oldData,
             items: oldData.items.map((log) =>
               log.id === variables.id
-                ? { ...log, is_verify: !variables.is_verify }
+                ? { ...log, approved: variables.approved }
                 : log
             ),
           };
@@ -91,8 +91,8 @@ export default function LogsSection() {
       toast.error(error);
     },
   });
-  const handleVerify = (is_verify, id) => {
-    verifyMutation.mutate({ id, is_verify });
+  const handleVerify = (id) => {
+    verifyMutation.mutate({ id });
   };
 
   const columnDefs = [
@@ -105,14 +105,12 @@ export default function LogsSection() {
     ...(isAdmin
       ? [
           {
-            field: "is_verify",
+            field: "approved",
             headerName: t("verify_key"),
             cellRenderer: (params) => (
               <span
                 className="cursor-pointer"
-                onClick={() =>
-                  handleVerify(params?.data?.is_verify, params?.data?.id)
-                }
+                onClick={() => handleVerify(params?.data?.id)}
                 title={t("remove_user_key")}
               >
                 <FaCheckCircle
