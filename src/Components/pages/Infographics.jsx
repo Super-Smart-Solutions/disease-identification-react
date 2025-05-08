@@ -44,8 +44,8 @@ export default function Infographics() {
     title: "",
     onClick: () => console.log(`Card ${index + 1} clicked`),
     component: (
-      <div className="w-full">
-        <div className="relative w-full h-48 rounded-2xl flex items-center justify-center bg-gray-100 overflow-hidden">
+      <div className="w-full ">
+        <div className="relative w-full h-48 rounded-2xl flex items-center justify-center bg-[#015C44] overflow-hidden">
           {card.value !== undefined ? (
             <NumberProgress value={card.value} />
           ) : (
@@ -69,7 +69,7 @@ export default function Infographics() {
   }));
 
   return (
-    <div className="py-12 px-4 sm:px-6 lg:px-8 bg-slate-50 space-y-4">
+    <div className="py-12 px-4 sm:px-6 lg:px-8 space-y-4">
       <span className="text-3xl text-center block">
         {t("infographics_key")}
       </span>
