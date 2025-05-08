@@ -5,7 +5,7 @@ import jsPDF from "jspdf";
 import { useQuery } from "@tanstack/react-query";
 import Button from "../../Button";
 import { FaFilePdf } from "react-icons/fa6";
-import { fetchCropById } from "../../../api/soilAPI"; // Adjust the import path
+import { fetchCropById } from "../../../api/soilApi";
 
 export const SummaryStep = ({ assessmentResult }) => {
   const { t } = useTranslation();
