@@ -84,7 +84,6 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
   console.log(predictionError);
 
   return (
-<<<<<<< HEAD
     <div className="space-y-4">
       {modelingData.selected_file.map((file, index) => (
         <div key={index} className="p-4 border rounded-lg bg-gray-50 space-y-4">
