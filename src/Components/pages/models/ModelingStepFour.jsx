@@ -62,6 +62,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
     setModelingData((prev) => ({
       category: prev.category,
       selected_file: [],
+      category: {},
     }));
   };
 
@@ -113,15 +114,6 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
                 {t("prediction_failed_message_key")}:{" "}
                 {predictionError.response?.data?.detail}
               </div>
-            ) : predictionFailed ? (
-              <div className="space-y-2">
-                <div className="text-red-500">
-                  {t("detection_inconclusive_message")}
-                </div>
-                <Button onClick={handleDeepAnalysis}>
-                  {t("go_to_deep_analysis_key")}
-                </Button>
-              </div>
             ) : (
               <div className="space-y-3">
                 {t("selected_disease")}:{" "}
@@ -134,7 +126,6 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
                   <Button
                     className="flex items-center gap-2 mx-auto mt-2"
                     onClick={navigateToDatabase}
-                    variant="outlined"
                   >
                     <GiNotebook size={22} />
                     {t("read_more_about_disease_key")}
@@ -145,15 +136,25 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 justify-center items-center  
+          ">
             <Button
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 "
               onClick={handleTryDifferentImage}
-              variant="outlined"
             >
               <RiImageEditLine size={22} />
               {t("try_with_a_different_image_key")}
             </Button>
+            {predictionFailed && (
+              <div className="space-y-2">
+                <div className="text-red-500">
+                  {t("detection_inconclusive_message")}
+                </div>
+                <Button onClick={handleDeepAnalysis}>
+                  {t("go_to_deep_analysis_key")}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       ))}

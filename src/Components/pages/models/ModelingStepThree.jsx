@@ -60,6 +60,7 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
     setModelingData((prev) => ({
       category: prev.category,
       selected_file: [],
+      category: {},
     }));
   };
 
@@ -85,7 +86,6 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
             <Button
               className="flex items-center gap-2"
               onClick={handleTryDifferentImage}
-              variant="outlined"
             >
               <RiImageEditLine size={22} />
               {t("try_with_a_different_image_key")}

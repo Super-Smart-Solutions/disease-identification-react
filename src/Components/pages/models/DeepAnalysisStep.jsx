@@ -70,6 +70,7 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
     setModelingData((prev) => ({
       category: prev.category,
       selected_file: [],
+      category: {},
     }));
   };
 
@@ -136,7 +137,6 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
                 <Button
                   className="flex items-center gap-2 mx-auto mt-2"
                   onClick={navigateToDatabase}
-                  variant="outlined"
                 >
                   <GiNotebook size={22} />
                   {t("read_more_about_disease_key")}
@@ -154,7 +154,6 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
                   <Button
                     className="flex items-center gap-2"
                     onClick={handleTryDifferentImage}
-                    variant="outlined"
                   >
                     <RiImageEditLine size={22} />
                     {t("try_with_a_different_image_key")}
