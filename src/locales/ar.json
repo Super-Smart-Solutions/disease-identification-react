@@ -34,7 +34,7 @@
   "search_about_data_key": "ابحث عن البيانات",
   "select_plant_key": "حدد النبات",
   "select_disease_key": "حدد المرض",
-  "select_plant_required_key": "يرجى اختيار نبات.",
+  "select_plant_required_key": "يرجى اختيار فئة.",
   "select_disease_required_key": "يرجى اختيار مرض.",
   "get_data_key": "الحصول على البيانات",
   "plants_animals_key": "النباتات والحيوانات",
@@ -70,7 +70,7 @@
   "read_more_about_disease_key": "اقرأ المزيد عن المرض",
   "deep_analytics_key": "التحليل العميق",
   "Symptoms": "الأعراض",
-  "Get Started": "ابدأ الان",
+  "Get Started": "سجل الان",
   "first_name_key": "الاسم الأول",
   "last_name_key": "الاسم الأخير",
   "user_type_key": "نوع المستخدم",
@@ -236,7 +236,7 @@
   "confirmation_caption": "و أخيرا، في حالة اكتشاف مرض، يجب مراجعة خبير زراعي لمراجعة الاجراءات العلاجية",
 
   "search_in_database_key": "ابحث في قاعدة البيانات",
-  "select_by_plant_key": "اختر من النباتات",
+  "select_by_plant_key": "اختر من الفئات",
 
   "invitation_title_key": "دعوة فريق",
   "invitation_from_key": "دعوة من:",
