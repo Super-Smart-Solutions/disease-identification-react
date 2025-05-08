@@ -527,5 +527,11 @@
   "finish_key": "Finish",
   "download_key": "Download",
   "min_key": "min",
-  "max_key": "max"
+  "max_key": "max",
+  "write_review_key": "Write a Review",
+  "your_review_key": "Your review...",
+  "submit_review_key": "Submit Review",
+  "review_submitted_key": "Review submitted successfully!",
+  "review_submit_error_key": "Failed to submit review.",
+  "rate_key": "Rate"
 }

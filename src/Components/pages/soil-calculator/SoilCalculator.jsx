@@ -38,17 +38,17 @@ export default function SoilCalculator() {
     <div>
       {/* Floating Calculator Button */}
       <div
-        className="fixed bottom-10 right-10 bg-primary cursor-pointer p-2 rounded-full shadow-md z-50"
+        className=" bg-primary cursor-pointer p-2 rounded-full shadow-md  w-fit"
         onClick={handleOpenModal}
       >
-        <IoCalculator size={24} color="white" />
+        <IoCalculator title={t("soil_calculator_key")} size={24} color="white" />
       </div>
 
       <Modal
         title={t("soil_calculator_key")}
         isOpen={isModalOpen}
         onClose={() => {
-          resetForm(); // Reset form when closing modal
+          resetForm();
           handleCloseModal();
         }}
       >

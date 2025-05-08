@@ -529,5 +529,11 @@
   "finish_key": "إنهاء",
   "download_key": "تحميل pdf",
   "min_key": "الصغري",
-  "max_key": "العظمي"
+  "max_key": "العظمي",
+  "write_review": "اكتب مراجعة",
+  "your_review_key": "مراجعتك...",
+  "submit_review_key": "إرسال المراجعة",
+  "review_submitted_key": "تم إرسال المراجعة بنجاح!",
+  "review_submit_error_key": "فشل في إرسال المراجعة.",
+  "rate_key": "تقييم"
 }
