@@ -61,6 +61,7 @@
   "selected_disease": "Selected Disease",
   "confidence_level": "Confidence Level",
   "next_key": "Next",
+  "previous_key": "Previous",
   "reset_key": "Reset",
   "complete_data_key": "Complete Your Data",
   "create_account_key": "Create Account",
@@ -211,7 +212,12 @@
     "next_button": "Next",
     "finish_button": "Finish"
   },
-
+  "status": {
+    "optimal": "Optimal",
+    "suboptimal": "Suboptimal",
+    "too_high": "Too High",
+    "too_low": "Too Low"
+  },
   "invitation_title_key": "Team Invitation",
   "invitation_from_key": "Invitation from:",
   "invitation_role_key": "Role:",
@@ -501,5 +507,18 @@
   "ph_key": "pH Level",
   "salinity_key": "Salinity",
   "prediction_failed_message_key": "Prediction failed message ",
-  "try_with_a_different_image_key": "try with a different image "
+  "try_with_a_different_image_key": "try with a different image ",
+  "temperature_key": "Temperature",
+  "recommendations_key": "Recommendations",
+  "your_value_key": "Your value",
+  "optimal_key": "Optimal",
+  "optimal_value_key": "Optimal",
+  "form_key": "Form",
+  "results_key": "Results",
+  "summary_key": "Summary",
+  "assess_key": "Assess",
+  "finish_key": "Finish",
+  "download_key": "Download",
+  "min_key": "min",
+  "max_key": "max"
 }
