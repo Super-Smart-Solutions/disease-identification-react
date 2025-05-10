@@ -311,10 +311,7 @@
     "death's-head hawkmoth": "death's-head hawkmoth",
     "honey bees_oriental hornet": "honey bees_oriental hornet",
     "PARASITIC": "parasitic diseases",
-<<<<<<< Updated upstream
-    "bacterial": "bacterial diseases",
-    "virus": "viral diseases"
-=======
+
     "bacterial":"bacterial diseases",
     "virus":"viral diseases",
 
@@ -323,7 +320,6 @@
     "animals_foot and mouth disease": "animals_foot and mouth disease",
     "animals_lumpy skin disease": "animals_lumpy skin disease",
     "animals_Lice disease": "animals_Lice disease"
->>>>>>> Stashed changes
   },
   "phone_input": {
     "label": "Phone Input",

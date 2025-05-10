@@ -301,10 +301,7 @@
     "death's-head hawkmoth": "فراشة السمسم",
     "honey bees_oriental hornet": "الدبور الشرقي",
     "PARASITIC": "الأمراض الطفيلية",
-<<<<<<< Updated upstream
-    "bacterial": "الأمراض البكتيرية",
-    "virus": "الأمراض الفيروسية"
-=======
+
     "bacterial":"الأمراض البكتيرية",
     "virus":"الأمراض الفيروسية",
     "Coffee leaf Miner": "حشرة حفار الاوراق",
@@ -312,8 +309,6 @@
     "animals_foot and mouth disease": "الحمى القلاعیة",
     "animals_lumpy skin disease": "الجلد العقدي",
     "animals_Lice disease": "القمل"
-
->>>>>>> Stashed changes
   },
   "text_input": {
     "label": "حقل إدخال نصي",
