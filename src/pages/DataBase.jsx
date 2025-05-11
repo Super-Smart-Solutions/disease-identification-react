@@ -7,12 +7,11 @@ import PlantDiseaseForm from "../Components/pages/PlantDiseaseForm";
 import { useTranslation } from "react-i18next";
 import DiseaseSearchDropdown from "../Components/pages/DiseaseSearchDropdown";
 import { useLocation } from "react-router-dom";
-import { fetchPlantByName } from "../api/plantAPI";
 
 export default function DataBase() {
   const { t, i18n } = useTranslation();
   const { state } = useLocation();
-  const [searchMethod, setSearchMethod] = useState("database");
+  const [searchMethod, setSearchMethod] = useState("plant");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDisease, setSelectedDisease] = useState(
     state?.selectedDisease || null

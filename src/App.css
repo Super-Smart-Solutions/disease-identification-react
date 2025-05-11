@@ -107,3 +107,6 @@ input::placeholder {
   border-color: #a9ada1; /* blue-500 */
   background-color: #d6d8d2;
 }
+body.modal-open {
+  overflow: hidden;
+}
