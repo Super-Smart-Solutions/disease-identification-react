@@ -72,8 +72,8 @@ export default function ReviewFormModal() {
             ))}
           </div>
 
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? t("submitting_key") : t("submit_review_key")}
+          <Button type="submit" loading={isSubmitting}>
+            {t("submit_review_key")}
           </Button>
         </form>
       </Modal>

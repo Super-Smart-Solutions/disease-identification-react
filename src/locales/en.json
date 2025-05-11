@@ -113,6 +113,7 @@
   "disease_identification_guide_key": "Your guide to identifying plant diseases.",
   "showing_key": "Showing {{from}} to {{to}} of {{total}} items",
   "show_key": "Show",
+  "attention_map_key": "Attention map",
   "previous_page_key": "Previous page",
   "next_page_key": "Next page",
   "dashboard_key": "Dashboard",
@@ -532,6 +533,7 @@
   "your_review_key": "Your review...",
   "submit_review_key": "Submit Review",
   "review_submitted_key": "Review submitted successfully!",
+  "review_updated_key": "Review updated successfully!",
   "review_submit_error_key": "Failed to submit review.",
   "rate_key": "Rate"
 }

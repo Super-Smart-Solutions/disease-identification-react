@@ -15,7 +15,10 @@ export const fetchReviews = async ({ page, size } = {}) => {
 // Post a new review
 export const createReview = async (reviewData) => {
     const response = await axiosInstance.post(REVIEW_ENDPOINT, reviewData);
-    return response.data;
+    return {
+        status: response.status,
+        data: response.data,
+    };
 };
 
 // Get review by ID

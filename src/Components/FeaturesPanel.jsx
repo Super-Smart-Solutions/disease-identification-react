@@ -9,16 +9,16 @@ const FeaturesPanel = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { t } = useTranslation();
   return (
-    <motion.div className="fixed bottom-10 right-10 z-50 flex items-end gap-2">
+    <motion.div className="fixed bottom-10 right-10 z-50 flex gap-2 flex-col items-center justify-between  w-30">
       {/* Features Panel */}
       <AnimatePresence>
         {isExpanded && (
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
             transition={{ type: "spring", damping: 10 }}
-            className="bg-white p-4 rounded-lg shadow-xl border border-gray-200 flex gap-4"
+            className="bg-white p-4 rounded-lg shadow-xl border border-gray-200 flex flex-col gap-4"
           >
             <SoilCalculator />
             <ReviewFormModal />
