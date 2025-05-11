@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaSearch, FaLeaf } from "react-icons/fa";
-import ImageGrid from "../Components/pages/ImageGrid";
-import ExpandableArticle from "../Components/pages/ExpandableArticle";
+import ImageGrid from "../Components/pages/data-base/ImageGrid";
+import ExpandableArticle from "../Components/pages/data-base/ExpandableArticle";
 import PlantDiseaseForm from "../Components/pages/PlantDiseaseForm";
 import { useTranslation } from "react-i18next";
 import DiseaseSearchDropdown from "../Components/pages/DiseaseSearchDropdown";
 import { useLocation } from "react-router-dom";
-import { fetchPlantByName } from "../api/plantAPI";
-
 export default function DataBase() {
   const { t, i18n } = useTranslation();
   const { state } = useLocation();
@@ -140,7 +138,9 @@ export default function DataBase() {
             plant_id={selectedPlant}
             article={selectedDisease}
             loading={isLoading}
+            diseaseId={selectedDisease?.id}
           />
+
           <ImageGrid
             plant_id={selectedPlant}
             diseaseId={selectedDisease?.id}

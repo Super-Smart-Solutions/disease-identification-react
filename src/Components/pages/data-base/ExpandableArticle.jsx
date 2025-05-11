@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import Button from "../Button";
+import Button from "../../Button";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Arrow icons
-import farm from "../../assets/farm.jpg";
-import { ArticleSkeleton } from "../skeltons/ArticleSkeleton";
+import farm from "../../../assets/farm.jpg";
+import { ArticleSkeleton } from "../../skeltons/ArticleSkeleton";
+import ExportPdf from "./ExportPdf";
 
-export default function ExpandableArticle({ plant_id, article, loading }) {
+export default function ExpandableArticle({
+  plant_id,
+  article,
+  loading,
+  diseaseId,
+}) {
   const [expanded, setExpanded] = useState(false);
   const { t } = useTranslation();
 
@@ -42,6 +48,12 @@ export default function ExpandableArticle({ plant_id, article, loading }) {
               t("no_description_key")}
           </motion.p>
         </div>
+        <ExportPdf
+          plant_id={plant_id}
+          diseaseId={diseaseId}
+          article={article}
+          t={t}
+        />
         <img
           src={plant_id ? `${plant_id}.jpg` : farm}
           alt="Disease"
