@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaSearch, FaLeaf } from "react-icons/fa";
 import ImageGrid from "../Components/pages/data-base/ImageGrid";
 import ExpandableArticle from "../Components/pages/data-base/ExpandableArticle";
-import PlantDiseaseForm from "../Components/pages/PlantDiseaseForm";
+import PlantDiseaseForm from "../Components/pages/data-base/PlantDiseaseForm";
 import { useTranslation } from "react-i18next";
-import DiseaseSearchDropdown from "../Components/pages/DiseaseSearchDropdown";
+import DiseaseSearchDropdown from "../Components/pages/data-base/DiseaseSearchDropdown";
 import { useLocation } from "react-router-dom";
 export default function DataBase() {
   const { t, i18n } = useTranslation();

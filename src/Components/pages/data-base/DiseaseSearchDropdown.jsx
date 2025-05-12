@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import Fuse from "fuse.js";
 import { useQuery } from "@tanstack/react-query";
-import { fetchDiseaseById, fetchDiseases } from "../../api/diseaseAPI";
+import { fetchDiseaseById, fetchDiseases } from "../../../api/diseaseAPI";
 import { useTranslation } from "react-i18next";
-import { usePlantByDiseases } from "../../hooks/usePlants";
+import { usePlantByDiseases } from "../../../hooks/usePlants";
 import { FiChevronDown, FiX } from "react-icons/fi";
 
 const CustomDropdown = ({

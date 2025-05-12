@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useState, useEffect } from "react";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import { FaFilePdf, FaSpinner } from "react-icons/fa";
@@ -9,6 +9,7 @@ import Button from "../../Button";
 export default function ExportPdf({ plant_id, diseaseId, article, t }) {
   const pdfRef = useRef();
   const [isGenerating, setIsGenerating] = useState(false);
+  const [processedImages, setProcessedImages] = useState([]);
   const page = 1;
   const pageSize = 4;
   const formatKey = (str) => str?.replace(/\s+/g, "_").toLowerCase();
@@ -27,7 +28,62 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
     queryFn: fetchImages,
     staleTime: 1000 * 60 * 5,
   });
-  const images = data?.items || [];
+
+  // Process images to handle CORS issues
+  useEffect(() => {
+    const processImages = async () => {
+      if (!data?.items) return;
+
+      const processed = await Promise.all(
+        data.items.map(async (img) => {
+          try {
+            // Try to load the image first
+            const loaded = await loadImageWithFallback(img.url);
+            return { ...img, processedUrl: loaded.src };
+          } catch (error) {
+            console.error("Error processing image:", error);
+            return { ...img, processedUrl: "/farm.jpeg" };
+          }
+        })
+      );
+      setProcessedImages(processed);
+    };
+
+    processImages();
+  }, [data]);
+
+  const loadImageWithFallback = (url) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.src = url;
+
+      const timeout = setTimeout(() => {
+        img.onerror = null; // Clear handlers
+        console.log(`Timeout loading image: ${url}`);
+        loadFallback();
+      }, 5000); // 5 second timeout
+
+      img.onload = () => {
+        clearTimeout(timeout);
+        resolve(img);
+      };
+
+      img.onerror = (error) => {
+        clearTimeout(timeout);
+        console.log("Image error:", error);
+        loadFallback();
+      };
+
+      function loadFallback() {
+        const fallback = new Image();
+        fallback.src = "/farm.jpeg";
+        fallback.onload = () => resolve(fallback);
+        fallback.onerror = () =>
+          reject(new Error("Could not load fallback image"));
+      }
+    });
+  };
 
   const handleDownloadPDF = async () => {
     if (!pdfRef.current || isGenerating) return;
@@ -35,41 +91,38 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
     setIsGenerating(true);
 
     try {
-      // Preload all images first
+      // Create a clone of the PDF content to manipulate
+      const pdfContent = pdfRef.current.cloneNode(true);
+
+      // Replace all image sources with processed URLs
       await Promise.all(
-        images.map((img) => {
-          return new Promise((resolve) => {
-            const image = new Image();
-            image.crossOrigin = "Anonymous";
-            image.src = img.url + "&response-content-type=image/jpeg";
-            image.onload = resolve;
-            image.onerror = resolve;
-          });
+        processedImages.map(async (img) => {
+          try {
+            await loadImageWithFallback(img.url);
+          } catch (error) {
+            console.log(`Failed to pre-load image: ${img.url}`, error);
+          }
         })
       );
 
-      const canvas = await html2canvas(pdfRef.current, {
-        scale: 1,
+      // Temporarily replace the original content
+      const originalParent = pdfRef.current.parentNode;
+      const originalNextSibling = pdfRef.current.nextSibling;
+      pdfRef.current.remove();
+      originalParent.insertBefore(pdfContent, originalNextSibling);
+
+      // Generate PDF
+      const canvas = await html2canvas(pdfContent, {
         useCORS: true,
         allowTaint: true,
-        logging: true,
-        backgroundColor: "#ffffff",
-        removeContainer: true,
-        windowWidth: 800,
-        async: true,
-        onclone: (clonedDoc) => {
-          const images = clonedDoc.querySelectorAll("img");
-          images.forEach((img) => {
-            img.style.width = "100%";
-            img.style.height = "auto";
-            img.style.maxHeight = "200px";
-            img.style.objectFit = "contain";
-          });
-        },
+        credentials: "include",
       });
+      // Restore original content
+      pdfContent.remove();
+      originalParent.insertBefore(pdfRef.current, originalNextSibling);
 
+      // Create PDF
       const imgData = canvas.toDataURL("image/jpeg", 0.85);
-
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
@@ -77,7 +130,6 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
       });
 
       const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
       const margin = 10;
       const contentWidth = pageWidth - margin * 2;
       const contentHeight = (canvas.height * contentWidth) / canvas.width;
@@ -117,6 +169,7 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
         className="flex items-center gap-2"
         variant="outlined"
         onClick={handleDownloadPDF}
+        loading={isGenerating}
       >
         {t("download_key")} <FaFilePdf size={16} />
       </Button>
@@ -143,6 +196,7 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
             maxWidth: "800px",
             fontFamily: "Arial, sans-serif",
             lineHeight: 1.5,
+            backgroundColor: "#ffffff",
           }}
         >
           {/* Header Section */}
@@ -204,26 +258,23 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
             </div>
           </div>
 
-          {/* Images Section with optimized layout */}
-          {images.length > 0 && (
+          {/* Images Section */}
+          {processedImages.length > 0 && (
             <div className="mt-6">
-              <h4 className="text-lg font-bold text-gray-800 mb-2">
-                {t("Images")} ({images.length})
-              </h4>
               <div className="grid grid-cols-4 gap-4">
-                {images.map((image, index) => (
-                  <div key={index} className="flex flex-col items-center">
-                    <img
-                      src={image.url}
-                      alt={`${article.english_name} - ${index + 1}`}
-                      className="w-full h-auto max-h-[200px] object-contain"
-                      loading="lazy"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "/farm.jpeg";
-                      }}
-                    />
-                  </div>
+                {processedImages.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image.processedUrl || image.url}
+                    alt={`${article.english_name} - ${index + 1}`}
+                    className="w-full h-auto max-h-[200px] object-contain border rounded"
+                    loading="eager"
+                    crossOrigin="anonymous"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/farm.jpeg";
+                    }}
+                  />
                 ))}
               </div>
             </div>
