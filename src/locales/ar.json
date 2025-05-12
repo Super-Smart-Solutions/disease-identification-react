@@ -537,5 +537,6 @@
   "review_submitted_key": "تم إرسال المراجعة بنجاح!",
   "review_updated_key": "تم تعديل المراجعة بنجاح!",
   "review_submit_error_key": "فشل في إرسال المراجعة.",
-  "rate_key": "تقييم"
+  "rate_key": "تقييم",
+  "need_help_key": "تحتاج للمساعدة"
 }

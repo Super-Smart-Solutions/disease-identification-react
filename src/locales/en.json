@@ -535,5 +535,6 @@
   "review_submitted_key": "Review submitted successfully!",
   "review_updated_key": "Review updated successfully!",
   "review_submit_error_key": "Failed to submit review.",
-  "rate_key": "Rate"
+  "rate_key": "Rate",
+  "need_help_key": "Need help"
 }

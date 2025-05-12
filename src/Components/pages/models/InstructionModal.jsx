@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Cookies from "js-cookie";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiInfo } from "react-icons/fi";
+import { IoIosHelpCircleOutline } from "react-icons/io";
+
 import Button from "../../Button";
 import good_1 from "../../../assets/good_1.png";
 import good_2 from "../../../assets/good_2.png";
@@ -78,15 +79,18 @@ const InstructionModal = () => {
 
   return (
     <>
-      <motion.button
-        onClick={handleOpen}
-        className=" bg-slate-50 text-slate-600 p-1 rounded-full hover:bg-slate-200  mt-3"
-        aria-label={t("instruction_modal.help_button_label")}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <FiInfo size={24} title={t("more_info_key")} />
-      </motion.button>
+      <div className="  relative bottom-10 flex gap-2">
+        <span>{t("need_help_key")}</span>
+        <motion.button
+          onClick={handleOpen}
+          className=" bg-slate-50 text-slate-600  rounded-full hover:bg-slate-200 "
+          aria-label={t("instruction_modal.help_button_label")}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <IoIosHelpCircleOutline size={26} title={t("more_info_key")} />
+        </motion.button>
+      </div>
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -327,10 +331,8 @@ const InstructionModal = () => {
 
                       {currentStep === 7 && (
                         <div className="space-y-4 p-2">
-
-
                           <h4 className="font-medium text-green-600 mb-2">
-                              {t("confirmation_caption")}
+                            {t("confirmation_caption")}
                           </h4>
 
                           <input
@@ -345,7 +347,6 @@ const InstructionModal = () => {
                             }
                             className="mt-1 me-2"
                           />
-
 
                           <label
                             htmlFor="confirm-checkbox"
