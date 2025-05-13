@@ -8,8 +8,10 @@ import {
 } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import LandingLayout from "../layouts/LandingLayout";
+import DashboardLayout from "../layouts/DashboardLayout";
 import routes from "./routes.json";
 import authRoutes from "./authRoutes.json";
+import adminRoutes from "./adminRoutes.json";
 import Landing from "../pages/Landing";
 import DataBase from "../pages/DataBase";
 import Models from "../pages/Models";
@@ -26,6 +28,9 @@ const componentMap = {
   Register,
   Login,
   Dashboard,
+  AdminDashboard: Dashboard,
+  AdminPlants: Models,
+  AdminDiseases: DataBase,
 };
 
 const ProtectedRoute = ({ children, isAuthenticated }) => {
@@ -61,19 +66,35 @@ const ForbiddenRoute = ({ children, isAuthenticated }) => {
   return !isAuthenticated ? children : null;
 };
 
+const AdminRoute = ({ children, isAuthenticated }) => {
+  const location = useLocation();
+
+  if (!isAuthenticated) {
+    localStorage.setItem("redirectPath", location.pathname);
+    return <Navigate to="/auth/login" replace state={{ from: location }} />;
+  }
+
+  return children;
+};
+
 const AppRoutes = () => {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { logout } = useAuthActions();
 
   useEffect(() => {
     const checkAuthentication = () => {
       const token = Cookies.get("token");
+      const userRole = Cookies.get("role"); // Assuming you store role in cookies
+
       if (token) {
         setIsAuthenticated(true);
+        setIsAdmin(userRole === "admin"); // Adjust based on your role checking logic
       } else {
         setIsAuthenticated(false);
+        setIsAdmin(false);
         logout();
       }
       setIsLoading(false);
@@ -133,6 +154,24 @@ const AppRoutes = () => {
               ) : (
                 React.createElement(componentMap[route.element])
               )
+            }
+          />
+        ))}
+      </Route>
+
+      {/* Admin routes use DashboardLayout */}
+      <Route
+        path="/admin"
+        element={<DashboardLayout isAuthenticated={isAuthenticated} />}
+      >
+        {adminRoutes.map((route, index) => (
+          <Route
+            key={index}
+            path={route.path}
+            element={
+              <AdminRoute isAuthenticated={isAuthenticated}>
+                {React.createElement(componentMap[route.element])}
+              </AdminRoute>
             }
           />
         ))}
