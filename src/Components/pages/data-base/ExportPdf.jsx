@@ -29,7 +29,6 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
     staleTime: 1000 * 60 * 5,
   });
 
-  // Process images to handle CORS issues
   useEffect(() => {
     const processImages = async () => {
       if (!data?.items) return;
@@ -37,9 +36,8 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
       const processed = await Promise.all(
         data.items.map(async (img) => {
           try {
-            // Try to load the image first
-            const loaded = await loadImageWithFallback(img.url);
-            return { ...img, processedUrl: loaded.src };
+            const url = await fetchImageWithFallback(img.url);
+            return { ...img, processedUrl: url };
           } catch (error) {
             console.error("Error processing image:", error);
             return { ...img, processedUrl: "/farm.jpeg" };
@@ -52,77 +50,66 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
     processImages();
   }, [data]);
 
-  const loadImageWithFallback = (url) => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = "Anonymous";
-      img.src = url;
+  const fetchImageWithFallback = async (url) => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 7000);
 
-      const timeout = setTimeout(() => {
-        img.onerror = null; // Clear handlers
-        console.log(`Timeout loading image: ${url}`);
-        loadFallback();
-      }, 5000); // 5 second timeout
+    try {
+      const response = await fetch(url, {
+        signal: controller.signal,
+        mode: "cors",
+        headers: { "Access-Control-Allow-Origin": "*" },
+      });
 
-      img.onload = () => {
-        clearTimeout(timeout);
-        resolve(img);
-      };
+      clearTimeout(timeout);
 
-      img.onerror = (error) => {
-        clearTimeout(timeout);
-        console.log("Image error:", error);
-        loadFallback();
-      };
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const blob = await response.blob();
 
-      function loadFallback() {
-        const fallback = new Image();
-        fallback.src = "/farm.jpeg";
-        fallback.onload = () => resolve(fallback);
-        fallback.onerror = () =>
-          reject(new Error("Could not load fallback image"));
+      if (!["image/jpeg", "image/png"].includes(blob.type)) {
+        throw new Error("Unsupported image type");
       }
-    });
+
+      return URL.createObjectURL(blob);
+    } catch (error) {
+      console.warn("Falling back to local image for:", url);
+      clearTimeout(timeout);
+      return "/farm.jpeg";
+    }
   };
 
   const handleDownloadPDF = async () => {
     if (!pdfRef.current || isGenerating) return;
-
     setIsGenerating(true);
 
     try {
-      // Create a clone of the PDF content to manipulate
+      // Clone and replace image sources
       const pdfContent = pdfRef.current.cloneNode(true);
 
-      // Replace all image sources with processed URLs
-      await Promise.all(
-        processedImages.map(async (img) => {
-          try {
-            await loadImageWithFallback(img.url);
-          } catch (error) {
-            console.log(`Failed to pre-load image: ${img.url}`, error);
-          }
-        })
-      );
+      processedImages.forEach((img, index) => {
+        const imgEl = pdfContent.querySelectorAll("img")[index];
+        if (imgEl) {
+          imgEl.src = img.processedUrl;
+        }
+      });
 
-      // Temporarily replace the original content
+      // Temporarily insert content into DOM
       const originalParent = pdfRef.current.parentNode;
       const originalNextSibling = pdfRef.current.nextSibling;
       pdfRef.current.remove();
       originalParent.insertBefore(pdfContent, originalNextSibling);
 
-      // Generate PDF
       const canvas = await html2canvas(pdfContent, {
         useCORS: true,
-        allowTaint: true,
-        credentials: "include",
+        allowTaint: false,
+        logging: false,
       });
-      // Restore original content
+
+      // Restore DOM
       pdfContent.remove();
       originalParent.insertBefore(pdfRef.current, originalNextSibling);
 
-      // Create PDF
-      const imgData = canvas.toDataURL("image/jpeg", 0.85);
+      const imgData = canvas.toDataURL("image/jpeg", 0.9);
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
@@ -134,15 +121,7 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
       const contentWidth = pageWidth - margin * 2;
       const contentHeight = (canvas.height * contentWidth) / canvas.width;
 
-      pdf.addImage(
-        imgData,
-        "JPEG",
-        margin,
-        margin,
-        contentWidth,
-        contentHeight
-      );
-
+      pdf.addImage(imgData, "JPEG", margin, margin, contentWidth, contentHeight);
       pdf.save(`${article.english_name || "disease"}_report.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -153,7 +132,6 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
 
   const formatTextWithLineBreaks = (text) => {
     if (!text) return t("no_data_available_key");
-
     return text.split("\n").map((line, i) => (
       <React.Fragment key={i}>
         {line}
@@ -164,7 +142,6 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
 
   return (
     <div className="relative">
-      {/* Download Button with Loading State */}
       <Button
         className="flex items-center gap-2"
         variant="outlined"
@@ -174,109 +151,54 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
         {t("download_key")} <FaFilePdf size={16} />
       </Button>
 
-      {/* Loading indicator for images */}
       {imagesLoading && (
         <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-white bg-opacity-50">
           <FaSpinner className="animate-spin text-2xl text-primary" />
         </div>
       )}
 
-      {/* Error message for images */}
       {imagesError && (
         <div className="text-red-500 text-sm mt-1">
           {t("failed_to_load_images_key")}
         </div>
       )}
 
-      {/* Hidden PDF content with optimized styling */}
       <div ref={pdfRef} style={{ position: "absolute", left: "-9999px" }}>
-        <div
-          style={{
-            padding: "20px",
-            maxWidth: "800px",
-            fontFamily: "Arial, sans-serif",
-            lineHeight: 1.5,
-            backgroundColor: "#ffffff",
-          }}
-        >
-          {/* Header Section */}
-          <div className="mb-6">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              {article?.english_name || t("no_disease_selected_key")}
-            </h2>
+        <div style={{ padding: "20px", maxWidth: "800px", backgroundColor: "#fff", fontFamily: "Arial, sans-serif" }}>
+          <h2 className="text-3xl font-bold mb-2">{article?.english_name || t("no_disease_selected_key")}</h2>
+          {article?.arabic_name && <h3>{t("arabic_name_key")}: {article?.arabic_name}</h3>}
+          {article?.scientific_name && <h4>{t("scientific_name_key")}: {article?.scientific_name}</h4>}
 
-            {article?.arabic_name && (
-              <h3 className="text-xl font-bold text-gray-900">
-                {t("arabic_name_key")}: {article?.arabic_name}
-              </h3>
-            )}
-
-            {article?.scientific_name && (
-              <h4 className="text-lg font-bold text-gray-900">
-                {t("scientific_name_key")}: {article?.scientific_name}
-              </h4>
-            )}
+          <div className="mt-4">
+            <h4>{t("Symptoms")}</h4>
+            <p>{formatTextWithLineBreaks(article?.symptoms || t("no_symptoms_key"))}</p>
           </div>
 
-          {/* Content Sections */}
-          <div className="space-y-4">
-            <div>
-              <h4 className="text-lg font-bold text-gray-800 mb-1">
-                {t("Symptoms")}
-              </h4>
-              <p className="text-gray-700 text-base">
-                {formatTextWithLineBreaks(
-                  t(`${formatKey(article?.english_name)}_symptoms`) ||
-                    article?.symptoms ||
-                    t("no_symptoms_key")
-                )}
-              </p>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-bold text-gray-800 mb-1">
-                {t("Description")}
-              </h4>
-              <p className="text-gray-700 text-base">
-                {formatTextWithLineBreaks(
-                  article?.description || t("no_description_key")
-                )}
-              </p>
-            </div>
-
-            <div>
-              <h4 className="text-lg font-bold text-gray-800 mb-1">
-                {t("Control Methods")}
-              </h4>
-              <p className="text-gray-700 text-base">
-                {formatTextWithLineBreaks(
-                  t(`${formatKey(article?.english_name)}_treatments`) ||
-                    article?.treatments ||
-                    t("no_treatment_key")
-                )}
-              </p>
-            </div>
+          <div className="mt-4">
+            <h4>{t("Description")}</h4>
+            <p>{formatTextWithLineBreaks(article?.description || t("no_description_key"))}</p>
           </div>
 
-          {/* Images Section */}
+          <div className="mt-4">
+            <h4>{t("Control Methods")}</h4>
+            <p>{formatTextWithLineBreaks(article?.treatments || t("no_treatment_key"))}</p>
+          </div>
+
           {processedImages.length > 0 && (
-            <div className="mt-6">
-              <div className="grid grid-cols-4 gap-4">
-                {processedImages.map((image, index) => (
-                  <img
-                    key={index}
-                    src={image.processedUrl || image.url}
-                    alt={`${article.english_name} - ${index + 1}`}
-                    className="w-full h-auto max-h-[200px] object-contain border rounded"
-                    loading="eager"
-                    crossOrigin="anonymous"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "/farm.jpeg";
-                    }}
-                  />
-                ))}
-              </div>
+            <div className="mt-6 grid grid-cols-4 gap-4">
+              {processedImages.map((image, index) => (
+                <img
+                  key={index}
+                  src={image.processedUrl}
+                  alt={`${article.english_name} - ${index + 1}`}
+                  className="w-full h-auto max-h-[200px] object-contain border rounded"
+                  loading="eager"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/farm.jpeg";
+                  }}
+                />
+              ))}
             </div>
           )}
         </div>
