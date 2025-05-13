@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import SelectInput from "../Formik/SelectInput";
-import Button from "../Button";
+import SelectInput from "../../Formik/SelectInput";
+import Button from "../../Button";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPlants, fetchDiseasesByPlant } from "../../api/plantAPI";
-import { fetchDiseaseById } from "../../api/diseaseAPI";
+import { fetchPlants, fetchDiseasesByPlant } from "../../../api/plantAPI";
+import { fetchDiseaseById } from "../../../api/diseaseAPI";
 
 const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
   const { t, i18n } = useTranslation();
