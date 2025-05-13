@@ -120,10 +120,12 @@ const Navbar = React.memo(({ auth = true }) => {
   useEffect(() => {
     if (i18n.language === "ar") {
       document.documentElement.setAttribute("dir", "rtl");
-      document.documentElement.style.fontFamily = "'Cascadia Code', serif";
+      document.documentElement.classList.add("font-arabic");
+      document.documentElement.classList.remove("font-english");
     } else {
       document.documentElement.setAttribute("dir", "ltr");
-      document.documentElement.style.fontFamily = "'Roboto', sans-serif";
+      document.documentElement.classList.add("font-english");
+      document.documentElement.classList.remove("font-arabic");
     }
   }, [i18n.language]);
 

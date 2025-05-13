@@ -35,8 +35,6 @@ export default function DataGrid({
   // Constants for height calculation
   const ROW_HEIGHT = 50;
   const HEADER_HEIGHT = 50;
-  const MIN_HEIGHT = 200;
-  const MAX_HEIGHT = 600;
   const MAX_VISIBLE_ROWS = 10;
 
   // Debounce search input
@@ -55,16 +53,6 @@ export default function DataGrid({
       onSearch(debouncedSearchValue);
     }
   }, [debouncedSearchValue, onSearch]);
-
-  // Calculate dynamic grid height
-  const gridHeight = useMemo(() => {
-    if (loading) return MIN_HEIGHT;
-
-    const rowCount = rowData?.length || 0;
-    const contentHeight =
-      HEADER_HEIGHT + Math.min(rowCount, MAX_VISIBLE_ROWS) * ROW_HEIGHT;
-    return Math.min(Math.max(contentHeight, MIN_HEIGHT), MAX_HEIGHT);
-  }, [rowData?.length, loading]);
 
   const defaultColDef = useMemo(
     () => ({
@@ -137,9 +125,7 @@ export default function DataGrid({
         className="ag-theme-alpine relative"
         style={{
           width: "100%",
-          height: `${gridHeight}px`,
-          minHeight: `${MIN_HEIGHT}px`,
-          overflow: "auto",
+          height: `550px`,
         }}
       >
         {loading ? (

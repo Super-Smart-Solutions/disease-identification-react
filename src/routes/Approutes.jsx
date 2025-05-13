@@ -15,7 +15,7 @@ import DataBase from "../pages/DataBase";
 import Models from "../pages/Models";
 import Register from "../Components/pages/auth/Register";
 import Login from "../Components/pages/auth/Login";
-import Cookies from "js-cookie"; // Import the Cookies library
+import Cookies from "js-cookie";
 import Dashboard from "../pages/Dashboard";
 import { useAuthActions } from "../Components/helpers/authHelpers";
 
@@ -29,23 +29,34 @@ const componentMap = {
 };
 
 const ProtectedRoute = ({ children, isAuthenticated }) => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/auth/login");
-    }
-  }, [isAuthenticated, navigate]);
+  const location = useLocation();
 
-  return isAuthenticated ? children : null;
+  if (!isAuthenticated) {
+    localStorage.setItem("redirectPath", location.pathname);
+    return <Navigate to="/auth/login" replace state={{ from: location }} />;
+  }
+
+  return children;
 };
 
 const ForbiddenRoute = ({ children, isAuthenticated }) => {
+  const location = useLocation();
   const navigate = useNavigate();
+
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/models");
+      const redirectPath =
+        localStorage.getItem("redirectPath") ||
+        (location.state && location.state.from && location.state.from.pathname);
+
+      if (redirectPath) {
+        localStorage.removeItem("redirectPath");
+        navigate(redirectPath);
+      } else {
+        navigate("/models");
+      }
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, location.state]);
 
   return !isAuthenticated ? children : null;
 };
@@ -60,10 +71,10 @@ const AppRoutes = () => {
     const checkAuthentication = () => {
       const token = Cookies.get("token");
       if (token) {
-        setIsAuthenticated(true); // User is authenticated
+        setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);
-        logout(); // User is not authenticated
+        logout();
       }
       setIsLoading(false);
     };
@@ -76,6 +87,7 @@ const AppRoutes = () => {
       localStorage.setItem("invite_id", inviteId);
     }
   }, [location.pathname]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -107,13 +119,7 @@ const AppRoutes = () => {
       {/* Authenticated routes use MainLayout */}
       <Route
         path="/"
-        element={
-          isAuthenticated ? (
-            <MainLayout isAuthenticated={isAuthenticated} />
-          ) : (
-            <Navigate to="/auth/login" replace />
-          )
-        }
+        element={<MainLayout isAuthenticated={isAuthenticated} />}
       >
         {routes.map((route, index) => (
           <Route

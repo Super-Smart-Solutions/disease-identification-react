@@ -8,6 +8,7 @@ const Button = ({
   size = "medium",
   loading = false,
   className,
+  disabled,
   width = "auto",
   ...props
 }) => {
@@ -42,7 +43,7 @@ const Button = ({
     responsiveStyles,
     className,
     {
-      "opacity-50 cursor-not-allowed": loading, // Disabled state styles
+      "opacity-50 cursor-not-allowed": loading || disabled, // Disabled state styles
       "hover:bg-primary": !loading && variant === "filled", // Remove hover for filled
       "hover:bg-primary hover:text-white": !loading && variant === "outlined", // Remove hover for outlined
       "hover:bg-gray-600": !loading && variant === "default", // Remove hover for default
@@ -50,7 +51,7 @@ const Button = ({
   );
 
   return (
-    <button className={buttonClasses} disabled={loading} {...props}>
+    <button className={buttonClasses} disabled={disabled || loading} {...props}>
       {loading ? (
         <div className="flex items-center justify-center gap-2">
           {t("loading_key")}

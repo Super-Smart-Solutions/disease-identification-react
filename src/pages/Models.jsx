@@ -17,21 +17,24 @@ export default function Models() {
   const stepsConfig = useModelingStepsConfig(getStepDisabledState);
 
   return (
-    <div className="flex gap-4 justify-start items-start">
-      <VerticalSteps activeStep={activeStep} steps={stepsConfig} />
+    <div className=" w-full flex  flex-col  items-end ">
+      <InstructionModal />
+      <div className="flex gap-4 justify-start items-start w-full">
+        <VerticalSteps activeStep={activeStep} steps={stepsConfig} />
 
-      <div className="flex-1 space-y-6">
-        {stepsConfig.map((step) => (
-          <StepWrapper
-            key={step.id}
-            step={step}
-            modelingData={modelingData}
-            setModelingData={setModelingData}
-            isExpanded={expandedSteps[step.id]}
-            onToggleExpand={handleToggleExpand}
-            showInstruction={step.id === 1}
-          />
-        ))}
+        <div className="flex-1 space-y-6">
+          {stepsConfig.map((step) => (
+            <StepWrapper
+              key={step.id}
+              step={step}
+              modelingData={modelingData}
+              setModelingData={setModelingData}
+              isExpanded={expandedSteps[step.id]}
+              onToggleExpand={handleToggleExpand}
+              showInstruction={step.id === 1}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -66,7 +69,6 @@ function StepWrapper({
           stepId={step.id}
         />
       </div>
-      {showInstruction && <InstructionModal />}
     </div>
   );
 }

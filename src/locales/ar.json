@@ -133,6 +133,7 @@
   "disease_identification_guide_key": "دليلك في التعرف على أمراض النبات.",
   "showing_key": "عرض {{from}} إلى {{to}} من {{total}} عنصر",
   "show_key": "عرض",
+  "attention_map_key": "خريطة الاستدلال",
   "previous_page_key": "الصفحة السابقة",
   "next_page_key": "الصفحة التالية",
   "dashboard_key": "لوحة التحكم",
@@ -537,7 +538,7 @@
   "crop_key": "المحصول",
   "type_crop_key": "ادخل المحصول",
   "ph_key": "نطاق الرقم الهيدروجيني",
-  "verify_key": "التحقق",
+  "verify_key": "حالة التحقق",
   "salinity_key": "الملوحة",
   "prediction_failed_message_key": "خطأ في التنبؤ",
   "try_with_a_different_image_key": "جرب بصورة اخري",
@@ -554,5 +555,14 @@
   "download_key": "تحميل pdf",
   "min_key": "الصغري",
   "max_key": "العظمي",
+  "write_review": "اكتب مراجعة",
+  "your_review_key": "مراجعتك...",
+  "submit_review_key": "إرسال المراجعة",
+  "review_submitted_key": "تم إرسال المراجعة بنجاح!",
+  "review_updated_key": "تم تعديل المراجعة بنجاح!",
+  "review_submit_error_key": "فشل في إرسال المراجعة.",
+  "rate_key": "تقييم",
+  "need_help_key": "تحتاج للمساعدة"
   "ecology_key": "علم البيئة"
+
 }

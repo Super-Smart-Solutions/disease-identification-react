@@ -7,10 +7,11 @@ import PlantDiseaseForm from "../Components/pages/data-base/PlantDiseaseForm";
 import { useTranslation } from "react-i18next";
 import DiseaseSearchDropdown from "../Components/pages/data-base/DiseaseSearchDropdown";
 import { useLocation } from "react-router-dom";
+
 export default function DataBase() {
   const { t, i18n } = useTranslation();
   const { state } = useLocation();
-  const [searchMethod, setSearchMethod] = useState("database");
+  const [searchMethod, setSearchMethod] = useState("plant");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDisease, setSelectedDisease] = useState(
     state?.selectedDisease || null
@@ -62,20 +63,6 @@ export default function DataBase() {
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <div
           className={`flex items-center justify-between px-6 py-4 rounded-lg w-full md:w-6/12 cursor-pointer ${
-            searchMethod === "database"
-              ? "border-1 border-primary bg-primary-10"
-              : "border-1 border-slate-300"
-          }`}
-          onClick={() => setSearchMethod("database")}
-        >
-          <div className="flex items-center gap-3">
-            <FaSearch className="text-primary text-xl" />
-            <span className="font-medium">{t("search_in_database_key")}</span>
-          </div>
-        </div>
-
-        <div
-          className={`flex items-center justify-between px-6 py-4 rounded-lg w-full md:w-6/12 cursor-pointer ${
             searchMethod === "plant"
               ? "border-1 border-primary bg-primary-10"
               : "border-1 border-slate-300"
@@ -85,6 +72,19 @@ export default function DataBase() {
           <div className="flex items-center gap-3">
             <FaLeaf className="text-primary text-xl" />
             <span className="font-medium">{t("select_by_plant_key")}</span>
+          </div>
+        </div>
+        <div
+          className={`flex items-center justify-between px-6 py-4 rounded-lg w-full md:w-6/12 cursor-pointer ${
+            searchMethod === "database"
+              ? "border-1 border-primary bg-primary-10"
+              : "border-1 border-slate-300"
+          }`}
+          onClick={() => setSearchMethod("database")}
+        >
+          <div className="flex items-center gap-3">
+            <FaSearch className="text-primary text-xl" />
+            <span className="font-medium">{t("search_in_database_key")}</span>
           </div>
         </div>
       </div>

@@ -14,6 +14,7 @@ import { getStatusTranslation } from "../../../utils/statusTranslations";
 import moment from "moment/moment";
 import { useUserData } from "../../../hooks/useUserData";
 import { toast } from "react-toastify";
+import Button from "../../Button";
 
 export default function LogsSection() {
   const queryClient = useQueryClient();
@@ -96,12 +97,43 @@ export default function LogsSection() {
   };
 
   const columnDefs = [
-    { field: "id", headerName: "#" },
+    { field: "id", headerName: "#", flex: 0.5 },
     {
       field: "plant_name",
       headerName: t("plant_key"),
+      flex: 1,
     },
-    { field: "disease_name", headerName: t("disease_key"), flex: 2 },
+    { field: "disease_name", headerName: t("disease_key"), flex: 1 },
+    {
+      field: "status_text",
+      headerName: t("status_key"),
+      flex: 2,
+    },
+    {
+      field: "image_id",
+      headerName: t("image_key"),
+      cellRenderer: (params) => <ImageById id={params?.data?.image_id} />,
+      flex: 0.5,
+    },
+    {
+      field: "attention_map_url",
+      headerName: t("attention_map_key"),
+      cellRenderer: (params) => (
+        <Button
+          disabled={!params.value}
+          onClick={() => window.open(params.value, "_blank")}
+        >
+          {t("show_key")}
+        </Button>
+      ),
+      flex: 1,
+    },
+    {
+      field: "created_at",
+      headerName: t("created_at_key"),
+      valueFormatter: ({ value }) =>
+        value && moment(value).format("YYYY-MM-DD"),
+    },
     ...(isAdmin
       ? [
           {
@@ -122,23 +154,6 @@ export default function LogsSection() {
           },
         ]
       : []),
-    {
-      field: "status_text",
-      headerName: t("status_key"),
-      flex: 2,
-    },
-    {
-      field: "image_id",
-      headerName: t("image_key"),
-      cellRenderer: (params) => <ImageById id={params?.data?.image_id} />,
-      flex: 2,
-    },
-    {
-      field: "created_at",
-      headerName: t("created_at_key"),
-      valueFormatter: ({ value }) =>
-        value && moment(value).format("YYYY-MM-DD"),
-    },
   ];
 
   if (isError) {

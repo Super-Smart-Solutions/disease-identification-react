@@ -29,7 +29,7 @@ export default function Login() {
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       await login(values);
-      navigate("/models");
+      navigate(localStorage.getItem("redirectPath").toString() || "/models");
     } catch (error) {
       console.error("Login failed", error);
     } finally {
