@@ -5,7 +5,16 @@ import Footer from "../Components/layout/Footer";
 
 const LandingLayout = ({ isAuthenticated }) => {
   return (
-    <main className="flex flex-col min-h-screen relative">
+    <main
+      style={{
+        backgroundImage: "url('/background.jpeg')", // Assuming the image is in the public folder
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed", // Optional: makes the background fixed while scrolling
+        backgroundRepeat: "no-repeat",
+      }}
+      className="flex flex-col min-h-screen relative"
+    >
       {/* Content */}
       <div className="flex-grow relative z-10 flex flex-col justify-between">
         <Navbar auth={isAuthenticated} />

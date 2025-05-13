@@ -48,7 +48,7 @@ const NumberCounter = ({
   return (
     <motion.span
       ref={ref}
-      className={`font-semibold ${className} text-2xl`}
+      className={`font-semibold ${className} text-2xl text-white`}
       initial={{ opacity: 0 }}
       animate={{ opacity: isInView ? 1 : 0.5 }}
       transition={{ duration: 0.5 }}

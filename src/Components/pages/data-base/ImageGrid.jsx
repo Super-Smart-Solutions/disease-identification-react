@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
-import { getImages } from "../../api/imagesAPI";
-import Pagination from "../Pagination";
+import { getImages } from "../../../api/imagesAPI";
+import Pagination from "../../Pagination";
 
 const ImageGrid = ({ plant_id, diseaseId }) => {
   const [selectedImage, setSelectedImage] = useState(null);
