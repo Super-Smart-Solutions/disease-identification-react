@@ -38,9 +38,6 @@ const CustomDropdown = ({
     onChange(option);
     setIsOpen(false);
     setInputValue(option.label);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
   };
 
   const toggleDropdown = () => {

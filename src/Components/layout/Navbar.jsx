@@ -146,13 +146,13 @@ const Navbar = React.memo(({ auth = true }) => {
         window.location.href = "/";
       },
     },
-    ...(Array.isArray(user?.roles) && user.roles[0]?.name === "super_user"
+    ...(Array.isArray(user?.roles) && user.roles[0]?.name !== "super_user"
       ? [
           {
             label: t("admin_key"),
             icon: <RiAdminFill />,
             onClick: () => {
-              window.open(ADMIN_URL, "_blank"); // open in new tab
+              navigate("/admin");
             },
           },
         ]

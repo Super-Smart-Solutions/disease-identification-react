@@ -122,6 +122,11 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
                   : t(`diseases.${diseaseData?.english_name}`, {
                       defaultValue: diseaseData?.english_name || t("loading"),
                     })}
+                <span className=" block">{`${t("confidence_level")} : ${
+                  confidenceScore !== null
+                    ? `${confidenceScore.toFixed(2)}%`
+                    : t("loading_key")
+                }`}</span>
                 {confidenceScore && !isHealthy && diseaseData && (
                   <Button
                     className="flex items-center gap-2 mx-auto mt-2"
@@ -136,26 +141,33 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-2 justify-center items-center  
-          ">
+          {predictionFailed ? (
+            <div className="flec flex-col items-center ">
+              <div className="text-red-500 text-center mb-2">
+                {t("detection_inconclusive_message")}
+              </div>
+              <div className=" flex gap-2 justify-center">
+                <Button onClick={handleDeepAnalysis}>
+                  {t("go_to_deep_analysis_key")}
+                </Button>
+                <Button
+                  className="flex items-center gap-2"
+                  onClick={handleTryDifferentImage}
+                >
+                  <RiImageEditLine size={22} />
+                  {t("try_with_a_different_image_key")}
+                </Button>
+              </div>
+            </div>
+          ) : (
             <Button
-              className="flex items-center gap-2 "
+              className="flex items-center gap-2"
               onClick={handleTryDifferentImage}
             >
               <RiImageEditLine size={22} />
               {t("try_with_a_different_image_key")}
             </Button>
-            {predictionFailed && (
-              <div className="space-y-2">
-                <div className="text-red-500">
-                  {t("detection_inconclusive_message")}
-                </div>
-                <Button onClick={handleDeepAnalysis}>
-                  {t("go_to_deep_analysis_key")}
-                </Button>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       ))}
     </div>

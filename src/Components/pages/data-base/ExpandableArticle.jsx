@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import Button from "../../Button";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Arrow icons
+import { FaChevronUp } from "react-icons/fa"; // Arrow icons
 import farm from "../../../assets/farm.jpg";
 import { ArticleSkeleton } from "../../skeltons/ArticleSkeleton";
 import ExportPdf from "./ExportPdf";
@@ -28,9 +28,17 @@ export default function ExpandableArticle({
         {/* Static image beside the English name */}
 
         <div className=" space-y-6">
-          <h2 className="text-3xl font-bold me-2 text-gray-900">
-            {article?.english_name || t("no_disease_selected_key")}
-          </h2>
+          <div className="flex justify-between">
+            <h2 className="text-3xl font-bold me-2 text-gray-900">
+              {article?.english_name || t("no_disease_selected_key")}
+            </h2>
+            <ExportPdf
+              plant_id={plant_id}
+              diseaseId={diseaseId}
+              article={article}
+              t={t}
+            />
+          </div>
           {article?.arabic_name && (
             <h3 className="text-xl font-bold me-2 text-gray-900">
               {t("arabic_name_key")}: {article?.arabic_name}
@@ -48,12 +56,7 @@ export default function ExpandableArticle({
               t("no_description_key")}
           </motion.p>
         </div>
-        <ExportPdf
-          plant_id={plant_id}
-          diseaseId={diseaseId}
-          article={article}
-          t={t}
-        />
+
         <img
           src={plant_id ? `${plant_id}.jpg` : farm}
           alt="Disease"
