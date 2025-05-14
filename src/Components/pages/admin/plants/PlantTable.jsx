@@ -66,14 +66,14 @@ const PlantTable = ({ onEdit, onAdd, t }) => {
           <button
             onClick={() => onEdit(params.data.id)}
             className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer text-gray-500"
-            title={t("edit")}
+            title={t("edit_key")}
           >
             <FiEdit size={20} />
           </button>
           <button
             onClick={() => setPlantToDelete(params.data.id)}
             className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer text-gray-500"
-            title={t("delete")}
+            title={t("delete_key")}
           >
             <FiTrash2 size={20} />
           </button>
