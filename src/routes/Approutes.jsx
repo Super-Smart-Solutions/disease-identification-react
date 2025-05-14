@@ -20,6 +20,7 @@ import Login from "../Components/pages/auth/Login";
 import Cookies from "js-cookie";
 import Dashboard from "../pages/Dashboard";
 import { useAuthActions } from "../Components/helpers/authHelpers";
+import AdminPlants from "../Components/pages/admin/plants/AdminPlants";
 
 const componentMap = {
   Landing,
@@ -29,8 +30,8 @@ const componentMap = {
   Login,
   Dashboard,
   AdminDashboard: Dashboard,
-  AdminPlants: Models,
-  AdminDiseases: DataBase,
+  AdminDiseases: DataBase, 
+  AdminPlants
 };
 
 const ProtectedRoute = ({ children, isAuthenticated }) => {
@@ -136,7 +137,6 @@ const AppRoutes = () => {
           />
         ))}
       </Route>
-
       {/* Authenticated routes use MainLayout */}
       <Route
         path="/"

@@ -26,6 +26,7 @@ export default function DataGrid({
   onPageSizeChange,
   title = "",
   onSearch,
+  onAdd,
   searchPlaceholder = "Search...",
 }) {
   const { t, i18n } = useTranslation();
@@ -95,11 +96,12 @@ export default function DataGrid({
     <div className="space-y-4">
       {/* Header with title and search */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        {title && (
-          <h2 className="text-xl font-semibold text-gray-800">
-            {loading ? <Skeleton className="h-8 w-48" /> : title}
-          </h2>
-        )}
+        <div className="flex justify-between items-center w-full">
+          {title && (
+            <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+          )}
+          {onAdd && onAdd}
+        </div>
 
         {onSearch && (
           <div className="relative w-full sm:w-64">
