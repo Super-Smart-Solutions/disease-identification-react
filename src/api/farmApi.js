@@ -3,7 +3,7 @@ import axiosInstance from "../utils/axiosInstance";
 const FARM_ENDPOINT = import.meta.env.VITE_FARM_ENDPOINT;
 
 // Fetch all farms (with pagination if supported)
-export const fetchFarms = async (page = 1, pageSize = 10) => {
+export const fetchFarms = async ({ page = 1, pageSize = 10 }) => {
     const response = await axiosInstance.get(FARM_ENDPOINT, {
         params: {
             page,

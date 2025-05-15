@@ -577,6 +577,9 @@
   "add_farm_key": "Add farm",
   "farm_deleted_successfully_key": "Farm deleted successfully",
   "farms_key": "Farms",
+  "add_organization_key": "Add organization",
+  "organization_deleted_successfully_key": "Organization deleted successfully",
+  "organizations_key": "Organizations",
   "location_key": "Location",
   "weather_key": "Weather"
 }

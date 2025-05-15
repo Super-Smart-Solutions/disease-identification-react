@@ -82,7 +82,6 @@ const FarmForm = ({ farmId, onSuccess, onClose, t }) => {
                 name="weather"
                 type="text"
                 className="custom-input"
-                dir="rtl"
               />
               <ErrorMessage
                 name="weather"

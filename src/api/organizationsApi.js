@@ -3,8 +3,13 @@ import axiosInstance from "../utils/axiosInstance";
 const ORGANIZATIONS_ENDPOINT = import.meta.env.VITE_ORGANIZATIONS_ENDPOINT;
 
 // Retrieve all organizations
-export const getOrganizations = async () => {
-    const response = await axiosInstance.get(`${ORGANIZATIONS_ENDPOINT}/`);
+export const getOrganizations = async ({ page = 1, pageSize = 10 }) => {
+    const response = await axiosInstance.get(ORGANIZATIONS_ENDPOINT, {
+        params: {
+            page,
+            size: pageSize,
+        },
+    });
     return response.data;
 };
 

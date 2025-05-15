@@ -17,11 +17,16 @@
     "label": "inferences",
     "protected": true
   },
-
   {
     "path": "farms",
     "element": "AdminFarms",
     "label": "farms",
+    "protected": true
+  },
+  {
+    "path": "organizations",
+    "element": "AdminOrganizations",
+    "label": "organizations",
     "protected": true
   }
 ]
