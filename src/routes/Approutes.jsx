@@ -21,6 +21,7 @@ import Cookies from "js-cookie";
 import Dashboard from "../pages/Dashboard";
 import { useAuthActions } from "../Components/helpers/authHelpers";
 import AdminPlants from "../Components/pages/admin/plants/AdminPlants";
+import AdminDiseases from "../Components/pages/admin/diseases/AdminDiseases";
 
 const componentMap = {
   Landing,
@@ -30,8 +31,8 @@ const componentMap = {
   Login,
   Dashboard,
   AdminDashboard: Dashboard,
-  AdminDiseases: DataBase, 
-  AdminPlants
+  AdminDiseases,
+  AdminPlants,
 };
 
 const ProtectedRoute = ({ children, isAuthenticated }) => {

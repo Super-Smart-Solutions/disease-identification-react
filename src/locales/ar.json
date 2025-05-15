@@ -571,5 +571,8 @@
   "plant_deleted_successfully_key": "تم حذف النبتة بنجاح",
   "delete_failed_key": "فشل حذف النبتة. يرجى المحاولة مرة أخرى.",
   "updated_key": "تم التحديث بنجاح",
-  "created_key": "تم الإنشاء بنجاح"
+  "created_key": "تم الإنشاء بنجاح",
+  "add_disease_key": "اضافة مرض",
+  "disease_deleted_successfully_key": "تم حذف المرض بنجاح",
+  "diseases_key": "الامراض"
 }

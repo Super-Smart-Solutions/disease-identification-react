@@ -1,11 +1,8 @@
-import { FaTachometerAlt, FaLeaf, FaClinicMedical } from 'react-icons/fa';
+import { FaLeaf } from 'react-icons/fa';
+import { GiCarnivorousPlant } from "react-icons/gi";
 
 const dashboardRoutes = [
-    {
-        path: "/admin",
-        label: "dashboard_key",
-        icon: FaTachometerAlt,
-    },
+
     {
         path: "/admin/plants",
         label: "plants_key",
@@ -13,8 +10,8 @@ const dashboardRoutes = [
     },
     {
         path: "/admin/diseases",
-        label: "disease_key",
-        icon: FaClinicMedical,
+        label: "diseases_key",
+        icon: GiCarnivorousPlant,
     },
 ];
 

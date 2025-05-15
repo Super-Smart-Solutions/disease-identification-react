@@ -1,34 +1,34 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
-import { plantSchema } from "../../../../schemas/plantValidation";
+import { diseaseSchema } from "../../../../schemas/diseaseValidation";
 import {
-  useAddPlant,
-  useUpdatePlant,
-  usePlantById,
-} from "../../../../hooks/usePlants";
+  useAddDisease,
+  useUpdateDisease,
+  useDiseaseById,
+} from "../../../../hooks/useDiseases";
 import Button from "../../../Button";
 
-const PlantForm = ({ plantId, onSuccess, onClose, t }) => {
-  const { data: plantData } = usePlantById(plantId);
-  const { mutateAsync: createPlant } = useAddPlant();
-  const { mutateAsync: updatePlant } = useUpdatePlant();
+const DiseaseForm = ({ diseaseId, onSuccess, onClose, t }) => {
+  const { data: diseaseData } = useDiseaseById(diseaseId);
+  const { mutateAsync: createDisease } = useAddDisease();
+  const { mutateAsync: updateDisease } = useUpdateDisease();
 
-  const isEdit = Boolean(plantId);
+  const isEdit = Boolean(diseaseId);
 
   const initialValues = {
-    english_name: plantData?.english_name || "",
-    arabic_name: plantData?.arabic_name || "",
-    scientific_name: plantData?.scientific_name || "",
-    description: plantData?.description || "",
+    english_name: diseaseData?.english_name || "",
+    arabic_name: diseaseData?.arabic_name || "",
+    scientific_name: diseaseData?.scientific_name || "",
+    description: diseaseData?.description || "",
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       if (isEdit) {
-        await updatePlant({ id: plantId, ...values });
+        await updateDisease({ id: diseaseId, ...values });
         toast.success(t("updated_key"));
       } else {
-        await createPlant(values);
+        await createDisease(values);
         toast.success(t("created_key"));
       }
       onSuccess?.();
@@ -45,7 +45,7 @@ const PlantForm = ({ plantId, onSuccess, onClose, t }) => {
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={plantSchema(t)}
+      validationSchema={diseaseSchema(t)}
       onSubmit={handleSubmit}
       enableReinitialize
     >
@@ -141,4 +141,4 @@ const PlantForm = ({ plantId, onSuccess, onClose, t }) => {
   );
 };
 
-export default PlantForm;
+export default DiseaseForm;

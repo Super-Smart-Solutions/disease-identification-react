@@ -569,5 +569,8 @@
   "plant_deleted_successfully_key": "Plant deleted successfully",
   "delete_failed_key": "Failed to delete plant. Please try again.",
   "updated_key": "Updated successfully",
-  "created_key": "Created successfully"
+  "created_key": "Created successfully",
+  "add_disease_key": "Add disease",
+  "disease_deleted_successfully_key": "Disease deleted successfully",
+  "diseases_key": "Diseases"
 }

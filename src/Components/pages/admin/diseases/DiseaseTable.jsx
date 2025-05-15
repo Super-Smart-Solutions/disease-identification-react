@@ -1,34 +1,34 @@
 import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
-import { usePlants, useDeletePlant } from "../../../../hooks/usePlants";
+import { useDiseases, useDeleteDisease } from "../../../../hooks/useDiseases";
 import DataGrid from "../../../../components/DataGrid";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import Button from "../../../Button";
 import ConfirmationModal from "../../../ConfirmationModal";
 
-const PlantTable = ({ onEdit, onAdd, t }) => {
+const dable = ({ onEdit, onAdd, t }) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [plantToDelete, setPlantToDelete] = useState(null);
+  const [diseaseToDelete, setdoDelete] = useState(null);
   const params = useMemo(() => ({ page, pageSize }), [page, pageSize]);
 
-  const { data: plants, isLoading, error } = usePlants(params);
+  const { data: diseases, isLoading, error } = useDiseases(params);
 
-  const deletePlant = useDeletePlant();
+  const deleteDisease = useDeleteDisease();
 
   const handleConfirmDelete = async () => {
     try {
-      await deletePlant.mutateAsync(plantToDelete);
-      toast.success(t("plant_deleted_successfully_key"));
+      await deleteDisease.mutateAsync(diseaseToDelete);
+      toast.success(t("disease_deleted_successfully_key"));
     } catch (err) {
       toast.error(t("delete_failed_key"));
     } finally {
-      setPlantToDelete(null);
+      setdoDelete(null);
     }
   };
 
-  if (isLoading) return <div>Loading plants...</div>;
-  if (error) return <div>Error loading plants</div>;
+  if (isLoading) return <div>Loading diseases...</div>;
+  if (error) return <div>Error loading diseases</div>;
 
   const columnDefs = [
     {
@@ -67,7 +67,7 @@ const PlantTable = ({ onEdit, onAdd, t }) => {
             <FiEdit size={20} />
           </button>
           <button
-            onClick={() => setPlantToDelete(params.data.id)}
+            onClick={() => setdoDelete(params.data.id)}
             className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer text-gray-500"
             title={t("delete_key")}
           >
@@ -83,26 +83,26 @@ const PlantTable = ({ onEdit, onAdd, t }) => {
       <DataGrid
         onAdd={
           <Button variant="outlined" onClick={onAdd}>
-            {t("add_plant_key")}
+            {t("add_disease_key")}
           </Button>
         }
-        rowData={plants?.items || []}
+        rowData={diseases?.items || []}
         colDefs={columnDefs}
-        title={t("plants_key")}
+        title={t("diseases_key")}
         pagination={true}
         currentPage={page}
         pageSize={pageSize}
-        totalItems={plants?.total || 0}
-        totalPages={plants?.pages || 1}
+        totalItems={diseases?.total || 0}
+        totalPages={diseases?.pages || 1}
         onPageChange={setPage}
         onPageSizeChange={setPageSize}
       />
-      {plantToDelete && (
+      {diseaseToDelete && (
         <ConfirmationModal
           t={t}
           onConfirm={handleConfirmDelete}
           onCancel={() => {
-            setPlantToDelete(null);
+            setdoDelete(null);
           }}
         />
       )}
@@ -110,4 +110,4 @@ const PlantTable = ({ onEdit, onAdd, t }) => {
   );
 };
 
-export default PlantTable;
+export default dable;
