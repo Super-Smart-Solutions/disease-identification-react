@@ -186,31 +186,60 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
     setIsGenerating(true);
 
     try {
-      // Clone and replace image sources
-      const pdfContent = pdfRef.current.cloneNode(true);
+      // 1. Create a hidden container in the document
+      const hiddenContainer = document.createElement("div");
+      hiddenContainer.style.position = "fixed";
+      hiddenContainer.style.left = "-10000px";
+      hiddenContainer.style.top = "0";
+      hiddenContainer.style.opacity = "0";
+      document.body.appendChild(hiddenContainer);
 
+      // 2. Clone the content and apply all necessary styles
+      const pdfContent = pdfRef.current.cloneNode(true);
+      pdfContent.style.width = "800px"; // Match your content width
+      hiddenContainer.appendChild(pdfContent);
+
+      // 3. Process images in the cloned content
       processedImages.forEach((img, index) => {
-        const imgEl = pdfContent.querySelectorAll("img")[index];
-        if (imgEl) {
-          imgEl.src = img.processedUrl;
+        const imgEls = pdfContent.querySelectorAll("img");
+        if (imgEls[index]) {
+          imgEls[index].src = img.processedUrl;
         }
       });
 
-      // Temporarily insert content into DOM
-      const originalParent = pdfRef.current.parentNode;
-      const originalNextSibling = pdfRef.current.nextSibling;
-      pdfRef.current.remove();
-      originalParent.insertBefore(pdfContent, originalNextSibling);
+      // 4. Wait for images to load
+      await new Promise((resolve) => {
+        const images = pdfContent.getElementsByTagName("img");
+        let loadedCount = 0;
 
+        if (images.length === 0) resolve();
+
+        const onLoad = () => {
+          loadedCount++;
+          if (loadedCount === images.length) resolve();
+        };
+
+        for (let img of images) {
+          if (img.complete) {
+            loadedCount++;
+          } else {
+            img.addEventListener("load", onLoad);
+            img.addEventListener("error", onLoad); // Continue even if some images fail
+          }
+        }
+
+        if (loadedCount === images.length) resolve();
+      });
+
+      // 5. Generate the PDF
       const canvas = await html2canvas(pdfContent, {
         useCORS: true,
         allowTaint: false,
-        logging: false,
+        logging: true, // Enable for debugging
+        scale: 2, // Higher quality
+        windowWidth: pdfContent.scrollWidth,
+        windowHeight: pdfContent.scrollHeight,
       });
-
-      // Restore DOM
-      pdfContent.remove();
-      originalParent.insertBefore(pdfRef.current, originalNextSibling);
 
       const imgData = canvas.toDataURL("image/jpeg", 0.9);
       const pdf = new jsPDF({
@@ -232,10 +261,17 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
         contentWidth,
         contentHeight
       );
+
       pdf.save(`${article.english_name || "disease"}_report.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
+      // Add user feedback here if needed
     } finally {
+      // Clean up
+      const hiddenContainer = document.querySelector('div[style*="-10000px"]');
+      if (hiddenContainer) {
+        document.body.removeChild(hiddenContainer);
+      }
       setIsGenerating(false);
     }
   };
