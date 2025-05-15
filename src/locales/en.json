@@ -572,5 +572,6 @@
   "created_key": "Created successfully",
   "add_disease_key": "Add disease",
   "disease_deleted_successfully_key": "Disease deleted successfully",
-  "diseases_key": "Diseases"
+  "diseases_key": "Diseases",
+  "inferences_key": "Inferences"
 }

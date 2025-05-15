@@ -574,5 +574,6 @@
   "created_key": "تم الإنشاء بنجاح",
   "add_disease_key": "اضافة مرض",
   "disease_deleted_successfully_key": "تم حذف المرض بنجاح",
-  "diseases_key": "الامراض"
+  "diseases_key": "الامراض",
+  "inferences_key": "الاستدلالات "
 }

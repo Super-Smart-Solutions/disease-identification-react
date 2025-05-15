@@ -1,11 +1,5 @@
 [
   {
-    "path": "/admin",
-    "element": "AdminDashboard",
-    "label": "dashboard",
-    "protected": true
-  },
-  {
     "path": "plants",
     "element": "AdminPlants",
     "label": "plants",
@@ -15,6 +9,12 @@
     "path": "diseases",
     "element": "AdminDiseases",
     "label": "diseases",
+    "protected": true
+  },
+  {
+    "path": "inferences",
+    "element": "LogsSection",
+    "label": "inferences",
     "protected": true
   }
 ]
