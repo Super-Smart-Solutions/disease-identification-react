@@ -23,6 +23,7 @@ import { useAuthActions } from "../Components/helpers/authHelpers";
 import AdminPlants from "../Components/pages/admin/plants/AdminPlants";
 import AdminDiseases from "../Components/pages/admin/diseases/AdminDiseases";
 import LogsSection from "../Components/pages/dashboard/LogsSection";
+import AdminFarms from "../Components/pages/admin/farms/AdminFarms";
 
 const componentMap = {
   Landing,
@@ -31,10 +32,10 @@ const componentMap = {
   Register,
   Login,
   Dashboard,
-  AdminDashboard: Dashboard,
   AdminDiseases,
   AdminPlants,
   LogsSection,
+  AdminFarms,
 };
 
 const ProtectedRoute = ({ children, isAuthenticated }) => {

@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { usePlants, useDeletePlant } from "../../../../hooks/usePlants";
-import DataGrid from "../../../../components/DataGrid";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import Button from "../../../Button";
 import ConfirmationModal from "../../../ConfirmationModal";
+import DataGrid from "../../../../Components/DataGrid";
 
 const PlantTable = ({ onEdit, onAdd, t }) => {
   const [page, setPage] = useState(1);
@@ -27,7 +27,6 @@ const PlantTable = ({ onEdit, onAdd, t }) => {
     }
   };
 
-  if (isLoading) return <div>Loading plants...</div>;
   if (error) return <div>Error loading plants</div>;
 
   const columnDefs = [
@@ -96,6 +95,7 @@ const PlantTable = ({ onEdit, onAdd, t }) => {
         totalPages={plants?.pages || 1}
         onPageChange={setPage}
         onPageSizeChange={setPageSize}
+        loading={isLoading}
       />
       {plantToDelete && (
         <ConfirmationModal

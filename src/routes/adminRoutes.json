@@ -16,5 +16,12 @@
     "element": "LogsSection",
     "label": "inferences",
     "protected": true
+  },
+
+  {
+    "path": "farms",
+    "element": "AdminFarms",
+    "label": "farms",
+    "protected": true
   }
 ]

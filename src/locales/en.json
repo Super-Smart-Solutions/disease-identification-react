@@ -573,5 +573,10 @@
   "add_disease_key": "Add disease",
   "disease_deleted_successfully_key": "Disease deleted successfully",
   "diseases_key": "Diseases",
-  "inferences_key": "Inferences"
+  "inferences_key": "Inferences",
+  "add_farm_key": "Add farm",
+  "farm_deleted_successfully_key": "Farm deleted successfully",
+  "farms_key": "Farms",
+  "location_key": "Location",
+  "weather_key": "Weather"
 }

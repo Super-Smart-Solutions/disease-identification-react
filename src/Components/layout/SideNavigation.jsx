@@ -17,15 +17,15 @@ export default function SideNavigation({ isExpanded, setIsExpanded }) {
 
   return (
     <motion.div
-      className={`bg-white shadow-md flex flex-col h-full overflow-x-hidden`}
+      className={`bg-white shadow-md flex flex-col h-full overflow-x-hidden transition`}
       initial={{ width: 256 }}
       animate={{ width: isExpanded ? 256 : 60 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.5 }}
     >
       <>
         <div className="flex justify-between items-center border-b border-slate-100 p-4">
           {isExpanded && (
-            <h1 className="text-xl font-semibold">{t("dashboard_key")}</h1>
+            <h1 className="text-xl font-semibold text-nowrap">{t("dashboard_key")}</h1>
           )}
           <motion.div
             animate={{ rotate: isExpanded ? 180 : 0 }}

@@ -575,5 +575,10 @@
   "add_disease_key": "اضافة مرض",
   "disease_deleted_successfully_key": "تم حذف المرض بنجاح",
   "diseases_key": "الامراض",
-  "inferences_key": "الاستدلالات "
+  "inferences_key": "الاستدلالات",
+  "add_farm_key": "اضافة مزرعة",
+  "farm_deleted_successfully_key": "تم حذف المزرعة بنجاح",
+  "farms_key": "المزارع",
+  "location_key": "الموقع",
+  "weather_key": "الطقس"
 }
