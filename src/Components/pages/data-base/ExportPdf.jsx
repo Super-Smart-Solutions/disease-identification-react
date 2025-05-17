@@ -5,10 +5,6 @@ import { FaFilePdf, FaSpinner } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { getImages } from "../../../api/imagesAPI";
 import Button from "../../Button";
-import { useTranslation } from "react-i18next";
-
-// Helper functions
-const formatKey = (str) => str?.replace(/\s+/g, "_").toLowerCase();
 
 const formatTextWithLineBreaks = (text, t) => {
   if (!text) return t("no_data_available_key");
@@ -20,7 +16,6 @@ const formatTextWithLineBreaks = (text, t) => {
   ));
 };
 
-// Image processing component
 const ImageProcessor = ({ images, onProcessed }) => {
   useEffect(() => {
     const processImages = async () => {
@@ -75,94 +70,94 @@ const ImageProcessor = ({ images, onProcessed }) => {
   return null;
 };
 
-// PDF Content component
-const PdfContent = React.forwardRef(({ article, processedImages, t }, ref) => {
-  const { i18n } = useTranslation();
-
-  return (
+const PdfContent = React.forwardRef(({ article, processedImages, t }, ref) => (
+  <div
+    style={{
+      position: "absolute",
+      width: "0",
+      height: "0",
+      overflow: "hidden",
+      opacity: 0,
+      pointerEvents: "none",
+      zIndex: -1,
+    }}
+  >
+    {/* This is the actual content block for the PDF.
+        The ref is moved here. This div has the correct dimensions. */}
     <div
       ref={ref}
       style={{
-        position: "fixed",
-        visibility: "hidden",
-        top: "-9999px",
         width: "800px",
-        direction: i18n.language === "ar" ? "rtl" : "ltr",
+        padding: "20px",
+        backgroundColor: "#fff",
+        fontFamily: "Arial, sans-serif",
       }}
     >
-      <div
-        style={{
-          padding: "20px",
-          maxWidth: "800px",
-          backgroundColor: "#fff",
-          fontFamily: "Arial, sans-serif",
-          direction: "inherit",
-        }}
-      >
-        <h2 className="text-3xl font-bold mb-2">
-          {article?.english_name || t("no_disease_selected_key")}
-        </h2>
-        {article?.arabic_name && (
-          <h3>
-            {t("arabic_name_key")}: {article?.arabic_name}
-          </h3>
-        )}
-        {article?.scientific_name && (
-          <h4>
-            {t("scientific_name_key")}: {article?.scientific_name}
-          </h4>
-        )}
+      <h2 className="text-3xl font-bold mb-2">
+        {article?.english_name || t("no_disease_selected_key")}
+      </h2>
+      {article?.arabic_name && (
+        <h3>
+          {t("arabic_name_key")}: {article?.arabic_name}
+        </h3>
+      )}
+      {article?.scientific_name && (
+        <h4>
+          {t("scientific_name_key")}: {article?.scientific_name}
+        </h4>
+      )}
 
-        <div className="mt-4">
-          <h4>{t("Symptoms")}</h4>
-          <p>
-            {formatTextWithLineBreaks(
-              article?.symptoms || t("no_symptoms_key")
-            )}
-          </p>
-        </div>
-
-        <div className="mt-4">
-          <h4>{t("Description")}</h4>
-          <p>
-            {formatTextWithLineBreaks(
-              article?.description || t("no_description_key")
-            )}
-          </p>
-        </div>
-
-        <div className="mt-4">
-          <h4>{t("Control Methods")}</h4>
-          <p>
-            {formatTextWithLineBreaks(
-              article?.treatments || t("no_treatment_key")
-            )}
-          </p>
-        </div>
-
-        {processedImages.length > 0 && (
-          <div className="mt-6 grid grid-cols-4 gap-4">
-            {processedImages.map((image, index) => (
-              <img
-                key={index}
-                src={image.processedUrl}
-                alt={`${article.english_name} - ${index + 1}`}
-                className="w-full h-auto max-h-[200px] object-contain border rounded"
-                loading="eager"
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "/farm.jpeg";
-                }}
-              />
-            ))}
-          </div>
-        )}
+      <div className="mt-4">
+        <h4>{t("Symptoms")}</h4>
+        <p>
+          {formatTextWithLineBreaks(
+            article?.symptoms || t("no_symptoms_key"),
+            t
+          )}
+        </p>
       </div>
-    </div>
-  );
-});
 
-// Status indicators
+      <div className="mt-4">
+        <h4>{t("Description")}</h4>
+        <p>
+          {formatTextWithLineBreaks(
+            article?.description || t("no_description_key"),
+            t
+          )}
+        </p>
+      </div>
+
+      <div className="mt-4">
+        <h4>{t("Control Methods")}</h4>
+        <p>
+          {formatTextWithLineBreaks(
+            article?.treatments || t("no_treatment_key"),
+            t
+          )}
+        </p>
+      </div>
+
+      {processedImages.length > 0 && (
+        <div className="mt-6 grid grid-cols-4 gap-4">
+          {processedImages.map((image, index) => (
+            <img
+              key={index}
+              src={image.processedUrl}
+              alt={`${article.english_name} - ${index + 1}`}
+              className="w-full h-auto max-h-[200px] object-contain border rounded"
+              loading="eager"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "/farm.jpeg";
+              }}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+));
+
 const LoadingIndicator = () => (
   <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-white bg-opacity-50">
     <FaSpinner className="animate-spin text-2xl text-primary" />
@@ -175,7 +170,6 @@ const ErrorIndicator = ({ t }) => (
   </div>
 );
 
-// Main component
 export default function ExportPdf({ plant_id, diseaseId, article, t }) {
   const pdfRef = useRef();
   const [isGenerating, setIsGenerating] = useState(false);
@@ -203,30 +197,27 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
     setIsGenerating(true);
 
     try {
-      // 1. Create a hidden container in the document
       const hiddenContainer = document.createElement("div");
       hiddenContainer.style.position = "fixed";
       hiddenContainer.style.left = "-10000px";
       hiddenContainer.style.top = "0";
       hiddenContainer.style.opacity = "0";
+
       document.body.appendChild(hiddenContainer);
 
-      // 2. Clone the content and apply all necessary styles
-      const pdfContent = pdfRef.current.cloneNode(true);
-      pdfContent.style.width = "800px"; // Match your content width
-      hiddenContainer.appendChild(pdfContent);
+      const pdfContentToRender = pdfRef.current.cloneNode(true);
 
-      // 3. Process images in the cloned content
+      hiddenContainer.appendChild(pdfContentToRender);
+
       processedImages.forEach((img, index) => {
-        const imgEls = pdfContent.querySelectorAll("img");
+        const imgEls = pdfContentToRender.querySelectorAll("img");
         if (imgEls[index]) {
           imgEls[index].src = img.processedUrl;
         }
       });
 
-      // 4. Wait for images to load
       await new Promise((resolve) => {
-        const images = pdfContent.getElementsByTagName("img");
+        const images = pdfContentToRender.getElementsByTagName("img");
         let loadedCount = 0;
 
         if (images.length === 0) resolve();
@@ -241,21 +232,20 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
             loadedCount++;
           } else {
             img.addEventListener("load", onLoad);
-            img.addEventListener("error", onLoad); // Continue even if some images fail
+            img.addEventListener("error", onLoad);
           }
         }
 
         if (loadedCount === images.length) resolve();
       });
 
-      // 5. Generate the PDF
-      const canvas = await html2canvas(pdfContent, {
+      const canvas = await html2canvas(pdfContentToRender, {
         useCORS: true,
         allowTaint: false,
-        logging: true, // Enable for debugging
-        scale: 2, // Higher quality
-        windowWidth: pdfContent.scrollWidth,
-        windowHeight: pdfContent.scrollHeight,
+        logging: true,
+        scale: 2,
+        windowWidth: pdfContentToRender.scrollWidth,
+        windowHeight: pdfContentToRender.scrollHeight,
       });
 
       const imgData = canvas.toDataURL("image/jpeg", 0.9);
@@ -282,11 +272,9 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
       pdf.save(`${article.english_name || "disease"}_report.pdf`);
     } catch (error) {
       console.error("Error generating PDF:", error);
-      // Add user feedback here if needed
     } finally {
-      // Clean up
       const hiddenContainer = document.querySelector('div[style*="-10000px"]');
-      if (hiddenContainer) {
+      if (hiddenContainer && hiddenContainer.parentNode === document.body) {
         document.body.removeChild(hiddenContainer);
       }
       setIsGenerating(false);
