@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import {
   useOrganizations,
   useDeleteOrganization,

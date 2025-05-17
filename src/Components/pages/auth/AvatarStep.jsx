@@ -6,7 +6,7 @@ import { IoClose } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { uploadUserAvatar } from "../../../api/userAPI";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { motion } from "framer-motion";
 
 const AvatarStep = ({ registerData }) => {

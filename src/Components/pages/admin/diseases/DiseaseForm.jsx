@@ -1,5 +1,5 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { diseaseSchema } from "../../../../schemas/diseaseValidation";
 import {
   useAddDisease,

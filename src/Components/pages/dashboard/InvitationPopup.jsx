@@ -8,7 +8,7 @@ import {
   rejectInvitation,
 } from "../../../api/inviteApi";
 import Button from "../../Button";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useUserData } from "../../../hooks/useUserData";
 import moment from "moment";
 import familyImage from "../../../assets/family.png";

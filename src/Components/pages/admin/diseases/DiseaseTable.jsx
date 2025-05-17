@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useDiseases, useDeleteDisease } from "../../../../hooks/useDiseases";
 import DataGrid from "../../../../Components/DataGrid";
 import { FiEdit, FiTrash2 } from "react-icons/fi";

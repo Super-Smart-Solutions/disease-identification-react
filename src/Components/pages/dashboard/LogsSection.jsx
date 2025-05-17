@@ -12,7 +12,7 @@ import ImageById from "./ImageById";
 import { getStatusTranslation } from "../../../utils/statusTranslations";
 import moment from "moment/moment";
 import { useUserData } from "../../../hooks/useUserData";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import Button from "../../Button";
 import DataGrid from "../../DataGrid";
 

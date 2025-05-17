@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { usePlants, useDeletePlant } from "../../../../hooks/usePlants";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import Button from "../../../Button";

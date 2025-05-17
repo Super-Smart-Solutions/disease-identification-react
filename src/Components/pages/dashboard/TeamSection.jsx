@@ -12,7 +12,7 @@ import { FiTrash } from "react-icons/fi";
 import ConfirmationModal from "../../ConfirmationModal";
 import { useUserTeam } from "../../../api/useUserTeam";
 import { createInvitation } from "../../../api/inviteApi";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import DataGrid from "../../DataGrid";
 
 export default function TeamSection() {

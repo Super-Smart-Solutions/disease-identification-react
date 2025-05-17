@@ -12,6 +12,8 @@ import {
   FaSignOutAlt,
   FaGlobe,
   FaUserCircle,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import { useAuthActions } from "../helpers/authHelpers";
@@ -71,6 +73,7 @@ const Navbar = React.memo(({ auth = true }) => {
   const { logout } = useAuthActions();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user")) || {};
@@ -179,45 +182,59 @@ const Navbar = React.memo(({ auth = true }) => {
         auth && location.pathname !== "/" ? "bg-primary" : "bg-black opacity-80"
       }`}
     >
-      <div className="w-full flex justify-between items-center px-6">
-        {/* Welcome Menu */}
-        {auth ? (
-          <DropdownMenu
-            buttonRef={welcomeButtonRef}
-            menuRef={welcomeMenuRef}
-            isOpen={isMenuOpen}
-            toggle={() => setIsMenuOpen(!isMenuOpen)}
-            buttonContent={
-              <div className="flex items-center gap-2">
-                {userAvatar ? (
-                  <img
-                    src={userAvatar}
-                    alt="User avatar"
-                    className="w-8 h-8 rounded-full object-cover"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "user-avatar.png";
-                    }}
-                  />
-                ) : (
-                  <FaUserCircle size={24} />
-                )}
-                <span className="text-lg text-white">
-                  {t("welcome_key")}{" "}
-                  {firstName && <span className="font-bold">{firstName}</span>}
-                </span>
-              </div>
-            }
-            options={welcomeOptions}
-            position="left"
-            buttonClassName="text-white"
-          />
-        ) : (
-          <span className="text-lg text-white w-1/3">{t("welcome_key")}</span>
-        )}
+      <div className="w-full flex justify-between items-center px-6 relative">
+        {/* Mobile Menu Button */}
+        <button
+          className="lg:hidden text-white"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? "" : <FaBars size={24} />}
+        </button>
 
-        {/* Navigation Links */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-6">
+        {/* Welcome Menu */}
+        <div className="lg:block">
+          {auth ? (
+            <DropdownMenu
+              buttonRef={welcomeButtonRef}
+              menuRef={welcomeMenuRef}
+              isOpen={isMenuOpen}
+              toggle={() => setIsMenuOpen(!isMenuOpen)}
+              buttonContent={
+                <div className="flex items-center gap-2">
+                  {userAvatar ? (
+                    <img
+                      src={userAvatar}
+                      alt="User avatar"
+                      className="w-8 h-8 rounded-full object-cover"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "user-avatar.png";
+                      }}
+                    />
+                  ) : (
+                    <FaUserCircle size={24} />
+                  )}
+                  <span className="text-lg text-white hidden lg:inline">
+                    {t("welcome_key")}{" "}
+                    {firstName && (
+                      <span className="font-bold">{firstName}</span>
+                    )}
+                  </span>
+                </div>
+              }
+              options={welcomeOptions}
+              position="left"
+              buttonClassName="text-white"
+            />
+          ) : (
+            <span className="text-lg text-white hidden lg:block w-1/3">
+              {t("welcome_key")}
+            </span>
+          )}
+        </div>
+
+        {/* Navigation Links - Desktop */}
+        <div className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-6">
           {navRoutes.map((route) => (
             <NavLink
               key={route.path}
@@ -236,6 +253,32 @@ const Navbar = React.memo(({ auth = true }) => {
           ))}
         </div>
 
+        {/* Mobile Navigation Menu */}
+        <div
+          className={`lg:hidden fixed inset-0 bg-primary-90 z-50 transition-transform duration-300 ${
+            isMobileMenuOpen ? "translate-start-50" : "-translate-x-full"
+          }`}
+        >
+          <button
+            className="lg:hidden text-white relative start-10 top-5"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <FaTimes size={24} /> : ""}
+          </button>
+          <div className="flex flex-col items-center justify-center h-full space-y-8">
+            {navRoutes.map((route) => (
+              <NavLink
+                key={route.path}
+                to={route.path}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-xl font-medium text-white hover:text-gray-300"
+              >
+                {t(route.label)}
+              </NavLink>
+            ))}
+          </div>
+        </div>
+
         {/* Language Dropdown */}
         <DropdownMenu
           buttonRef={languageButtonRef}
@@ -245,7 +288,9 @@ const Navbar = React.memo(({ auth = true }) => {
           buttonContent={
             <div className="flex items-center gap-2 text-sm text-white">
               <FaGlobe size={16} />
-              {i18n.language === "en" ? "English" : "العربية"}
+              <span className="hidden lg:inline">
+                {i18n.language === "en" ? "English" : "العربية"}
+              </span>
             </div>
           }
           options={languageOptions}
