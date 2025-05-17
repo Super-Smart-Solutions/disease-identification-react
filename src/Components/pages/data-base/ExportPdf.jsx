@@ -5,6 +5,7 @@ import { FaFilePdf, FaSpinner } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { getImages } from "../../../api/imagesAPI";
 import Button from "../../Button";
+import { useTranslation } from "react-i18next";
 
 // Helper functions
 const formatKey = (str) => str?.replace(/\s+/g, "_").toLowerCase();
@@ -75,75 +76,91 @@ const ImageProcessor = ({ images, onProcessed }) => {
 };
 
 // PDF Content component
-const PdfContent = React.forwardRef(({ article, processedImages, t }, ref) => (
-  <div ref={ref} style={{ position: "absolute", left: "-9999px" }}>
+const PdfContent = React.forwardRef(({ article, processedImages, t }, ref) => {
+  const { i18n } = useTranslation();
+
+  return (
     <div
+      ref={ref}
       style={{
-        padding: "20px",
-        maxWidth: "800px",
-        backgroundColor: "#fff",
-        fontFamily: "Arial, sans-serif",
+        position: "fixed",
+        visibility: "hidden",
+        top: "-9999px",
+        width: "800px",
+        direction: i18n.language === "ar" ? "rtl" : "ltr",
       }}
     >
-      <h2 className="text-3xl font-bold mb-2">
-        {article?.english_name || t("no_disease_selected_key")}
-      </h2>
-      {article?.arabic_name && (
-        <h3>
-          {t("arabic_name_key")}: {article?.arabic_name}
-        </h3>
-      )}
-      {article?.scientific_name && (
-        <h4>
-          {t("scientific_name_key")}: {article?.scientific_name}
-        </h4>
-      )}
+      <div
+        style={{
+          padding: "20px",
+          maxWidth: "800px",
+          backgroundColor: "#fff",
+          fontFamily: "Arial, sans-serif",
+          direction: "inherit",
+        }}
+      >
+        <h2 className="text-3xl font-bold mb-2">
+          {article?.english_name || t("no_disease_selected_key")}
+        </h2>
+        {article?.arabic_name && (
+          <h3>
+            {t("arabic_name_key")}: {article?.arabic_name}
+          </h3>
+        )}
+        {article?.scientific_name && (
+          <h4>
+            {t("scientific_name_key")}: {article?.scientific_name}
+          </h4>
+        )}
 
-      <div className="mt-4">
-        <h4>{t("Symptoms")}</h4>
-        <p>
-          {formatTextWithLineBreaks(article?.symptoms || t("no_symptoms_key"))}
-        </p>
-      </div>
-
-      <div className="mt-4">
-        <h4>{t("Description")}</h4>
-        <p>
-          {formatTextWithLineBreaks(
-            article?.description || t("no_description_key")
-          )}
-        </p>
-      </div>
-
-      <div className="mt-4">
-        <h4>{t("Control Methods")}</h4>
-        <p>
-          {formatTextWithLineBreaks(
-            article?.treatments || t("no_treatment_key")
-          )}
-        </p>
-      </div>
-
-      {processedImages.length > 0 && (
-        <div className="mt-6 grid grid-cols-4 gap-4">
-          {processedImages.map((image, index) => (
-            <img
-              key={index}
-              src={image.processedUrl}
-              alt={`${article.english_name} - ${index + 1}`}
-              className="w-full h-auto max-h-[200px] object-contain border rounded"
-              loading="eager"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = "/farm.jpeg";
-              }}
-            />
-          ))}
+        <div className="mt-4">
+          <h4>{t("Symptoms")}</h4>
+          <p>
+            {formatTextWithLineBreaks(
+              article?.symptoms || t("no_symptoms_key")
+            )}
+          </p>
         </div>
-      )}
+
+        <div className="mt-4">
+          <h4>{t("Description")}</h4>
+          <p>
+            {formatTextWithLineBreaks(
+              article?.description || t("no_description_key")
+            )}
+          </p>
+        </div>
+
+        <div className="mt-4">
+          <h4>{t("Control Methods")}</h4>
+          <p>
+            {formatTextWithLineBreaks(
+              article?.treatments || t("no_treatment_key")
+            )}
+          </p>
+        </div>
+
+        {processedImages.length > 0 && (
+          <div className="mt-6 grid grid-cols-4 gap-4">
+            {processedImages.map((image, index) => (
+              <img
+                key={index}
+                src={image.processedUrl}
+                alt={`${article.english_name} - ${index + 1}`}
+                className="w-full h-auto max-h-[200px] object-contain border rounded"
+                loading="eager"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/farm.jpeg";
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
-  </div>
-));
+  );
+});
 
 // Status indicators
 const LoadingIndicator = () => (

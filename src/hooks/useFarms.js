@@ -5,7 +5,7 @@ import {
     addFarm,
     updateFarm,
     deleteFarm,
-} from "../api/farmAPI";
+} from "../api/farmApi";
 
 // Fetch paginated farms
 export const useFarms = (page = 1, pageSize = 10) => {

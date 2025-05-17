@@ -149,7 +149,7 @@ const Navbar = React.memo(({ auth = true }) => {
         window.location.href = "/";
       },
     },
-    ...(Array.isArray(user?.roles) && user.roles[0]?.name === "superUser"
+    ...(Array.isArray(user?.roles) && user.roles[0]?.name === "superuser"
       ? [
           {
             label: t("admin_key"),
