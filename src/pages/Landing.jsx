@@ -56,7 +56,7 @@ export default function Landing() {
             <span dir="rtl" className="w-10/12 text-6xl">
               {t("disease_identification_project_key")}
             </span>
-            <span className="block mt-8 w-6/12 text-center mx-auto opacity-80">
+            <span className="block mt-8 w-6/12 text-center mx-auto  text-xl font-semibold">
               {t("disease_identification_description_key")}
             </span>
             <Link
