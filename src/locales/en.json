@@ -697,6 +697,15 @@
   "previously_widely_grown": "previously widely grown",
   "grown_on_small_scale_harvested_from_wild_previously_widely_grown": "grown on small scale, harvested from wild, previously widely grown",
   "other": "other",
-  "harvested_from_wild_previously_widely_grown": "harvested from wild, previously widely grown"
+  "harvested_from_wild_previously_widely_grown": "harvested from wild, previously widely grown",
+  "consider_adding_lime_to_increase_soil_ph_test_soil_first_to_determine_the_exact_amount_needed": "Consider adding lime to increase soil pH. Test soil first to determine the exact amount needed.",
+  "add_sulfur_or_organic_matter_to_lower_soil_ph_regular_monitoring_is_recommended": "Add sulfur or organic matter to lower soil pH. Regular monitoring is recommended.",
+  "implement_proper_drainage_to_reduce_salt_accumulation": "Implement proper drainage to reduce salt accumulation.",
+  "consider_leaching_the_soil_with_good_quality_irrigation_water": "Consider leaching the soil with good quality irrigation water.",
+  "add_organic_matter_to_improve_soil_structure_and_drainage": "Add organic matter to improve soil structure and drainage.",
+  "current_salinity_levels_are_lower_than_optimal_monitor_regularly_but_no_immediate_action_needed": "Current salinity levels are lower than optimal. Monitor regularly but no immediate action needed.",
+  "consider_using_row_covers_or_mulch_to_retain_heat": "Consider using row covers or mulch to retain heat.",
+  "implement_shade_cloth_or_other_cooling_methods_to_protect_plants_from_excessive_heat": "Implement shade cloth or other cooling methods to protect plants from excessive heat.",
+  "all_parameters_are_within_optimal_ranges": "All parameters are within optimal ranges."
 
 }
