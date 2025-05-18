@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { assessSoil, fetchCrops } from "../api/soilApi";
-import { useSoilCalculatorValidations } from "../Components/pages/soil-calculator/soilCalculatorValidations";
 import { setSoilCalculatorOpen } from "../redux/features/soilCalculatorSlice";
+import { useSoilCalculatorValidations } from "../schemas/soilCalculatorValidations";
 
 export function useSoilCalculator({ user, dispatch, navigate }) {
     const [currentStep, setCurrentStep] = useState(1);

@@ -1,16 +1,16 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { WiStars } from "react-icons/wi"; // Make sure to install react-icons
-import SoilCalculator from "./pages/soil-calculator/SoilCalculator";
 import { useState, useEffect, useRef } from "react";
 import ReviewFormModal from "./features/ReviewFormModal";
 import { useTranslation } from "react-i18next";
 import { IoCalculator } from "react-icons/io5";
 import { GiStarsStack } from "react-icons/gi";
-import { useSoilCalculator } from "../hooks/useSoilCalculator";
 import { useUserData } from "../hooks/useUserData";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useReviewForm } from "../hooks/features/rating/useReviewForm";
+import SoilCalculator from "./features/soil-calculator/SoilCalculator";
+import { useSoilCalculator } from "../hooks/useSoilCalculator";
 
 const FeaturesPanel = () => {
   const [isExpanded, setIsExpanded] = useState(false);

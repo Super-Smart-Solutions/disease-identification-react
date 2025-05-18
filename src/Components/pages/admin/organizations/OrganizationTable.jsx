@@ -53,8 +53,7 @@ const OrganizationTable = ({ onEdit, onAdd, t }) => {
       cellRenderer: (params) => (
         <div className="flex items-center">
           <button
-            disabled={true}
-            onClick={() => onEdit(params.data.id)}
+            onClick={() => onEdit(params.data)}
             className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer text-gray-500"
             title={t("edit_key")}
           >

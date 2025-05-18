@@ -9,21 +9,21 @@ import {
 import Button from "../../../Button";
 
 const OrganizationForm = ({ organizationId, onSuccess, onClose, t }) => {
-  const { data: organizationData } = useOrganizationById(organizationId);
+  // const { data: organizationData } = useOrganizationById(organizationId);
   const { mutateAsync: createOrganization } = useAddOrganization();
   const { mutateAsync: updateOrganization } = useUpdateOrganization();
 
-  const isEdit = Boolean(organizationId);
+  const isEdit = Boolean(organizationId?.id);
 
   const initialValues = {
-    name: organizationData?.name || "",
-    description: organizationData?.description || "",
+    name: organizationId?.name || "",
+    description: organizationId?.description || "",
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       if (isEdit) {
-        await updateOrganization({ id: organizationId, ...values });
+        await updateOrganization({ id: organizationId?.id, ...values });
         toast.success(t("updated_key"));
       } else {
         await createOrganization(values);
