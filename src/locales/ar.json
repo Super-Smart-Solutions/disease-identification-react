@@ -583,5 +583,7 @@
   "organization_deleted_successfully_key": "تم حذف الفريق بنجاح",
   "organizations_key": "الفرق",
   "location_key": "الموقع",
-  "weather_key": "الطقس"
+  "weather_key": "الطقس" , 
+  "control_methods_key": "طرق الوقاية"
+
 }

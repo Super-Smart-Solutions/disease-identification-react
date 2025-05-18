@@ -581,5 +581,6 @@
   "organization_deleted_successfully_key": "Organization deleted successfully",
   "organizations_key": "Organizations",
   "location_key": "Location",
-  "weather_key": "Weather"
+  "weather_key": "Weather",
+  "control_methods_key": "Control methods"
 }

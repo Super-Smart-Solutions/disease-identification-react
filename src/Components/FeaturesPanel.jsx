@@ -88,7 +88,7 @@ const FeaturesPanel = () => {
                 color="white"
               />
             </div>{" "}
-            <div
+            {/* <div
               onClick={() => {
                 openReviewModal();
                 setIsExpanded(false);
@@ -96,7 +96,7 @@ const FeaturesPanel = () => {
               className="bg-primary cursor-pointer p-2 rounded-full shadow-md  w-fit"
             >
               <GiStarsStack title={t("rate_key")} size={32} color="white" />
-            </div>
+            </div> */}
           </motion.div>
         )}
       </AnimatePresence>

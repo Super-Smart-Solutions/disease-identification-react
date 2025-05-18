@@ -6,13 +6,21 @@ import Button from "../../Button";
 import { fetchDiseaseById } from "../../../api/diseaseAPI";
 import { detectDisease, visualizeInference } from "../../../api/inferenceAPI";
 import { GiNotebook } from "react-icons/gi";
-import { DiGoogleAnalytics } from "react-icons/di";
 import { RiImageEditLine } from "react-icons/ri";
+import { useUserData } from "../../../hooks/useUserData";
+import { useDispatch } from "react-redux";
+import { useReviewForm } from "../../../hooks/features/rating/useReviewForm";
 
 export default function ModelingStepFour({ modelingData, setModelingData }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-
+  const { user } = useUserData();
+  const dispatch = useDispatch();
+  const { handleOpenModal: openReviewModal } = useReviewForm({
+    user,
+    dispatch,
+    navigate,
+  });
   // Fetch disease prediction
   const {
     data: prediction,
@@ -47,7 +55,16 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
     isError: isVisualizationError,
   } = useQuery({
     queryKey: ["visualization", modelingData.inference_id],
-    queryFn: () => visualizeInference(modelingData.inference_id),
+    queryFn: async () => {
+      const result = await visualizeInference(modelingData.inference_id);
+
+      if (result) {
+        setTimeout(() => {
+          openReviewModal();
+        }, 2000);
+      }
+      return result;
+    },
     enabled: !!modelingData?.inference_id && !!prediction?.disease_id,
     staleTime: 60 * 60 * 1000,
     retry: false,
@@ -82,7 +99,6 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
   if (!modelingData?.selected_file?.length) {
     return <div>{t("no_image_selected")}</div>;
   }
-  console.log(predictionError);
 
   return (
     <div className="space-y-4">

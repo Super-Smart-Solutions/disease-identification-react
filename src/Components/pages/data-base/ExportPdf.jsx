@@ -118,7 +118,7 @@ const PdfContent = React.forwardRef(({ article, processedImages, t }, ref) => (
       </div>
 
       <div className="mt-4">
-        <h4>{t("Description")}</h4>
+        <h4 className=" text-2xl">{t("description_key")}</h4>
         <p>
           {formatTextWithLineBreaks(
             article?.description || t("no_description_key"),
@@ -128,7 +128,7 @@ const PdfContent = React.forwardRef(({ article, processedImages, t }, ref) => (
       </div>
 
       <div className="mt-4">
-        <h4>{t("Control Methods")}</h4>
+        <h4 className=" text-2xl">{t("control_methods_key")}</h4>
         <p>
           {formatTextWithLineBreaks(
             article?.treatments || t("no_treatment_key"),
