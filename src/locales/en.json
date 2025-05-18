@@ -582,5 +582,16 @@
   "organizations_key": "Organizations",
   "location_key": "Location",
   "weather_key": "Weather",
-  "control_methods_key": "Control methods"
+  "control_methods_key": "Control methods",
+  "life_form_key": "Life Form",
+  "physiology_key": "Physiology",
+  "habit_key": "Habit",
+  "life_span_key": "Life Span",
+  "plant_attributes_key": "Plant Attributes",
+  "soil_depth_key": "Soil Depth",
+  "soil_texture_key": "Soil Texture",
+  "soil_salinity_key": "Soil Salinity",
+  "soil_drainage_key": "Soil Drainage",
+  "soil_ph_key": "Soil pH",
+  "light_intensity_key": "Light Intensity"
 }

@@ -583,7 +583,17 @@
   "organization_deleted_successfully_key": "تم حذف الفريق بنجاح",
   "organizations_key": "الفرق",
   "location_key": "الموقع",
-  "weather_key": "الطقس" , 
-  "control_methods_key": "طرق الوقاية"
-
+  "weather_key": "الطقس",
+  "control_methods_key": "طرق الوقاية",
+  "life_form_key": "شكل الحياة",
+  "physiology_key": "الفسيولوجيا",
+  "habit_key": "العادة",
+  "life_span_key": "عمر الحياة",
+  "plant_attributes_key": "خصائص النبات",
+  "soil_depth_key": "عمق التربة",
+  "soil_texture_key": "قوام التربة",
+  "soil_salinity_key": "ملوحة التربة",
+  "soil_drainage_key": "تصريف التربة",
+  "soil_ph_key": "درجة حموضة التربة",
+  "light_intensity_key": "شدة الإضاءة"
 }
