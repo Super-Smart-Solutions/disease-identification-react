@@ -25,6 +25,7 @@ import AdminDiseases from "../Components/pages/admin/diseases/AdminDiseases";
 import LogsSection from "../Components/pages/dashboard/LogsSection";
 import AdminFarms from "../Components/pages/admin/farms/AdminFarms";
 import AdminOrganizations from "../Components/pages/admin/organizations/AdminOrganizations";
+import AdminImages from "../Components/pages/admin/images/AdminImages";
 
 const componentMap = {
   Landing,
@@ -38,6 +39,7 @@ const componentMap = {
   LogsSection,
   AdminFarms,
   AdminOrganizations,
+  AdminImages,
 };
 
 const ProtectedRoute = ({ children, isAuthenticated }) => {

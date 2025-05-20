@@ -33,10 +33,10 @@
   "plants_key": "Plants",
   "animals_key": "Animals",
   "search_about_data_key": "Search",
-  "select_plant_key": "Select Category",
+  "select_plant_key": "Select Plant",
   "select_disease_key": "Select Disease",
   "plants_animals_key": "Plants and Animals",
-  "select_plant_required_key": "Please select a category.",
+  "select_plant_required_key": "Please select a plant.",
   "select_disease_required_key": "Please select a disease.",
   "get_data_key": "Get Data",
   "models_key": "Models",
@@ -617,7 +617,6 @@
   "vine_shrub": "vine, shrub",
   "herb_shrub": "herb, shrub",
   "herb_vine_subshrub": "herb, vine, sub-shrub",
-  "other": "other",
   "subshrub_shrub": "sub-shrub, shrub",
   "vine_subshrub": "vine, sub-shrub",
   "vine_shrub_tree": "vine, shrub, tree",
@@ -706,6 +705,14 @@
   "current_salinity_levels_are_lower_than_optimal_monitor_regularly_but_no_immediate_action_needed": "Current salinity levels are lower than optimal. Monitor regularly but no immediate action needed.",
   "consider_using_row_covers_or_mulch_to_retain_heat": "Consider using row covers or mulch to retain heat.",
   "implement_shade_cloth_or_other_cooling_methods_to_protect_plants_from_excessive_heat": "Implement shade cloth or other cooling methods to protect plants from excessive heat.",
-  "all_parameters_are_within_optimal_ranges": "All parameters are within optimal ranges."
-
+  "all_parameters_are_within_optimal_ranges": "All parameters are within optimal ranges.",
+  "image_name_placeholder_key": "Enter image name",
+  "image_type_key": "Image Type",
+  "image_type_placeholder_key": "eg : tree , leaf ,... ",
+  "image_upload_key": "Image Upload",
+  "add_image_key": "Add image",
+  "image_updated_key": "Image updated successfully",
+  "image_created_key": "Image created successfully",
+  "commonErrors.somethingWentWrong": "Something went wrong, please try again",
+  "images_key": "Images"
 }

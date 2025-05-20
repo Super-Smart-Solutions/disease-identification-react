@@ -363,7 +363,7 @@
   "active_key": "نشط",
   "pending_key": "قيد الانتظار",
   "inactive_key": "غير نشط",
-  "name_required_key": "اسم الفريق مطلوب",
+  "name_required_key": "الاسم مطلوب",
   "name_too_short_key": "يجب أن يكون الاسم على الأقل حرفين",
   "name_too_long_key": "يجب أن لا يتجاوز الاسم 50 حرفاً",
   "description_required_key": "الوصف مطلوب",
@@ -597,7 +597,6 @@
   "soil_ph_key": "درجة حموضة التربة",
   "light_intensity_key": "شدة الإضاءة",
 
-
   "erect": "منتصب",
   "prostrate_procumbent_semierect": "زاحف / متمدد / شبه منتصب",
   "climber_scrambler_scadent": "متسلق / زاحف / متسلق بسيط",
@@ -699,7 +698,6 @@
   "grown_on_small_scale_previously_widely_grown": "تزرع على نطاق صغير، كانت تزرع على نطاق واسع سابقًا",
   "previously_widely_grown": "كانت تزرع على نطاق واسع سابقًا",
   "grown_on_small_scale_harvested_from_wild_previously_widely_grown": "تزرع على نطاق صغير، تحصد من البرية، كانت تزرع على نطاق واسع سابقًا",
-  "other": "أخرى",
   "harvested_from_wild_previously_widely_grown": "تحصد من البرية، كانت تزرع على نطاق واسع سابقًا",
   "consider_adding_lime_to_increase_soil_ph_test_soil_first_to_determine_the_exact_amount_needed": "فكر في إضافة الجير لزيادة درجة حموضة التربة. اختبر التربة أولاً لتحديد الكمية المطلوبة بدقة.",
   "add_sulfur_or_organic_matter_to_lower_soil_ph_regular_monitoring_is_recommended": "أضف الكبريت أو المادة العضوية لخفض درجة حموضة التربة. يُنصح بالمراقبة المنتظمة.",
@@ -709,6 +707,14 @@
   "current_salinity_levels_are_lower_than_optimal_monitor_regularly_but_no_immediate_action_needed": "مستويات الملوحة الحالية أقل من المستوى الأمثل. راقب بانتظام، ولكن لا حاجة لاتخاذ إجراء فوري.",
   "consider_using_row_covers_or_mulch_to_retain_heat": "فكر في استخدام أغطية الصفوف أو المهاد للاحتفاظ بالحرارة.",
   "implement_shade_cloth_or_other_cooling_methods_to_protect_plants_from_excessive_heat": "قم بتطبيق قماش التظليل أو طرق تبريد أخرى لحماية النباتات من الحرارة الزائدة.",
-  "all_parameters_are_within_optimal_ranges": "جميع المعلمات ضمن النطاقات المثلى."
-
+  "all_parameters_are_within_optimal_ranges": "جميع المعلمات ضمن النطاقات المثلى.",
+  "image_name_placeholder_key": "أدخل اسم الصورة",
+  "image_type_key": "نوع الصورة",
+  "image_type_placeholder_key": "مثال: شجرة، ورقة، ...",
+  "image_upload_key": "رفع الصورة",
+  "add_image_key": "إضافة صورة",
+  "image_updated_key": "تم تحديث الصورة بنجاح",
+  "image_created_key": "تم إنشاء الصورة بنجاح",
+  "commonErrors.somethingWentWrong": "حدث خطأ، يرجى المحاولة مرة أخرى",
+  "images_key": "الصور"
 }

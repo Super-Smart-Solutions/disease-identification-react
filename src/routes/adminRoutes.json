@@ -28,5 +28,11 @@
     "element": "AdminOrganizations",
     "label": "organizations",
     "protected": true
+  },
+  {
+    "path": "images",
+    "element": "AdminImages",
+    "label": "images",
+    "protected": true
   }
 ]

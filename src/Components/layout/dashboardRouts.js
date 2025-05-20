@@ -1,6 +1,7 @@
 import { GiCarnivorousPlant } from "react-icons/gi";
 import { PiDetective, PiFarm } from "react-icons/pi";
 import { RiLeafLine, RiTeamLine } from "react-icons/ri";
+import { IoImagesOutline } from "react-icons/io5";
 
 
 const dashboardRoutes = [
@@ -29,6 +30,11 @@ const dashboardRoutes = [
         path: "/admin/organizations",
         label: "organizations_key",
         icon: RiTeamLine,
+    },
+    {
+        path: "/admin/images",
+        label: "images_key",
+        icon: IoImagesOutline,
     },
 ];
 
