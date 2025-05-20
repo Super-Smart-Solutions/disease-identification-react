@@ -20,6 +20,8 @@ const DiseaseForm = ({ diseaseId, onSuccess, onClose, t }) => {
     arabic_name: diseaseData?.arabic_name || "",
     scientific_name: diseaseData?.scientific_name || "",
     description: diseaseData?.description || "",
+    control_method: diseaseData?.control_method || "",
+    symptoms: diseaseData?.symptoms || "",
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -106,7 +108,45 @@ const DiseaseForm = ({ diseaseId, onSuccess, onClose, t }) => {
               className="text-red-500 text-sm mt-1"
             />
           </div>
+          <div>
+            <label
+              htmlFor="symptoms"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              {t("symptoms_key")}
+            </label>
+            <Field
+              name="symptoms"
+              className="custom-input"
+              placeholder={t("symptoms_key")}
+            />
+            <ErrorMessage
+              name="symptoms"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
+          </div>
 
+          <div>
+            <label
+              htmlFor="control_method"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              {t("control_methods_key")}
+            </label>
+            <Field
+              as="textarea"
+              rows={3}
+              name="control_method"
+              className="custom-input"
+              placeholder={t("control_methods_key")}
+            />
+            <ErrorMessage
+              name="control_method"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
+          </div>
           <div>
             <label
               htmlFor="description"
@@ -119,6 +159,7 @@ const DiseaseForm = ({ diseaseId, onSuccess, onClose, t }) => {
               name="description"
               rows={3}
               className="custom-input"
+              placeholder={t("description_key")}
             />
             <ErrorMessage
               name="description"

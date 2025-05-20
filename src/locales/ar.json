@@ -716,5 +716,6 @@
   "image_updated_key": "تم تحديث الصورة بنجاح",
   "image_created_key": "تم إنشاء الصورة بنجاح",
   "commonErrors.somethingWentWrong": "حدث خطأ، يرجى المحاولة مرة أخرى",
-  "images_key": "الصور"
+  "images_key": "الصور",
+  "symptoms_key": "الأعراض"
 }

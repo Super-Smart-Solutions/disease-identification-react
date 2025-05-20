@@ -714,5 +714,6 @@
   "image_updated_key": "Image updated successfully",
   "image_created_key": "Image created successfully",
   "commonErrors.somethingWentWrong": "Something went wrong, please try again",
-  "images_key": "Images"
+  "images_key": "Images",
+  "symptoms_key": "Symptoms"
 }
