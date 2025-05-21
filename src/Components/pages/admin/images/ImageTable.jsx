@@ -5,7 +5,7 @@ import Button from "../../../Button";
 import ConfirmationModal from "../../../ConfirmationModal";
 import DataGrid from "../../../../Components/DataGrid";
 import { useDeleteImage, useImages } from "../../../../hooks/useImages";
-import ImageById from "../../dashboard/ImageById";
+import ImageModal from "../../dashboard/ImageModal";
 
 const ImageTable = ({ onEdit, onAdd, t }) => {
   const [page, setPage] = useState(1);
@@ -44,7 +44,7 @@ const ImageTable = ({ onEdit, onAdd, t }) => {
     {
       field: "id",
       headerName: t("image_key"),
-      cellRenderer: (params) => <ImageById id={params?.data?.id} />,
+      cellRenderer: (params) => <ImageModal id={params?.data?.id} />,
       flex: 0.5,
     },
     {

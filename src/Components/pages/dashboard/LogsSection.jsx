@@ -8,12 +8,11 @@ import {
 } from "../../../api/inferenceAPI";
 import { fetchDiseases } from "../../../api/diseaseAPI";
 import { fetchPlants } from "../../../api/plantAPI";
-import ImageById from "./ImageById";
+import ImageModal from "./ImageModal";
 import { getStatusTranslation } from "../../../utils/statusTranslations";
 import moment from "moment/moment";
 import { useUserData } from "../../../hooks/useUserData";
 import { toast } from "sonner";
-import Button from "../../Button";
 import DataGrid from "../../DataGrid";
 
 export default function LogsSection() {
@@ -111,20 +110,13 @@ export default function LogsSection() {
     {
       field: "image_id",
       headerName: t("image_key"),
-      cellRenderer: (params) => <ImageById id={params?.data?.image_id} />,
+      cellRenderer: (params) => <ImageModal id={params?.data?.image_id} />,
       flex: 0.5,
     },
     {
       field: "attention_map_url",
       headerName: t("attention_map_key"),
-      cellRenderer: (params) => (
-        <Button
-          disabled={!params.value}
-          onClick={() => window.open(params.value, "_blank")}
-        >
-          {t("show_key")}
-        </Button>
-      ),
+      cellRenderer: (params) => <ImageModal url={params?.value} />,
       flex: 1,
     },
     {

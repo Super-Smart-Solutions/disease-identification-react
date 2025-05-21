@@ -1,17 +1,21 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { fetchImageById } from "../../../api/imagesAPI";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import Modal from "../../Modal";
 import Button from "../../Button";
 
-// In-memory cache to store image data by ID
 const imageCache = new Map();
 
-export default function ImageById({ id, tableId }) {
+export default function ImageModal({ id, url = null, tableId }) {
   const { t } = useTranslation();
-  const [imageData, setImageData] = useState(() => imageCache.get(id) || null);
+  const [imageData, setImageData] = useState(() =>
+    id ? imageCache.get(id) : url ? { url, name: url } : null
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const hasNoImage = !id && !url;
 
   useEffect(() => {
     let root = document.getElementById(`modal-root-${tableId}`);
@@ -30,26 +34,33 @@ export default function ImageById({ id, tableId }) {
 
   useEffect(() => {
     const loadImage = async () => {
-      // Check if image data is already in cache
-      if (imageCache.has(id)) {
-        setImageData(imageCache.get(id));
-        return;
-      }
+      if (!id) return;
 
+      setIsLoading(true);
       try {
+        if (imageCache.has(id)) {
+          setImageData(imageCache.get(id));
+          return;
+        }
+
         const data = await fetchImageById(id);
-        // Store in cache
         imageCache.set(id, data);
         setImageData(data);
       } catch (err) {
         console.error("Error fetching image:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    if (id && !imageData) {
-      loadImage();
+    loadImage();
+  }, [id]);
+
+  useEffect(() => {
+    if (url && !imageData) {
+      setImageData({ url, name: url });
     }
-  }, [id]); // Removed `t` from dependencies to prevent unnecessary re-runs
+  }, [url]);
 
   const getDisplayName = (fullPath) => {
     if (!fullPath) return "---";
@@ -69,13 +80,16 @@ export default function ImageById({ id, tableId }) {
   };
 
   return (
-    <div key={id} className="relative">
-      {/* Thumbnail Image */}
-      <Button variant="outlined" onClick={() => setIsModalOpen(true)}>
+    <div key={id || url} className="relative">
+      <Button
+        variant={id ? "outlined" : "filled"}
+        onClick={() => setIsModalOpen(true)}
+        disabled={hasNoImage || isLoading}
+        loading={isLoading}
+      >
         {t("show_key")}
       </Button>
 
-      {/* Modal for full-size image - rendered via portal */}
       {isModalOpen && imageData && (
         <Modal
           isOpen={isModalOpen}
