@@ -30,7 +30,7 @@ export default function ExpandableArticle({
         <div className=" space-y-6">
           <div className="flex justify-between">
             <h2 className="text-3xl font-bold me-2 text-gray-900">
-              {article?.english_name || t("no_disease_selected_key")}
+              {article?.arabic_name || t("no_disease_selected_key")}
             </h2>
             <ExportPdf
               plant_id={plant_id}
@@ -39,9 +39,9 @@ export default function ExpandableArticle({
               t={t}
             />
           </div>
-          {article?.arabic_name && (
+          {article?.english_name && (
             <h3 className="text-xl font-bold me-2 text-gray-900">
-              {t("arabic_name_key")}: {article?.arabic_name}
+              {t("english_name_key")}: {article?.english_name}
             </h3>
           )}
 
