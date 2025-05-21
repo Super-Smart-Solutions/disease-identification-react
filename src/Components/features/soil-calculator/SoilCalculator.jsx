@@ -26,7 +26,6 @@ export default function SoilCalculator() {
     isPending,
     validationSchema,
     formValues,
-    handleOpenModal,
     handleCloseModal,
     handleSubmit,
     goToNextStep,
@@ -36,14 +35,6 @@ export default function SoilCalculator() {
 
   return (
     <div>
-      {/* Floating Calculator Button */}
-      <div
-        className=" bg-primary cursor-pointer p-2 rounded-full shadow-md  w-fit"
-        onClick={handleOpenModal}
-      >
-        <IoCalculator title={t("soil_calculator_key")} size={32} color="white" />
-      </div>
-
       <Modal
         title={t("soil_calculator_key")}
         isOpen={isModalOpen}

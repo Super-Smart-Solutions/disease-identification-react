@@ -1,8 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import AppRoutes from "./routes/Approutes";
-import { ToastContainer } from "react-toastify";
-import SoilCalculator from "./Components/pages/soil-calculator/SoilCalculator";
+import Toast from "./Components/Toast";
 import FeaturesPanel from "./Components/FeaturesPanel";
 
 export default function App() {
@@ -12,7 +11,7 @@ export default function App() {
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <ToastContainer position="top-right" autoClose={3000} />
+      <Toast />
       <AppRoutes />
       <FeaturesPanel />
     </motion.div>

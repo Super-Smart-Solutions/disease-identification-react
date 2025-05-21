@@ -6,14 +6,14 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Button from "../../Button";
 import CreateOrganization from "./CreateOrganization";
-import DataGrid from "../../DataGrid";
 import noDataImg from "../../../assets/no-data.png";
 import { deleteUserById, fetchUsers } from "../../../api/userAPI";
 import { FiTrash } from "react-icons/fi";
 import ConfirmationModal from "../../ConfirmationModal";
 import { useUserTeam } from "../../../api/useUserTeam";
 import { createInvitation } from "../../../api/inviteApi";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
+import DataGrid from "../../DataGrid";
 
 export default function TeamSection() {
   const { t } = useTranslation();

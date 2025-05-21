@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 // Base API URL from environment variables
 const BASE_URL = import.meta.env.VITE_API_URL;
@@ -44,11 +44,8 @@ axiosInstance.interceptors.response.use(
 
       // Handle unauthorized error (redirect to login)
       if (status === 401) {
-        //toast.error("Unauthorized! Redirecting to login...");
         console.warn("Unauthorized! Redirecting to login...");
-        // window.location.href = "/auth/login"; // Uncomment to redirect to login
       } else {
-
         toast.error(errorMessage);
       }
     } else {

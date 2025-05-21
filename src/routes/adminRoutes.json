@@ -1,0 +1,38 @@
+[
+  {
+    "path": "plants",
+    "element": "AdminPlants",
+    "label": "plants",
+    "protected": true
+  },
+  {
+    "path": "diseases",
+    "element": "AdminDiseases",
+    "label": "diseases",
+    "protected": true
+  },
+  {
+    "path": "inferences",
+    "element": "LogsSection",
+    "label": "inferences",
+    "protected": true
+  },
+  {
+    "path": "farms",
+    "element": "AdminFarms",
+    "label": "farms",
+    "protected": true
+  },
+  {
+    "path": "organizations",
+    "element": "AdminOrganizations",
+    "label": "organizations",
+    "protected": true
+  },
+  {
+    "path": "images",
+    "element": "AdminImages",
+    "label": "images",
+    "protected": true
+  }
+]

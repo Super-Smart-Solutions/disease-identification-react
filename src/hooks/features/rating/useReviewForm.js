@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { createReview, updateReviewById } from "../../../api/reviewApi";
 import { useDispatch, useSelector } from "react-redux";

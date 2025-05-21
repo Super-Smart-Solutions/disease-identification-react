@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FaCheckCircle } from "react-icons/fa";
-import DataGrid from "../../DataGrid";
 import {
   getInferences,
   updateInferenceVerify,
@@ -13,8 +12,9 @@ import ImageById from "./ImageById";
 import { getStatusTranslation } from "../../../utils/statusTranslations";
 import moment from "moment/moment";
 import { useUserData } from "../../../hooks/useUserData";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import Button from "../../Button";
+import DataGrid from "../../DataGrid";
 
 export default function LogsSection() {
   const queryClient = useQueryClient();
@@ -27,8 +27,8 @@ export default function LogsSection() {
   const fetchLogs = useCallback(async () => {
     const [inferencesData, diseasesData, plantsData] = await Promise.all([
       getInferences({ page, size: pageSize }),
-      fetchDiseases(),
-      fetchPlants(),
+      fetchDiseases({ pageSize: 100 }),
+      fetchPlants({ pageSize: 100 }),
     ]);
 
     const currentLang = i18n.language;
@@ -54,7 +54,6 @@ export default function LogsSection() {
         status_text: getStatusTranslation(inference.status, t),
       };
     });
-
     return {
       items: enrichedInferences || [],
       total: inferencesData.total,
@@ -156,7 +155,7 @@ export default function LogsSection() {
       : []),
   ];
 
-  if (isError) {
+  if (error) {
     return (
       <div className="text-red-500">
         {error?.message || t("failed_to_load_logs_key")}

@@ -8,8 +8,10 @@ import {
 } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import LandingLayout from "../layouts/LandingLayout";
+import DashboardLayout from "../layouts/DashboardLayout";
 import routes from "./routes.json";
 import authRoutes from "./authRoutes.json";
+import adminRoutes from "./adminRoutes.json";
 import Landing from "../pages/Landing";
 import DataBase from "../pages/DataBase";
 import Models from "../pages/Models";
@@ -18,6 +20,12 @@ import Login from "../Components/pages/auth/Login";
 import Cookies from "js-cookie";
 import Dashboard from "../pages/Dashboard";
 import { useAuthActions } from "../Components/helpers/authHelpers";
+import AdminPlants from "../Components/pages/admin/plants/AdminPlants";
+import AdminDiseases from "../Components/pages/admin/diseases/AdminDiseases";
+import LogsSection from "../Components/pages/dashboard/LogsSection";
+import AdminFarms from "../Components/pages/admin/farms/AdminFarms";
+import AdminOrganizations from "../Components/pages/admin/organizations/AdminOrganizations";
+import AdminImages from "../Components/pages/admin/images/AdminImages";
 
 const componentMap = {
   Landing,
@@ -26,6 +34,12 @@ const componentMap = {
   Register,
   Login,
   Dashboard,
+  AdminDiseases,
+  AdminPlants,
+  LogsSection,
+  AdminFarms,
+  AdminOrganizations,
+  AdminImages,
 };
 
 const ProtectedRoute = ({ children, isAuthenticated }) => {
@@ -61,19 +75,35 @@ const ForbiddenRoute = ({ children, isAuthenticated }) => {
   return !isAuthenticated ? children : null;
 };
 
+const AdminRoute = ({ children, isAuthenticated }) => {
+  const location = useLocation();
+
+  if (!isAuthenticated) {
+    localStorage.setItem("redirectPath", location.pathname);
+    return <Navigate to="/auth/login" replace state={{ from: location }} />;
+  }
+
+  return children;
+};
+
 const AppRoutes = () => {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { logout } = useAuthActions();
 
   useEffect(() => {
     const checkAuthentication = () => {
       const token = Cookies.get("token");
+      const userRole = Cookies.get("role"); // Assuming you store role in cookies
+
       if (token) {
         setIsAuthenticated(true);
+        setIsAdmin(userRole === "admin"); // Adjust based on your role checking logic
       } else {
         setIsAuthenticated(false);
+        setIsAdmin(false);
         logout();
       }
       setIsLoading(false);
@@ -115,7 +145,6 @@ const AppRoutes = () => {
           />
         ))}
       </Route>
-
       {/* Authenticated routes use MainLayout */}
       <Route
         path="/"
@@ -133,6 +162,24 @@ const AppRoutes = () => {
               ) : (
                 React.createElement(componentMap[route.element])
               )
+            }
+          />
+        ))}
+      </Route>
+
+      {/* Admin routes use DashboardLayout */}
+      <Route
+        path="/admin"
+        element={<DashboardLayout isAuthenticated={isAuthenticated} />}
+      >
+        {adminRoutes.map((route, index) => (
+          <Route
+            key={index}
+            path={route.path}
+            element={
+              <AdminRoute isAuthenticated={isAuthenticated}>
+                {React.createElement(componentMap[route.element])}
+              </AdminRoute>
             }
           />
         ))}

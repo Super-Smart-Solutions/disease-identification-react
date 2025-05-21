@@ -6,13 +6,21 @@ import Button from "../../Button";
 import { fetchDiseaseById } from "../../../api/diseaseAPI";
 import { detectDisease, visualizeInference } from "../../../api/inferenceAPI";
 import { GiNotebook } from "react-icons/gi";
-import { DiGoogleAnalytics } from "react-icons/di";
 import { RiImageEditLine } from "react-icons/ri";
+import { useUserData } from "../../../hooks/useUserData";
+import { useDispatch } from "react-redux";
+import { useReviewForm } from "../../../hooks/features/rating/useReviewForm";
 
 export default function ModelingStepFour({ modelingData, setModelingData }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-
+  const { user } = useUserData();
+  const dispatch = useDispatch();
+  const { handleOpenModal: openReviewModal } = useReviewForm({
+    user,
+    dispatch,
+    navigate,
+  });
   // Fetch disease prediction
   const {
     data: prediction,
@@ -47,7 +55,16 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
     isError: isVisualizationError,
   } = useQuery({
     queryKey: ["visualization", modelingData.inference_id],
-    queryFn: () => visualizeInference(modelingData.inference_id),
+    queryFn: async () => {
+      const result = await visualizeInference(modelingData.inference_id);
+
+      if (result) {
+        setTimeout(() => {
+          openReviewModal();
+        }, 2000);
+      }
+      return result;
+    },
     enabled: !!modelingData?.inference_id && !!prediction?.disease_id,
     staleTime: 60 * 60 * 1000,
     retry: false,
@@ -82,7 +99,6 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
   if (!modelingData?.selected_file?.length) {
     return <div>{t("no_image_selected")}</div>;
   }
-  console.log(predictionError);
 
   return (
     <div className="space-y-4">
@@ -122,6 +138,11 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
                   : t(`diseases.${diseaseData?.english_name}`, {
                       defaultValue: diseaseData?.english_name || t("loading"),
                     })}
+                <span className=" block">{`${t("confidence_level")} : ${
+                  confidenceScore !== null
+                    ? `${confidenceScore.toFixed(2)}%`
+                    : t("loading_key")
+                }`}</span>
                 {confidenceScore && !isHealthy && diseaseData && (
                   <Button
                     className="flex items-center gap-2 mx-auto mt-2"
@@ -136,26 +157,33 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-2 justify-center items-center  
-          ">
+          {predictionFailed ? (
+            <div className="flec flex-col items-center ">
+              <div className="text-red-500 text-center mb-2">
+                {t("detection_inconclusive_message")}
+              </div>
+              <div className=" flex gap-2 justify-center">
+                <Button onClick={handleDeepAnalysis}>
+                  {t("go_to_deep_analysis_key")}
+                </Button>
+                <Button
+                  className="flex items-center gap-2"
+                  onClick={handleTryDifferentImage}
+                >
+                  <RiImageEditLine size={22} />
+                  {t("try_with_a_different_image_key")}
+                </Button>
+              </div>
+            </div>
+          ) : (
             <Button
-              className="flex items-center gap-2 "
+              className="flex items-center gap-2"
               onClick={handleTryDifferentImage}
             >
               <RiImageEditLine size={22} />
               {t("try_with_a_different_image_key")}
             </Button>
-            {predictionFailed && (
-              <div className="space-y-2">
-                <div className="text-red-500">
-                  {t("detection_inconclusive_message")}
-                </div>
-                <Button onClick={handleDeepAnalysis}>
-                  {t("go_to_deep_analysis_key")}
-                </Button>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       ))}
     </div>

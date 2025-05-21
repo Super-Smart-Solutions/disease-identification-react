@@ -1,7 +1,6 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-// Custom hook to detect clicks outside the component
 const useClickOutside = (ref, callback) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -30,16 +29,29 @@ const DropdownMenu = ({
   align = "start",
 }) => {
   const dropdownRef = useRef(null);
+  const [menuDirection, setMenuDirection] = useState("down");
 
-  // Close dropdown when clicking outside
+  // Calculate menu position on open
+  useEffect(() => {
+    if (isOpen && dropdownRef.current) {
+      const buttonRect = dropdownRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - buttonRect.bottom;
+      const spaceAbove = buttonRect.top;
+      const menuHeight = options.length * 40 + 16; // Approximate menu height
+
+      setMenuDirection(
+        spaceBelow > menuHeight || spaceBelow > spaceAbove ? "down" : "up"
+      );
+    }
+  }, [isOpen, options.length]);
+
   useClickOutside(dropdownRef, () => {
     if (isOpen) toggle();
   });
 
-  // Handle option click
   const handleOptionClick = (option) => {
     option.onClick();
-    toggle(); // Close menu after selection
+    toggle();
   };
 
   return (
@@ -57,11 +69,15 @@ const DropdownMenu = ({
       {isOpen && (
         <ul
           ref={menuRef}
-          className={`absolute z-10 min-w-[160px] overflow-auto rounded-lg border border-slate-200 bg-white shadow-md mt-2 ${
-            position === "right" ? "right-0" : "left-0"
-          } ${
+          className={`absolute z-10 min-w-[160px] overflow-auto rounded-lg border border-slate-200 bg-white shadow-md ${
+            menuDirection === "down" ? "mt-2" : "mb-2 bottom-full"
+          } ${position === "right" ? "right-0" : "left-0"} ${
             align === "center" ? "left-1/2 transform -translate-x-1/2" : ""
           } ${menuClassName}`}
+          style={{
+            maxHeight: "calc(100vh - 100px)", // Prevent going off-screen vertically
+            overflowY: "auto",
+          }}
         >
           {options.map((option, index) => (
             <li

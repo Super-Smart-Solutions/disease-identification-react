@@ -9,11 +9,20 @@ import {
 } from "../../../api/inferenceAPI";
 import { RiImageEditLine } from "react-icons/ri";
 import { GiNotebook } from "react-icons/gi";
+import { useDispatch } from "react-redux";
+import { useReviewForm } from "../../../hooks/features/rating/useReviewForm";
+import { useUserData } from "../../../hooks/useUserData";
 
 export default function DeepAnalysisStep({ modelingData, setModelingData }) {
   const { t } = useTranslation();
   const navigate = useNavigate(); // Navigation function
-
+  const { user } = useUserData();
+  const { dispatch } = useDispatch();
+  const { handleOpenModal: openReviewModal } = useReviewForm({
+    user,
+    dispatch,
+    navigate,
+  });
   const [diseaseData, setDiseaseData] = useState(null);
   const [confidenceScore, setConfidenceScore] = useState(null);
   const [predictionFailed, setPredictionFailed] = useState(false);
@@ -51,6 +60,10 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
         if (visualizationResponse?.attention_map_url) {
           setVisualizationUrl(visualizationResponse.attention_map_url);
         }
+        // Wait 2 seconds then open review modal after successful analysis
+        setTimeout(() => {
+          openReviewModal();
+        }, 2000);
       } catch (error) {
         console.error("Error in analysis request:", error);
       }

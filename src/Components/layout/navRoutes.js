@@ -2,7 +2,7 @@ const navRoutes = [
 
     {
         path: "/",
-        label: "home_key"
+        label: "home_key",
     },
     {
         path: "/models",

@@ -23,6 +23,7 @@ const FileUpload = ({
   const removeFile = (index) => {
     setSelectedFile((prevFiles) => prevFiles.filter((_, i) => i !== index));
   };
+  console.log(selectedFile);
 
   return (
     <div className="space-y-4 grow">

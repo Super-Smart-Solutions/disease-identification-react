@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { fetchImageById } from "../../../api/imagesAPI";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import Modal from "../../Modal";
 import Button from "../../Button";
 
+// In-memory cache to store image data by ID
+const imageCache = new Map();
+
 export default function ImageById({ id, tableId }) {
   const { t } = useTranslation();
-  const [imageData, setImageData] = useState(null);
+  const [imageData, setImageData] = useState(() => imageCache.get(id) || null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -27,18 +30,26 @@ export default function ImageById({ id, tableId }) {
 
   useEffect(() => {
     const loadImage = async () => {
+      // Check if image data is already in cache
+      if (imageCache.has(id)) {
+        setImageData(imageCache.get(id));
+        return;
+      }
+
       try {
         const data = await fetchImageById(id);
+        // Store in cache
+        imageCache.set(id, data);
         setImageData(data);
       } catch (err) {
-      } finally {
+        console.error("Error fetching image:", err);
       }
     };
 
-    if (id) {
+    if (id && !imageData) {
       loadImage();
     }
-  }, [id, t]);
+  }, [id]); // Removed `t` from dependencies to prevent unnecessary re-runs
 
   const getDisplayName = (fullPath) => {
     if (!fullPath) return "---";
@@ -65,7 +76,7 @@ export default function ImageById({ id, tableId }) {
       </Button>
 
       {/* Modal for full-size image - rendered via portal */}
-      {isModalOpen && (
+      {isModalOpen && imageData && (
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
@@ -78,7 +89,7 @@ export default function ImageById({ id, tableId }) {
               className="max-w-full max-h-[60vh] object-contain mx-auto"
             />
             <Button
-              className={` flex justify-between items-center gap-2`}
+              className="flex justify-between items-center gap-2"
               onClick={handleDownload}
             >
               <FaCloudDownloadAlt />

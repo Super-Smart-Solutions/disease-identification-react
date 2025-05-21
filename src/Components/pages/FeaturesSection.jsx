@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IoIosCalculator } from "react-icons/io";
 import { FaOilCan } from "react-icons/fa";
+import { GiRose } from 'react-icons/gi'
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
@@ -35,7 +36,7 @@ export default function FeaturesSection() {
     {
       label: t("oil_test_key"),
       icon: (
-        <FaOilCan
+        <GiRose
           title={t("coming_soon_key")}
           className="text-4xl text-primaryDarker cursor-pointer"
         />

@@ -10,7 +10,13 @@ import { fetchCropById } from "../../../api/soilApi";
 export const SummaryStep = ({ assessmentResult }) => {
   const { t } = useTranslation();
   const summaryRef = React.useRef();
-
+  const formatKey = (str) =>
+    str
+      ?.toLowerCase()
+      .replace(/&/g, "and")
+      .replace(/[^\w\s]/g, "")
+      .replace(/\s+/g, "_")
+      .trim();
   // Fetch crop data using TanStack Query
   const { data: cropData, isLoading: isCropLoading } = useQuery({
     queryKey: ["crop", assessmentResult?.crop_id],
@@ -48,46 +54,66 @@ export const SummaryStep = ({ assessmentResult }) => {
   if (!assessmentResult) return null;
 
   const descriptionRows = [
-    { label: "Life form", value: cropData?.life_form },
-    { label: "Physiology", value: cropData?.physical_description },
-    { label: "Habit", value: cropData?.habitat },
-    { label: "Category", value: cropData?.category },
-    { label: "Life span", value: cropData?.life_span },
-    { label: "Plant attributes", value: cropData?.plant_type },
+    {
+      label: t("life_form_key"),
+      value: t(`${formatKey(cropData?.life_form)}`) || t("no_description_key"),
+    },
+    {
+      label: t("physiology_key"),
+      value:
+        t(`${formatKey(cropData?.physical_description)}`) ||
+        t("no_description_key"),
+    },
+    {
+      label: t("habit_key"),
+      value: t(`${formatKey(cropData?.habitat)}`) || t("no_description_key"),
+    },
+    {
+      label: t("category_key"),
+      value: t(`${formatKey(cropData?.category)}`) || t("no_description_key"),
+    },
+    {
+      label: t("life_span_key"),
+      value: t(`${formatKey(cropData?.life_span)}`) || t("no_description_key"),
+    },
+    {
+      label: t("plant_attributes_key"),
+      value: t(`${formatKey(cropData?.plant_type)}`) || t("no_description_key"),
+    },
   ];
   const ecologyRows = [
     {
-      label: "Temperat",
+      label: t("temperature_key"),
       value: assessmentResult?.temperature,
       optimalMin: cropData?.temp_opt_min,
       optimalMax: cropData?.temp_opt_max,
-      rightLabel: "Soil depth",
+      rightLabel: t("soil_depth_key"),
       rightOptimal: cropData?.soil_depth,
       rightAbsolute: cropData?.soil_depth_req,
     },
     {
-      label: "Salinity",
+      label: t("salinity_key"),
       value: assessmentResult?.salinity,
       optimalMin: cropData?.salinity,
       optimalMax: "",
-      rightLabel: "Soil texture",
+      rightLabel: t("soil_texture_key"),
       rightOptimal: cropData?.soil_texture,
       rightAbsolute: cropData?.soil_texture_req,
     },
     {
-      label: "Soil PH",
+      label: t("soil_ph_key"),
       value: assessmentResult?.ph,
       optimalMin: cropData?.ph_opt_min,
       optimalMax: cropData?.ph_opt_max,
-      rightLabel: "Soil salinity",
+      rightLabel: t("soil_salinity_key"),
       rightOptimal: cropData?.salinity,
       rightAbsolute: cropData?.salinity_req,
     },
     {
-      label: "Light intensity",
+      label: t("light_intensity_key"),
       optimalMin: cropData?.light_opt_min,
       optimalMax: cropData?.light_opt_max,
-      rightLabel: "Soil drainage",
+      rightLabel: t("soil_drainage_key"),
       rightOptimal: cropData?.drainage,
       rightAbsolute: cropData?.drainage_req,
     },
