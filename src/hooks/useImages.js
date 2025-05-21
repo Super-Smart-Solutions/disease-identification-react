@@ -3,7 +3,7 @@ import {
   getImages,
   getImageUrls,
   fetchImageById,
-  uploadImage,
+  uploadImageAdmin,
   updateImage,
   deleteImage,
 } from "../api/imagesAPI";
@@ -34,7 +34,7 @@ export const useImageById = (imageId) => {
 export const useUploadImage = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: uploadImage,
+    mutationFn: uploadImageAdmin,
     onSuccess: () => {
       queryClient.invalidateQueries(["images"]);
     },

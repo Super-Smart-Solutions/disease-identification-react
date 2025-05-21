@@ -36,7 +36,7 @@ export const fetchImageById = async (imageId) => {
   const response = await axiosInstance.get(`${IMAGE_ENDPOINT}/${imageId}`);
   return response.data;
 };
-export const uploadImage = async (formData, config = {}) => {
+export const uploadImageAdmin = async (formData, config = {}) => {
   const { onUploadProgress } = config;
   try {
     const response = await axiosInstance.post(UPLOAD_ENDPOINT, formData, {
@@ -60,6 +60,25 @@ export const uploadImage = async (formData, config = {}) => {
     console.error("Upload failed:", error);
     throw error; // Let the caller handle the error
   }
+};
+
+
+export const uploadImage = async ({ name, plantId, imageFile }) => {
+  const formData = new FormData();
+
+  // Append JSON fields
+  formData.append("name", name);
+  formData.append("farm_id", "1"); // Default farm ID as string
+  formData.append("plant_id", plantId);
+  formData.append("annotated", "false");
+
+  // Append image file
+  formData.append("image_file", imageFile);
+
+  // Make POST request
+  const response = await axiosInstance.post(UPLOAD_ENDPOINT, formData);
+
+  return response.data;
 };
 
 
