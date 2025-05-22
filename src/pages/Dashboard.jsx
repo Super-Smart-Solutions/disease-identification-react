@@ -29,7 +29,6 @@ const sectionVariants = {
 
 export default function Dashboard() {
   const [showInvitationPopup, setShowInvitationPopup] = useState(true);
-  console.log(localStorage.getItem("invite_id"));
 
   return (
     <>

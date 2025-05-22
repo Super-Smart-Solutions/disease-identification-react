@@ -1,8 +1,6 @@
 import React from "react";
 
 export default function TableSkeleton({ columns = 5, rows = 5 }) {
-  console.log(rows);
-
   return (
     <div className="overflow-x-auto border border-gray-300 rounded-lg animate-pulse">
       <table className="min-w-full border-gray-300">
