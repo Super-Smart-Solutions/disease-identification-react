@@ -11,8 +11,8 @@ export const getImages = async ({ plantId, diseaseId, page = 1, pageSize = 20 })
     params: {
       plant_id: plantId,
       disease_id: diseaseId,
-      page: page,
-      size: pageSize
+      pageNumber: page,
+      pageSize: pageSize
     }
   });
   return response.data;
