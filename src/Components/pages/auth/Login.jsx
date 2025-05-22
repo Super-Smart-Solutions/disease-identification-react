@@ -23,7 +23,7 @@ export default function Login() {
     username: Yup.string().required(t("username_required_key")),
     password: Yup.string()
       .min(6, t("password_min_length_key"))
-      .required(t("password_required_key")),
+      .required(t("required_field_key")),
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {

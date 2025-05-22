@@ -62,7 +62,7 @@ export default function TeamSection() {
   const inviteSchema = Yup.object().shape({
     email: Yup.string()
       .email(t("email_invalid_key"))
-      .required(t("email_required_key")),
+      .required(t("required_field_key")),
   });
 
   const handleInviteSubmit = async (values, { setSubmitting, resetForm }) => {
