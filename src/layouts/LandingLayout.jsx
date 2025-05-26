@@ -7,7 +7,7 @@ const LandingLayout = ({ isAuthenticated }) => {
   return (
     <main
       style={{
-        backgroundImage: "url('/background.jpeg')", // Assuming the image is in the public folder
+        backgroundImage: "url('/background.png')", // Assuming the image is in the public folder
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed", // Optional: makes the background fixed while scrolling

@@ -31,7 +31,7 @@ const MainLayout = () => {
     <div
       className="flex flex-col min-h-screen"
       style={{
-        backgroundImage: "url('/background.jpeg')",
+        backgroundImage: "url('/background.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",

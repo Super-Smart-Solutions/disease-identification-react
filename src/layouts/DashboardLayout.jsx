@@ -78,7 +78,7 @@ export default function DashboardLayout() {
           <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed"
             style={{
-              backgroundImage: "url('/background.jpeg')",
+              backgroundImage: "url('/background.png')",
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundAttachment: "fixed",

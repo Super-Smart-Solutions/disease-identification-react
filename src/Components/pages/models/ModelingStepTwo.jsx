@@ -67,7 +67,6 @@ export default function ModelingStepTwo({ modelingData, setModelingData }) {
   return (
     <div className="flex items-center gap-4 flex-col">
       <FileUpload
-        accept="image/*"
         multiple={false}
         selectedFile={tempFile}
         setSelectedFile={handleSelectFile}

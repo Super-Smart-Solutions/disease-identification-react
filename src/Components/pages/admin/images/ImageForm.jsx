@@ -94,7 +94,6 @@ const ImageForm = ({ imageId, onSuccess, onClose, t }) => {
                   {({ field, form }) => (
                     <FileUpload
                       allowRemove={true}
-                      accept="image/*"
                       multiple={false}
                       selectedFile={field.value ? [field.value] : []}
                       setSelectedFile={(files) => {

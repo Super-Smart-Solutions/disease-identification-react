@@ -4,26 +4,43 @@ import { useTranslation } from "react-i18next";
 import { FiUploadCloud, FiX } from "react-icons/fi";
 
 const FileUpload = ({
-  accept = "image/*",
+  accept = { "image/*": [".jpeg", ".jpg", ".png", ".gif"] }, // Corrected accept format
   multiple = false,
   selectedFile = [],
   setSelectedFile,
-  allowRemove = false, // New prop with default false
+  allowRemove = false,
 }) => {
   const { t } = useTranslation();
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept,
+    accept, // Use object format for accept
     multiple,
-    onDrop: (acceptedFiles) => {
+    maxSize: 4 * 1024 * 1024, // 4MB in bytes
+    onDrop: (acceptedFiles, fileRejections) => {
       setSelectedFile(acceptedFiles);
+      if (fileRejections.length > 0) {
+        // Optionally handle rejections (e.g., file too large or wrong type)
+        console.log("Rejected files:", fileRejections);
+        alert(
+          t("file_rejected_key", {
+            reasons: fileRejections
+              .map((rej) =>
+                rej.errors.map((err) =>
+                  err.code === "file-too-large"
+                    ? t("file_too_large_key", { maxSize: "4MB" })
+                    : t("file_type_invalid_key")
+                )
+              )
+              .join(", "),
+          })
+        );
+      }
     },
   });
 
   const removeFile = (index) => {
     setSelectedFile((prevFiles) => prevFiles.filter((_, i) => i !== index));
   };
-  console.log(selectedFile);
 
   return (
     <div className="space-y-4 grow">
@@ -37,7 +54,8 @@ const FileUpload = ({
           <FiUploadCloud className="mx-auto text-3xl text-gray-400" />
           <p className="mt-2 text-gray-600">{t("drag_drop_key")}</p>
           <p className="text-sm text-gray-500">
-            {t("accepted_types_key")}: {accept}
+            {t("accepted_types_key")}: {Object.keys(accept).join(", ")} (Max
+            4MB)
           </p>
         </div>
       ) : (
@@ -56,7 +74,7 @@ const FileUpload = ({
                   <button
                     type="button"
                     onClick={() => removeFile(index)}
-                    className="absolute top-6 right-6 p-1 bg-gray-300 rounded-full text-black opacity-0 group-hover:opacity-100 cursor-pointer   transition-opacity"
+                    className="absolute top-6 right-6 p-1 bg-gray-300 rounded-full text-black opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity"
                   >
                     <FiX className="text-lg" />
                   </button>

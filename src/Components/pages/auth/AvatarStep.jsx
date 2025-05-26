@@ -91,7 +91,6 @@ const AvatarStep = ({ registerData }) => {
           </label>
           <FileUpload
             allowRemove={true}
-            accept="image/*"
             multiple={false}
             selectedFile={selectedFile ? [selectedFile] : []}
             setSelectedFile={handleFileSelect}

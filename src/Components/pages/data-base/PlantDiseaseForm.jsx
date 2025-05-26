@@ -62,8 +62,8 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
   }, [diseaseOptions, i18n.language]);
 
   const validationSchema = Yup.object().shape({
-    plant: Yup.string().required(t("select_plant_required_key")),
-    disease: Yup.string().required(t("select_disease_required_key")),
+    plant: Yup.string().required(t("required_field_key")),
+    disease: Yup.string().required(t("required_field_key")),
   });
 
   const handleSubmit = async (values) => {
