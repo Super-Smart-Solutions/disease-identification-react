@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import TeamSection from "../Components/pages/dashboard/TeamSection";
 import LogsSection from "../Components/pages/dashboard/LogsSection";
 import InvitationPopup from "../Components/pages/dashboard/InvitationPopup";
+import InferenceStats from "../Components/pages/dashboard/InferenceStats";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -38,8 +39,10 @@ export default function Dashboard() {
         animate="visible"
         variants={containerVariants}
       >
-        <motion.div variants={sectionVariants}>
-          <TeamSection />
+        <motion.div variants={sectionVariants}> 
+
+        <InferenceStats/>
+
         </motion.div>
 
         <motion.div variants={sectionVariants}>

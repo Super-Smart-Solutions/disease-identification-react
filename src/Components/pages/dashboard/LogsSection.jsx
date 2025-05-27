@@ -14,6 +14,7 @@ import moment from "moment/moment";
 import { useUserData } from "../../../hooks/useUserData";
 import { toast } from "sonner";
 import DataGrid from "../../DataGrid";
+import { useInferences } from "../../../hooks/useInferences";
 
 export default function LogsSection() {
   const queryClient = useQueryClient();
@@ -23,47 +24,8 @@ export default function LogsSection() {
   const { user } = useUserData();
   const isAdmin = user?.is_org_admin;
 
-  const fetchLogs = useCallback(async () => {
-    const [inferencesData, diseasesData, plantsData] = await Promise.all([
-      getInferences({ page, size: pageSize }),
-      fetchDiseases({ pageSize: 100 }),
-      fetchPlants({ pageSize: 100 }),
-    ]);
+  const { data, isLoading, isError, error } = useInferences(page, pageSize);
 
-    const currentLang = i18n.language;
-
-    const enrichedInferences = inferencesData?.items?.map((inference) => {
-      const plant = plantsData?.items?.find((p) => p.id === inference.plant_id);
-      const disease = diseasesData?.items?.find(
-        (d) => d.id === inference.disease_id
-      );
-
-      return {
-        ...inference,
-        plant_name: plant
-          ? currentLang === "ar"
-            ? plant.arabic_name
-            : plant.english_name
-          : "----",
-        disease_name: disease
-          ? currentLang === "ar"
-            ? disease.arabic_name
-            : disease.english_name
-          : "----",
-        status_text: getStatusTranslation(inference.status, t),
-      };
-    });
-    return {
-      items: enrichedInferences || [],
-      total: inferencesData.total,
-      pages: inferencesData.pages,
-    };
-  }, [page, pageSize, i18n.language, t]);
-
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["logs", page, pageSize, i18n.language],
-    queryFn: fetchLogs,
-  });
   const verifyMutation = useMutation({
     mutationFn: async ({ id }) => {
       // Assuming you have an API function called `updateInferenceVerify`
@@ -93,6 +55,7 @@ export default function LogsSection() {
   const handleVerify = (id) => {
     verifyMutation.mutate({ id });
   };
+  console.log(data);
 
   const columnDefs = [
     { field: "id", headerName: "#", flex: 0.5 },
