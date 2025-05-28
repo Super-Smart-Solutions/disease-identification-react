@@ -5,8 +5,8 @@ const INFERENCE_ENDPOINT = "/inferences";
 // Get inferences
 export const getInferences = async ({ size = 10, page = 1 }) => {
   const params = {
-    page,
-    size,
+    pageSize: size,
+    pageNumber: page,
   };
   const response = await axiosInstance.get(`${INFERENCE_ENDPOINT}`, { params });
   return response.data;

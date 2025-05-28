@@ -37,7 +37,7 @@ const cardVariants = {
 
 const InferenceStats = () => {
   const { t } = useTranslation();
-  const { data, isLoading, isError, error } = useInferences();
+  const { data, isLoading, isError, error } = useInferences(1, 100);
 
   const getInferenceMetrics = useMemo(() => {
     if (!data?.items || !Array.isArray(data.items)) return [];
