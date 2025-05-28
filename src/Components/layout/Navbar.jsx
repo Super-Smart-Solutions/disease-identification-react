@@ -14,6 +14,7 @@ import {
   FaUserCircle,
   FaBars,
   FaTimes,
+  FaUser,
 } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import { useAuthActions } from "../helpers/authHelpers";
@@ -134,6 +135,13 @@ const Navbar = React.memo(({ auth = true }) => {
 
   // Welcome dropdown options
   const welcomeOptions = [
+    {
+      label: t("profile_key"),
+      icon: <FaUser />,
+      onClick: () => {
+        navigate("/profile");
+      },
+    },
     {
       label: t("dashboard_key"),
       icon: <RxDashboard />,

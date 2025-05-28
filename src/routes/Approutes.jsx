@@ -26,6 +26,7 @@ import LogsSection from "../Components/pages/dashboard/LogsSection";
 import AdminFarms from "../Components/pages/admin/farms/AdminFarms";
 import AdminOrganizations from "../Components/pages/admin/organizations/AdminOrganizations";
 import AdminImages from "../Components/pages/admin/images/AdminImages";
+import Profile from "../pages/Profile";
 
 const componentMap = {
   Landing,
@@ -34,6 +35,7 @@ const componentMap = {
   Register,
   Login,
   Dashboard,
+  Profile,
   AdminDiseases,
   AdminPlants,
   LogsSection,

@@ -23,6 +23,13 @@
   },
   {
     "protected": true,
+    "path": "profile",
+    "element": "Profile",
+    "breadcrumb": true,
+    "label": "profile"
+  },
+  {
+    "protected": true,
     "path": "dashboard",
     "element": "Dashboard",
     "breadcrumb": true,
