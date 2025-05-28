@@ -735,5 +735,11 @@
   "successful_inferences_key": "Successful Inferences",
   "failed_inferences_key": "Failed Inferences",
   "detected_diseases_key": "Detected Diseases",
-  "inference_history_key": "Inference history"
+  "inference_history_key": "Inference history",
+  "profile_key": "Profile",
+  "discard_changes_key": "Discard Changes",
+  "discard_confirm_key": "Are you sure you want to discard your changes?",
+  "discard_key": "Discard",
+  "keep_editing_key": "Keep Editing" , 
+  "not_valid_field_key" : "not valid"
 }

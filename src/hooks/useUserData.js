@@ -4,9 +4,11 @@ import { fetchCurrentUser, updateUserById, uploadUserAvatar as UploadUserAvatar 
 import { loginUser } from '../api/authAPI';
 
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 export const useUserData = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const { user, isLoading, isError, error } = useSelector((state) => state.user);
 
     const login = async (values) => {
@@ -21,6 +23,15 @@ export const useUserData = () => {
             });
             const userResponse = await fetchCurrentUser();
             dispatch(setUser(userResponse));
+
+            const redirectPath =
+                localStorage.getItem("redirectPath")
+            if (redirectPath) {
+                navigate(redirectPath);
+                localStorage.removeItem("redirectPath");
+            } else {
+                navigate("/models");
+            }
             return userResponse;
         } catch (error) {
             const errorMessage = error.response?.data?.message || error.message;

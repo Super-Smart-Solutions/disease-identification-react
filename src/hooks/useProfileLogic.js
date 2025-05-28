@@ -1,12 +1,14 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { useUserData } from "./useUserData";
 
 const useProfileLogic = () => {
+    const { t } = useTranslation();
     const { user, isError, error, updateUserData, uploadUserAvatar } = useUserData();
     const [isEditMode, setIsEditMode] = useState(false);
     const [changedFields, setChangedFields] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [message, setMessage] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null);
 
     const initialValues = {
@@ -27,6 +29,7 @@ const useProfileLogic = () => {
             setAvatarPreview(URL.createObjectURL(file));
             setChangedFields({ ...changedFields, avatar: file });
             await uploadUserAvatar(file);
+            toast.success(t("updated_key"))
         }
     };
 
@@ -59,11 +62,12 @@ const useProfileLogic = () => {
                     await updateUserData(user.id, userData);
                 }
             }
-            setMessage("update_user_success");
+            toast.success(t("updated_key"));
             setIsEditMode(false);
             setChangedFields({});
         } catch (err) {
-            setMessage(`update_user_error: ${err}`);
+            console.log(err);
+
         }
         setSubmitting(false);
     };
@@ -78,7 +82,6 @@ const useProfileLogic = () => {
         setChangedFields,
         isModalOpen,
         setIsModalOpen,
-        message,
         avatarPreview,
         initialValues,
         handleFieldChange,

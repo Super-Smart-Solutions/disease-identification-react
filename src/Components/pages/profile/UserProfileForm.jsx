@@ -1,9 +1,10 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Formik, Form, Field } from "formik";
-import { FaEdit, FaSave } from "react-icons/fa";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { FaEdit } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "../../Button";
+import { profileFormValidation } from "../../../schemas/ProfileFormValidation";
 
 // Discard Modal Component
 const DiscardModal = ({ isOpen, onConfirm, onCancel }) => {
@@ -25,13 +26,17 @@ const DiscardModal = ({ isOpen, onConfirm, onCancel }) => {
             exit={{ scale: 0.8, y: 20 }}
             transition={{ duration: 0.3 }}
           >
-            <h3 className="text-lg font-bold mb-4">{t("discard_changes")}</h3>
-            <p className="text-gray-600 mb-6">{t("discard_confirm")}</p>
+            <h3 className="text-lg font-bold mb-4">
+              {t("discard_changes_key")}
+            </h3>
+            <p className="text-gray-600 mb-6">{t("discard_confirm_key")}</p>
             <div className="flex justify-end gap-4">
-              <Button variant="outlined" onClick={onCancel}>
+              <Button type="button" variant="outlined" onClick={onCancel}>
                 {t("keep_editing_key")}
               </Button>
-              <Button onClick={onConfirm}>{t("discard_key")}</Button>
+              <Button type="button" onClick={onConfirm}>
+                {t("discard_key")}
+              </Button>
             </div>
           </motion.div>
         </motion.div>
@@ -69,12 +74,17 @@ const UserProfileForm = ({
         />
       )}
       <Formik
+        validationSchema={profileFormValidation(t)}
         initialValues={initialValues}
         enableReinitialize
         onSubmit={handleSubmit}
       >
         {({ setFieldValue, resetForm }) => (
-          <Form className="space-y-4">
+          <Form
+            className={`space-y-4 ${
+              !isEditMode ? "opacity-50 pointer-events-none" : ""
+            }`}
+          >
             <div className="flex flex-col md:flex-row justify-between gap-4 items-center">
               <div className=" w-full md:w-6/12">
                 <label className="block text-gray-700">
@@ -92,6 +102,11 @@ const UserProfileForm = ({
                       e.target.value
                     )
                   }
+                />
+                <ErrorMessage
+                  name="first_name"
+                  component="div"
+                  className="text-red-500 text-sm"
                 />
               </div>
               <div className=" w-full md:w-6/12">
@@ -111,6 +126,11 @@ const UserProfileForm = ({
                     )
                   }
                 />
+                <ErrorMessage
+                  name="last_name"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
               </div>
             </div>
             <div>
@@ -123,6 +143,11 @@ const UserProfileForm = ({
                 onChange={(e) =>
                   handleFieldChange(setFieldValue, "email", e.target.value)
                 }
+              />
+              <ErrorMessage
+                name="email"
+                component="div"
+                className="text-red-500 text-sm"
               />
             </div>
             <div>
@@ -142,24 +167,33 @@ const UserProfileForm = ({
                   )
                 }
               />
+              <ErrorMessage
+                name="phone_number"
+                component="div"
+                className="text-red-500 text-sm"
+              />
             </div>
-            {(isEditMode || Object.keys(changedFields).length > 0) && (
-              <div className="flex justify-end gap-4">
-                <Button
-                  variant="outlined"
-                  type="button"
-                  onClick={() => handleCancel(resetForm)}
-                >
-                  {t("cancel_key")}
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={Object.keys(changedFields).length === 0}
-                >
-                  {t("save_key")}
-                </Button>
-              </div>
-            )}
+
+            <div
+              className={`flex justify-end gap-4 transition-opacity duration-300 ease-in-out ${
+                !isEditMode ? "opacity-0 pointer-events-none" : "opacity-100"
+              }`}
+            >
+              <Button
+                variant="outlined"
+                type="button"
+                onClick={() => handleCancel(resetForm)}
+              >
+                {t("cancel_key")}
+              </Button>
+              <Button
+                type="submit"
+                disabled={Object.keys(changedFields).length === 0}
+              >
+                {t("save_key")}
+              </Button>
+            </div>
+
             <DiscardModal
               isOpen={isModalOpen}
               onConfirm={() => handleDiscardConfirm(resetForm)}

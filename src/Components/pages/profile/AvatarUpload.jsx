@@ -96,7 +96,7 @@ const AvatarUpload = ({ handleAvatarChange, avatarPreview }) => {
             onClick={() => fileInputRef.current?.click()}
           >
             <span className="text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              {t("edit_avatar")}
+              {t("edit_key")}
             </span>
           </div>
           <input
@@ -124,7 +124,7 @@ const AvatarUpload = ({ handleAvatarChange, avatarPreview }) => {
               exit={{ scale: 0.8, y: 20 }}
               transition={{ duration: 0.3 }}
             >
-              <h3 className="text-lg font-bold mb-4">{t("edit_avatar")}</h3>
+              <h3 className="text-lg font-bold mb-4">{t("edit_key")}</h3>
               {error && <div className="text-red-500 mb-4">{error}</div>}
               <div className="flex justify-center mb-4">
                 <AvatarEditor
