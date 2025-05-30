@@ -39,7 +39,7 @@ const MainLayout = () => {
       }}
     >
       <Navbar />
-      <main className="flex-grow p-8 border border-slate-200 rounded-2xl w-11/12 mx-auto mt-8 space-y-4 shadow-sm bg-slate-50 bg-opacity-90">
+      <main className="flex-grow p-8 border border-slate-200 rounded-2xl w-11/12 mx-auto mt-30 space-y-4 shadow-sm bg-slate-50 bg-opacity-90 ">
         {/* Add bg-opacity to make content more readable over the background */}
         {/* Render breadcrumbs if not on the home page */}
         <Breadcrumbs items={breadcrumbItems} />

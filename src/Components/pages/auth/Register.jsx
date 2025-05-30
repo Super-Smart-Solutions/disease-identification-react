@@ -84,7 +84,7 @@ export default function Register() {
   ];
 
   return (
-    <div className="flex items-center justify-center  py-6">
+    <div className="flex items-center justify-center mt-20">
       <div className="flex bg-white shadow-lg rounded-lg w-full max-w-4xl">
         {/* Left: Auth Image */}
         <div className="w-1/2 hidden md:flex justify-center items-center bg-gray-100">

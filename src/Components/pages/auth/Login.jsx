@@ -11,7 +11,6 @@ import { useAuthActions } from "../../helpers/authHelpers";
 
 export default function Login() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { login } = useAuthActions();
 
   const initialValues = {
@@ -29,7 +28,6 @@ export default function Login() {
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       await login(values);
-      navigate(localStorage.getItem("redirectPath").toString() || "/models");
     } catch (error) {
       console.error("Login failed", error);
     } finally {
@@ -39,7 +37,7 @@ export default function Login() {
 
   return (
     <motion.div
-      className="w-full py-6"
+      className="w-full mt-20 overflow-x-hidden"
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -50 }}
