@@ -2,14 +2,8 @@ import React, { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FaCheckCircle } from "react-icons/fa";
-import {
-  getInferences,
-  updateInferenceVerify,
-} from "../../../api/inferenceAPI";
-import { fetchDiseases } from "../../../api/diseaseAPI";
-import { fetchPlants } from "../../../api/plantAPI";
+import { updateInferenceVerify } from "../../../api/inferenceAPI";
 import ImageModal from "./ImageModal";
-import { getStatusTranslation } from "../../../utils/statusTranslations";
 import moment from "moment/moment";
 import { useUserData } from "../../../hooks/useUserData";
 import { toast } from "sonner";
@@ -17,6 +11,8 @@ import DataGrid from "../../DataGrid";
 import { useInferences } from "../../../hooks/useInferences";
 
 export default function LogsSection() {
+  const { getInferencesData } = useInferences();
+
   const queryClient = useQueryClient();
   const { t, i18n } = useTranslation();
   const [page, setPage] = useState(1);
@@ -24,7 +20,7 @@ export default function LogsSection() {
   const { user } = useUserData();
   const isAdmin = user?.is_org_admin;
 
-  const { data, isLoading, isError, error } = useInferences(page, pageSize);
+  const { data, isLoading, isError, error } = getInferencesData(page, pageSize);
 
   const verifyMutation = useMutation({
     mutationFn: async ({ id }) => {

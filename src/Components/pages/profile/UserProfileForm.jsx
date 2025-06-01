@@ -4,7 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { FaEdit } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "../../Button";
-import { profileFormValidation } from "../../../schemas/ProfileFormValidation";
+import { profileFormValidation } from "../../../schemas/profileFormValidation";
 
 // Discard Modal Component
 const DiscardModal = ({ isOpen, onConfirm, onCancel }) => {

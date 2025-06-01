@@ -1,6 +1,5 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import ReactApexChart from "react-apexcharts";
 import { useInferences } from "../../../hooks/useInferences";
 import { useTranslation } from "react-i18next";
 import {
@@ -9,165 +8,118 @@ import {
   FaTimesCircle,
   FaVirus,
 } from "react-icons/fa";
+import StatCard from "./StatCard";
+import InferenceChart from "./InferenceChart";
 
-// Animation variants for the card grid (parent)
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2, // Stagger each card by 0.2s
-    },
-  },
-};
-
-// Animation variants for individual cards
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      type: "spring",
-      stiffness: 100,
+      staggerChildren: 0.2,
     },
   },
 };
 
 const InferenceStats = () => {
   const { t } = useTranslation();
-  const { data, isLoading, isError, error } = useInferences(1, 100);
+  const { getInferenceAggregates } = useInferences();
+
+  const [dateRange, setDateRange] = useState(() => {
+    const today = new Date();
+    const initialStartDate = new Date();
+    initialStartDate.setDate(today.getDate() - 28);
+    return {
+      start_date: initialStartDate,
+      end_date: today,
+    };
+  });
+
+  const formatDate = useCallback((date) => {
+    return date ? date.toISOString().split("T")[0] : "";
+  }, []);
+
+  const { data, isLoading, isError } = getInferenceAggregates(
+    formatDate(dateRange?.start_date) || undefined,
+    formatDate(dateRange?.end_date) || undefined
+  );
+
+  const processedData = useMemo(() => {
+    if (!Array.isArray(data)) return null;
+    return data
+      ?.map((item) => ({
+        date: item.date.split("T")[0],
+        count: item.total_inferences,
+        successful: item.successful_inferences,
+        failed: item.failed_inferences,
+        unique_diseases: item.unique_diseases_count,
+        average_confidence: item.average_confidence,
+        status_breakdown: item.status_breakdown,
+      }))
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }, [data]);
+
+  const inferenceMetrics = useMemo(() => {
+    if (!processedData) return null;
+    const totals = processedData.reduce(
+      (acc, day) => ({
+        total: acc.total + day.count,
+        successful: acc.successful + day.successful,
+        failed: acc.failed + day.failed,
+        diseases: acc.diseases + day.diseases,
+      }),
+      { total: 0, successful: 0, failed: 0, diseases: 0 }
+    );
+    return totals;
+  }, [processedData]);
 
   const getInferenceMetrics = useMemo(() => {
-    if (!data?.items || !Array.isArray(data.items)) return [];
-
-    const { items: inferences } = data;
-
-    const totalInferences = inferences.length;
-    const successfulInferences = inferences.filter(
-      (item) => item.status === 1
-    ).length;
-    const failedInferences = inferences.filter(
-      (item) => item.status === -1
-    ).length;
-    const detectedDiseases = inferences.filter(
-      (item) => item.status === 2
-    ).length;
-
+    if (!inferenceMetrics) return [];
     return [
       {
         title: t("total_inferences_key"),
-        value: totalInferences,
+        value: inferenceMetrics.total,
         icon: FaCalculator,
       },
       {
         title: t("successful_inferences_key"),
-        value: successfulInferences,
+        value: inferenceMetrics.successful,
         icon: FaCheckCircle,
       },
       {
         title: t("failed_inferences_key"),
-        value: failedInferences,
+        value: inferenceMetrics.failed,
         icon: FaTimesCircle,
       },
       {
         title: t("detected_diseases_key"),
-        value: detectedDiseases,
+        value: inferenceMetrics.diseases,
         icon: FaVirus,
       },
     ];
-  }, [data, t]);
+  }, [inferenceMetrics, t]);
 
-  const getInferenceHistory = useMemo(() => {
-    if (!data?.items || !Array.isArray(data.items)) return [];
+  const handleDateChange = useCallback((dates) => {
+    const [newStartDate, newEndDate] = dates;
+    if (!newEndDate || (newStartDate && newEndDate >= newStartDate)) {
+      setDateRange({
+        start_date: newStartDate,
+        end_date: newEndDate,
+      });
+    }
+  }, []);
 
-    const dateCounts = data.items.reduce((acc, item) => {
-      const date = new Date(item.created_at).toISOString().split("T")[0];
-      acc[date] = (acc[date] || 0) + 1;
-      return acc;
-    }, {});
-
-    return Object.entries(dateCounts)
-      .map(([date, count]) => ({ date, count }))
-      .sort((a, b) => new Date(a.date) - new Date(b.date));
-  }, [data]);
-
-  const historyChartData = {
-    series: [
-      {
-        name: t("inferences_key"),
-        data: getInferenceHistory.map((item) => item.count),
-      },
-    ],
-    options: {
-      chart: {
-        height: 350,
-        type: "line",
-      },
-      stroke: {
-        curve: "smooth",
-        width: 8,
-      },
-      colors: ["#416a00"],
-      title: {
-        text: t("inference_history_key"),
-        align: "left",
-        style: {
-          fontSize: "18px",
-          fontWeight: "bold",
-          color: "#374151",
-        },
-      },
-      xaxis: {
-        categories: getInferenceHistory.map((item) => item.date),
-        labels: {
-          style: {
-            colors: "#6B7280",
-            fontSize: "12px",
-          },
-        },
-        type: "datetime",
-      },
-      yaxis: {
-        title: {
-          text: t("inferences_key"),
-          style: {
-            color: "#6B7280",
-            fontSize: "12px",
-          },
-        },
-        min: 0,
-        labels: {
-          style: {
-            colors: "#6B7280",
-            fontSize: "12px",
-          },
-        },
-      },
-      tooltip: {
-        x: {
-          format: "dd MMM yyyy",
-        },
-        theme: "light",
-      },
-      markers: {
-        size: 5,
-      },
-    },
-  };
-
-  if (isLoading) return <div className="text-center py-8">Loading...</div>;
+  if (isLoading)
+    return <div className="text-center py-8">{t("loading_key")}</div>;
   if (isError)
     return (
       <div className="text-center py-8 text-red-500">
-        Error: {error.message}
+        {t("error_loading_data")}
       </div>
     );
 
   return (
     <div className="space-y-6">
-      {/* Stat Cards with Animation */}
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
         variants={containerVariants}
@@ -175,35 +127,23 @@ const InferenceStats = () => {
         animate="visible"
       >
         {getInferenceMetrics.map((stat, index) => (
-          <motion.div
-            key={index}
-            className="bg-white rounded-lg shadow p-4 flex flex-col items-start"
-            variants={cardVariants}
-          >
-            <div className="flex items-center gap-4 justify-between w-full">
-              <div className="text-gray-500 text-sm font-medium">
-                {stat.title}
-              </div>
-              <div className="text-2xl text-primary">
-                <stat.icon />
-              </div>
-            </div>
-            <div className="text-2xl font-bold text-gray-900 mt-2">
-              {stat.value}
-            </div>
-          </motion.div>
+          <StatCard
+            isLoading={isLoading}
+            key={`stat-${index}`}
+            title={stat.title}
+            value={stat.value}
+            icon={stat.icon}
+          />
         ))}
       </motion.div>
 
-      {/* History Line Chart */}
-      <div className="bg-white rounded-lg shadow p-4">
-        <ReactApexChart
-          options={historyChartData.options}
-          series={historyChartData.series}
-          type="line"
-          height={350}
-        />
-      </div>
+      <InferenceChart
+        t={t}
+        startDate={dateRange.start_date}
+        endDate={dateRange.end_date}
+        handleDateChange={handleDateChange}
+        historyData={processedData || []}
+      />
     </div>
   );
 };

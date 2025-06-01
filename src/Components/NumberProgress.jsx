@@ -8,6 +8,7 @@ const NumberCounter = ({
   suffix = "",
   className = "",
   decimals = 0,
+  color = "white",
 }) => {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
@@ -32,7 +33,7 @@ const NumberCounter = ({
         target * 0.7,
         target * 0.8,
         target * 0.85,
-        target * 0.90,
+        target * 0.9,
         target * 0.95,
         target,
       ]
@@ -67,7 +68,7 @@ const NumberCounter = ({
   return (
     <motion.span
       ref={ref}
-      className={`font-semibold ${className} text-2xl text-white`}
+      className={`font-semibold ${className} text-2xl text-${color}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: isInView ? 1 : 0.5 }}
       transition={{ duration: 0.5 }}

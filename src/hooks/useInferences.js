@@ -1,15 +1,16 @@
 import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getInferences } from "../api/inferenceAPI";
+import { getInferences, getAggregates } from "../api/inferenceAPI";
 import { fetchDiseases } from "../api/diseaseAPI";
 import { fetchPlants } from "../api/plantAPI";
 import { getStatusTranslation } from "../utils/statusTranslations";
 import { useTranslation } from "react-i18next";
 
-export const useInferences = (page, pageSize) => {
+export const useInferences = () => {
     const { i18n, t } = useTranslation();
 
-    const fetchLogs = useCallback(async () => {
+
+    const fetchLogs = useCallback(async (page, pageSize) => {
         const [inferencesData, diseasesData, plantsData] = await Promise.all([
             getInferences({ page, size: pageSize }),
             fetchDiseases({ pageSize: 100 }),
@@ -43,10 +44,29 @@ export const useInferences = (page, pageSize) => {
             total: inferencesData.total,
             pages: inferencesData.pages,
         };
-    }, [page, pageSize, i18n.language, t]);
+    }, [i18n.language, t]);
 
-    return useQuery({
-        queryKey: ["logs", page, pageSize, i18n.language],
-        queryFn: fetchLogs,
-    });
+    const getInferencesData = (page, pageSize) => {
+        return useQuery({
+            queryKey: ["inferences", page, pageSize, i18n.language],
+            queryFn: () => fetchLogs(page, pageSize),
+        });
+    };
+
+
+    const getInferenceAggregates = useCallback((start_date, end_date) => {
+
+        return useQuery({
+            queryKey: ["inferenceAggregates", start_date, end_date],
+            queryFn: async () => getAggregates(start_date, end_date),
+            enabled: !!end_date,
+            keepPreviousData: true
+
+        });
+    }, []);
+
+    return {
+        getInferencesData,
+        getInferenceAggregates
+    };
 };

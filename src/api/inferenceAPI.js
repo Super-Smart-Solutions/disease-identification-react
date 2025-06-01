@@ -46,3 +46,11 @@ export const analyzeInference = async (inferenceId) => {
   const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/${inferenceId}/deep-analysis`);
   return response.data;
 };
+// Get aggregates
+export const getAggregates = async (start_date, end_date) => {
+  const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/aggregates`, {
+    start_date,
+    end_date,
+  });
+  return response.data;
+};
