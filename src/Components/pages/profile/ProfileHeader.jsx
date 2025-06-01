@@ -1,11 +1,9 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
 import AvatarUpload from "./AvatarUpload";
 import UserProfileForm from "./UserProfileForm";
 import useProfileLogic from "../../../hooks/useProfileLogic";
 
 const ProfileHeader = () => {
-  const { t } = useTranslation();
   const {
     isEditMode,
     setIsEditMode,
