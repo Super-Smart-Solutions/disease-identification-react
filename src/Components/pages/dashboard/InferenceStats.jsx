@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { useInferences } from "../../../hooks/useInferences";
 import { useTranslation } from "react-i18next";
+import { useInferenceAggregates } from "../../../hooks/useInferenceAggregates";
 import {
   FaCalculator,
   FaCheckCircle,
@@ -23,7 +23,8 @@ const containerVariants = {
 
 const InferenceStats = () => {
   const { t } = useTranslation();
-  const { getInferenceAggregates } = useInferences();
+  const { formatDate, processData, calculateMetrics, getInferenceAggregates } =
+    useInferenceAggregates();
 
   const [dateRange, setDateRange] = useState(() => {
     const today = new Date();
@@ -35,65 +36,38 @@ const InferenceStats = () => {
     };
   });
 
-  const formatDate = useCallback((date) => {
-    return date ? date.toISOString().split("T")[0] : "";
-  }, []);
-
   const { data, isLoading, isError } = getInferenceAggregates(
     formatDate(dateRange?.start_date) || undefined,
     formatDate(dateRange?.end_date) || undefined
   );
 
-  const processedData = useMemo(() => {
-    if (!Array.isArray(data)) return null;
-    return data
-      ?.map((item) => ({
-        date: item.date.split("T")[0],
-        count: item.total_inferences,
-        successful: item.successful_inferences,
-        failed: item.failed_inferences,
-        unique_diseases: item.unique_diseases_count,
-        average_confidence: item.average_confidence,
-        status_breakdown: item.status_breakdown,
-      }))
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  }, [data]);
-
-  const inferenceMetrics = useMemo(() => {
-    if (!processedData) return null;
-    const totals = processedData.reduce(
-      (acc, day) => ({
-        total: acc.total + day.count,
-        successful: acc.successful + day.successful,
-        failed: acc.failed + day.failed,
-        diseases: acc.diseases + day.diseases,
-      }),
-      { total: 0, successful: 0, failed: 0, diseases: 0 }
-    );
-    return totals;
-  }, [processedData]);
+  const processedData = useMemo(() => processData(data), [data, processData]);
+  const inferenceMetrics = useMemo(
+    () => calculateMetrics(processedData),
+    [processedData, calculateMetrics]
+  );
 
   const getInferenceMetrics = useMemo(() => {
     if (!inferenceMetrics) return [];
     return [
       {
         title: t("total_inferences_key"),
-        value: inferenceMetrics.total,
+        value: inferenceMetrics.total || 0,
         icon: FaCalculator,
       },
       {
         title: t("successful_inferences_key"),
-        value: inferenceMetrics.successful,
+        value: inferenceMetrics.successful || 0,
         icon: FaCheckCircle,
       },
       {
         title: t("failed_inferences_key"),
-        value: inferenceMetrics.failed,
+        value: inferenceMetrics.failed || 0,
         icon: FaTimesCircle,
       },
       {
         title: t("detected_diseases_key"),
-        value: inferenceMetrics.diseases,
+        value: inferenceMetrics.diseases || 0,
         icon: FaVirus,
       },
     ];
@@ -109,8 +83,6 @@ const InferenceStats = () => {
     }
   }, []);
 
-  if (isLoading)
-    return <div className="text-center py-8">{t("loading_key")}</div>;
   if (isError)
     return (
       <div className="text-center py-8 text-red-500">
@@ -121,7 +93,7 @@ const InferenceStats = () => {
   return (
     <div className="space-y-6">
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:gridivols-4 gap-4"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
