@@ -82,13 +82,13 @@ const InferenceChart = ({
           return (
             '<div class="p-2 bg-white shadow-lg rounded">' +
             `<div class="font-bold">${data.date}</div>` +
-            `<div>Total: ${data.count}</div>` +
-            `<div>Successful: ${data.successful}</div>` +
-            `<div>Failed: ${data.failed}</div>` +
-            `<div>Unique Diseases: ${data.unique_diseases}</div>` +
-            `<div>Avg Confidence: ${(data.average_confidence * 100).toFixed(
-              2
-            )}%</div>` +
+            `<div>${t("total_key")}: ${data.count}</div>` +
+            `<div>${t("successful_key")}: ${data.successful}</div>` +
+            `<div>${t("failed_key")}: ${data.failed}</div>` +
+            `<div>${t("unique_diseases_key")}: ${data.unique_diseases}</div>` +
+            `<div>${t("avg_confidence_key")}: ${(
+              data.average_confidence * 100
+            ).toFixed(2)}%</div>` +
             "</div>"
           );
         },

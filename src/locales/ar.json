@@ -748,7 +748,11 @@
   "discard_changes_key": "تجاهل التغييرات",
   "discard_confirm_key": "هل أنت متأكد أنك تريد تجاهل التغييرات؟",
   "discard_key": "تجاهل",
-  "keep_editing_key": "الاستمرار في التعديل" , 
-  "not_valid_field_key" : "قيمة غير صالحة"
-
+  "keep_editing_key": "الاستمرار في التعديل",
+  "not_valid_field_key": "قيمة غير صالحة",
+  "total_key": "الإجمالي",
+  "successful_key": "ناجح",
+  "failed_key": "فشل",
+  "unique_diseases_key": "أمراض فريدة",
+  "avg_confidence_key": "متوسط الثقة"
 }

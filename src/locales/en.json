@@ -740,6 +740,11 @@
   "discard_changes_key": "Discard Changes",
   "discard_confirm_key": "Are you sure you want to discard your changes?",
   "discard_key": "Discard",
-  "keep_editing_key": "Keep Editing" , 
-  "not_valid_field_key" : "not valid"
+  "keep_editing_key": "Keep Editing",
+  "not_valid_field_key": "not valid",
+  "total_key": "Total",
+  "successful_key": "Successful",
+  "failed_key": "Failed",
+  "unique_diseases_key": "Unique Diseases",
+  "avg_confidence_key": "Avg Confidence"
 }
