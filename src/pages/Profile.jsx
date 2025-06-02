@@ -4,7 +4,7 @@ import ProfileHeader from "../Components/pages/profile/ProfileHeader";
 
 export default function Profile() {
   return (
-    <div>
+    <div className=" space-y-4">
       <ProfileHeader />
       <TeamSection />
     </div>

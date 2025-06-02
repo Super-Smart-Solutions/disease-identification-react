@@ -79,7 +79,7 @@ const AvatarUpload = ({ handleAvatarChange, avatarPreview }) => {
   return (
     <>
       <div className="flex justify-center mb-6">
-        <div className="relative w-64 h-64 rounded-full overflow-hidden group">
+        <div className="relative w-full h-64 rounded-full overflow-hidden group">
           <AvatarEditor
             image={avatarPreview || "https://via.placeholder.com/150"}
             width={260}
@@ -89,7 +89,7 @@ const AvatarUpload = ({ handleAvatarChange, avatarPreview }) => {
             scale={1.2}
             rotate={0}
             disableBoundaryChecks={false}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover "
           />
           <div
             className="relative"
