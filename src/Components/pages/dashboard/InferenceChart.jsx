@@ -9,6 +9,7 @@ const InferenceChart = ({
   endDate,
   handleDateChange,
   t,
+  isLoading,
 }) => {
   const historyChartData = {
     series: [
@@ -104,7 +105,11 @@ const InferenceChart = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-4">
+    <div
+      className={`"bg-white rounded-lg shadow p-4 ${
+        isLoading ? " animate-pulse select-none pointer-events-none" : ""
+      }`}
+    >
       <div className="flex items-center start gap-10 mb-4">
         <h2 className="text-xl font-semibold">{t("inference_history_key")}</h2>
         <DateRangePicker

@@ -15,10 +15,12 @@ const cardVariants = {
   },
 };
 
-const StatCard = ({ title, value, icon: Icon }) => {
+const StatCard = ({ title, value, icon: Icon, isLoading }) => {
   return (
     <motion.div
-      className="bg-white rounded-lg shadow p-4 flex flex-col items-start"
+      className={`bg-white rounded-lg shadow p-4 flex flex-col items-start ${
+        isLoading ? "opacity-50 animate-pulse  select-none pointer-events-none" : ""
+      }`}
       variants={cardVariants}
     >
       <div className="flex items-center gap-4 justify-between w-full">

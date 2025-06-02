@@ -48,26 +48,25 @@ const InferenceStats = () => {
   );
 
   const getInferenceMetrics = useMemo(() => {
-    if (!inferenceMetrics) return [];
     return [
       {
         title: t("total_inferences_key"),
-        value: inferenceMetrics.total || 0,
+        value: inferenceMetrics?.total || 0,
         icon: FaCalculator,
       },
       {
         title: t("successful_inferences_key"),
-        value: inferenceMetrics.successful || 0,
+        value: inferenceMetrics?.successful || 0,
         icon: FaCheckCircle,
       },
       {
         title: t("failed_inferences_key"),
-        value: inferenceMetrics.failed || 0,
+        value: inferenceMetrics?.failed || 0,
         icon: FaTimesCircle,
       },
       {
         title: t("detected_diseases_key"),
-        value: inferenceMetrics.diseases || 0,
+        value: inferenceMetrics?.diseases || 0,
         icon: FaVirus,
       },
     ];
@@ -110,6 +109,7 @@ const InferenceStats = () => {
       </motion.div>
 
       <InferenceChart
+        isLoading={isLoading}
         t={t}
         startDate={dateRange.start_date}
         endDate={dateRange.end_date}
