@@ -19,8 +19,6 @@ const FileUpload = ({
     onDrop: (acceptedFiles, fileRejections) => {
       setSelectedFile(acceptedFiles);
       if (fileRejections.length > 0) {
-        // Optionally handle rejections (e.g., file too large or wrong type)
-        console.log("Rejected files:", fileRejections);
         alert(
           t("file_rejected_key", {
             reasons: fileRejections

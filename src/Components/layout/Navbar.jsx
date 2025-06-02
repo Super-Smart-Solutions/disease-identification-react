@@ -8,7 +8,6 @@ import navRoutes from "./navRoutes";
 
 import {
   FaSignOutAlt,
-  FaGlobe,
   FaUserCircle,
   FaBars,
   FaTimes,
@@ -19,33 +18,15 @@ import { useAuthActions } from "../helpers/authHelpers";
 import { RiAdminFill } from "react-icons/ri";
 import DropdownMenu from "../DropdownMenu";
 import { useUserData } from "../../hooks/useUserData";
+import { LanguageToggle } from "../LanguageToggle";
 
 const Navbar = React.memo(() => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { logout } = useAuthActions();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useUserData();
-  const toggleLanguage = useCallback(
-    (lang) => {
-      i18n.changeLanguage(lang);
-      Cookies.set("language", lang, { expires: 365 });
-    },
-    [i18n]
-  );
-
-  useEffect(() => {
-    if (i18n.language === "ar") {
-      document.documentElement.setAttribute("dir", "rtl");
-      document.documentElement.classList.add("font-arabic");
-      document.documentElement.classList.remove("font-english");
-    } else {
-      document.documentElement.setAttribute("dir", "ltr");
-      document.documentElement.classList.add("font-english");
-      document.documentElement.classList.remove("font-arabic");
-    }
-  }, [i18n.language]);
 
   // Welcome dropdown options
   const welcomeOptions = [
@@ -84,27 +65,16 @@ const Navbar = React.memo(() => {
     },
   ];
 
-  // Language dropdown options
-  const languageOptions = [
-    {
-      label: "English",
-      onClick: () => toggleLanguage("en"),
-      isSelected: i18n.language === "en",
-    },
-    {
-      label: "العربية",
-      onClick: () => toggleLanguage("ar"),
-      isSelected: i18n.language === "ar",
-    },
-  ];
-
   return (
     <nav
       className={`p-4 text-white fixed w-full top-0 z-20 bg-blend-color-burn will-change-auto ${
-        user && location.pathname !== "/" ? "bg-primary" : "bg-black opacity-80"
+        user && location.pathname !== "/" ? "bg-primary" : "bg-[#000000bb]"
       }`}
     >
-      <div className="w-full flex justify-between items-center px-6 relative">
+      <div
+        dir="rtl"
+        className="w-full flex justify-between items-center px-6 relative"
+      >
         {/* Mobile Menu Button */}
         <button
           className="lg:hidden text-white"
@@ -195,18 +165,8 @@ const Navbar = React.memo(() => {
           </div>
         </div>
 
-        {/* Language Dropdown */}
-        <DropdownMenu
-          buttonContent={
-            <div className="flex items-center gap-2 text-sm text-white">
-              <FaGlobe size={16} />
-              <span className="hidden lg:inline">
-                {i18n.language === "en" ? "English" : "العربية"}
-              </span>
-            </div>
-          }
-          options={languageOptions}
-        />
+        {/* Language Toggle */}
+        <LanguageToggle />
       </div>
     </nav>
   );

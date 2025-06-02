@@ -51,7 +51,6 @@ export default function LogsSection() {
   const handleVerify = (id) => {
     verifyMutation.mutate({ id });
   };
-  console.log(data);
 
   const columnDefs = [
     { field: "id", headerName: "#", flex: 0.5 },

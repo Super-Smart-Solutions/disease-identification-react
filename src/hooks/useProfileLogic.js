@@ -67,7 +67,6 @@ const useProfileLogic = () => {
             setChangedFields({});
         } catch (err) {
             console.log(err);
-
         }
         setSubmitting(false);
     };
