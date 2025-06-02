@@ -110,3 +110,8 @@ input::placeholder {
 body.modal-open {
   overflow: hidden;
 }
+.apexcharts-legend.apx-legend-position-bottom.apexcharts-align-right,
+.apexcharts-legend.apx-legend-position-top.apexcharts-align-right {
+  justify-content: flex-start !important;
+  align-items: flex-end;
+}

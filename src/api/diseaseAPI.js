@@ -3,11 +3,11 @@ import axiosInstance from "../utils/axiosInstance";
 const DISEASE_ENDPOINT = import.meta.env.VITE_DISEASE_ENDPOINT;
 
 // Fetch all diseases
-export const fetchDiseases = async ({page = 1, pageSize = 10}) => {
+export const fetchDiseases = async ({ page = 1, pageSize = 10 }) => {
   const response = await axiosInstance.get(DISEASE_ENDPOINT, {
     params: {
-      page,
-      size: pageSize
+      pageNumber: page,
+      pageSize: pageSize
     }
   });
   return response.data;

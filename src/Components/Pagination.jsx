@@ -15,9 +15,6 @@ const Pagination = ({
   const isRTL = i18n.dir() === "rtl";
   const pageNumbers = [];
   const maxVisiblePages = 5;
-  const [isPageSizeMenuOpen, setIsPageSizeMenuOpen] = useState(false);
-  const pageSizeMenuRef = useRef(null);
-  const pageSizeButtonRef = useRef(null);
 
   let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
@@ -73,21 +70,12 @@ const Pagination = ({
 
         {/* Replace select with DropdownMenu */}
         <DropdownMenu
-          buttonRef={pageSizeButtonRef}
-          menuRef={pageSizeMenuRef}
-          isOpen={isPageSizeMenuOpen}
-          toggle={() => setIsPageSizeMenuOpen(!isPageSizeMenuOpen)}
           buttonContent={
             <span className="text-sm">
               {t("show_key")} {pageSize}
             </span>
           }
           options={pageSizeOptions}
-          position={isRTL ? "left" : "right"}
-          buttonClassName={`border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
-            isRTL ? "text-right" : "text-left"
-          }`}
-          menuClassName="min-w-[100px]"
         />
       </div>
 

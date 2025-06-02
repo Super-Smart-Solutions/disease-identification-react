@@ -112,7 +112,7 @@
   "please_wait_validating_key": "Please wait while validating image",
   "read_more_about_disease_key": "Read more about disease",
   "deep_analytics_key": "Deep analytics",
-  "disease_identification_project_key": "Agricultural Health Platform",
+  "disease_identification_project_key": "Smart Agricultural Guide",
   "disease_identification_description_key": "The Agricultural Health Platform use machine learning models for disease identification using an extensive database for plants and diseases. Studying many diseases in six different classes, including: Roses, Fruits, Coffee Trees, Honey Bees, Livestock Animals, and Fish.",
   "disease_identification_guide_key": "Your guide to identifying plant diseases.",
   "showing_key": "Showing {{from}} to {{to}} of {{total}} items",
@@ -545,9 +545,6 @@
   "coffee_green_scales_symptoms": "- Silver and brown spots: Silver or gray spots appear on the upper surface of leaves due to cell puncturing and internal content extraction.\r\n- Deformities: Leaves, flowers, and fruits become distorted, with curling or bending edges.\r\n- Black waste: Insects leave small black spots (excrement) on leaves.\r\n- General weakness: Chlorophyll deficiency leads to yellowing and wilting of leaves, especially in severe infestations.",
   "coffee_green_scales_treatments": "A. Preventive control\r\n- Regular inspection: Monitor plants using blue or yellow sticky traps to attract thrips.\r\n- Agricultural hygiene: Remove weeds and plant debris, sterilize tools.\r\n- Use resistant varieties: Select coffee seedlings free of viruses.\r\nB. Biological control\r\n- Predatory mites: Such as Amblyseius swirskii and Neoseiulus cucumeris that prey on thrips larvae.\r\n- Nematodes: Such as Steinernema feltiae that attack pupae in soil.\r\nC. Chemical control\r\n- Registered pesticides:\r\n  - Spinosad: Effective against thrips but toxic to bees (use cautiously outside flowering periods).\r\n  - Imidacloprid: Systemic insecticide applied according to recommended doses by the Ministry of Environment, Water and Agriculture.\r\n- Mineral oils: Such as \"KZed Oil 95\" to suffocate insects without environmental harm.\r\nD. Agricultural control\r\n- Balanced irrigation: Avoid drought that encourages thrips proliferation.\r\n- Moderate fertilization: Reduce nitrogen fertilizers that attract pests.\r\nE. Challenges in thrips control in coffee\r\n- Pesticide resistance: Due to rapid reproduction.\r\n- Spread by wind: Difficult to control in open farms.",
 
-
-
-
   "required_field_key": "This field is required",
   "ph_min_error_key": "pH must be at least 0",
   "ph_max_error_key": "pH must be at most 14",
@@ -737,5 +734,21 @@
   "image_created_key": "Image created successfully",
   "commonErrors.somethingWentWrong": "Something went wrong, please try again",
   "images_key": "Images",
-  "symptoms_key": "Symptoms"
+  "symptoms_key": "Symptoms",
+  "total_inferences_key": "Total Inferences",
+  "successful_inferences_key": "Successful Inferences",
+  "failed_inferences_key": "Failed Inferences",
+  "detected_diseases_key": "Detected Diseases",
+  "inference_history_key": "Inference history",
+  "profile_key": "Profile",
+  "discard_changes_key": "Discard Changes",
+  "discard_confirm_key": "Are you sure you want to discard your changes?",
+  "discard_key": "Discard",
+  "keep_editing_key": "Keep Editing",
+  "not_valid_field_key": "not valid",
+  "total_key": "Total",
+  "successful_key": "Successful",
+  "failed_key": "Failed",
+  "unique_diseases_key": "Unique Diseases",
+  "avg_confidence_key": "Avg Confidence"
 }

@@ -1,16 +1,18 @@
 // src/utils/authHelpers.js
 import { useDispatch } from 'react-redux';
-import { login, logout } from '../../redux/features/userSlice';
+import { logout } from '../../redux/features/userSlice';
+import { useUserData } from '../../hooks/useUserData';
 
 /**
  * Custom hook for authentication actions
  */
 export const useAuthActions = () => {
+  const { login } = useUserData()
   const dispatch = useDispatch();
 
   const handleLogin = async (values) => {
     try {
-      await dispatch(login(values)).unwrap();
+      await login(values).unwrap();
       return true;
     } catch (error) {
       console.error('Login failed:', error);

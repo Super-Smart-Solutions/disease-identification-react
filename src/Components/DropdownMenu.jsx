@@ -1,11 +1,20 @@
 import React, { useRef, useEffect, useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
-const useClickOutside = (ref, callback) => {
+const DropdownMenu = ({ buttonContent, options }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(
+    options.find((opt) => opt.isSelected) || null
+  );
+  const dropdownRef = useRef(null);
+  const [menuDirection, setMenuDirection] = useState("down");
+
+  // Click outside handler
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        callback();
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
       }
     };
 
@@ -13,25 +22,9 @@ const useClickOutside = (ref, callback) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [ref, callback]);
-};
+  }, []);
 
-const DropdownMenu = ({
-  buttonRef,
-  menuRef,
-  isOpen,
-  toggle,
-  buttonContent,
-  options,
-  position = "left",
-  buttonClassName = "",
-  menuClassName = "",
-  align = "start",
-}) => {
-  const dropdownRef = useRef(null);
-  const [menuDirection, setMenuDirection] = useState("down");
-
-  // Calculate menu position on open
+  // Calculate menu position
   useEffect(() => {
     if (isOpen && dropdownRef.current) {
       const buttonRect = dropdownRef.current.getBoundingClientRect();
@@ -45,64 +38,106 @@ const DropdownMenu = ({
     }
   }, [isOpen, options.length]);
 
-  useClickOutside(dropdownRef, () => {
-    if (isOpen) toggle();
-  });
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
   const handleOptionClick = (option) => {
-    option.onClick();
-    toggle();
+    if (option.onClick) {
+      option.onClick();
+    }
+    setSelectedOption(option);
+    setIsOpen(false);
+  };
+
+  // Determine button display content
+  const displayContent =
+    buttonContent ||
+    (selectedOption ? selectedOption.label : "Select an option");
+
+  // Animation variants for the menu
+  const menuVariants = {
+    hidden: {
+      opacity: 0,
+      y: menuDirection === "down" ? 10 : -10,
+      transition: { duration: 0.2 },
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.2, ease: "easeOut" },
+    },
+  };
+
+  // Animation for the chevron
+  const chevronVariants = {
+    closed: { rotate: 0 },
+    open: { rotate: 180 },
   };
 
   return (
     <div className="relative" ref={dropdownRef}>
-      <button
-        ref={buttonRef}
-        onClick={toggle}
-        className={`flex items-center gap-2 ${buttonClassName}`}
+      <motion.button
+        onClick={toggleMenu}
+        className={`flex items-center gap-2 rounded-md ${
+          buttonContent ? "" : "border border-slate-200"
+        } px-3 py-2 text-sm`}
         type="button"
+        whileTap={{ scale: 0.95 }}
+        transition={{ duration: 0.1 }}
       >
-        {buttonContent}
-        {isOpen ? <FaChevronUp size={14} /> : <FaChevronDown size={14} />}
-      </button>
-
-      {isOpen && (
-        <ul
-          ref={menuRef}
-          className={`absolute z-10 min-w-[160px] overflow-auto rounded-lg border border-slate-200 bg-white shadow-md ${
-            menuDirection === "down" ? "mt-2" : "mb-2 bottom-full"
-          } ${position === "right" ? "right-0" : "left-0"} ${
-            align === "center" ? "left-1/2 transform -translate-x-1/2" : ""
-          } ${menuClassName}`}
-          style={{
-            maxHeight: "calc(100vh - 100px)", // Prevent going off-screen vertically
-            overflowY: "auto",
-          }}
+        {displayContent}
+        <motion.span
+          variants={chevronVariants}
+          animate={isOpen ? "open" : "closed"}
+          transition={{ duration: 0.2 }}
         >
-          {options.map((option, index) => (
-            <li
-              key={index}
-              className={`cursor-pointer flex items-center gap-2 text-sm p-3 transition-all hover:bg-slate-100 ${
-                option.isSelected
-                  ? "bg-slate-100 font-semibold text-primary"
-                  : "text-slate-800"
-              }`}
-              onClick={() => handleOptionClick(option)}
-            >
-              {option.icon && (
-                <span
-                  className={`text-gray-500 ${
-                    option.isSelected ? "text-primary" : ""
-                  }`}
-                >
-                  {option.icon}
-                </span>
-              )}
-              {option.label}
-            </li>
-          ))}
-        </ul>
-      )}
+          <FaChevronDown size={14} />
+        </motion.span>
+      </motion.button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.ul
+            variants={menuVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className={`absolute z-10 min-w-[120px] overflow-auto rounded-lg border border-slate-200 bg-white shadow-md ${
+              menuDirection === "down" ? "mt-2" : "mb-2 bottom-full"
+            } left-0`}
+            style={{
+              maxHeight: "calc(100vh - 100px)", // Prevent going off-screen vertically
+              overflowY: "auto",
+            }}
+          >
+            {options.map((option, index) => (
+              <motion.li
+                key={index}
+                className={`cursor-pointer flex items-center gap-2 text-sm p-3 transition-all hover:bg-slate-100 ${
+                  selectedOption === option
+                    ? "bg-slate-100 font-semibold text-primary"
+                    : "text-slate-800"
+                }`}
+                onClick={() => handleOptionClick(option)}
+                whileHover={{ backgroundColor: "rgba(203, 213, 225, 0.1)" }}
+                transition={{ duration: 0.1 }}
+              >
+                {option.icon && (
+                  <span
+                    className={`text-gray-500 ${
+                      selectedOption === option ? "text-primary" : ""
+                    }`}
+                  >
+                    {option.icon}
+                  </span>
+                )}
+                {option.label}
+              </motion.li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

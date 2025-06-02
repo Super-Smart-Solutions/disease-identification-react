@@ -7,133 +7,36 @@ import Cookies from "js-cookie";
 import navRoutes from "./navRoutes";
 
 import {
-  FaChevronDown,
-  FaChevronUp,
   FaSignOutAlt,
-  FaGlobe,
   FaUserCircle,
   FaBars,
   FaTimes,
+  FaUser,
 } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
 import { useAuthActions } from "../helpers/authHelpers";
 import { RiAdminFill } from "react-icons/ri";
+import DropdownMenu from "../DropdownMenu";
+import { useUserData } from "../../hooks/useUserData";
+import { LanguageToggle } from "../LanguageToggle";
 
-// Dropdown Component
-const DropdownMenu = ({
-  buttonRef,
-  menuRef,
-  isOpen,
-  toggle,
-  buttonContent,
-  options,
-  position = "left",
-  buttonClassName = "",
-  menuClassName = "",
-}) => {
-  return (
-    <div className="relative ">
-      <button
-        ref={buttonRef}
-        onClick={toggle}
-        className={`flex items-center gap-2 ${buttonClassName}`}
-        type="button"
-      >
-        {buttonContent}
-        {isOpen ? <FaChevronUp size={14} /> : <FaChevronDown size={14} />}
-      </button>
-
-      {isOpen && (
-        <ul
-          ref={menuRef}
-          className={`absolute z-10 min-w-[160px] overflow-auto rounded-lg border border-slate-200 bg-white shadow-md mt-2 ${
-            position === "right" ? "-right-6" : "left-0"
-          } ${menuClassName}`}
-        >
-          {options.map((option, index) => (
-            <li
-              key={index}
-              className="cursor-pointer text-slate-800 flex items-center gap-2 text-sm p-3 transition-all hover:bg-slate-100"
-              onClick={option.onClick}
-            >
-              {option.icon && (
-                <span className="text-gray-500">{option.icon}</span>
-              )}
-              {option.label}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-};
-
-const Navbar = React.memo(({ auth = true }) => {
-  const { t, i18n } = useTranslation();
+const Navbar = React.memo(() => {
+  const { t } = useTranslation();
   const { logout } = useAuthActions();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user")) || {};
-  const firstName = user?.first_name || "";
-  const userAvatar = user?.avatar;
-  const welcomeMenuRef = useRef(null);
-  const welcomeButtonRef = useRef(null);
-  const languageMenuRef = useRef(null);
-  const languageButtonRef = useRef(null);
-  const ADMIN_URL = import.meta.env.VITE_ADMIN_URL;
-
-  // Close menus when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        welcomeMenuRef.current &&
-        !welcomeMenuRef.current.contains(event.target) &&
-        welcomeButtonRef.current &&
-        !welcomeButtonRef.current.contains(event.target)
-      ) {
-        setIsMenuOpen(false);
-      }
-
-      if (
-        languageMenuRef.current &&
-        !languageMenuRef.current.contains(event.target) &&
-        languageButtonRef.current &&
-        !languageButtonRef.current.contains(event.target)
-      ) {
-        setIsLanguageMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const toggleLanguage = useCallback(
-    (lang) => {
-      i18n.changeLanguage(lang);
-      Cookies.set("language", lang, { expires: 365 });
-      setIsLanguageMenuOpen(false);
-    },
-    [i18n]
-  );
-
-  useEffect(() => {
-    if (i18n.language === "ar") {
-      document.documentElement.setAttribute("dir", "rtl");
-      document.documentElement.classList.add("font-arabic");
-      document.documentElement.classList.remove("font-english");
-    } else {
-      document.documentElement.setAttribute("dir", "ltr");
-      document.documentElement.classList.add("font-english");
-      document.documentElement.classList.remove("font-arabic");
-    }
-  }, [i18n.language]);
+  const { user } = useUserData();
 
   // Welcome dropdown options
   const welcomeOptions = [
+    {
+      label: t("profile_key"),
+      icon: <FaUser />,
+      onClick: () => {
+        navigate("/profile");
+      },
+    },
     {
       label: t("dashboard_key"),
       icon: <RxDashboard />,
@@ -162,27 +65,16 @@ const Navbar = React.memo(({ auth = true }) => {
     },
   ];
 
-  // Language dropdown options
-  const languageOptions = [
-    {
-      label: "English",
-      onClick: () => toggleLanguage("en"),
-      isSelected: i18n.language === "en",
-    },
-    {
-      label: "العربية",
-      onClick: () => toggleLanguage("ar"),
-      isSelected: i18n.language === "ar",
-    },
-  ];
-
   return (
     <nav
-      className={`p-4 text-white sticky top-0 z-20 bg-blend-color-burn will-change-auto ${
-        auth && location.pathname !== "/" ? "bg-primary" : "bg-black opacity-80"
+      className={`p-4 text-white fixed w-full top-0 z-20 bg-blend-color-burn will-change-auto ${
+        user && location.pathname !== "/" ? "bg-primary" : "bg-[#000000bb]"
       }`}
     >
-      <div className="w-full flex justify-between items-center px-6 relative">
+      <div
+        dir="rtl"
+        className="w-full flex justify-between items-center px-6 relative"
+      >
         {/* Mobile Menu Button */}
         <button
           className="lg:hidden text-white"
@@ -193,17 +85,13 @@ const Navbar = React.memo(({ auth = true }) => {
 
         {/* Welcome Menu */}
         <div className="lg:block">
-          {auth ? (
+          {user ? (
             <DropdownMenu
-              buttonRef={welcomeButtonRef}
-              menuRef={welcomeMenuRef}
-              isOpen={isMenuOpen}
-              toggle={() => setIsMenuOpen(!isMenuOpen)}
               buttonContent={
                 <div className="flex items-center gap-2">
-                  {userAvatar ? (
+                  {user?.avatar ? (
                     <img
-                      src={userAvatar}
+                      src={user?.avatar}
                       alt="User avatar"
                       className="w-8 h-8 rounded-full object-cover"
                       onError={(e) => {
@@ -216,15 +104,13 @@ const Navbar = React.memo(({ auth = true }) => {
                   )}
                   <span className="text-lg text-white hidden lg:inline">
                     {t("welcome_key")}{" "}
-                    {firstName && (
-                      <span className="font-bold">{firstName}</span>
+                    {user?.first_name && (
+                      <span className="font-bold">{user?.first_name}</span>
                     )}
                   </span>
                 </div>
               }
               options={welcomeOptions}
-              position="left"
-              buttonClassName="text-white"
             />
           ) : (
             <span className="text-lg text-white hidden lg:block w-1/3">
@@ -279,24 +165,8 @@ const Navbar = React.memo(({ auth = true }) => {
           </div>
         </div>
 
-        {/* Language Dropdown */}
-        <DropdownMenu
-          buttonRef={languageButtonRef}
-          menuRef={languageMenuRef}
-          isOpen={isLanguageMenuOpen}
-          toggle={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
-          buttonContent={
-            <div className="flex items-center gap-2 text-sm text-white">
-              <FaGlobe size={16} />
-              <span className="hidden lg:inline">
-                {i18n.language === "en" ? "English" : "العربية"}
-              </span>
-            </div>
-          }
-          options={languageOptions}
-          position={i18n.language === "en" ? "right" : "left"}
-          buttonClassName="text-white"
-        />
+        {/* Language Toggle */}
+        <LanguageToggle />
       </div>
     </nav>
   );

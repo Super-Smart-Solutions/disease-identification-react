@@ -5,8 +5,8 @@ const INFERENCE_ENDPOINT = "/inferences";
 // Get inferences
 export const getInferences = async ({ size = 10, page = 1 }) => {
   const params = {
-    page,
-    size,
+    pageSize: size,
+    pageNumber: page,
   };
   const response = await axiosInstance.get(`${INFERENCE_ENDPOINT}`, { params });
   return response.data;
@@ -44,5 +44,13 @@ export const visualizeInference = async (inferenceId) => {
 // Get deep analysis results for inference
 export const analyzeInference = async (inferenceId) => {
   const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/${inferenceId}/deep-analysis`);
+  return response.data;
+};
+// Get aggregates
+export const getAggregates = async (start_date, end_date) => {
+  const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/aggregates`, {
+    start_date,
+    end_date,
+  });
   return response.data;
 };

@@ -10,8 +10,8 @@ export default function Carousel({ cards }) {
     slidesToShow: 3,
     slidesToScroll: 3,
     autoplay: true,
-    speed: 300,
-    autoplaySpeed: 2000,
+    speed: 800,
+    autoplaySpeed: 4000,
     cssEase: "linear",
     responsive: [
       {

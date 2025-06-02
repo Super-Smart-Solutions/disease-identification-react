@@ -9,8 +9,8 @@ const PLANT_ENDPOINT = import.meta.env.VITE_PLANT_ENDPOINT;
 export const fetchPlants = async (page = 1, pageSize = 10) => {
   const response = await axiosInstance.get(PLANT_ENDPOINT, {
     params: {
-      page,
-      size: pageSize
+      pageNumber: page,
+      pageSize: pageSize
     }
   });
   return response.data;

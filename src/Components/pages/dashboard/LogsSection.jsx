@@ -2,20 +2,17 @@ import React, { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FaCheckCircle } from "react-icons/fa";
-import {
-  getInferences,
-  updateInferenceVerify,
-} from "../../../api/inferenceAPI";
-import { fetchDiseases } from "../../../api/diseaseAPI";
-import { fetchPlants } from "../../../api/plantAPI";
+import { updateInferenceVerify } from "../../../api/inferenceAPI";
 import ImageModal from "./ImageModal";
-import { getStatusTranslation } from "../../../utils/statusTranslations";
 import moment from "moment/moment";
 import { useUserData } from "../../../hooks/useUserData";
 import { toast } from "sonner";
 import DataGrid from "../../DataGrid";
+import { useInferences } from "../../../hooks/useInferences";
 
 export default function LogsSection() {
+  const { getInferencesData } = useInferences();
+
   const queryClient = useQueryClient();
   const { t, i18n } = useTranslation();
   const [page, setPage] = useState(1);
@@ -23,47 +20,8 @@ export default function LogsSection() {
   const { user } = useUserData();
   const isAdmin = user?.is_org_admin;
 
-  const fetchLogs = useCallback(async () => {
-    const [inferencesData, diseasesData, plantsData] = await Promise.all([
-      getInferences({ page, size: pageSize }),
-      fetchDiseases({ pageSize: 100 }),
-      fetchPlants({ pageSize: 100 }),
-    ]);
+  const { data, isLoading, isError, error } = getInferencesData(page, pageSize);
 
-    const currentLang = i18n.language;
-
-    const enrichedInferences = inferencesData?.items?.map((inference) => {
-      const plant = plantsData?.items?.find((p) => p.id === inference.plant_id);
-      const disease = diseasesData?.items?.find(
-        (d) => d.id === inference.disease_id
-      );
-
-      return {
-        ...inference,
-        plant_name: plant
-          ? currentLang === "ar"
-            ? plant.arabic_name
-            : plant.english_name
-          : "----",
-        disease_name: disease
-          ? currentLang === "ar"
-            ? disease.arabic_name
-            : disease.english_name
-          : "----",
-        status_text: getStatusTranslation(inference.status, t),
-      };
-    });
-    return {
-      items: enrichedInferences || [],
-      total: inferencesData.total,
-      pages: inferencesData.pages,
-    };
-  }, [page, pageSize, i18n.language, t]);
-
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["logs", page, pageSize, i18n.language],
-    queryFn: fetchLogs,
-  });
   const verifyMutation = useMutation({
     mutationFn: async ({ id }) => {
       // Assuming you have an API function called `updateInferenceVerify`

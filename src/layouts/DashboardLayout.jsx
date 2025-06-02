@@ -63,9 +63,9 @@ export default function DashboardLayout() {
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       <Navbar />
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 ">
         {/* Side Navigation */}
-        <div className="h-full">
+        <div className=" mt-20 overflow-hidden">
           <SideNavigation
             isExpanded={isExpanded}
             setIsExpanded={setIsExpanded}
@@ -73,27 +73,22 @@ export default function DashboardLayout() {
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 overflow-auto relative">
+        <div className="flex-1 relative">
           {/* Background with overlay */}
           <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed"
+            className="absolute inset-0 bg-cover bg-center "
             style={{
               backgroundImage: "url('/background.png')",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundAttachment: "fixed",
-              backgroundRepeat: "no-repeat",
             }}
           />
 
           {/* Content Container */}
-          <div className="relative min-h-full p-4">
-            <main className="flex-grow p-8 border border-slate-200 rounded-2xl  space-y-4 shadow-sm bg-slate-50 bg-opacity-90">
+          <div className="relative min-h-full p-4 overflow-auto ">
+            <main className="flex-grow p-8 border  border-slate-200 rounded-2xl mt-20 bg-slate-50  space-y-4 shadow-sm  bg-opacity-90">
               {/* Enhanced Breadcrumbs */}
               <Breadcrumbs items={generateBreadcrumbs()} />
-
               {/* Page Content */}
-              <Outlet />
+              <Outlet />{" "}
             </main>
           </div>
         </div>

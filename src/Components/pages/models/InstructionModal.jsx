@@ -79,7 +79,7 @@ const InstructionModal = () => {
 
   return (
     <>
-      <div className="  relative bottom-10 flex gap-2">
+      <div className="relative bottom-10 flex gap-2">
         <span>{t("need_help_key")}</span>
         <motion.button
           onClick={handleOpen}

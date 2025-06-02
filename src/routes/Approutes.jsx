@@ -26,6 +26,8 @@ import LogsSection from "../Components/pages/dashboard/LogsSection";
 import AdminFarms from "../Components/pages/admin/farms/AdminFarms";
 import AdminOrganizations from "../Components/pages/admin/organizations/AdminOrganizations";
 import AdminImages from "../Components/pages/admin/images/AdminImages";
+import Profile from "../pages/Profile";
+import { useUserData } from "../hooks/useUserData";
 
 const componentMap = {
   Landing,
@@ -34,6 +36,7 @@ const componentMap = {
   Register,
   Login,
   Dashboard,
+  Profile,
   AdminDiseases,
   AdminPlants,
   LogsSection,
@@ -75,12 +78,14 @@ const ForbiddenRoute = ({ children, isAuthenticated }) => {
   return !isAuthenticated ? children : null;
 };
 
-const AdminRoute = ({ children, isAuthenticated }) => {
+const AdminRoute = ({ children, isAuthenticated, isAdmin }) => {
   const location = useLocation();
 
   if (!isAuthenticated) {
     localStorage.setItem("redirectPath", location.pathname);
     return <Navigate to="/auth/login" replace state={{ from: location }} />;
+  } else if (!isAdmin) {
+    return <Navigate to="/models" replace state={{ from: location }} />;
   }
 
   return children;
@@ -88,43 +93,22 @@ const AdminRoute = ({ children, isAuthenticated }) => {
 
 const AppRoutes = () => {
   const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useUserData();
   const { logout } = useAuthActions();
 
   useEffect(() => {
-    const checkAuthentication = () => {
-      const token = Cookies.get("token");
-      const userRole = Cookies.get("role"); // Assuming you store role in cookies
-
-      if (token) {
-        setIsAuthenticated(true);
-        setIsAdmin(userRole === "admin"); // Adjust based on your role checking logic
-      } else {
-        setIsAuthenticated(false);
-        setIsAdmin(false);
-        logout();
-      }
-      setIsLoading(false);
-    };
-
-    checkAuthentication();
-    const params = new URLSearchParams(location.search);
-    const inviteId = params.get("invite_id");
-
-    if (inviteId) {
-      localStorage.setItem("invite_id", inviteId);
+    const token = Cookies.get("token");
+    if (!token) {
+      logout();
     }
   }, [location.pathname]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const isAuthenticated = !!user;
+  const isAdmin = user?.roles?.some((role) => role.name === "superuser");
 
   return (
     <Routes>
-      {/* Unauthenticated routes use LandingLayout */}
+      {/* Unauthenticated routes */}
       <Route
         path="/"
         element={<LandingLayout isAuthenticated={isAuthenticated} />}
@@ -145,7 +129,8 @@ const AppRoutes = () => {
           />
         ))}
       </Route>
-      {/* Authenticated routes use MainLayout */}
+
+      {/* Authenticated routes */}
       <Route
         path="/"
         element={<MainLayout isAuthenticated={isAuthenticated} />}
@@ -167,17 +152,14 @@ const AppRoutes = () => {
         ))}
       </Route>
 
-      {/* Admin routes use DashboardLayout */}
-      <Route
-        path="/admin"
-        element={<DashboardLayout isAuthenticated={isAuthenticated} />}
-      >
+      {/* Admin routes */}
+      <Route path="/admin" element={<DashboardLayout />}>
         {adminRoutes.map((route, index) => (
           <Route
             key={index}
             path={route.path}
             element={
-              <AdminRoute isAuthenticated={isAuthenticated}>
+              <AdminRoute isAuthenticated={isAuthenticated} isAdmin={isAdmin}>
                 {React.createElement(componentMap[route.element])}
               </AdminRoute>
             }
