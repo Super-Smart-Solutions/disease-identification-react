@@ -108,7 +108,7 @@
   "please_wait_validating_key": "Please wait while validating image",
   "read_more_about_disease_key": "Read more about disease",
   "deep_analytics_key": "Deep analytics",
-  "disease_identification_project_key": "Agricultural Health Platform",
+  "disease_identification_project_key": "Smart Agricultural Guide",
   "disease_identification_description_key": "The Agricultural Health Platform use machine learning models for disease identification using an extensive database for plants and diseases. Studying many diseases in six different classes, including: Roses, Fruits, Coffee Trees, Honey Bees, Livestock Animals, and Fish.",
   "disease_identification_guide_key": "Your guide to identifying plant diseases.",
   "showing_key": "Showing {{from}} to {{to}} of {{total}} items",
