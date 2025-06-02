@@ -22,7 +22,7 @@ export const fetchUserById = async (userId) => {
 
 // Update a user by ID
 export const updateUserById = async (userId, userData) => {
-    const response = await axiosInstance.patch(`${USER_ENDPOINT}/${userId}`, userData);
+    const response = await axiosInstance.put(`${USER_ENDPOINT}/${userId}`, userData);
     return response.data;
 };
 

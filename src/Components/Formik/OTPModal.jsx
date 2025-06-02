@@ -99,7 +99,7 @@ export default function OTPModal({ isOpen, onClose, length = 6, onSubmit }) {
         </p>
 
         {/* OTP Inputs */}
-        <div className="flex justify-center gap-2">
+        <div dir="ltr" className="flex justify-center gap-2">
           {otp.map((digit, index) => (
             <input
               key={index}

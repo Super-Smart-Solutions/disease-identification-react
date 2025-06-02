@@ -40,5 +40,78 @@
 }
 .slick-prev:before,
 .slick-next:before {
-  color: #416a00 !important;
+  color: #00000083 !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  font-family: "slick";
+  line-height: 1;
+  opacity: 0.75;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+input::placeholder {
+  font: 0.8rem/3 "Roboto", sans-serif;
+}
+
+.ag-row {
+  display: flex;
+  justify-content: start !important; /* Center row items */
+  align-items: center; /* Vertically align row items */
+  border: 0.5px solid #f0f0f0;
+}
+.ag-cell {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: none !important;
+  overflow: hidden;
+}
+
+.ag-body-viewport {
+  border: none !important;
+}
+
+.ag-root-wrapper {
+  border: none !important;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px; /* fully rounded */
+  padding: 2px 10px;
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500;
+}
+
+/* Success badge */
+.badge-success {
+  color: #15803d; /* green-700 */
+  border-color: #b4c2b9; /* green-500 */
+  background-color: #ecfdf5;
+}
+
+/* Error badge */
+.badge-error {
+  color: #b91c1c; /* red-700 */
+  border-color: #928b8b; /* red-500 */
+  background-color: #fef2f2;
+}
+
+/* Primary badge */
+.badge-primary {
+  color: #416a00; /* blue-700 */
+  border-color: #a9ada1; /* blue-500 */
+  background-color: #d6d8d2;
+}
+body.modal-open {
+  overflow: hidden;
+}
+.apexcharts-legend.apx-legend-position-bottom.apexcharts-align-right,
+.apexcharts-legend.apx-legend-position-top.apexcharts-align-right {
+  justify-content: flex-start !important;
+  align-items: flex-end;
 }

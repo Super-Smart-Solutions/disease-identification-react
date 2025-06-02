@@ -1,46 +1,100 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchCurrentUser } from '../api/userAPI';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser, setLoading, setError, logout } from '../redux/features/userSlice';
+import { fetchCurrentUser, updateUserById, uploadUserAvatar as UploadUserAvatar } from '../api/userAPI';
+import { loginUser } from '../api/authAPI';
+
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 export const useUserData = () => {
-    const queryClient = useQueryClient();
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
+    const { user, isLoading, isError, error } = useSelector((state) => state.user);
 
+    const login = async (values) => {
+        try {
+            dispatch(setLoading(true));
+            const loginResponse = await loginUser(values);
+            const { access_token } = loginResponse;
+            Cookies.set('token', access_token, {
+                secure: true,
+                sameSite: 'Strict',
+                expires: 1,
+            });
+            const userResponse = await fetchCurrentUser();
+            dispatch(setUser(userResponse));
 
-    const { data: user, isLoading, isError, refetch } = useQuery({
-        queryKey: ['currentUser'],
-        queryFn: fetchCurrentUser,
-        initialData: () => {
-
-            const storedUser = localStorage.getItem('user');
-            return storedUser ? JSON.parse(storedUser) : null;
-        },
-        staleTime: 1000 * 60 * 5,
-        cacheTime: 1000 * 60 * 30,
-        onSuccess: (data) => {
-            if (data) {
-                localStorage.setItem('user', JSON.stringify(data));
+            const redirectPath =
+                localStorage.getItem("redirectPath")
+            if (redirectPath) {
+                navigate(redirectPath);
+                localStorage.removeItem("redirectPath");
+            } else {
+                navigate("/models");
             }
-        },
-        onError: (error) => {
-            console.error('Failed to fetch user data', error);
+            return userResponse;
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || error.message;
+            dispatch(setError(errorMessage));
+            throw errorMessage;
         }
-    });
+    };
 
-
-    const { mutate: clearUserData } = useMutation({
-        mutationFn: () => {
-            localStorage.removeItem('user');
-            return Promise.resolve(null);
-        },
-        onSuccess: () => {
-            queryClient.setQueryData(['currentUser'], null);
+    const refetchUserData = async () => {
+        try {
+            dispatch(setLoading(true));
+            const userResponse = await fetchCurrentUser();
+            dispatch(setUser(userResponse));
+            return userResponse;
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || error.message;
+            dispatch(setError(errorMessage));
+            throw errorMessage;
         }
-    });
+    };
+
+    const updateUserData = async (userId, userData) => {
+        try {
+            dispatch(setLoading(true));
+            await updateUserById(userId, userData);
+            const updatedUser = await fetchCurrentUser()
+            dispatch(setUser(updatedUser));
+            return updatedUser;
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || error.message;
+            dispatch(setError(errorMessage));
+            throw errorMessage;
+        }
+    };
+
+    const uploadUserAvatar = async (avatarFile) => {
+        try {
+            dispatch(setLoading(true));
+            const token = Cookies.get('token');
+            await UploadUserAvatar(avatarFile, token);
+            const updatedUser = await fetchCurrentUser()
+            dispatch(setUser(updatedUser));
+            return updatedUser;
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || error.message;
+            dispatch(setError(errorMessage));
+            throw errorMessage;
+        }
+    };
+
+    const logoutUser = () => {
+        dispatch(logout());
+    };
 
     return {
         user,
         isLoading,
         isError,
-        refetchUserData: refetch,
-        clearUserData
+        error,
+        login,
+        refetchUserData,
+        updateUserData,
+        uploadUserAvatar,
+        logoutUser,
     };
 };

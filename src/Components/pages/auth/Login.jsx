@@ -7,11 +7,11 @@ import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../Button";
 import PasswordInput from "../../Formik/PasswordInput";
-import { login } from "../../helpers/authHelpers";
+import { useAuthActions } from "../../helpers/authHelpers";
 
 export default function Login() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { login } = useAuthActions();
 
   const initialValues = {
     username: "",
@@ -22,13 +22,12 @@ export default function Login() {
     username: Yup.string().required(t("username_required_key")),
     password: Yup.string()
       .min(6, t("password_min_length_key"))
-      .required(t("password_required_key")),
+      .required(t("required_field_key")),
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       await login(values);
-      navigate("/models");
     } catch (error) {
       console.error("Login failed", error);
     } finally {
@@ -38,7 +37,7 @@ export default function Login() {
 
   return (
     <motion.div
-      className="w-full py-6"
+      className="w-full mt-20 overflow-x-hidden"
       initial={{ opacity: 0, x: 50 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -50 }}

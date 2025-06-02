@@ -4,18 +4,20 @@ const IMAGE_ENDPOINT = "/images";
 const URL_ENDPOINT = "/images/url";
 const UPLOAD_ENDPOINT = "/images/uploads";
 
-// Fetch images with optional filters
-export const getImages = async ({ plantId, diseaseId, size = 10, }) => {
-  const params = {
-    plant_id: plantId,
-    disease_id: diseaseId,
-    size,
-  };
-  const response = await axiosInstance.get(IMAGE_ENDPOINT, { params });
+
+export const getImages = async ({ plantId, diseaseId, page = 1, pageSize = 20 }) => {
+
+  const response = await axiosInstance.get(IMAGE_ENDPOINT, {
+    params: {
+      plant_id: plantId,
+      disease_id: diseaseId,
+      pageNumber: page,
+      pageSize: pageSize
+    }
+  });
   return response.data;
 };
 
-// Get presigned URLs for images
 export const getImageUrls = async ({ plantId, diseaseId, limit = 10, offset = 0 }) => {
   const imagesData = await getImages({ plantId, diseaseId, limit, offset });
   const urls = await Promise.all(
@@ -26,42 +28,59 @@ export const getImageUrls = async ({ plantId, diseaseId, limit = 10, offset = 0 
   );
   return { urls, images: imagesData.data };
 };
-// Fetch an image by ID
+
 export const fetchImageById = async (imageId) => {
   const response = await axiosInstance.get(`${IMAGE_ENDPOINT}/${imageId}`);
   return response.data;
 };
 
+export const uploadImageAdmin = async (formData) => {
+  try {
+    const response = await axiosInstance.post(UPLOAD_ENDPOINT, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Upload failed:", error);
+    throw error;
+  }
+};
+
 export const uploadImage = async ({ name, plantId, imageFile }) => {
   const formData = new FormData();
 
-  // Append JSON fields
+
   formData.append("name", name);
-  formData.append("farm_id", "1"); // Default farm ID as string
+  formData.append("farm_id", "1");
   formData.append("plant_id", plantId);
   formData.append("annotated", "false");
 
-  // Append image file
+
   formData.append("image_file", imageFile);
 
-  // Make POST request
+
   const response = await axiosInstance.post(UPLOAD_ENDPOINT, formData);
 
   return response.data;
 };
 
-
-
-// Update image metadata
-export const updateImageMetadata = async ({ imageId, plantId, diseaseId, farmId, metadata }) => {
+export const updateImage = async ({ id, plant_id, disease_id, name, image_type }) => {
   const data = {
-    img_metadata: metadata,
+    name: name,
+    image_type: image_type,
     annotated: true,
-    plant_id: plantId,
-    disease_id: diseaseId,
-    farm_id: farmId,
+    plant_id: plant_id,
+    disease_id: disease_id,
+    farm_id: 1,
   };
 
-  const response = await axiosInstance.put(`${IMAGE_ENDPOINT}/${imageId}`, data);
+  const response = await axiosInstance.put(`${IMAGE_ENDPOINT}/${id}`, data);
+  return response.data;
+};
+
+export const deleteImage = async (imageId) => {
+  const response = await axiosInstance.delete(`${IMAGE_ENDPOINT}/${imageId}`);
   return response.data;
 };

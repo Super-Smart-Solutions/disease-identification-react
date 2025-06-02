@@ -1,48 +1,29 @@
-import Cookies from "js-cookie";
-import { loginUser } from "../../api/authAPI"; // Adjust the import path as needed
-import { fetchCurrentUser } from "../../api/userAPI";
+// src/utils/authHelpers.js
+import { useDispatch } from 'react-redux';
+import { logout } from '../../redux/features/userSlice';
+import { useUserData } from '../../hooks/useUserData';
 
 /**
- * Helper function to handle user login
- * @param {Object} values - Login form values (username and password)
- * @returns {Promise<void>}
+ * Custom hook for authentication actions
  */
-export const login = async (values) => {
-  try {
-    // Step 1: Log in the user and get the access token
-    const loginResponse = await loginUser(values);
-    const { access_token } = loginResponse;
+export const useAuthActions = () => {
+  const { login } = useUserData()
+  const dispatch = useDispatch();
 
-    // Step 2: Set the token in cookies
-    Cookies.set("token", access_token, {
-      secure: true,
-      sameSite: "Strict",
-      expires: 1, // Expires in 1 day
-    });
+  const handleLogin = async (values) => {
+    try {
+      await login(values).unwrap();
+      return true;
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error;
+    }
+  };
 
-    // Step 3: Fetch the current user's data
-    const userResponse = await fetchCurrentUser();
+  const handleLogout = () => {
+    dispatch(logout());
+    // Optional: Add redirect here or handle it in components
+  };
 
-    // Step 4: Store user data in local storage
-    localStorage.setItem("user", JSON.stringify(userResponse));
-
-    return userResponse; // Return user data for further use if needed
-  } catch (error) {
-    console.error("Login failed", error);
-    throw error; // Re-throw the error for handling in the component
-  }
-};
-
-/**
- * Helper function to handle user logout
- */
-export const logout = () => {
-  // Step 1: Remove the token from cookies
-  Cookies.remove("token");
-
-  // Step 2: Clear user data from local storage
-  localStorage.removeItem("user");
-
-  // Optional: Redirect the user to the login page or home page
-  window.location.href = "/"; // Adjust the path as needed
+  return { login: handleLogin, logout: handleLogout };
 };

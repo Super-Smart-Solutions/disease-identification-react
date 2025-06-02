@@ -1,6 +1,7 @@
-import React from "react";
+import { useState, useRef } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import DropdownMenu from "./DropdownMenu";
 
 const Pagination = ({
   currentPage,
@@ -38,10 +39,17 @@ const Pagination = ({
     }
   };
 
-  const handlePageSizeChange = (e) => {
-    onPageSizeChange(Number(e.target.value));
+  const handlePageSizeSelect = (size) => {
+    onPageSizeChange(size);
     onPageChange(1);
+    setIsPageSizeMenuOpen(false);
   };
+
+  const pageSizeOptions = [20, 50, 100].map((size) => ({
+    label: `${t("show_key")} ${size}`,
+    onClick: () => handlePageSizeSelect(size),
+    isSelected: pageSize === size,
+  }));
 
   const PreviousIcon = isRTL ? FaChevronRight : FaChevronLeft;
   const NextIcon = isRTL ? FaChevronLeft : FaChevronRight;
@@ -60,19 +68,15 @@ const Pagination = ({
           })}
         </span>
 
-        <select
-          value={pageSize}
-          onChange={handlePageSizeChange}
-          className={`border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
-            isRTL ? "text-right" : "text-left"
-          }`}
-        >
-          {[20, 50, 100].map((size) => (
-            <option key={size} value={size}>
-              {t("show_key")} {size}
-            </option>
-          ))}
-        </select>
+        {/* Replace select with DropdownMenu */}
+        <DropdownMenu
+          buttonContent={
+            <span className="text-sm">
+              {t("show_key")} {pageSize}
+            </span>
+          }
+          options={pageSizeOptions}
+        />
       </div>
 
       <nav className="flex items-center gap-1">

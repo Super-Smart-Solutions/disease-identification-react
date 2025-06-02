@@ -1,134 +1,42 @@
+// components/Navbar.js
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Cookies from "js-cookie";
 import navRoutes from "./navRoutes";
-import { logout } from "../helpers/authHelpers";
+
 import {
-  FaChevronDown,
-  FaChevronUp,
   FaSignOutAlt,
-  FaGlobe,
   FaUserCircle,
+  FaBars,
+  FaTimes,
+  FaUser,
 } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
+import { useAuthActions } from "../helpers/authHelpers";
+import { RiAdminFill } from "react-icons/ri";
+import DropdownMenu from "../DropdownMenu";
+import { useUserData } from "../../hooks/useUserData";
+import { LanguageToggle } from "../LanguageToggle";
 
-// Dropdown Component
-const DropdownMenu = ({
-  buttonRef,
-  menuRef,
-  isOpen,
-  toggle,
-  buttonContent,
-  options,
-  position = "left",
-  buttonClassName = "",
-  menuClassName = "",
-}) => {
-  return (
-    <div className="relative ">
-      <button
-        ref={buttonRef}
-        onClick={toggle}
-        className={`flex items-center gap-2 ${buttonClassName}`}
-        type="button"
-      >
-        {buttonContent}
-        {isOpen ? <FaChevronUp size={14} /> : <FaChevronDown size={14} />}
-      </button>
-
-      {isOpen && (
-        <ul
-          ref={menuRef}
-          className={`absolute z-10 min-w-[160px] overflow-auto rounded-lg border border-slate-200 bg-white shadow-md mt-2 ${
-            position === "right" ? "-right-6" : "left-0"
-          } ${menuClassName}`}
-        >
-          {options.map((option, index) => (
-            <li
-              key={index}
-              className="cursor-pointer text-slate-800 flex items-center gap-2 text-sm p-3 transition-all hover:bg-slate-100"
-              onClick={option.onClick}
-            >
-              {option.icon && (
-                <span className="text-gray-500">{option.icon}</span>
-              )}
-              {option.label}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-};
-
-const Navbar = React.memo(({ auth = true }) => {
-  const { t, i18n } = useTranslation();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+const Navbar = React.memo(() => {
+  const { t } = useTranslation();
+  const { logout } = useAuthActions();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user")) || {};
-  const firstName = user?.first_name || "";
-  const userAvatar = user?.avatar;
-  const welcomeMenuRef = useRef(null);
-  const welcomeButtonRef = useRef(null);
-  const languageMenuRef = useRef(null);
-  const languageButtonRef = useRef(null);
-
-  // Close menus when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        welcomeMenuRef.current &&
-        !welcomeMenuRef.current.contains(event.target) &&
-        welcomeButtonRef.current &&
-        !welcomeButtonRef.current.contains(event.target)
-      ) {
-        setIsMenuOpen(false);
-      }
-
-      if (
-        languageMenuRef.current &&
-        !languageMenuRef.current.contains(event.target) &&
-        languageButtonRef.current &&
-        !languageButtonRef.current.contains(event.target)
-      ) {
-        setIsLanguageMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const toggleLanguage = useCallback(
-    (lang) => {
-      i18n.changeLanguage(lang);
-      Cookies.set("language", lang, { expires: 365 });
-      setIsLanguageMenuOpen(false);
-    },
-    [i18n]
-  );
-
-  const handleLogout = useCallback(() => {
-    logout();
-    navigate("/auth/login");
-  }, [navigate]);
-
-  useEffect(() => {
-    if (i18n.language === "ar") {
-      document.documentElement.setAttribute("dir", "rtl");
-      document.documentElement.style.fontFamily = "'Noto Kufi Arabic', serif";
-    } else {
-      document.documentElement.setAttribute("dir", "ltr");
-      document.documentElement.style.fontFamily = "'Roboto', sans-serif";
-    }
-  }, [i18n.language]);
+  const { user } = useUserData();
 
   // Welcome dropdown options
   const welcomeOptions = [
+    {
+      label: t("profile_key"),
+      icon: <FaUser />,
+      onClick: () => {
+        navigate("/profile");
+      },
+    },
     {
       label: t("dashboard_key"),
       icon: <RxDashboard />,
@@ -136,69 +44,83 @@ const Navbar = React.memo(({ auth = true }) => {
         navigate("/dashboard");
       },
     },
+    ...(Array.isArray(user?.roles) && user.roles[0]?.name === "superuser"
+      ? [
+          {
+            label: t("admin_key"),
+            icon: <RiAdminFill />,
+            onClick: () => {
+              navigate("/admin/inferences");
+            },
+          },
+        ]
+      : []),
     {
       label: t("logout_key"),
       icon: <FaSignOutAlt />,
-      onClick: handleLogout,
-    },
-  ];
-
-  // Language dropdown options
-  const languageOptions = [
-    {
-      label: "English",
-      onClick: () => toggleLanguage("en"),
-    },
-    {
-      label: "العربية",
-      onClick: () => toggleLanguage("ar"),
+      onClick: () => {
+        logout();
+        window.location.href = "/";
+      },
     },
   ];
 
   return (
     <nav
-      className={`p-4 text-white sticky top-0 z-20 bg-blend-color-burn will-change-auto ${
-        auth && location.pathname !== "/" ? "bg-primary" : "bg-black opacity-80"
+      className={`p-4 text-white fixed w-full top-0 z-20 bg-blend-color-burn will-change-auto ${
+        user && location.pathname !== "/" ? "bg-primary" : "bg-[#000000bb]"
       }`}
     >
-      <div className="container mx-auto flex justify-between items-center">
-        {/* Welcome Menu */}
-        {auth ? (
-          <DropdownMenu
-            buttonRef={welcomeButtonRef}
-            menuRef={welcomeMenuRef}
-            isOpen={isMenuOpen}
-            toggle={() => setIsMenuOpen(!isMenuOpen)}
-            buttonContent={
-              <div className="flex items-center gap-2">
-                {userAvatar ? (
-                  <img
-                    src={userAvatar}
-                    alt="User avatar"
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
-                ) : (
-                  <FaUserCircle size={24} />
-                )}
-                <span className="text-lg text-white">
-                  {t("welcome_key")}{" "}
-                  {firstName && <span className="font-bold">{firstName}</span>}
-                </span>
-              </div>
-            }
-            options={welcomeOptions}
-            position="left"
-            buttonClassName="text-white"
-          />
-        ) : (
-          <>
-            {" "}
-            <span className="text-lg text-white">{t("welcome_key")} </span>
-          </>
-        )}
+      <div
+        dir="rtl"
+        className="w-full flex justify-between items-center px-6 relative"
+      >
+        {/* Mobile Menu Button */}
+        <button
+          className="lg:hidden text-white"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? "" : <FaBars size={24} />}
+        </button>
 
-        {/* Navigation Links */}
-        <div className="flex items-center space-x-6">
+        {/* Welcome Menu */}
+        <div className="lg:block">
+          {user ? (
+            <DropdownMenu
+              buttonContent={
+                <div className="flex items-center gap-2">
+                  {user?.avatar ? (
+                    <img
+                      src={user?.avatar}
+                      alt="User avatar"
+                      className="w-8 h-8 rounded-full object-cover"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "user-avatar.png";
+                      }}
+                    />
+                  ) : (
+                    <FaUserCircle size={24} />
+                  )}
+                  <span className="text-lg text-white hidden lg:inline">
+                    {t("welcome_key")}{" "}
+                    {user?.first_name && (
+                      <span className="font-bold">{user?.first_name}</span>
+                    )}
+                  </span>
+                </div>
+              }
+              options={welcomeOptions}
+            />
+          ) : (
+            <span className="text-lg text-white hidden lg:block w-1/3">
+              {t("welcome_key")}
+            </span>
+          )}
+        </div>
+
+        {/* Navigation Links - Desktop */}
+        <div className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-6">
           {navRoutes.map((route) => (
             <NavLink
               key={route.path}
@@ -217,22 +139,34 @@ const Navbar = React.memo(({ auth = true }) => {
           ))}
         </div>
 
-        {/* Language Dropdown */}
-        <DropdownMenu
-          buttonRef={languageButtonRef}
-          menuRef={languageMenuRef}
-          isOpen={isLanguageMenuOpen}
-          toggle={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
-          buttonContent={
-            <div className="flex items-center gap-2 text-sm text-white">
-              <FaGlobe size={16} />
-              {i18n.language === "en" ? "English" : "العربية"}
-            </div>
-          }
-          options={languageOptions}
-          position="right"
-          buttonClassName="text-white"
-        />
+        {/* Mobile Navigation Menu */}
+        <div
+          className={`lg:hidden fixed inset-0 bg-primary-90 z-50 transition-transform duration-300 ${
+            isMobileMenuOpen ? "translate-start-50" : "-translate-x-full"
+          }`}
+        >
+          <button
+            className="lg:hidden text-white relative start-10 top-5"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <FaTimes size={24} /> : ""}
+          </button>
+          <div className="flex flex-col items-center justify-center h-full space-y-8">
+            {navRoutes.map((route) => (
+              <NavLink
+                key={route.path}
+                to={route.path}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-xl font-medium text-white hover:text-gray-300"
+              >
+                {t(route.label)}
+              </NavLink>
+            ))}
+          </div>
+        </div>
+
+        {/* Language Toggle */}
+        <LanguageToggle />
       </div>
     </nav>
   );

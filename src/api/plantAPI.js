@@ -6,8 +6,13 @@ import axiosInstance from "../utils/axiosInstance";
 const PLANT_ENDPOINT = import.meta.env.VITE_PLANT_ENDPOINT;
 
 // Fetch all plants
-export const fetchPlants = async () => {
-  const response = await axiosInstance.get(PLANT_ENDPOINT);
+export const fetchPlants = async (page = 1, pageSize = 10) => {
+  const response = await axiosInstance.get(PLANT_ENDPOINT, {
+    params: {
+      pageNumber: page,
+      pageSize: pageSize
+    }
+  });
   return response.data;
 };
 
@@ -31,6 +36,16 @@ export const addPlant = async (plantData) => {
   return response.data;
 };
 
+// Update an existing plant
+export const updatePlant = async (plantId, plantData) => {
+  const response = await axiosInstance.put(`${PLANT_ENDPOINT}/${plantId}`, plantData);
+  return response.data;
+};
+
+export const deletePlant = async (plantId) => {
+  const response = await axiosInstance.delete(`${PLANT_ENDPOINT}/${plantId}`);
+  return response.data;
+};
 // Fetch diseases associated with a plant
 export const fetchDiseasesByPlant = async (plantId) => {
   const response = await axiosInstance.get(`${PLANT_ENDPOINT}/${plantId}/diseases`);
