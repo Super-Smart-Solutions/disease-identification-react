@@ -1,67 +1,47 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import RegisterStepOne from "./RegisterStepOne";
 import RegisterStepTwo from "./RegisterStepTwo";
-import RegisterStepThree from "./RegisterStepThree";
-import { useTranslation } from "react-i18next";
-import authImage from "../../../assets/auth.png"; // Adjust path if necessary
 import AvatarStep from "./AvatarStep";
+import authImage from "../../../assets/auth.png";
+import useRegisterLogic from "../../../hooks/useRegisterLogic";
 
-export default function Register() {
+const Register = () => {
   const { t } = useTranslation();
-  const [registerData, setRegisterData] = useState({
-    email: "",
-    password: "",
-    is_active: true,
-    is_superuser: true,
-    is_verified: true,
-    organization_id: 0,
-    first_name: "",
-    last_name: "",
-    user_type: null,
-    token: null,
-  });
-  const [step, setStep] = useState(1);
-
-  // Validation functions for each step
-  const validateStepOne = () => {
-    return (
-      registerData.first_name &&
-      registerData.last_name &&
-      registerData.user_type
-    );
-  };
-
-  const validateStepTwo = () => {
-    return registerData.email && registerData.password;
-  };
-
-  const handleStepClick = (newStep) => {
-    if (newStep < step) {
-      // Allow going back to previous steps without validation
-      setStep(newStep);
-    } else {
-      // Validate current step before proceeding
-      if (step === 1 && validateStepOne()) {
-        setStep(newStep);
-      } else if (step === 2 && validateStepTwo()) {
-        setStep(newStep);
-      } else if (step === 3) {
-        // Handle final submission or next steps
-        setStep(newStep);
-      }
-    }
-  };
+  const {
+    registerData,
+    step,
+    handleStepClick,
+    validateStepOne,
+    validateStepTwo,
+    handleStepOneSubmit,
+    handleStepTwoSubmit,
+    handleOTPSubmit,
+    otpModal,
+    setOtpModal,
+    selectedFile,
+    tempSelectedFile,
+    showModal,
+    setShowModal,
+    scale,
+    setScale,
+    isLoading,
+    error,
+    handleFileSelect,
+    handleAvatarSave,
+    handleSkipAvatar,
+    invited,
+  } = useRegisterLogic();
 
   const steps = [
     {
       component: (
         <RegisterStepOne
-          step={step}
-          setStep={handleStepClick}
           registerData={registerData}
-          setRegisterData={setRegisterData}
+          validateStepOne={validateStepOne}
+          handleStepOneSubmit={handleStepOneSubmit}
         />
       ),
       label: t("Step 1"),
@@ -69,24 +49,41 @@ export default function Register() {
     {
       component: (
         <RegisterStepTwo
-          step={step}
-          setStep={handleStepClick}
+          invited={invited}
           registerData={registerData}
-          setRegisterData={setRegisterData}
+          validateStepTwo={validateStepTwo}
+          handleStepTwoSubmit={handleStepTwoSubmit}
+          otpModal={otpModal}
+          setOtpModal={setOtpModal}
+          handleOTPSubmit={handleOTPSubmit}
         />
       ),
       label: t("Step 2"),
     },
     {
-      component: <AvatarStep registerData={registerData} />,
+      component: (
+        <AvatarStep
+          registerData={registerData}
+          selectedFile={selectedFile}
+          tempSelectedFile={tempSelectedFile}
+          showModal={showModal}
+          setShowModal={setShowModal}
+          scale={scale}
+          setScale={setScale}
+          isLoading={isLoading}
+          error={error}
+          handleFileSelect={handleFileSelect}
+          handleAvatarSave={handleAvatarSave}
+          handleSkipAvatar={handleSkipAvatar}
+        />
+      ),
       label: t("Step 3"),
     },
   ];
 
   return (
-    <div className="flex items-center justify-center mt-20">
+    <div className="flex items-center justify-center mt-30">
       <div className="flex bg-white shadow-lg rounded-lg w-full max-w-4xl">
-        {/* Left: Auth Image */}
         <div className="w-1/2 hidden md:flex justify-center items-center bg-gray-100">
           <img
             loading="lazy"
@@ -96,9 +93,7 @@ export default function Register() {
           />
         </div>
 
-        {/* Right: Stepper Content */}
         <div className="w-full md:w-2/3 p-6 flex flex-col justify-between gap-12 items-center h-[100%]">
-          {/* Step Indicator */}
           <div className="w-full">
             <div className="flex items-center justify-between mb-6 w-full">
               {steps.map((_, index) => (
@@ -116,7 +111,6 @@ export default function Register() {
             <span className="text-2xl block">{t("create_account_key")}</span>
           </div>
 
-          {/* Step Content with Framer Motion Animation */}
           <motion.div
             className="flex-grow w-full"
             key={step}
@@ -141,4 +135,6 @@ export default function Register() {
       </div>
     </div>
   );
-}
+};
+
+export default Register;
