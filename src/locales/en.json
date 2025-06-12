@@ -52,9 +52,9 @@
   "remove_file_key": "Remove file",
   "select_category_key": "Select Category",
   "select_category_group_key": "Select Type",
-  "Plants_key":"Plants",
-  "Animals_key":"Animals",
-  "Fish_key":"Fish",
+  "Plants_key": "Plants",
+  "Animals_key": "Animals",
+  "Fish_key": "Fish",
   "select_model_key": "Select Model",
   "select_image_key": "Select Image",
   "find_diseases_key": "Find Diseases",
@@ -732,7 +732,10 @@
   "add_image_key": "Add image",
   "image_updated_key": "Image updated successfully",
   "image_created_key": "Image created successfully",
-  "commonErrors.somethingWentWrong": "Something went wrong, please try again",
+  "commonErrors": {
+    "somethingWentWrong": "Something went wrong, please try again",
+    "LOGIN_BAD_CREDENTIALS": "wrong username or password"
+  },
   "images_key": "Images",
   "symptoms_key": "Symptoms",
   "total_inferences_key": "Total Inferences",
@@ -750,5 +753,6 @@
   "successful_key": "Successful",
   "failed_key": "Failed",
   "unique_diseases_key": "Unique Diseases",
-  "avg_confidence_key": "Avg Confidence"
+  "avg_confidence_key": "Avg Confidence",
+  "login_success_key": "Login successful!"
 }
