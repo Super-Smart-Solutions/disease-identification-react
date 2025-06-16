@@ -22,6 +22,7 @@ const RegisterStepTwo = ({
     password: registerData.password || "",
     re_password: registerData.re_password || "",
     phone_number: registerData.phone_number || "",
+    city: registerData.city || "",
   };
 
   return (
@@ -105,7 +106,26 @@ const RegisterStepTwo = ({
               className="text-red-500 text-sm"
             />
           </div>
-
+          <div className="flex flex-col gap-1">
+            <label
+              htmlFor="city"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              {t("city_key")}
+            </label>
+            <Field
+              placeholder={t("city_placeholder_key")}
+              type="text"
+              name="city"
+              id="city"
+              className="custom-input w-full p-2 border rounded"
+            />
+            <ErrorMessage
+              name="city"
+              component="div"
+              className="text-red-500 text-xs mt-1"
+            />
+          </div>
           <Button loading={isSubmitting} type="submit">
             {t("complete_data_key")}
           </Button>

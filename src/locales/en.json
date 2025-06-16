@@ -754,5 +754,7 @@
   "failed_key": "Failed",
   "unique_diseases_key": "Unique Diseases",
   "avg_confidence_key": "Avg Confidence",
-  "login_success_key": "Login successful!"
+  "login_success_key": "Login successful!",
+  "city_key": "City",
+  "city_placeholder_key": "Riyadh , Jeddah , Cairo , ...."
 }

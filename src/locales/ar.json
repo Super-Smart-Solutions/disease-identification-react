@@ -759,5 +759,7 @@
   "failed_key": "فشل",
   "unique_diseases_key": "أمراض فريدة",
   "avg_confidence_key": "متوسط الثقة",
-  "login_success_key": "!تم تسجيل الدخول بنجاح"
+  "login_success_key": "!تم تسجيل الدخول بنجاح",
+  "city_key": "المدينة",
+  "city_placeholder_key": "الرياض , جدة , القاهرة , ...."
 }

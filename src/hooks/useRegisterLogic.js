@@ -24,6 +24,7 @@ const useRegisterLogic = () => {
         last_name: "",
         user_type: "individual",
         token: null,
+        city: ""
     });
     const [step, setStep] = useState(1);
     const [otpModal, setOtpModal] = useState(false);
@@ -116,6 +117,8 @@ const useRegisterLogic = () => {
             phone_number: values.phone_number,
             email: values.email,
             password: values.password,
+            city: values.city,
+
             organization_id: null,
         };
         try {
