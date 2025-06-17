@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { generateVerificationCode, verifyCode } from './../api/verificationAPI';
 import { uploadUserAvatar } from "./../api/userAPI";
 import { registerUser } from './../api/authAPI';
+import { acceptInvitationWithToken } from "../api/inviteApi";
 
 const useRegisterLogic = () => {
     const { t } = useTranslation();
@@ -24,7 +25,8 @@ const useRegisterLogic = () => {
         last_name: "",
         user_type: "individual",
         token: null,
-        city: ""
+        city: "",
+        invite_id: null
     });
     const [step, setStep] = useState(1);
     const [otpModal, setOtpModal] = useState(false);
@@ -40,8 +42,10 @@ const useRegisterLogic = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const email = params.get("email");
+        const invite_id = params.get("invite_id");
         if (email) {
             setRegisterData((prev) => ({ ...prev, email }));
+            setRegisterData((prev) => ({ ...prev, invite_id }));
             setInvited(true)
         }
     }, [location.search]);
@@ -105,11 +109,12 @@ const useRegisterLogic = () => {
     // Step 1 form submission
     const handleStepOneSubmit = (values) => {
         setRegisterData((prev) => ({ ...prev, ...values }));
-        handleStepClick(step + 1);
+        setStep(2)
     };
 
     // Step 2 form submission
     const handleStepTwoSubmit = async (values) => {
+        setIsLoading(true);
         setRegisterData((prev) => ({ ...prev, ...values }));
         const payload = {
             first_name: registerData.first_name,
@@ -118,7 +123,6 @@ const useRegisterLogic = () => {
             email: values.email,
             password: values.password,
             city: values.city,
-
             organization_id: null,
         };
         try {
@@ -129,6 +133,9 @@ const useRegisterLogic = () => {
             console.error("Error in Step 2:", error);
             setError(error.message || t("registration_error"));
         }
+        finally {
+            setIsLoading(false);
+        }
     };
 
     // OTP submission
@@ -137,7 +144,12 @@ const useRegisterLogic = () => {
             const response = await verifyCode(registerData.email, otp);
             setRegisterData((prev) => ({ ...prev, token: response.access_token }));
             setOtpModal(false);
-            handleStepClick(step + 1);
+
+            if (invited) {
+                await acceptInvitationWithToken(registerData?.invite_id, response.access_token);
+            }
+
+            setStep(3);
         } catch (error) {
             console.error("OTP verification failed:", error);
             setError(error.message || t("otp_verification_error"));

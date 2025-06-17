@@ -19,7 +19,6 @@ export default function TeamSection() {
   const { t } = useTranslation();
   const { user, refetchUserData } = useUserData();
   const { data: teamData } = useUserTeam(user?.organization_id);
-
   const isInOrganization = !!user?.organization_id;
   const isAdmin = user?.is_org_admin;
 
@@ -282,11 +281,9 @@ export default function TeamSection() {
       {/* Delete User Confirmation Modal */}
       {isDeleteModalOpen && (
         <ConfirmationModal
-          title={t("confirm_remove_user_key")}
-          message={t("are_you_sure_delete_user_key")}
           onConfirm={confirmDeleteUser}
           onCancel={() => setIsDeleteModalOpen(false)}
-          loading={deletingUser}
+          t={t}
         />
       )}
     </div>

@@ -14,6 +14,7 @@ const RegisterStepTwo = ({
   setOtpModal,
   handleOTPSubmit,
   invited,
+  isLoading,
 }) => {
   const { t } = useTranslation();
 
@@ -32,7 +33,7 @@ const RegisterStepTwo = ({
       onSubmit={handleStepTwoSubmit}
       enableReinitialize
     >
-      {({ setFieldValue, isSubmitting }) => (
+      {({ setFieldValue }) => (
         <Form className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
             <label htmlFor="email">{t("email_key")}</label>
@@ -126,7 +127,7 @@ const RegisterStepTwo = ({
               className="text-red-500 text-xs mt-1"
             />
           </div>
-          <Button loading={isSubmitting} type="submit">
+          <Button loading={isLoading} type="submit">
             {t("complete_data_key")}
           </Button>
 

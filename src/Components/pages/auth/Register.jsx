@@ -56,6 +56,7 @@ const Register = () => {
           otpModal={otpModal}
           setOtpModal={setOtpModal}
           handleOTPSubmit={handleOTPSubmit}
+          isLoading={isLoading}
         />
       ),
       label: t("Step 2"),

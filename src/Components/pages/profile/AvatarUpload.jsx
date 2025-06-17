@@ -81,7 +81,7 @@ const AvatarUpload = ({ handleAvatarChange, avatarPreview }) => {
       <div className="flex justify-center mb-6">
         <div className="relative w-full h-64 rounded-full overflow-hidden group">
           <AvatarEditor
-            image={avatarPreview || "https://via.placeholder.com/150"}
+            image={avatarPreview || "/user-avatar.png"}
             width={260}
             height={260}
             border={0}

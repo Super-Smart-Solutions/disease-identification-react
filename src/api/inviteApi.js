@@ -27,6 +27,21 @@ export const acceptInvitation = async (invitationId) => {
     const response = await axiosInstance.patch(`${INVITATION_ENDPOINT}/${invitationId}/accept`);
     return response.data;
 };
+// Accept an invitation with token 
+export const acceptInvitationWithToken = async (invitationId, token) => {
+    const response = await axiosInstance.patch(
+        `${INVITATION_ENDPOINT}/${invitationId}/accept`,
+        {},
+        {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+    return response.data;
+};
+
 
 // Reject an invitation
 export const rejectInvitation = async (invitationId) => {
