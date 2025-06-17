@@ -21,16 +21,16 @@ const dashboardRoutes = [
         label: "diseases_key",
         icon: GiCarnivorousPlant,
     },
-    // {
-    //     path: "/admin/farms",
-    //     label: "farms_key",
-    //     icon: PiFarm,
-    // },
-    // {
-    //     path: "/admin/organizations",
-    //     label: "organizations_key",
-    //     icon: RiTeamLine,
-    // },
+    {
+        path: "/admin/farms",
+        label: "farms_key",
+        icon: PiFarm,
+    },
+    {
+        path: "/admin/organizations",
+        label: "organizations_key",
+        icon: RiTeamLine,
+    },
     {
         path: "/admin/images",
         label: "images_key",
