@@ -14,8 +14,8 @@ const ImageGrid = ({ plant_id, diseaseId }) => {
 
   // Memoize the query function to prevent unnecessary re-renders
   const fetchImages = useCallback(
-    () => getImages({ plant_id, diseaseId, size: pageSize, page }),
-    [plant_id, diseaseId, pageSize, page]
+    () => getImages({ plant_id, diseaseId,page,pageSize }),
+    [plant_id, diseaseId, page, pageSize]
   );
 
   const { data, isLoading, error, isFetching } = useQuery({

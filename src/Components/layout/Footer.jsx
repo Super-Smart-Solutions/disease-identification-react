@@ -1,13 +1,10 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
-import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import logo from "../../assets/logo.jpg";
 
 export default function Footer() {
-  const { t } = useTranslation();
   return (
-    <footer className="text-white">
-      <div className="mx-auto max-w-screen-xl px-4 pt-16  sm:px-6 lg:px-8 lg:pt-24">
+    <footer className="">
+      <div className="mx-auto max-w-screen-xl px-4 pt-16  sm:px-6 lg:px-8 lg:pt-8">
         <div className=" flex justify-between items-center">
           {/* Center Section - Logo */}
           <div className="flex justify-end w-2/3 ">
