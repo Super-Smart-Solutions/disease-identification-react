@@ -2,6 +2,7 @@ import { GiCarnivorousPlant } from "react-icons/gi";
 import { PiDetective, PiFarm } from "react-icons/pi";
 import { RiLeafLine, RiTeamLine } from "react-icons/ri";
 import { IoImagesOutline } from "react-icons/io5";
+import { FaUsersRectangle } from "react-icons/fa6";
 
 
 const dashboardRoutes = [
@@ -35,6 +36,11 @@ const dashboardRoutes = [
         path: "/admin/images",
         label: "images_key",
         icon: IoImagesOutline,
+    },
+    {
+        path: "/admin/users",
+        label: "users_key",
+        icon: FaUsersRectangle,
     },
 ];
 

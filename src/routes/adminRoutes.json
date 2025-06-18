@@ -34,5 +34,11 @@
     "element": "AdminImages",
     "label": "images",
     "protected": true
+  },
+  {
+    "path": "users",
+    "element": "AdminUsers",
+    "label": "users",
+    "protected": true
   }
 ]
