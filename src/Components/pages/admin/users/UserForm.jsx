@@ -21,11 +21,13 @@ const UserForm = ({ userId, onSuccess, onClose, t }) => {
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       if (isEdit) {
-        await updateUser.mutateAsync({ id: userId, ...values });
+        await updateUser({ id: userId, ...values });
         toast.success(t("updated_key"));
       }
       onSuccess?.();
     } catch (error) {
+      console.log(error);
+
       toast.error(
         error.response?.data?.message || t("commonErrors.somethingWentWrong")
       );

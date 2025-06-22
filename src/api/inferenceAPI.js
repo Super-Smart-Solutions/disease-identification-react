@@ -54,3 +54,8 @@ export const getAggregates = async (start_date, end_date) => {
   });
   return response.data;
 };
+
+export const deleteInference = async (id) => {
+  const response = await axiosInstance.delete(`${INFERENCE_ENDPOINT}/${id}`);
+  return response.data;
+};

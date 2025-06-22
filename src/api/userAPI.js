@@ -49,7 +49,7 @@ export const uploadUserAvatar = async (avatarFile, token) => {
 // Fetch all users
 export const fetchUsers = async ({ page, pageSize }) => {
     const params = {
-        page,
+        pageNumber: page,
         pageSize
     }
     const response = await axiosInstance.get(USER_ENDPOINT, { params });

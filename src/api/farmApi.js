@@ -6,8 +6,8 @@ const FARM_ENDPOINT = import.meta.env.VITE_FARM_ENDPOINT;
 export const fetchFarms = async ({ page = 1, pageSize = 10 }) => {
     const response = await axiosInstance.get(FARM_ENDPOINT, {
         params: {
-            page,
-            size: pageSize,
+            pageNumber: page,
+            pageSize,
         },
     });
     return response.data;

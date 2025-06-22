@@ -1,57 +1,47 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FaCheckCircle } from "react-icons/fa";
-import { updateInferenceVerify } from "../../../api/inferenceAPI";
 import ImageModal from "./ImageModal";
 import moment from "moment/moment";
 import { useUserData } from "../../../hooks/useUserData";
 import { toast } from "sonner";
 import DataGrid from "../../DataGrid";
 import { useInferences } from "../../../hooks/useInferences";
+import { FiTrash2 } from "react-icons/fi";
+import ConfirmationModal from "../../ConfirmationModal";
 
 export default function LogsSection() {
-  const { getInferencesData } = useInferences();
+  const {
+    getInferencesData,
+    deleteInferenceMutation,
+    updateInferenceVerifyMutation,
+  } = useInferences();
 
-  const queryClient = useQueryClient();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [inferenceToDelete, setInferenceToDelete] = useState(null);
+
   const { user } = useUserData();
   const isAdmin = user?.is_org_admin;
-
+  const isSuperUser =
+    Array.isArray(user?.roles) && user.roles[0]?.name === "superuser";
   const { data, isLoading, isError, error } = getInferencesData(page, pageSize);
 
-  const verifyMutation = useMutation({
-    mutationFn: async ({ id }) => {
-      // Assuming you have an API function called `updateInferenceVerify`
-      return await updateInferenceVerify(id);
-    },
-    onSuccess: (variables) => {
-      // Update the specific inference in the cache
-      queryClient.setQueryData(
-        ["logs", page, pageSize, i18n.language],
-        (oldData) => {
-          if (!oldData) return oldData;
-          return {
-            ...oldData,
-            items: oldData.items.map((log) =>
-              log.id === variables.id
-                ? { ...log, approved: variables.approved }
-                : log
-            ),
-          };
-        }
-      );
-    },
-    onError: (error) => {
-      toast.error(error);
-    },
-  });
-  const handleVerify = (id) => {
-    verifyMutation.mutate({ id });
-  };
+  const verifyMutation = updateInferenceVerifyMutation();
+  const deleteMutation = deleteInferenceMutation();
 
+  const handleConfirmDelete = async () => {
+    if (!inferenceToDelete) return;
+    try {
+      await deleteMutation.mutateAsync(inferenceToDelete);
+      toast.success(t("inference_deleted_successfully_key"));
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setInferenceToDelete(null);
+    }
+  };
   const columnDefs = [
     { field: "id", headerName: "#", flex: 0.5 },
     {
@@ -83,7 +73,7 @@ export default function LogsSection() {
       valueFormatter: ({ value }) =>
         value && moment(value).format("YYYY-MM-DD"),
     },
-    ...(isAdmin
+    ...(isAdmin || isSuperUser
       ? [
           {
             field: "approved",
@@ -91,14 +81,42 @@ export default function LogsSection() {
             cellRenderer: (params) => (
               <span
                 className="cursor-pointer"
-                onClick={() => handleVerify(params?.data?.id)}
-                title={t("remove_user_key")}
+                onClick={() => verifyMutation.mutate(params.data.id)}
+                title={t("approved_key")}
               >
                 <FaCheckCircle
-                  color={params?.value ? "green" : "gray"}
+                  color={params.data.approved ? "green" : "gray"}
                   size={18}
                 />
               </span>
+            ),
+          },
+        ]
+      : []),
+    ...(isSuperUser
+      ? [
+          {
+            field: "actions",
+            headerName: t("actions_key"),
+            flex: 1,
+            minWidth: 150,
+            cellRenderer: (params) => (
+              <div className="flex items-center">
+                {/* <button
+                  onClick={() => onEdit(params.data.id)}
+                  className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer text-gray-500"
+                  title={t("edit_key")}
+                >
+                  <FiEdit size={20} />
+                </button> */}
+                <button
+                  onClick={() => setInferenceToDelete(params.data.id)}
+                  className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer text-gray-500"
+                  title={t("delete_key")}
+                >
+                  <FiTrash2 size={20} />
+                </button>
+              </div>
             ),
           },
         ]
@@ -130,6 +148,13 @@ export default function LogsSection() {
         onPageChange={setPage}
         onPageSizeChange={setPageSize}
       />
+      {inferenceToDelete && (
+        <ConfirmationModal
+          t={t}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setInferenceToDelete(null)}
+        />
+      )}
     </div>
   );
 }
