@@ -19,6 +19,11 @@ export const getOrganizationById = async (organizationId) => {
     return response.data;
 };
 
+export const getMyOrganization = async () => {
+    const response = await axiosInstance.get(`${ORGANIZATIONS_ENDPOINT}/me`);
+    return response.data;
+};
+
 // Create a new organization
 export const createOrganization = async (organizationData) => {
     const response = await axiosInstance.post(`${ORGANIZATIONS_ENDPOINT}/`, organizationData);

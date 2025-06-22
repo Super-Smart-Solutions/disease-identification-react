@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../Button";
 import { useTranslation } from "react-i18next";
 import { startInference, validateInference } from "../../../api/inferenceAPI";
@@ -8,10 +8,33 @@ import { RiImageEditLine } from "react-icons/ri";
 export default function ModelingStepThree({ modelingData, setModelingData }) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const [location, setLocation] = useState({ lat: null, lng: null });
+  const [locationError, setLocationError] = useState(null);
+
+  // Get user's geolocation
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
+          setLocationError(error.message);
+          console.error("Geolocation error:", error);
+        }
+      );
+    } else {
+      setLocationError(t("geolocation_not_supported"));
+    }
+  }, [t]);
 
   // Mutation for starting inference
   const startInferenceMutation = useMutation({
-    mutationFn: (imageId) => startInference(imageId),
+    mutationFn: ({ imageId, lat, lng }) =>
+      startInference({ imageId, lat, lng }),
     onSuccess: (data) => {
       if (data?.id) {
         setModelingData((prev) => ({ ...prev, inference_id: data.id }));
@@ -35,16 +58,28 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
 
   // Effect to trigger inference when image_id changes
   useEffect(() => {
-    if (modelingData?.image_id && !modelingData?.inference_id) {
-      startInferenceMutation.mutate(modelingData.image_id);
+    if (
+      modelingData?.image_id &&
+      !modelingData?.inference_id &&
+      location.lat &&
+      location.lng
+    ) {
+      startInferenceMutation.mutate({
+        imageId: modelingData.image_id,
+        lat: location.lat,
+        lng: location.lng,
+      });
     }
-  }, [modelingData?.image_id]);
+  }, [modelingData?.image_id, location.lat, location.lng]);
 
   // Combined loading state
   const isLoading =
     startInferenceMutation.isPending || validateInferenceMutation.isPending;
   // Combined error state
-  const error = startInferenceMutation.error || validateInferenceMutation.error;
+  const error =
+    startInferenceMutation.error ||
+    validateInferenceMutation.error ||
+    locationError;
 
   const handleReset = () => {
     queryClient.invalidateQueries(["inference"]);
@@ -73,7 +108,9 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
       ) : error ? (
         <>
           <p className="text-red-500">
-            {error.response?.data?.detail || t("something_went_wrong")}
+            {typeof error === "string"
+              ? error
+              : error.response?.data?.detail || t("something_went_wrong")}
           </p>
           <Button variant="outlined" onClick={handleReset}>
             {t("reset_key")}
@@ -97,7 +134,9 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
           onClick={() =>
             setModelingData((prev) => ({ ...prev, is_final: true }))
           }
-          disabled={!modelingData.inference_id}
+          disabled={
+            !modelingData.inference_id || !location.lat || !location.lng
+          }
         >
           {t("next_key")}
         </Button>
