@@ -25,7 +25,7 @@ const AdminUsers = () => {
       {showForm && (
         <Modal
           isOpen={showForm}
-          title={t("edit_key")}
+          title={selectedId ? t("edit_key") : t("add_user_key")}
           onClose={() => setShowForm(false)}
         >
           <UserForm
