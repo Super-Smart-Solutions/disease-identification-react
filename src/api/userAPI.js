@@ -26,6 +26,12 @@ export const updateUserById = async (userId, userData) => {
     return response.data;
 };
 
+// Verify user by ID
+export const verifyUserById = async (userId) => {
+    const response = await axiosInstance.post(`${USER_ENDPOINT}/${userId}/verify`);
+    return response.data;
+};
+
 // Delete a user by ID
 export const deleteUserById = async (userId) => {
     const response = await axiosInstance.delete(`${USER_ENDPOINT}/${userId}`);

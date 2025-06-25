@@ -756,6 +756,9 @@
   "avg_confidence_key": "Avg Confidence",
   "login_success_key": "Login successful!",
   "city_key": "City",
-  "city_placeholder_key": "Riyadh , Jeddah , Cairo , ...." , 
-  "users_key" : "Users"
+  "city_placeholder_key": "Riyadh , Jeddah , Cairo , ....",
+  "users_key": "Users",
+  "add_user_key": "Add User",
+  "registered_and_verified_key": "user registered successfully",
+  "hashed_password_key": "Hashed password"
 }

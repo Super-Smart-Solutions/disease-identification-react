@@ -82,11 +82,11 @@ const UserTable = ({ onEdit, onAdd, t }) => {
   return (
     <>
       <DataGrid
-        // onAdd={
-        //   <Button variant="outlined" onClick={onAdd}>
-        //     {t("add_user_key")}
-        //   </Button>
-        // }
+        onAdd={
+          <Button variant="outlined" onClick={onAdd}>
+            {t("add_user_key")}
+          </Button>
+        }
         rowData={users?.items || []}
         colDefs={columnDefs}
         title={t("users_key")}

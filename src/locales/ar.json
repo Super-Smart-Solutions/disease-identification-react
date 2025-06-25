@@ -761,7 +761,9 @@
   "avg_confidence_key": "متوسط الثقة",
   "login_success_key": "!تم تسجيل الدخول بنجاح",
   "city_key": "المدينة",
-  "city_placeholder_key": "الرياض , جدة , القاهرة , ...." , 
-  "users_key" : "المستخدمين"
-
+  "city_placeholder_key": "الرياض , جدة , القاهرة , ....",
+  "users_key": "المستخدمين",
+  "add_user_key": "اضافة مستخدم",
+  "registered_and_verified_key": "تم تسجيل المستخدم بنجاح",
+  "hashed_password_key": "كلمة المرور المبدئية"
 }
