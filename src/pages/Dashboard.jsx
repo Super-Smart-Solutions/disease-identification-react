@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import TeamSection from "../Components/pages/dashboard/TeamSection";
 import LogsSection from "../Components/pages/dashboard/LogsSection";
-import InvitationPopup from "../Components/pages/dashboard/InvitationPopup";
 import InferenceStats from "../Components/pages/dashboard/InferenceStats";
 
 const containerVariants = {
@@ -29,8 +27,6 @@ const sectionVariants = {
 };
 
 export default function Dashboard() {
-  const [showInvitationPopup, setShowInvitationPopup] = useState(true);
-
   return (
     <>
       <motion.div
@@ -39,19 +35,14 @@ export default function Dashboard() {
         animate="visible"
         variants={containerVariants}
       >
-        <motion.div variants={sectionVariants}> 
-
-        <InferenceStats/>
-
+        <motion.div variants={sectionVariants}>
+          <InferenceStats />
         </motion.div>
 
         <motion.div variants={sectionVariants}>
           <LogsSection />
         </motion.div>
       </motion.div>
-      {showInvitationPopup && (
-        <InvitationPopup onClose={() => setShowInvitationPopup(false)} />
-      )}{" "}
     </>
   );
 }
