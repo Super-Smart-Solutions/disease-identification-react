@@ -10,9 +10,11 @@ export const createInvitation = async (invitee_email) => {
     return response.data;
 };
 
-// Get all invitations
-export const fetchInvitations = async () => {
-    const response = await axiosInstance.get(INVITATION_ENDPOINT);
+// Updated fetchInvitations function
+export const fetchInvitations = async ({ page = 1, size = 10 }) => {
+    const response = await axiosInstance.get(INVITATION_ENDPOINT, {
+        params: { page, size },
+    });
     return response.data;
 };
 

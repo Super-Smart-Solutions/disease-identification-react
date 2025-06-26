@@ -27,7 +27,7 @@ export default function CreateOrganization({ onSuccess, onCancel }) {
   const onSubmit = async (values, { setSubmitting }) => {
     try {
       await createOrganization(values);
-      onSuccess(); // This will close the modal and refresh data
+      onSuccess();
     } catch (error) {
       console.error("Organization creation failed", error);
     } finally {
@@ -42,8 +42,8 @@ export default function CreateOrganization({ onSuccess, onCancel }) {
       onSubmit={onSubmit}
     >
       {({ isSubmitting }) => (
-        <Form className="flex flex-col gap-4"> 
-        <span className=" text-xl me-auto ">{t("create_team_key")}</span>
+        <Form className="flex flex-col gap-4">
+          <span className=" text-xl me-auto ">{t("create_team_key")}</span>
           <div className="flex flex-col gap-1">
             <label htmlFor="name">{t("name_key")}</label>
             <Field

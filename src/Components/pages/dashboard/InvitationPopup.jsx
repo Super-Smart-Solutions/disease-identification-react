@@ -1,16 +1,16 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import {
-  fetchInvitationById,
+  fetchInvitations,
   acceptInvitation,
   rejectInvitation,
 } from "../../../api/inviteApi";
 import Button from "../../Button";
 import { toast } from "sonner";
 import { useUserData } from "../../../hooks/useUserData";
-import moment from "moment";
+import Pagination from "../../Pagination";
 import familyImage from "../../../assets/family.png";
 
 const popupVariants = {
@@ -34,12 +34,12 @@ const popupVariants = {
 };
 
 export default function InvitationPopup({ onClose }) {
-  const inviteId = localStorage.getItem("invite_id");
   const { t, i18n } = useTranslation();
   const { user, refetchUserData } = useUserData();
   const popupRef = useRef(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
-  // Click outside handler
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
@@ -53,58 +53,54 @@ export default function InvitationPopup({ onClose }) {
     };
   }, [onClose]);
 
-  // Fetch invitation data
-  const {
-    data: invitation,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["invitation", inviteId],
-    queryFn: () => fetchInvitationById(inviteId),
-    enabled: !!inviteId && !user?.organization_id,
+  const { data: invitationsData } = useQuery({
+    queryKey: ["invitations", page, pageSize],
+    queryFn: () => fetchInvitations({ page, size: pageSize }),
+    enabled: !user?.organization_id,
     onError: () => {
-      localStorage.removeItem("invite_id");
+      toast.error(t("invitations_fetch_error_key"));
     },
   });
 
-  // Accept invitation mutation
   const { mutate: acceptMutate, isLoading: isAccepting } = useMutation({
-    mutationFn: () => acceptInvitation(inviteId),
+    mutationFn: (inviteId) => acceptInvitation(inviteId),
     onSuccess: () => {
       toast.success(t("invitation_accepted_key"));
       refetchUserData();
-      localStorage.removeItem("invite_id");
       onClose();
     },
     onError: () => {
       toast.error(t("invitation_accept_error_key"));
-      onClose();
     },
   });
 
-  // Reject invitation mutation
   const { mutate: rejectMutate, isLoading: isRejecting } = useMutation({
-    mutationFn: () => rejectInvitation(inviteId),
+    mutationFn: (inviteId) => rejectInvitation(inviteId),
     onSuccess: () => {
       toast.success(t("invitation_rejected_key"));
-      localStorage.removeItem("invite_id");
       onClose();
     },
     onError: () => {
       toast.error(t("invitation_reject_error_key"));
-      onClose();
     },
   });
 
-  const handleAccept = () => {
-    acceptMutate();
+  const handleAccept = (inviteId) => {
+    acceptMutate(inviteId);
   };
 
-  const handleDecline = () => {
-    rejectMutate();
+  const handleDecline = (inviteId) => {
+    rejectMutate(inviteId);
   };
 
-  if (!inviteId || isError || user?.organization_id) return null;
+  const invitations = invitationsData?.items || [];
+  const totalPages = invitationsData?.pages || 1;
+  const totalItems = invitationsData?.total || 0;
+
+  // Only render modal if user is not in an organization and there are invitations
+  if (user?.organization_id || invitations.length === 0) {
+    return null;
+  }
 
   return (
     <div className="overlay">
@@ -118,52 +114,59 @@ export default function InvitationPopup({ onClose }) {
         animate="visible"
         exit="exit"
       >
-        {isLoading ? (
-          <div className="flex justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-500"></div>
-          </div>
-        ) : (
-          <div className=" space-y-2">
-            <h3 className="text-xl font-bold text-gray-800">
-              {t("invitation_title_key")}
-            </h3>
-            <p className=" text-lg font-medium text-gray-800 text-center capitalize ">
-              {t("invitation_message_key", {
-                name: invitation?.organization_admin_name,
-                team: invitation?.organization_name,
-              })}
-            </p>
-            <img
-              src={familyImage}
-              alt="Organization"
-              className="w-10/12 max-h-60  mx-auto object-cover "
-            />
-
-            <div
-              className={`flex gap-4 ${
-                i18n.dir() === "rtl" ? "flex-row-reverse" : ""
-              }`}
-            >
-              <Button
-                variant="outlined"
-                onClick={handleDecline}
-                className="flex-1"
-                loading={isRejecting}
-                disabled={isAccepting || isRejecting}
+        <div className="space-y-4">
+          <h3 className="text-xl font-bold text-gray-800">
+            {t("invitation_title_key")}
+          </h3>
+          {invitations.map((invitation) => (
+            <div key={invitation.id} className="space-y-2  pb-4">
+              <p className="text-lg font-medium text-gray-800 text-center capitalize">
+                {t("invitation_message_key", {
+                  name: invitation.organization_admin_name,
+                  team: invitation.organization_name,
+                })}
+              </p>
+              <img
+                src={familyImage}
+                alt="Organization"
+                className="w-10/12 max-h-60 mx-auto object-cover"
+              />
+              <div
+                className={`flex gap-4 ${
+                  i18n.dir() === "rtl" ? "flex-row-reverse" : ""
+                }`}
               >
-                {t("decline_key")}
-              </Button>
-              <Button
-                onClick={handleAccept}
-                className="flex-1"
-                loading={isAccepting}
-                disabled={isAccepting || isRejecting}
-              >
-                {t("accept_key")}
-              </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => handleDecline(invitation.id)}
+                  className="flex-1"
+                  loading={isRejecting}
+                  disabled={isAccepting || isRejecting}
+                >
+                  {t("decline_key")}
+                </Button>
+                <Button
+                  onClick={() => handleAccept(invitation.id)}
+                  className="flex-1"
+                  loading={isAccepting}
+                  disabled={isAccepting || isRejecting}
+                >
+                  {t("accept_key")}
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
+          ))}
+          {invitations.length > 1 && (
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              pageSize={pageSize}
+              totalItems={totalItems}
+              onPageChange={setPage}
+              onPageSizeChange={setPageSize}
+            />
+          )}
+        </div>
       </motion.div>
     </div>
   );
