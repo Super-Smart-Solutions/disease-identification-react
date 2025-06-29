@@ -5,7 +5,6 @@ import Button from "../../Button";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlants } from "../../../api/plantAPI";
 
-
 export default function ModelingStepOne({ modelingData, setModelingData }) {
   const { t } = useTranslation();
 
@@ -23,11 +22,10 @@ export default function ModelingStepOne({ modelingData, setModelingData }) {
 
   // const [tempData, setTempData] = useState(modelingData);
   const [tempData, setTempData] = useState({
-  categoryGroup: null,
-  category: null,
-  ...modelingData,
-});
-
+    categoryGroup: null,
+    category: null,
+    ...modelingData,
+  });
 
   const { data: plants = [], isLoading } = useQuery({
     queryKey: ["plants"],
@@ -47,9 +45,7 @@ export default function ModelingStepOne({ modelingData, setModelingData }) {
   const filteredOptions = useMemo(() => {
     if (!tempData.categoryGroup) return [];
     const allowed = CATEGORY_MAP[tempData.categoryGroup.value] || [];
-    return plants.filter((plant) =>
-      allowed.includes(plant.english_name)
-    );
+    return plants.filter((plant) => allowed.includes(plant.english_name));
   }, [plants, tempData.categoryGroup]);
 
   const handleSave = () => {
@@ -67,8 +63,6 @@ export default function ModelingStepOne({ modelingData, setModelingData }) {
       category: null,
     }));
   };
-
-  console.log("temp:", tempData?.category?.label);
 
   return (
     <div className="flex flex-col gap-4">

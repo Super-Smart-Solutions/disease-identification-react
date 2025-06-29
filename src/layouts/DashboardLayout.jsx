@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SideNavigation from "../Components/layout/SideNavigation";
-import Navbar from "../Components/layout/Navbar";
+import Navbar from "../Components/layout/navbar/Index";
 import { Outlet, useLocation } from "react-router-dom";
 import Breadcrumbs from "../Components/layout/BreadCrumbs";
 import { useTranslation } from "react-i18next";
