@@ -9,6 +9,7 @@ import useNavigation from "./../../../hooks/useNavigation";
 import { navItems } from "./navConfig.js";
 import { FaBars } from "react-icons/fa";
 import { useUserData } from "./../../../hooks/useUserData";
+import Search from "./Search.jsx";
 
 const Navbar = React.memo(() => {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ const Navbar = React.memo(() => {
           </button>
         )}
 
-        <div className="lg:flex gap-8">
+        <div className="lg:flex gap-8 w-full">
           <UserDropdown t={t} user={user} />
           <div className="h-12 w-[1px] bg-gray-400 hidden lg:block" />
           <div className="hidden lg:flex gap-4">
@@ -47,6 +48,7 @@ const Navbar = React.memo(() => {
               />
             ))}
           </div>
+          <Search user={user} />
         </div>
 
         {/* Mobile Navigation Menu */}

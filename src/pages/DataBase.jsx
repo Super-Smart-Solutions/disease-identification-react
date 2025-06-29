@@ -9,7 +9,7 @@ import DiseaseSearchDropdown from "../Components/pages/data-base/DiseaseSearchDr
 import { useLocation } from "react-router-dom";
 
 export default function DataBase() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { state } = useLocation();
   const [searchMethod, setSearchMethod] = useState("plant");
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +58,7 @@ export default function DataBase() {
   };
 
   return (
-    <div className="space-y-6" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+    <div className="space-y-6">
       {/* Search Method Selection */}
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <div
