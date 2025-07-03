@@ -2,18 +2,20 @@ import React from "react";
 import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
 import { FiUploadCloud, FiX } from "react-icons/fi";
+import { FaFilePdf } from "react-icons/fa";
 
 const FileUpload = ({
-  accept = { "image/*": [".jpeg", ".jpg", ".png", ".gif"] }, // Corrected accept format
+  accept = { "image/*": [".jpeg", ".jpg", ".png", ".gif"] },
   multiple = false,
   selectedFile = [],
   setSelectedFile,
   allowRemove = false,
 }) => {
   const { t } = useTranslation();
+  const isPdf = accept["application/pdf"]?.includes(".pdf");
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept, // Use object format for accept
+    accept,
     multiple,
     maxSize: 4 * 1024 * 1024, // 4MB in bytes
     onDrop: (acceptedFiles, fileRejections) => {
@@ -61,18 +63,25 @@ const FileUpload = ({
           <div className="space-y-2">
             {selectedFile.map((file, index) => (
               <div key={index} className="relative group">
-                <div className="flex items-center p-2 bg-gray-50">
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={file.name}
-                    className="max-w-120 max-h-80 object-cover rounded-md"
-                  />
+                <div className="flex items-center p-2 bg-gray-50 rounded-md">
+                  {isPdf ? (
+                    <div className="flex items-center space-x-2">
+                      <FaFilePdf className="text-3xl text-red-500" />
+                      <span className="text-sm text-gray-600">{file.name}</span>
+                    </div>
+                  ) : (
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={file.name}
+                      className="max-w-120 max-h-80 object-cover rounded-md"
+                    />
+                  )}
                 </div>
                 {allowRemove && (
                   <button
                     type="button"
                     onClick={() => removeFile(index)}
-                    className="absolute top-6 right-6 p-1 bg-gray-300 rounded-full text-black opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity"
+                    className="absolute top-2 end-2 p-1 bg-gray-300 rounded-full text-black opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity"
                   >
                     <FiX className="text-lg" />
                   </button>

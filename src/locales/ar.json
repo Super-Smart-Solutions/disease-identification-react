@@ -765,5 +765,10 @@
   "users_key": "المستخدمين",
   "add_user_key": "اضافة مستخدم",
   "registered_and_verified_key": "تم تسجيل المستخدم بنجاح",
-  "hashed_password_key": "كلمة المرور المبدئية"
+  "hashed_password_key": "كلمة المرور المبدئية",
+  "soil_input_step_key": "مدخلات التربة",
+  "upload_pdf_step_key": "رفع ملف PDF",
+  "results_step_key": "النتائج",
+  "summary_step_key": "الملخص",
+  "selected_file_key": "الملمف المرفوع"
 }

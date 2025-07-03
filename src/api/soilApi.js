@@ -6,10 +6,10 @@ const SOIL_ENDPOINT = import.meta.env.VITE_SOIL_ENDPOINT;
 
 // Fetch crops with optional query parameters
 export const fetchCrops = async (params = {}) => {
-  const response = await axiosInstance.get(`${SOIL_ENDPOINT}/crops`, {
-    params,
-  });
-  return response.data;
+    const response = await axiosInstance.get(`${SOIL_ENDPOINT}/crops`, {
+        params,
+    });
+    return response.data;
 };
 
 
@@ -48,5 +48,18 @@ export const assessSoil = async (assessmentData) => {
 // Get all soil assessments
 export const fetchSoilAssessments = async () => {
     const response = await axiosInstance.get(`${SOIL_ENDPOINT}/assessments`);
+    return response.data;
+};
+
+// upload report
+export const uploadReport = async ({ file }) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await axiosInstance.post(`${SOIL_ENDPOINT}/upload-report`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+
     return response.data;
 };
