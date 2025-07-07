@@ -14,15 +14,14 @@ import { useUserTeam } from "../../../api/useUserTeam";
 import { createInvitation } from "../../../api/inviteApi";
 import { toast } from "sonner";
 import DataGrid from "../../DataGrid";
+import InvitationPopup from "./InvitationPopup";
 
 export default function TeamSection() {
   const { t } = useTranslation();
   const { user, refetchUserData } = useUserData();
   const { data: teamData } = useUserTeam(user?.organization_id);
-
   const isInOrganization = !!user?.organization_id;
   const isAdmin = user?.is_org_admin;
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [page, setPage] = useState(1);
@@ -30,7 +29,7 @@ export default function TeamSection() {
   const [inviteLoading, setInviteLoading] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [deletingUser, setDeletingUser] = useState(false);
+  const [showInvitationPopup, setShowInvitationPopup] = useState(true);
 
   const fetchUsersData = useCallback(
     () =>
@@ -91,15 +90,12 @@ export default function TeamSection() {
   const confirmDeleteUser = async () => {
     if (!userToDelete) return;
     try {
-      setDeletingUser(true);
       await deleteUserById(userToDelete);
       setIsDeleteModalOpen(false);
       setUserToDelete(null);
       refetchUsers();
     } catch (err) {
       console.error("Failed to delete user:", err);
-    } finally {
-      setDeletingUser(false);
     }
   };
 
@@ -207,7 +203,6 @@ export default function TeamSection() {
   return (
     <div className="space-y-4">
       {renderContent()}
-
       {/* Create Organization Modal */}
       {isModalOpen && (
         <div className="overlay">
@@ -219,7 +214,6 @@ export default function TeamSection() {
           </div>
         </div>
       )}
-
       {/* Invite User Modal */}
       {isInviteModalOpen && (
         <div className="overlay">
@@ -278,15 +272,15 @@ export default function TeamSection() {
           </div>
         </div>
       )}
-
+      {showInvitationPopup && (
+        <InvitationPopup onClose={() => setShowInvitationPopup(false)} />
+      )}{" "}
       {/* Delete User Confirmation Modal */}
       {isDeleteModalOpen && (
         <ConfirmationModal
-          title={t("confirm_remove_user_key")}
-          message={t("are_you_sure_delete_user_key")}
           onConfirm={confirmDeleteUser}
           onCancel={() => setIsDeleteModalOpen(false)}
-          loading={deletingUser}
+          t={t}
         />
       )}
     </div>

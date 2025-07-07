@@ -3,21 +3,21 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../Components/layout/Navbar";
 import Footer from "../Components/layout/Footer";
 
-const LandingLayout = ({ isAuthenticated }) => {
+const LandingLayout = () => {
   return (
     <main
       style={{
-        backgroundImage: "url('/background.png')", // Assuming the image is in the public folder
+        backgroundImage: "url('/background.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundAttachment: "fixed", // Optional: makes the background fixed while scrolling
+        backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
       }}
       className="flex flex-col min-h-screen relative"
     >
       {/* Content */}
-      <div className="flex-grow relative z-10 flex flex-col justify-between">
-        <Navbar auth={isAuthenticated} />
+      <div className="flex-grow relative  z-10 flex flex-col justify-between overflow-auto lg:overflow-hidden">
+        <Navbar />
         <Outlet />
       </div>
       <Footer />

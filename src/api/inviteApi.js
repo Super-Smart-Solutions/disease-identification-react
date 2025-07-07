@@ -10,9 +10,11 @@ export const createInvitation = async (invitee_email) => {
     return response.data;
 };
 
-// Get all invitations
-export const fetchInvitations = async () => {
-    const response = await axiosInstance.get(INVITATION_ENDPOINT);
+// Updated fetchInvitations function
+export const fetchInvitations = async ({ page = 1, size = 10 }) => {
+    const response = await axiosInstance.get(INVITATION_ENDPOINT, {
+        params: { page, size },
+    });
     return response.data;
 };
 
@@ -27,6 +29,21 @@ export const acceptInvitation = async (invitationId) => {
     const response = await axiosInstance.patch(`${INVITATION_ENDPOINT}/${invitationId}/accept`);
     return response.data;
 };
+// Accept an invitation with token 
+export const acceptInvitationWithToken = async (invitationId, token) => {
+    const response = await axiosInstance.patch(
+        `${INVITATION_ENDPOINT}/${invitationId}/accept`,
+        {},
+        {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+    return response.data;
+};
+
 
 // Reject an invitation
 export const rejectInvitation = async (invitationId) => {

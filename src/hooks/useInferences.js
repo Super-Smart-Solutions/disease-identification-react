@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getInferences, getAggregates } from "../api/inferenceAPI";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getInferences, getAggregates, deleteInference, updateInferenceVerify } from "../api/inferenceAPI";
 import { fetchDiseases } from "../api/diseaseAPI";
 import { fetchPlants } from "../api/plantAPI";
 import { getStatusTranslation } from "../utils/statusTranslations";
@@ -65,8 +65,45 @@ export const useInferences = () => {
         });
     }, []);
 
+    const updateInferenceVerifyMutation = () => {
+        const queryClient = useQueryClient();
+        return useMutation({
+            mutationFn: (id) => updateInferenceVerify(id),
+            onSuccess: (updatedInference) => {
+                queryClient.setQueryData(
+                    ["inferences"],
+                    (oldData) => {
+                        if (!oldData) return oldData;
+                        return {
+                            ...oldData,
+                            items: oldData.items.map((item) =>
+                                item.id === updatedInference.id
+                                    ? { ...item, approved: updatedInference.approved }
+                                    : item
+                            ),
+                        };
+                    }
+                );
+                queryClient.invalidateQueries(["inferences"]);
+            },
+
+        });
+    };
+
+    const deleteInferenceMutation = () => {
+        const queryClient = useQueryClient();
+        return useMutation({
+            mutationFn: (inferenceId) => deleteInference(inferenceId),
+            onSuccess: () => {
+                queryClient.invalidateQueries(["inferences"]);
+                queryClient.invalidateQueries(["inferenceAggregates"]);
+            },
+        });
+    };
     return {
         getInferencesData,
-        getInferenceAggregates
+        getInferenceAggregates,
+        updateInferenceVerifyMutation,
+        deleteInferenceMutation
     };
 };

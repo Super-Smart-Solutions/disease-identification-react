@@ -91,13 +91,9 @@ const Navbar = React.memo(() => {
                 <div className="flex items-center gap-2">
                   {user?.avatar ? (
                     <img
-                      src={user?.avatar}
+                      src={user?.avatar || "/user-avatar.png"}
                       alt="User avatar"
                       className="w-8 h-8 rounded-full object-cover"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "user-avatar.png";
-                      }}
                     />
                   ) : (
                     <FaUserCircle size={24} />

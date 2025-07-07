@@ -6,8 +6,8 @@ const ORGANIZATIONS_ENDPOINT = import.meta.env.VITE_ORGANIZATIONS_ENDPOINT;
 export const getOrganizations = async ({ page = 1, pageSize = 10 }) => {
     const response = await axiosInstance.get(ORGANIZATIONS_ENDPOINT, {
         params: {
-            page,
-            size: pageSize,
+            pageNumber: page,
+            pageSize,
         },
     });
     return response.data;
@@ -16,6 +16,11 @@ export const getOrganizations = async ({ page = 1, pageSize = 10 }) => {
 // Retrieve a single organization by ID
 export const getOrganizationById = async (organizationId) => {
     const response = await axiosInstance.get(`${ORGANIZATIONS_ENDPOINT}/${organizationId}`);
+    return response.data;
+};
+
+export const getMyOrganization = async () => {
+    const response = await axiosInstance.get(`${ORGANIZATIONS_ENDPOINT}/me`);
     return response.data;
 };
 

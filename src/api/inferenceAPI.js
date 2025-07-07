@@ -18,8 +18,13 @@ export const updateInferenceVerify = async (id) => {
   return response.data;
 };
 // Start inference on an uploaded image
-export const startInference = async (imageId) => {
-  const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}?image_id=${imageId}`);
+export const startInference = async ({ imageId, lat, lng }) => {
+  const params = new URLSearchParams({
+    image_id: imageId,
+    lat: lat.toString(),
+    lng: lng.toString(),
+  });
+  const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}?${params.toString()}`);
   return response.data;
 };
 
@@ -52,5 +57,10 @@ export const getAggregates = async (start_date, end_date) => {
     start_date,
     end_date,
   });
+  return response.data;
+};
+
+export const deleteInference = async (id) => {
+  const response = await axiosInstance.delete(`${INFERENCE_ENDPOINT}/${id}`);
   return response.data;
 };

@@ -24,6 +24,7 @@ import AdminPlants from "../Components/pages/admin/plants/AdminPlants";
 import AdminDiseases from "../Components/pages/admin/diseases/AdminDiseases";
 import LogsSection from "../Components/pages/dashboard/LogsSection";
 import AdminFarms from "../Components/pages/admin/farms/AdminFarms";
+import AdminUsers from "../Components/pages/admin/users/AdminUsers";
 import AdminOrganizations from "../Components/pages/admin/organizations/AdminOrganizations";
 import AdminImages from "../Components/pages/admin/images/AdminImages";
 import Profile from "../pages/Profile";
@@ -43,6 +44,7 @@ const componentMap = {
   AdminFarms,
   AdminOrganizations,
   AdminImages,
+  AdminUsers,
 };
 
 const ProtectedRoute = ({ children, isAuthenticated }) => {

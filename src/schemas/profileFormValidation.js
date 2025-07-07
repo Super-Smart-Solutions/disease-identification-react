@@ -8,7 +8,7 @@ export const profileFormValidation = (t) => Yup.object({
         .required(t("required_field_key")),
     last_name: Yup.string()
 
-        .required("Last name is required"),
+        .required(t("required_field_key")),
     email: Yup.string()
         .email(t("not_valid_field_key"))
         .required(t("required_field_key"))

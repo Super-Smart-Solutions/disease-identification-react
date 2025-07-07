@@ -1,77 +1,31 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import AvatarEditor from "react-avatar-editor";
 import FileUpload from "../../FileUpload";
 import Button from "../../Button";
 import { IoClose } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import { uploadUserAvatar } from "../../../api/userAPI";
-import { toast } from "sonner";
 import { motion } from "framer-motion";
 
-const AvatarStep = ({ registerData }) => {
+const AvatarStep = ({
+  registerData,
+  selectedFile,
+  tempSelectedFile,
+  showModal,
+  setShowModal,
+  scale,
+  setScale,
+  isLoading,
+  error,
+  handleFileSelect,
+  handleAvatarSave,
+  handleSkipAvatar,
+}) => {
   const { t } = useTranslation();
   const editorRef = useRef(null);
-  const navigate = useNavigate();
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [tempSelectedFile, setTempSelectedFile] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [scale, setScale] = useState(1.2);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const handleSave = async () => {
-    if (!editorRef.current || isLoading) return;
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const canvas = editorRef.current.getImageScaledToCanvas();
-      const blob = await new Promise((resolve) => {
-        canvas.toBlob((blob) => resolve(blob), "image/png", 1);
-      });
-
-      if (!blob) {
-        throw new Error(t("avatar_upload_failed"));
-      }
-
-      const file = new File([blob], "avatar.png", {
-        type: "image/png",
-        lastModified: Date.now(),
-      });
-
-      await uploadUserAvatar(file, registerData?.token);
-      setSelectedFile(file);
-      setShowModal(false);
-      toast.success(t("account_created_successfully"));
-      navigate("/auth/login");
-    } catch (error) {
-      console.error("Error saving avatar:", error);
-      setError(error.message || t("avatar_upload_error"));
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleFileSelect = (files) => {
-    if (files.length > 0) {
-      setTempSelectedFile(files[0]);
-      setSelectedFile(files[0]);
-      setShowModal(true);
-      setError(null);
-    }
-  };
 
   const handleCancel = () => {
     setShowModal(false);
     setTempSelectedFile(null);
-    setError(null);
-  };
-
-  const handleSkip = () => {
-    toast.success(t("account_created_successfully"));
-    navigate("/auth/login");
   };
 
   return (
@@ -98,7 +52,11 @@ const AvatarStep = ({ registerData }) => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 pt-4">
-          <Button variant="outline" onClick={handleSkip} className="flex-1">
+          <Button
+            variant="outline"
+            onClick={handleSkipAvatar}
+            className="flex-1"
+          >
             {t("skip_and_login")}
           </Button>
           <Button
@@ -178,8 +136,7 @@ const AvatarStep = ({ registerData }) => {
                   {t("cancel")}
                 </Button>
                 <Button
-                  onClick={handleSave}
-                  loading={isLoading}
+                  onClick={() => handleAvatarSave(editorRef)}
                   disabled={isLoading}
                 >
                   {t("save_changes")}

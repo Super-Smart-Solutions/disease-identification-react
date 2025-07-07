@@ -26,6 +26,12 @@ export const updateUserById = async (userId, userData) => {
     return response.data;
 };
 
+// Verify user by ID
+export const verifyUserById = async (userId) => {
+    const response = await axiosInstance.post(`${USER_ENDPOINT}/${userId}/verify`);
+    return response.data;
+};
+
 // Delete a user by ID
 export const deleteUserById = async (userId) => {
     const response = await axiosInstance.delete(`${USER_ENDPOINT}/${userId}`);
@@ -47,10 +53,10 @@ export const uploadUserAvatar = async (avatarFile, token) => {
 };
 
 // Fetch all users
-export const fetchUsers = async ({ page, size }) => {
+export const fetchUsers = async ({ page, pageSize }) => {
     const params = {
-        page,
-        size
+        pageNumber: page,
+        pageSize
     }
     const response = await axiosInstance.get(USER_ENDPOINT, { params });
     return response.data;
