@@ -19,8 +19,8 @@ const DiseaseForm = ({ diseaseId, onSuccess, onClose, t }) => {
     english_name: diseaseData?.english_name || "",
     arabic_name: diseaseData?.arabic_name || "",
     scientific_name: diseaseData?.scientific_name || "",
-    description: diseaseData?.description || "",
     control_method: diseaseData?.control_method || "",
+    description: diseaseData?.description || "",
     symptoms: diseaseData?.symptoms || "",
   };
 
@@ -168,7 +168,7 @@ const DiseaseForm = ({ diseaseId, onSuccess, onClose, t }) => {
             />
           </div>
 
-          <div className="flex justify-end space-x-3 pt-4">
+          <div className="flex justify-end space-x-3">
             <Button variant="outlined" type="button" onClick={onClose}>
               {t("cancel_key")}
             </Button>

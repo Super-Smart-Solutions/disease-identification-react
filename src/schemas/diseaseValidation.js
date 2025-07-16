@@ -10,10 +10,8 @@ export const diseaseSchema = (t) => Yup.object().shape({
         .required(t("required_field_key"))
     ,
     control_method: Yup.string()
-        .required(t("required_field_key"))
     ,
-    symptomps: Yup.string()
-        .required(t("required_field_key"))
+    symptoms: Yup.string()
     ,
     description: Yup.string()
         .nullable()
