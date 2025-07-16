@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -11,6 +12,17 @@ export function useReviewForm({ user, navigate }) {
     const dispatch = useDispatch();
     const isModalOpen = useSelector((state) => state.reviewModal.isOpen);
     const [hoverRating, setHoverRating] = useState(null);
+
+    const REVIEW_COOKIE = "hasReviewed";
+    const COOKIE_EXPIRES_DAYS = 30;
+
+
+    useEffect(() => {
+        if (Cookies.get(REVIEW_COOKIE)) {
+            dispatch(setreviewModalOpen(false));
+        }
+    }, [dispatch]);
+
     const { mutate, isPending } = useMutation({
         mutationFn: createReview,
         onSuccess: async (response, variables) => {
@@ -18,29 +30,30 @@ export function useReviewForm({ user, navigate }) {
 
             if (status === 201) {
                 toast.success(t("review_submitted_key"));
-                dispatch(setreviewModalOpen(false));
             } else if (status === 200) {
                 try {
                     await updateReviewById(data.id, variables);
                     toast.success(t("review_updated_key"));
-                    dispatch(setreviewModalOpen(false));
                 } catch (error) {
                     toast.error(t("review_update_error_key"));
                 }
             } else {
                 toast.error(t("review_submit_error"));
+                return;
             }
-        },
-        onError: (error) => {
-            toast.error(t("review_submit_error"));
-        },
-    });
-    const initialValues = {
-        review_text: "",
-        rating: 0,
-    };
 
-    const handleSubmit = async (values, { setSubmitting }) => {
+
+            Cookies.set(REVIEW_COOKIE, "true", { expires: COOKIE_EXPIRES_DAYS, path: "/" });
+            dispatch(setreviewModalOpen(false));
+        },
+        onError: () => {
+            toast.error(t("review_submit_error"));
+        }
+    });
+
+    const initialValues = { review_text: "", rating: 0 };
+
+    const handleSubmit = (values, { setSubmitting }) => {
         mutate(values);
         setSubmitting(false);
     };
@@ -48,7 +61,7 @@ export function useReviewForm({ user, navigate }) {
     const handleOpenModal = () => {
         if (!user?.id) {
             navigate("/auth/login");
-        } else {
+        } else if (!Cookies.get(REVIEW_COOKIE)) {
             dispatch(setreviewModalOpen(true));
         }
     };
@@ -66,6 +79,6 @@ export function useReviewForm({ user, navigate }) {
         isSubmitting: isPending,
         hoverRating,
         setHoverRating,
-        setRating: (setFieldValue, value) => setFieldValue("rating", value),
+        setRating: (setFieldValue, value) => setFieldValue("rating", value)
     };
 }
