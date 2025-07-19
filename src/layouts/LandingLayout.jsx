@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
-import Navbar from "../Components/layout/navbar/Index";
+import Navbar from "../Components/layout/navbar/Navbar";
 import Footer from "../Components/layout/Footer";
 
 const LandingLayout = () => {
