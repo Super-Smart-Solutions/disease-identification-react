@@ -14,6 +14,7 @@ export default function UploadPdf({ name }) {
 
   return (
     <div className="space-y-2">
+      <span className=" text-muted text-sm block mb-2" > {t("optional_key")}</span>
       <FileUpload
         accept={{ "application/pdf": [".pdf"] }}
         multiple={false}

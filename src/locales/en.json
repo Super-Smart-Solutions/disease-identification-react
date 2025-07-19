@@ -764,6 +764,7 @@
   "soil_input_step_key": "Soil Input",
   "upload_pdf_step_key": "Upload PDF",
   "results_step_key": "Results",
-  "summary_step_key": "Summary" , 
-  "selected_file_key" :"selected file"
+  "summary_step_key": "Summary",
+  "selected_file_key": "selected file",
+  "optional_key": "Optional"
 }

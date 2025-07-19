@@ -770,5 +770,6 @@
   "upload_pdf_step_key": "رفع ملف PDF",
   "results_step_key": "النتائج",
   "summary_step_key": "الملخص",
-  "selected_file_key": "الملمف المرفوع"
+  "selected_file_key": "الملمف المرفوع",
+  "optional_key": "اختياري"
 }
