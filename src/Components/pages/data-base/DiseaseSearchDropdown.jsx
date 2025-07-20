@@ -169,7 +169,7 @@ const CustomDropdown = ({
   );
 };
 
-const DiseaseSearchDropdown = ({ onSelectDisease, onSelectPlant }) => {
+const DiseaseSearchDropdown = ({ handleDiseaseChange, handlePlantChange }) => {
   const { t, i18n } = useTranslation();
   const [selectedDisease, setSelectedDisease] = useState(null);
   const [inputValue, setInputValue] = useState("");
@@ -192,14 +192,14 @@ const DiseaseSearchDropdown = ({ onSelectDisease, onSelectPlant }) => {
         try {
           const diseaseData = await fetchDiseaseById(selectedDisease.value);
           if (isActive) {
-            onSelectDisease(diseaseData);
-            onSelectPlant(plantsData?.items?.[0]?.id);
+            handleDiseaseChange(diseaseData);
+            handlePlantChange(plantsData?.items?.[0]?.id);
           }
         } catch (error) {
           console.error("Error fetching disease details:", error);
           if (isActive) {
-            onSelectDisease(null);
-            onSelectPlant(null);
+            handleDiseaseChange(null);
+            handlePlantChange(null);
           }
         }
       }
@@ -210,7 +210,7 @@ const DiseaseSearchDropdown = ({ onSelectDisease, onSelectPlant }) => {
     return () => {
       isActive = false;
     };
-  }, [plantsData, selectedDisease, onSelectDisease, onSelectPlant]);
+  }, [plantsData, selectedDisease, handleDiseaseChange, handlePlantChange]);
 
   const fuse = useMemo(() => {
     return new Fuse(diseases, {
@@ -276,8 +276,8 @@ const DiseaseSearchDropdown = ({ onSelectDisease, onSelectPlant }) => {
 
     setSelectedDisease({ ...selectedOption, label });
     if (!selectedOption) {
-      onSelectDisease(null);
-      onSelectPlant(null);
+      handleDiseaseChange(null);
+      handlePlantChange(null);
     }
   };
 

@@ -182,7 +182,7 @@ const Search = ({ user }) => {
     if (selectedDisease && plantsData.length > 0) {
       const firstPlant = plantsData[0];
       navigate(
-        `/disease?plant_id=${firstPlant.id}&disease_id=${selectedDisease.value}`
+        `/database?plant_id=${firstPlant.id}&disease_id=${selectedDisease.value}`
       );
     }
   }, [plantsData, selectedDisease]);
