@@ -771,5 +771,6 @@
   "results_step_key": "النتائج",
   "summary_step_key": "الملخص",
   "selected_file_key": "الملمف المرفوع",
-  "optional_key": "اختياري"
+  "optional_key": "اختياري",
+  "image_reviewer_key": "مراجع الصور"
 }

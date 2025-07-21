@@ -7,7 +7,7 @@ import DataGrid from "../../../../Components/DataGrid";
 import { useDeleteImage, useImages } from "../../../../hooks/useImages";
 import ImageModal from "../../dashboard/ImageModal";
 
-const ImageTable = ({ onEdit, onAdd, t }) => {
+const ImageTable = ({ onEdit, onAdd, onReview, t }) => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [imageToDelete, setImageToDelete] = useState(null);
@@ -77,9 +77,14 @@ const ImageTable = ({ onEdit, onAdd, t }) => {
     <>
       <DataGrid
         onAdd={
-          <Button variant="outlined" onClick={onAdd}>
-            {t("add_image_key")}
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outlined" onClick={onAdd}>
+              {t("add_image_key")}
+            </Button>
+            <Button variant="outlined" onClick={onReview}>
+              {t("image_reviewer_key")}
+            </Button>
+          </div>
         }
         rowData={images?.items || []}
         colDefs={columnDefs}

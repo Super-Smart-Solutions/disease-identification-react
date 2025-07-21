@@ -766,5 +766,6 @@
   "results_step_key": "Results",
   "summary_step_key": "Summary",
   "selected_file_key": "selected file",
-  "optional_key": "Optional"
+  "optional_key": "Optional",
+  "image_reviewer_key": "Image Reviewer"
 }
