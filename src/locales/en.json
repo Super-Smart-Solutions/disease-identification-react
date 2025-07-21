@@ -318,8 +318,14 @@
     "bacterial": "bacterial diseases",
     "virus": "viral diseases",
 
-    "Coffee leaf Miner": "Coffee leaf Miner",
+    "Coffee leaf miner": "Coffee leaf Miner",
     "coffee_rust": "coffee_rust",
+    "coffee coccus viridis" :"coffee coccus viridis",
+    "coffee thrips":"coffee thrips",
+    "coffee_mealybug": "coffee mealybug",
+    "coffee toxoptera auranti": "coffee aphid",
+    "coffee prophantis smaragdina": "coffee moth",
+
     "animals_foot and mouth disease": "animals_foot and mouth disease",
     "animals_lumpy skin disease": "animals_lumpy skin disease",
     "animals_Lice disease": "animals_Lice disease"
