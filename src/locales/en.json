@@ -767,5 +767,6 @@
   "summary_step_key": "Summary",
   "selected_file_key": "selected file",
   "optional_key": "Optional",
-  "image_reviewer_key": "Image Reviewer"
+  "image_reviewer_key": "Image Reviewer",
+  "no_images_found_key": "No images found for the selected criteria."
 }

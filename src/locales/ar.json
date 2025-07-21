@@ -772,5 +772,6 @@
   "summary_step_key": "الملخص",
   "selected_file_key": "الملمف المرفوع",
   "optional_key": "اختياري",
-  "image_reviewer_key": "مراجع الصور"
+  "image_reviewer_key": "مراجع الصور",
+  "no_images_found_key": "لم يتم العثور على صور للمعايير المحددة."
 }
