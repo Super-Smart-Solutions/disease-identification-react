@@ -1,17 +1,19 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaSearch, FaLeaf } from "react-icons/fa";
 import ImageGrid from "../Components/pages/data-base/ImageGrid";
 import ExpandableArticle from "../Components/pages/data-base/ExpandableArticle";
 import PlantDiseaseForm from "../Components/pages/data-base/PlantDiseaseForm";
 import { useTranslation } from "react-i18next";
-import DiseaseSearchDropdown from "../Components/pages/data-base/DiseaseSearchDropdown";
 import { useSearchParams } from "react-router-dom";
 import { useDiseaseById } from "../hooks/useDiseases";
+import DiseaseSearchDropdown from "../Components/pages/data-base/database-search/DiseaseSearchDropdown";
+import { useSearchHandlers } from "../hooks/useSearchHandlers";
 
 const DataBase = () => {
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { handleDiseaseChange, handlePlantChange } = useSearchHandlers();
+  const [searchParams] = useSearchParams();
   const diseaseId = searchParams.get("disease_id");
   const plantId = searchParams.get("plant_id");
   const [searchMethod, setSearchMethod] = useState("plant");
@@ -31,44 +33,6 @@ const DataBase = () => {
       transition: { duration: 0.2, ease: "easeInOut" },
     },
   };
-
-  // Handle disease change and update URL params
-  const handleDiseaseChange = useCallback(
-    (diseaseId) => {
-      setSearchParams((prev) => {
-        const params = new URLSearchParams(prev);
-        if (diseaseId) {
-          params.set("disease_id", diseaseId);
-        } else {
-          params.delete("disease_id");
-        }
-        if (params.get("plant_id") && diseaseId) {
-          params.set("plant_id", params.get("plant_id"));
-        }
-        return params;
-      });
-    },
-    [setSearchParams]
-  );
-
-  // Handle plant change and update URL params
-  const handlePlantChange = useCallback(
-    (plantId) => {
-      setSearchParams((prev) => {
-        const params = new URLSearchParams(prev);
-        if (plantId) {
-          params.set("plant_id", plantId);
-        } else {
-          params.delete("plant_id");
-        }
-        if (params.get("disease_id") && plantId) {
-          params.set("disease_id", params.get("disease_id"));
-        }
-        return params;
-      });
-    },
-    [setSearchParams]
-  );
 
   return (
     <div className="space-y-6">
@@ -111,9 +75,17 @@ const DataBase = () => {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="mb-6"
+            className="mb-6 w-full cardIt"
           >
+            <label
+              htmlFor="search"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              {t("type_to_search_key")}
+            </label>
             <DiseaseSearchDropdown
+              selectedDisease={diseaseId}
+              selectedPlant={plantId}
               handleDiseaseChange={handleDiseaseChange}
               handlePlantChange={handlePlantChange}
             />

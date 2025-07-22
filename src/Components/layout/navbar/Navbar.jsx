@@ -9,7 +9,7 @@ import useNavigation from "../../../hooks/useNavigation.js";
 import { navItems } from "./navConfig.js";
 import { FaBars } from "react-icons/fa";
 import { useUserData } from "../../../hooks/useUserData.js";
-import Search from "./Search.jsx";
+import Search from "./Search";
 
 const Navbar = React.memo(() => {
   const { t } = useTranslation();
@@ -20,25 +20,29 @@ const Navbar = React.memo(() => {
 
   return (
     <nav
-      className={`p-4 text-white fixed w-full top-0 z-20 bg-blend-color-burn will-change-auto ${
+      className={`fixed w-full top-0 z-20 ${
         location.pathname !== "/" ? "bg-primary" : "bg-[#000000bb]"
-      }`}
+      } bg-blend-color-burn will-change-auto p-3 sm:p-4`}
     >
-      <div className="w-full flex justify-between items-center px-6 relative">
+      <div className="   mx-auto flex justify-between items-center px-4 sm:px-6 relative">
         {/* Mobile Menu Button */}
-        {!isMobileMenuOpen && (
-          <button
-            className="lg:hidden text-white"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            <FaBars size={24} />
-          </button>
-        )}
+        <button
+          className="lg:hidden text-white flex items-center"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <FaBars size={24} />
+        </button>
 
-        <div className="lg:flex gap-8 w-full">
+        {/* Main Navigation Content */}
+        <div className="flex items-center gap-4 sm:gap-6 lg:gap-8 w-full justify-between">
+          {/* User Dropdown */}
           <UserDropdown t={t} user={user} />
-          <div className="h-12 w-[1px] bg-gray-400 hidden lg:block" />
-          <div className="hidden lg:flex gap-4">
+
+          {/* Vertical Divider */}
+          <div className="hidden lg:block h-8 w-[1px] bg-gray-400" />
+
+          {/* Navigation Items */}
+          <div className="hidden lg:flex items-center gap-4 text-white">
             {navItems(t)?.map((route) => (
               <NavItem
                 key={route.path}
@@ -48,7 +52,16 @@ const Navbar = React.memo(() => {
               />
             ))}
           </div>
-          <Search user={user} />
+
+          {/* Search Bar */}
+          <div className="flex-1 max-w-xs lg:max-w-sm">
+            <Search />
+          </div>
+
+          {/* Language Toggle */}
+          <div className="flex items-center">
+            <LanguageToggle />
+          </div>
         </div>
 
         {/* Mobile Navigation Menu */}
@@ -59,9 +72,6 @@ const Navbar = React.memo(() => {
           navItems={navItems}
           handleRoute={handleRoute}
         />
-
-        {/* Language Toggle */}
-        <LanguageToggle />
       </div>
     </nav>
   );

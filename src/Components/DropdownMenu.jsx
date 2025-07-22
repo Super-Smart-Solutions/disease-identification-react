@@ -130,7 +130,7 @@ const DropdownMenu = ({ buttonContent, options }) => {
                     }`}
                   >
                     {<option.icon size={16} />}
-                    </span>
+                  </span>
                 )}
                 {option.label}
               </motion.li>
