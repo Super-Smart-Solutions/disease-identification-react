@@ -8,14 +8,14 @@ import {
   deleteImage,
 } from "../api/imagesAPI";
 
-export const useImages = (page = 1, pageSize = 10) => {
+export const useImages = ({ plant_id, diseaseId, page = 1, pageSize = 10 }) => {
   return useQuery({
-    queryKey: ["images", page, pageSize],
-    queryFn: () => getImages(page, pageSize),
-    keepPreviousData: true
+    queryKey: ["images", plant_id, diseaseId, page, pageSize],
+    queryFn: () => getImages({ plant_id, diseaseId, page, pageSize }),
+    staleTime: 5 * 60 * 1000,
+    keepPreviousData: true,
   });
 };
-
 export const useImageUrls = () => {
   return useQuery({
     queryKey: ["imageUrls"],

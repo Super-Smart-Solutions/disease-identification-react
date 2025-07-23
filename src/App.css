@@ -11,6 +11,33 @@
   ring: 2px solid #416a00; /* primary color */
   border-color: #416a00; /* primary border */
 }
+.nav-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem; /* Increased padding, extra left for search icon */
+  border: 1px solid #d1d5db; /* gray-300 equivalent, slightly darker for clarity */
+  border-radius: 0.5rem; /* Softer rounded corners */
+  outline: none;
+  background-color: #ffffff; /* White background for better contrast */
+  color: #1f2937; /* Dark gray text for readability (replacing white) */
+  font-size: 1rem; /* Standard font size */
+  font-weight: 400; /* Normal weight for readability */
+  transition: all 0.2s ease-in-out; /* Smooth transitions for focus and hover */
+}
+
+.nav-input::placeholder {
+  color: #9ca3af; /* Gray-400 for placeholder */
+}
+
+.nav-input:hover {
+  border-color: #9ca3af; /* Gray-400 on hover for subtle effect */
+  background-color: #f9fafb; /* Light gray background on hover */
+}
+
+.nav-input:focus {
+  border-color: #416a00; /* Primary border color */
+  box-shadow: 0 0 0 2px rgba(65, 106, 0, 0.2); /* Focus ring effect */
+  background-color: #ffffff; /* Keep white background on focus */
+}
 .overlay {
   position: fixed; /* Fixed position to cover the entire screen */
   top: 0;

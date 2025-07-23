@@ -29,11 +29,13 @@ import AdminOrganizations from "../Components/pages/admin/organizations/AdminOrg
 import AdminImages from "../Components/pages/admin/images/AdminImages";
 import Profile from "../pages/Profile";
 import { useUserData } from "../hooks/useUserData";
+import Disease from "../pages/Disease";
 
 const componentMap = {
   Landing,
   DataBase,
   Models,
+  Disease,
   Register,
   Login,
   Dashboard,
