@@ -9,11 +9,13 @@ import DownloadBanner from "../Components/pages/DownloadBanner";
 import farm from "../assets/farm.jpg";
 import FeaturesSection from "../Components/pages/FeaturesSection";
 import Infographics from "../Components/pages/Infographics";
+import { useUserData } from "../hooks/useUserData";
 
 export default function Landing() {
   const { t } = useTranslation();
   const controls = useAnimation();
   const ref = useRef(null);
+  const { user } = useUserData();
   const isInView = useInView(ref, { once: true, amount: 0.5 });
 
   const containerVariants = {
@@ -63,7 +65,7 @@ export default function Landing() {
               to="/models"
               className="mt-8 inline-block rounded-full border border-white px-12 py-3 text-sm font-medium text-white hover:bg-white hover:text-primary hover:border-white"
             >
-              {t("Get Started")}
+              {user.id ? t("try_models_key") : t("Get Started")}
             </Link>
           </div>
 

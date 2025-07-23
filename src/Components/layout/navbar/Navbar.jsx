@@ -36,7 +36,9 @@ const Navbar = React.memo(() => {
         {/* Main Navigation Content */}
         <div className="flex items-center gap-4 sm:gap-6 lg:gap-8 w-full justify-between">
           {/* User Dropdown */}
-          <UserDropdown t={t} user={user} />
+          <div className=" text-white">
+            <UserDropdown t={t} user={user} />
+          </div>
 
           {/* Vertical Divider */}
           <div className="hidden lg:block h-8 w-[1px] bg-gray-400" />
@@ -55,7 +57,7 @@ const Navbar = React.memo(() => {
 
           {/* Search Bar */}
           <div className="flex-1 max-w-xs lg:max-w-sm">
-            <Search />
+            {user?.id && <Search />}
           </div>
 
           {/* Language Toggle */}

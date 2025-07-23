@@ -332,9 +332,11 @@
     "selected_country": "Selected Country",
     "phone_number": "Phone Number"
   },
-  "describtion_key": "Describtion",
   "describtion_required_key": "Describtion required",
-  "Get Started": "Join Now",
+  "describtion_key": "Describtion",
+  "try_models_key": "Try Models",
+  "Get Started": "Join Now", 
+  
   "Symptoms": "Symptoms",
   "Control Methods:": "Control Methods:",
   "total_images_collected": "Total images collected",
