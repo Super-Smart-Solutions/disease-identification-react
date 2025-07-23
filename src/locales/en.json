@@ -771,5 +771,9 @@
   "optional_key": "Optional",
   "file_rejected_key": "Upload failed due to: {{reasons}}",
   "file_too_large_key": "File too large. Max allowed is {{maxSize}}",
-  "file_type_invalid_key": "Unsupported file type"
+  "file_type_invalid_key": "Unsupported file type",
+  "organization_id_key": "Organization Id",
+  "organization_id_placeholder_key": "Enter organization ID",
+  "plant_id_key": "Plant id",
+  "disease_id_key": "Disease id"
 }

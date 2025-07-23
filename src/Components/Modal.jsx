@@ -42,7 +42,7 @@ const Modal = ({ isOpen, onClose, children, title }) => {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
-        className="relative bg-white rounded-lg shadow-xl w-full max-w-2xl"
+        className="relative bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-auto"
       >
         {/* Modal header with title and close button */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">

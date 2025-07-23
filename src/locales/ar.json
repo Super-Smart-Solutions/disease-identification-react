@@ -775,5 +775,9 @@
   "optional_key": "اختياري",
   "file_rejected_key": "فشل التحميل بسبب: {{reasons}}",
   "file_too_large_key": "الملف كبير جداً. الحد الأقصى هو {{maxSize}}",
-  "file_type_invalid_key": "نوع الملف غير مدعوم"
+  "file_type_invalid_key": "نوع الملف غير مدعوم",
+  "organization_id_key": "رقم الفريق",
+  "organization_id_placeholder_key": "أدخل رقم الفريق",
+  "plant_id_key": "رقم النبات",
+  "disease_id_key": "رقم المرض"
 }
