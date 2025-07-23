@@ -71,7 +71,8 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
   });
 
   const isHealthy = prediction?.status === 2 && !prediction?.disease_id;
-  const predictionFailed = prediction?.status !== 2 || isPredictionError;
+  const predictionFailed =
+    prediction !== undefined && (prediction?.status !== 2 || isPredictionError);
   const confidenceScore = prediction?.confidence_level * 100;
   const visualizationUrl = visualization?.attention_map_url;
 
@@ -123,12 +124,11 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
               {t("category_key")}: {modelingData?.category?.label}
             </div>
 
-            {isPredicting ? (
-              <span>{t("analyzing_image")}</span>
-            ) : isPredictionError ? (
-              <div className="text-red-500">
-                {t("prediction_failed_message_key")}:{" "}
-                {predictionError.response?.data?.detail}
+            {isDiseaseLoading || !prediction ? (
+              <div className="space-y-3">
+                <div className="h-4 w-40 bg-gray-300 rounded animate-pulse" />
+                <div className="h-4 w-48 bg-gray-300 rounded animate-pulse" />
+                <div className="h-10 w-56 bg-gray-300 rounded animate-pulse mx-auto" />
               </div>
             ) : (
               <div className="space-y-3">
