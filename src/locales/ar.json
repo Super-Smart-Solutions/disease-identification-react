@@ -779,5 +779,10 @@
   "organization_id_key": "رقم الفريق",
   "organization_id_placeholder_key": "أدخل رقم الفريق",
   "plant_id_key": "رقم النبات",
-  "disease_id_key": "رقم المرض"
+  "disease_id_key": "رقم المرض",
+  "leave_organization_key": "مغادرة المجموعة",
+  "left_organization_key": "لقد غادرت المجموعة",
+  "failed_to_leave_organization_key": "فشل في مغادرة المجموعة",
+  "leave_organization_confirmation_key": "هل أنت متأكد أنك تريد مغادرة المجموعة؟",
+  "confirm_key": "تأكبد"
 }

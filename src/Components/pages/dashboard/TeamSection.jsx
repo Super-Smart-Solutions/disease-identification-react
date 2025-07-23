@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import Button from "../../Button";
 import CreateOrganization from "./CreateOrganization";
 import noDataImg from "../../../assets/no-data.png";
-import { deleteUserById, fetchUsers } from "../../../api/userAPI";
+import { kickOutUserById, fetchUsers } from "../../../api/userAPI";
 import { FiTrash } from "react-icons/fi";
 import ConfirmationModal from "../../ConfirmationModal";
 import { useUserTeam } from "../../../api/useUserTeam";
@@ -30,6 +30,7 @@ export default function TeamSection() {
   const [userToDelete, setUserToDelete] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [showInvitationPopup, setShowInvitationPopup] = useState(true);
+  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
 
   const fetchUsersData = useCallback(
     () =>
@@ -90,12 +91,22 @@ export default function TeamSection() {
   const confirmDeleteUser = async () => {
     if (!userToDelete) return;
     try {
-      await deleteUserById(userToDelete);
+      await kickOutUserById(userToDelete);
       setIsDeleteModalOpen(false);
       setUserToDelete(null);
       refetchUsers();
     } catch (err) {
       console.error("Failed to delete user:", err);
+    }
+  };
+  const confirmLeaveOrganization = async () => {
+    try {
+      await kickOutUserById(user?.id);
+      toast.success(t("left_organization_key"));
+      refetchUserData();
+      setIsLeaveModalOpen(false);
+    } catch (err) {
+      toast.error(t("failed_to_leave_organization_key"));
     }
   };
 
@@ -192,8 +203,16 @@ export default function TeamSection() {
             </div>
           )
         ) : (
-          <div className="text-lg text-gray-600">
-            {t("member_of_team_key")} <strong>{teamData?.name}</strong>
+          <div className="flex items-center justify-between">
+            <div className="text-lg text-gray-600">
+              {t("member_of_team_key")} <strong>{teamData?.name}</strong>
+            </div>
+            <Button
+              variant="outlined"
+              onClick={() => setIsLeaveModalOpen(true)}
+            >
+              {t("leave_organization_key")}
+            </Button>
           </div>
         )}
       </>
@@ -281,6 +300,14 @@ export default function TeamSection() {
           onConfirm={confirmDeleteUser}
           onCancel={() => setIsDeleteModalOpen(false)}
           t={t}
+        />
+      )}
+      {isLeaveModalOpen && (
+        <ConfirmationModal
+          onConfirm={confirmLeaveOrganization}
+          onCancel={() => setIsLeaveModalOpen(false)}
+          t={t}
+          message={t("leave_organization_confirmation_key")}
         />
       )}
     </div>

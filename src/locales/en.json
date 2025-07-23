@@ -775,5 +775,10 @@
   "organization_id_key": "Organization Id",
   "organization_id_placeholder_key": "Enter organization ID",
   "plant_id_key": "Plant id",
-  "disease_id_key": "Disease id"
+  "disease_id_key": "Disease id",
+  "leave_organization_key": "Leave Organization",
+  "left_organization_key": "You have left the organization",
+  "failed_to_leave_organization_key": "Failed to leave organization",
+  "leave_organization_confirmation_key": "Are you sure you want to leave the organization?",
+  "confirm_key": "Confirm"
 }

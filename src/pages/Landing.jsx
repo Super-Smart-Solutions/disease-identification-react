@@ -65,7 +65,7 @@ export default function Landing() {
               to="/models"
               className="mt-8 inline-block rounded-full border border-white px-12 py-3 text-sm font-medium text-white hover:bg-white hover:text-primary hover:border-white"
             >
-              {user.id ? t("try_models_key") : t("Get Started")}
+              {user && user.id ? t("try_models_key") : t("Get Started")}
             </Link>
           </div>
 
