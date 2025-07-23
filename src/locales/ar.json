@@ -772,5 +772,8 @@
   "results_step_key": "النتائج",
   "summary_step_key": "الملخص",
   "selected_file_key": "الملمف المرفوع",
-  "optional_key": "اختياري"
+  "optional_key": "اختياري",
+  "file_rejected_key": "فشل التحميل بسبب: {{reasons}}",
+  "file_too_large_key": "الملف كبير جداً. الحد الأقصى هو {{maxSize}}",
+  "file_type_invalid_key": "نوع الملف غير مدعوم"
 }

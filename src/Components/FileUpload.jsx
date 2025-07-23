@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
 import { FiUploadCloud, FiX } from "react-icons/fi";
@@ -12,28 +12,35 @@ const FileUpload = ({
   allowRemove = false,
 }) => {
   const { t } = useTranslation();
+  const [error, setError] = useState("");
   const isPdf = accept["application/pdf"]?.includes(".pdf");
 
   const { getRootProps, getInputProps } = useDropzone({
     accept,
     multiple,
-    maxSize: 4 * 1024 * 1024, // 4MB in bytes
+    maxSize: 4 * 1024 * 1024,
     onDrop: (acceptedFiles, fileRejections) => {
       setSelectedFile(acceptedFiles);
       if (fileRejections.length > 0) {
-        alert(
-          t("file_rejected_key", {
-            reasons: fileRejections
-              .map((rej) =>
-                rej.errors.map((err) =>
-                  err.code === "file-too-large"
-                    ? t("file_too_large_key", { maxSize: "4MB" })
-                    : t("file_type_invalid_key")
-                )
+        const reasons = fileRejections
+          .map((rej) =>
+            rej.errors
+              .map((err) =>
+                err.code === "file-too-large"
+                  ? t("file_too_large_key", { maxSize: "4MB" })
+                  : t("file_type_invalid_key")
               )
-              .join(", "),
+              .join(", ")
+          )
+          .join(", ");
+
+        setError(
+          t("file_rejected_key", {
+            reasons,
           })
         );
+      } else {
+        setError(""); // Clear error if upload successful
       }
     },
   });
@@ -90,6 +97,11 @@ const FileUpload = ({
             ))}
           </div>
         </div>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <p className="text-sm text-red-500 bg-red-50 p-2 rounded-md">{error}</p>
       )}
     </div>
   );

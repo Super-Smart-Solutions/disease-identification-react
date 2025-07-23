@@ -335,8 +335,8 @@
   "describtion_required_key": "Describtion required",
   "describtion_key": "Describtion",
   "try_models_key": "Try Models",
-  "Get Started": "Join Now", 
-  
+  "Get Started": "Join Now",
+
   "Symptoms": "Symptoms",
   "Control Methods:": "Control Methods:",
   "total_images_collected": "Total images collected",
@@ -768,5 +768,8 @@
   "results_step_key": "Results",
   "summary_step_key": "Summary",
   "selected_file_key": "selected file",
-  "optional_key": "Optional"
+  "optional_key": "Optional",
+  "file_rejected_key": "Upload failed due to: {{reasons}}",
+  "file_too_large_key": "File too large. Max allowed is {{maxSize}}",
+  "file_type_invalid_key": "Unsupported file type"
 }
