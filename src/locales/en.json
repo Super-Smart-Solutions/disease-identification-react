@@ -760,5 +760,11 @@
   "users_key": "Users",
   "add_user_key": "Add User",
   "registered_and_verified_key": "user registered successfully",
-  "hashed_password_key": "Hashed password"
+  "hashed_password_key": "Hashed password",
+  "soil_input_step_key": "Soil Input",
+  "upload_pdf_step_key": "Upload PDF",
+  "results_step_key": "Results",
+  "summary_step_key": "Summary",
+  "selected_file_key": "selected file",
+  "optional_key": "Optional"
 }

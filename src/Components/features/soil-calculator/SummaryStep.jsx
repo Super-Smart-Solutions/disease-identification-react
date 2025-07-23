@@ -120,16 +120,13 @@ export const SummaryStep = ({ assessmentResult }) => {
   ];
   return (
     <div className="space-y-3 h-[60vh] overflow-y-auto">
-      <div className="print-header flex justify-between items-center p-4">
-        <h2 className="text-xl font-bold">{t("summary_key")}</h2>
-        <Button
-          className="flex items-center gap-2"
-          variant="outlined"
-          onClick={handleDownloadPDF}
-        >
-          {t("download_key")} <FaFilePdf size={16} />
-        </Button>
-      </div>
+      <Button
+        className="flex items-center gap-2"
+        variant="outlined"
+        onClick={handleDownloadPDF}
+      >
+        {t("download_key")} <FaFilePdf size={16} />
+      </Button>
 
       <div
         ref={summaryRef}

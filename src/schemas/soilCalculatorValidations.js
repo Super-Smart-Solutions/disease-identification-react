@@ -18,7 +18,13 @@ export const useSoilCalculatorValidations = () => {
             .typeError(t("must_be_a_number_key"))
             .min(-100, t("temperature_min_error_key"))
             .max(100, t("temperature_max_error_key"))
-            .required(t("required_field_key"))
+            .required(t("required_field_key")),
+        uploaded_pdf: Yup.mixed()
+            .nullable()
+            .test('fileType', t("invalid_file_type_key"), (value) => {
+                if (!value) return true; // Allow empty (optional field)
+                return value && value.type === "application/pdf";
+            })
     });
 
     const initialValues = {
@@ -26,6 +32,7 @@ export const useSoilCalculatorValidations = () => {
         ph: "",
         salinity: "",
         temperature: "",
+        uploaded_pdf: null
     };
 
     return { validationSchema, initialValues };
