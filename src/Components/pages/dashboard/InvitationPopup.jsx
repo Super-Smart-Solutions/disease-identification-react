@@ -93,7 +93,10 @@ export default function InvitationPopup({ onClose }) {
     rejectMutate(inviteId);
   };
 
-  const invitations = invitationsData?.items || [];
+  const invitations =
+    invitationsData?.items?.filter(
+      (invitation) => invitation.status !== "rejected"
+    ) || [];
   const totalPages = invitationsData?.pages || 1;
   const totalItems = invitationsData?.total || 0;
 
