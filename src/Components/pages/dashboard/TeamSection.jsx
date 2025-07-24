@@ -8,13 +8,13 @@ import Button from "../../Button";
 import CreateOrganization from "./CreateOrganization";
 import noDataImg from "../../../assets/no-data.png";
 import { kickOutUserById, fetchUsers } from "../../../api/userAPI";
-import { FiTrash } from "react-icons/fi";
 import ConfirmationModal from "../../ConfirmationModal";
 import { useUserTeam } from "../../../api/useUserTeam";
 import { createInvitation } from "../../../api/inviteApi";
 import { toast } from "sonner";
 import DataGrid from "../../DataGrid";
 import InvitationPopup from "./InvitationPopup";
+import { IoPersonRemoveOutline } from "react-icons/io5";
 
 export default function TeamSection() {
   const { t } = useTranslation();
@@ -50,7 +50,7 @@ export default function TeamSection() {
   } = useQuery({
     queryKey: ["organizationUsers", user?.organization_id, page, pageSize],
     queryFn: fetchUsersData,
-    enabled: isInOrganization && isAdmin, // Only fetch if user is admin in organization
+    enabled: isInOrganization && isAdmin, 
     staleTime: 1000 * 60 * 5,
   });
 
@@ -148,7 +148,7 @@ export default function TeamSection() {
                   onClick={() => handleRemoveUser(params?.data?.id)}
                   title={t("remove_user_key")}
                 >
-                  <FiTrash size={18} />
+                  <IoPersonRemoveOutline size={18} />
                 </button>
               ),
           },
@@ -156,7 +156,7 @@ export default function TeamSection() {
       : []),
   ];
 
-  // Render based on user's organization status
+  
   const renderContent = () => {
     if (!isInOrganization) {
       return (
