@@ -2,9 +2,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setUser, setLoading, setError, logout } from '../redux/features/userSlice';
 import { fetchCurrentUser, updateUserById, uploadUserAvatar as UploadUserAvatar } from '../api/userAPI';
 import { loginUser } from '../api/authAPI';
-
-import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import tokenManager from '../Components/helpers/tokenManager';
 
 export const useUserData = () => {
     const dispatch = useDispatch();
@@ -15,12 +14,8 @@ export const useUserData = () => {
         try {
             dispatch(setLoading(true));
             const loginResponse = await loginUser(values);
-            const { access_token } = loginResponse;
-            Cookies.set('token', access_token, {
-                secure: true,
-                sameSite: 'Strict',
-                expires: 1,
-            });
+            const { access_token, refresh_token } = loginResponse;
+            tokenManager.setTokens(access_token, refresh_token)
             const userResponse = await fetchCurrentUser();
             dispatch(setUser(userResponse));
 
@@ -70,7 +65,7 @@ export const useUserData = () => {
     const uploadUserAvatar = async (avatarFile) => {
         try {
             dispatch(setLoading(true));
-            const token = Cookies.get('token');
+            const token = tokenManager.getAccessToken()
             await UploadUserAvatar(avatarFile, token);
             const updatedUser = await fetchCurrentUser()
             dispatch(setUser(updatedUser));

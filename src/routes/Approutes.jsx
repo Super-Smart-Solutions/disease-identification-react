@@ -101,7 +101,7 @@ const AppRoutes = () => {
   const { logout } = useAuthActions();
 
   useEffect(() => {
-    const token = Cookies.get("token");
+    const token = Cookies.get("access_token");
     if (!token) {
       logout();
     }
