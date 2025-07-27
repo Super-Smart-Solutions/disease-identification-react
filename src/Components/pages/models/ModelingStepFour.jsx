@@ -61,7 +61,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
       if (result) {
         setTimeout(() => {
           openReviewModal();
-        }, 2000);
+        }, 6000);
       }
       return result;
     },
