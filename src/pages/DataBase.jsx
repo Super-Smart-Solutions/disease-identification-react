@@ -12,7 +12,8 @@ import { useSearchHandlers } from "../hooks/useSearchHandlers";
 
 const DataBase = () => {
   const { t } = useTranslation();
-  const { handleDiseaseChange, handlePlantChange } = useSearchHandlers();
+  const { handleDiseaseChange, handlePlantChange, handleReset } =
+    useSearchHandlers();
   const [searchParams] = useSearchParams();
   const diseaseId = searchParams.get("disease_id");
   const plantId = searchParams.get("plant_id");
@@ -84,6 +85,7 @@ const DataBase = () => {
               {t("type_to_search_key")}
             </label>
             <DiseaseSearchDropdown
+              handleReset={handleReset}
               selectedDisease={diseaseId}
               selectedPlant={plantId}
               handleDiseaseChange={handleDiseaseChange}
@@ -104,6 +106,7 @@ const DataBase = () => {
             className="mb-6"
           >
             <PlantDiseaseForm
+              handleReset={handleReset}
               selectedDisease={diseaseId}
               selectedPlant={plantId}
               handleDiseaseChange={handleDiseaseChange}

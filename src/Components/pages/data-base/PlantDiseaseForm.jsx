@@ -12,6 +12,7 @@ const PlantDiseaseForm = ({
   selectedPlant,
   handleDiseaseChange,
   handlePlantChange,
+  handleReset,
 }) => {
   const { t, i18n } = useTranslation();
 
@@ -63,9 +64,8 @@ const PlantDiseaseForm = ({
   });
 
   const handleReset = (resetForm) => {
+    handleReset();
     resetForm();
-    handlePlantChange(null);
-    handleDiseaseChange(null);
   };
 
   const onPlantSelect = useCallback(

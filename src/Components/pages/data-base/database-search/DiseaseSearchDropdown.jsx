@@ -10,30 +10,23 @@ import { useDiseaseSearch } from "./../../../../hooks/useDiseaseSearch";
 const DiseaseSearchDropdown = ({
   handleDiseaseChange,
   handlePlantChange,
-  selectedDisease = null,
-  selectedPlant = null,
+  selectedDisease,
+  selectedPlant,
+  handleReset,
 }) => {
   const { t, i18n } = useTranslation();
   const [inputValue, setInputValue] = useState("");
-  const [currentDiseaseId, setCurrentDiseaseId] = useState(selectedDisease);
 
-  // Fetch diseases
   const { data: response = {}, isLoading: isDiseasesLoading } = useDiseases({
     pageSize: 50,
   });
   const diseases = response?.items || [];
 
-  // Fetch plants for selected disease
   const { data: plantsData, isFetching: isPlantsLoading } =
-    usePlantByDiseases(currentDiseaseId);
-
-  // Get filtered options based on search
+    usePlantByDiseases(selectedDisease);
   const filteredOptions = useDiseaseSearch(diseases, inputValue);
-
-  // Transform diseases to select options
   const selectOptions = useDiseaseOptions(filteredOptions, i18n.language);
 
-  // Format option display
   const formatOptionLabel = useCallback(
     ({ label, scientificName, arabicName }) => (
       <DiseaseOptionLabel
@@ -47,38 +40,32 @@ const DiseaseSearchDropdown = ({
     [t, i18n.language]
   );
 
-  // Initialize component with selected disease
   useEffect(() => {
     if (selectedDisease && diseases.length > 0) {
       const disease = diseases.find((d) => d.id === Number(selectedDisease));
-
-      if (disease) {
-        const label =
-          i18n.language === "ar"
-            ? disease.arabic_name
-            : disease.english_name || "Unnamed Disease";
-        setInputValue(label);
-        setCurrentDiseaseId(selectedDisease);
-      }
+      const label =
+        i18n.language === "ar"
+          ? disease?.arabic_name
+          : disease?.english_name || "Unnamed Disease";
+      setInputValue(label);
+    } else {
+      setInputValue("");
     }
   }, [selectedDisease, diseases, i18n.language]);
 
-  // Handle plant selection when plants data changes
   useEffect(() => {
-    if (currentDiseaseId && plantsData?.items?.length > 0) {
-      const targetPlantId =
-        selectedPlant &&
-        plantsData.items.some((plant) => plant.id === selectedPlant)
-          ? selectedPlant
-          : plantsData.items[0].id;
-
-      handlePlantChange(targetPlantId);
-    } else if (currentDiseaseId && plantsData?.items?.length === 0) {
+    if (selectedDisease && plantsData?.items?.length > 0) {
+      const isValid = plantsData.items.some(
+        (plant) => plant.id === selectedPlant
+      );
+      if (!isValid) {
+        handlePlantChange(plantsData.items[0].id);
+      }
+    } else if (selectedDisease && plantsData?.items?.length === 0) {
       handlePlantChange(null);
     }
-  }, [plantsData, currentDiseaseId, selectedPlant, handlePlantChange]);
+  }, [plantsData, selectedDisease]);
 
-  // Handle disease selection
   const handleSelect = useCallback(
     (selectedOption) => {
       const label =
@@ -87,28 +74,21 @@ const DiseaseSearchDropdown = ({
           : selectedOption.englishName || "Unnamed Disease";
 
       setInputValue(label);
-      setCurrentDiseaseId(selectedOption.value);
       handleDiseaseChange(selectedOption.value);
     },
     [i18n.language, handleDiseaseChange]
   );
 
-  // Handle reset - clear both disease and plant selections
-  const handleReset = useCallback(() => {
+  const onReset = useCallback(() => {
     setInputValue("");
-    setCurrentDiseaseId(null);
-    handleDiseaseChange(null);
-    handlePlantChange(null);
+    handleReset();
   }, [handleDiseaseChange, handlePlantChange]);
 
-  // Handle input change for search
   const handleInputChange = useCallback(
     (newValue) => {
       setInputValue(newValue);
 
-      // If input is cleared, clear selections
       if (!newValue) {
-        setCurrentDiseaseId(null);
         handleDiseaseChange(null);
         handlePlantChange(null);
       }
@@ -120,11 +100,11 @@ const DiseaseSearchDropdown = ({
     <CustomDropdown
       t={t}
       inputValue={inputValue}
-      selectedValue={currentDiseaseId}
+      selectedValue={selectedDisease}
       options={selectOptions}
       onInputChange={handleInputChange}
       onSelect={handleSelect}
-      onReset={handleReset}
+      onReset={onReset}
       isLoading={isDiseasesLoading || isPlantsLoading}
       formatOptionLabel={formatOptionLabel}
     />

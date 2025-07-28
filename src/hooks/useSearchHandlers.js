@@ -5,46 +5,55 @@ export const useSearchHandlers = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
 
+    const updateParamsAndNavigate = useCallback(
+        (newParams) => {
+            const currentPath = window?.location?.pathname;
+            const newQueryString = newParams.toString();
+
+            if (currentPath === "/database") {
+                setSearchParams(newParams);
+            } else {
+                navigate(`/database?${newQueryString}`);
+            }
+        },
+        [navigate, setSearchParams]
+    );
+
     const handleDiseaseChange = useCallback(
         (diseaseId) => {
-            const newParams = new URLSearchParams(searchParams);
+            const newParams = new URLSearchParams(searchParams.toString());
             if (diseaseId) {
                 newParams.set("disease_id", diseaseId);
-                if (newParams.get("plant_id")) {
-                    newParams.set("plant_id", newParams.get("plant_id"));
-                }
             } else {
                 newParams.delete("disease_id");
                 newParams.delete("plant_id");
             }
-            setSearchParams(newParams);
-            // Navigate with the updated params
-            if (window.location.pathname !== "/database") {
-                navigate(`/database?${newParams.toString()}`);
-            }
+            updateParamsAndNavigate(newParams);
         },
-        [searchParams, setSearchParams, navigate]
+        [searchParams, updateParamsAndNavigate]
     );
 
     const handlePlantChange = useCallback(
         (plantId) => {
-            const newParams = new URLSearchParams(searchParams);
-            if (plantId && plantId !== null) {
+            const newParams = new URLSearchParams(searchParams.toString());
+            if (plantId) {
                 newParams.set("plant_id", plantId);
             } else {
                 newParams.delete("plant_id");
             }
-            if (newParams.get("disease_id")) {
-                newParams.set("disease_id", newParams.get("disease_id"));
-            }
-            setSearchParams(newParams);
-            // Navigate with the updated params
-            if (window.location.pathname !== "/database") {
-                navigate(`/database?${newParams.toString()}`);
-            }
+            updateParamsAndNavigate(newParams);
         },
-        [searchParams, setSearchParams, navigate]
+        [searchParams, updateParamsAndNavigate]
     );
 
-    return { handleDiseaseChange, handlePlantChange };
+    const handleReset = useCallback(() => {
+        setSearchParams({});
+    }, [navigate, setSearchParams]);
+
+    return {
+        handleDiseaseChange,
+        handlePlantChange,
+        handleReset,
+    };
 };
+

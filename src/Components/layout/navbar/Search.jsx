@@ -7,10 +7,12 @@ const Search = () => {
   const [searchParams] = useSearchParams();
   const diseaseId = searchParams.get("disease_id");
   const plantId = searchParams.get("plant_id");
-  const { handleDiseaseChange, handlePlantChange } = useSearchHandlers();
+  const { handleDiseaseChange, handlePlantChange, handleReset } =
+    useSearchHandlers();
 
   return (
     <DiseaseSearchDropdown
+      handleReset={handleReset}
       selectedDisease={diseaseId}
       selectedPlant={plantId}
       handleDiseaseChange={handleDiseaseChange}
