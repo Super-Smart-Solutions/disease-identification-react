@@ -63,7 +63,7 @@ const PlantDiseaseForm = ({
     disease: Yup.string().required(t("required_field_key")),
   });
 
-  const handleReset = (resetForm) => {
+  const onReset = (resetForm) => {
     handleReset();
     resetForm();
   };
@@ -142,7 +142,7 @@ const PlantDiseaseForm = ({
             <div className="md:col-span-1">
               <Button
                 type="button"
-                onClick={() => handleReset(resetForm)}
+                onClick={() => onReset(resetForm)}
                 width="full"
                 disabled={isSubmitting}
               >

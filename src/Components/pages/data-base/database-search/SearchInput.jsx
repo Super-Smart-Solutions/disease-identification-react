@@ -20,7 +20,7 @@ export const SearchInput = ({
       onFocus={onFocus}
       onKeyDown={onKeyDown}
       placeholder={t("search_diseases_placeholder_key")}
-      className="nav-input"
+      className="nav-input pe-20 p-2 "
     />
     <div className="absolute end-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
       {hasSelection ? (
