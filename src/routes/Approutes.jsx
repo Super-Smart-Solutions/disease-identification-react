@@ -96,16 +96,7 @@ const AdminRoute = ({ children, isAuthenticated, isAdmin }) => {
 };
 
 const AppRoutes = () => {
-  const location = useLocation();
   const { user } = useUserData();
-  const { logout } = useAuthActions();
-
-  useEffect(() => {
-    const token = Cookies.get("access_token");
-    if (!token) {
-      logout();
-    }
-  }, [location.pathname]);
 
   const isAuthenticated = !!user;
   const isAdmin = user?.roles?.some((role) => role.name === "superuser");
