@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
 import { FiUploadCloud, FiX } from "react-icons/fi";
-import { FaFilePdf } from "react-icons/fa";
+import { FaFilePdf, FaFileCsv } from "react-icons/fa";
 
 const FileUpload = ({
   accept = { "image/*": [".jpeg", ".jpg", ".png", ".gif"] },
@@ -14,6 +14,7 @@ const FileUpload = ({
   const { t } = useTranslation();
   const [error, setError] = useState("");
   const isPdf = accept["application/pdf"]?.includes(".pdf");
+  const isCsv = accept["text/csv"]?.includes(".csv");
 
   const { getRootProps, getInputProps } = useDropzone({
     accept,
@@ -49,6 +50,37 @@ const FileUpload = ({
     setSelectedFile((prevFiles) => prevFiles.filter((_, i) => i !== index));
   };
 
+  const renderFilePreview = (file) => {
+    const fileType = file.type;
+
+    if (isPdf && fileType === "application/pdf") {
+      return (
+        <div className="flex items-center space-x-2">
+          <FaFilePdf className="text-3xl text-red-500" />
+          <span className="text-sm text-gray-600">{file.name}</span>
+        </div>
+      );
+    }
+
+    if (isCsv && fileType === "text/csv") {
+      return (
+        <div className="flex items-center space-x-2">
+          <FaFileCsv className="text-3xl text-green-600" />
+          <span className="text-sm text-gray-600">{file.name}</span>
+        </div>
+      );
+    }
+
+    // Default to image preview
+    return (
+      <img
+        src={URL.createObjectURL(file)}
+        alt={file.name}
+        className="max-w-120 max-h-80 object-cover rounded-md"
+      />
+    );
+  };
+
   return (
     <div className="space-y-4 grow">
       {/* Dropzone Area */}
@@ -71,18 +103,7 @@ const FileUpload = ({
             {selectedFile.map((file, index) => (
               <div key={index} className="relative group">
                 <div className="flex items-center p-2 bg-gray-50 rounded-md">
-                  {isPdf ? (
-                    <div className="flex items-center space-x-2">
-                      <FaFilePdf className="text-3xl text-red-500" />
-                      <span className="text-sm text-gray-600">{file.name}</span>
-                    </div>
-                  ) : (
-                    <img
-                      src={URL.createObjectURL(file)}
-                      alt={file.name}
-                      className="max-w-120 max-h-80 object-cover rounded-md"
-                    />
-                  )}
+                  {renderFilePreview(file)}
                 </div>
                 {allowRemove && (
                   <button

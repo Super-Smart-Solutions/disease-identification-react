@@ -1,6 +1,6 @@
 import axiosInstance from "../utils/axiosInstance";
 
-const OIL_TEST_ENDPOINT = "/api/oil-tests";
+const OIL_TEST_ENDPOINT = "/oil-tests";
 
 
 export const checkOilAuthenticity = async (file, name) => {
