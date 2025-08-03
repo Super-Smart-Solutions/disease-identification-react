@@ -22,12 +22,13 @@ export default function ModalOilTest() {
     setSelectedFiles([]);
   };
 
-  const mutation = useMutation({
+  const { mutate, data, isPending } = useMutation({
     mutationFn: ({ file, name }) => checkOilAuthenticity(file, name),
     onSuccess: () => {
       handleClose();
     },
   });
+
 
   const handleFileChange = (files, setFieldValue) => {
     setSelectedFiles(files);
@@ -54,12 +55,15 @@ export default function ModalOilTest() {
         validationSchema={validationSchema}
         onSubmit={(values) => {
           if (!selectedFiles.length) return;
-          mutation.mutate({ file: selectedFiles[0], name: values.name });
+          mutate({ file: selectedFiles[0], name: values.name });
         }}
       >
         {({ setFieldValue }) => (
           <Form className="space-y-4">
-            <span className=" text-2xl text-center my-4 block"> {t("oil_test_key")}</span>
+            <span className=" text-2xl text-center my-4 block">
+              {" "}
+              {t("oil_test_key")}
+            </span>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               {t("oil_test_desc_key")}
             </label>
@@ -95,8 +99,13 @@ export default function ModalOilTest() {
                 </motion.div>
               )}
             </AnimatePresence>
-
-            <Button type="submit" loading={mutation.isPending} width="full">
+            {data?.result && (
+              <span className="block text-sm font-medium text-gray-700 mb-2">
+                {" "}
+                {data?.result || "no result"}
+              </span>
+            )}
+            <Button type="submit" loading={isPending} width="full">
               {t("upload_key")}
             </Button>
           </Form>

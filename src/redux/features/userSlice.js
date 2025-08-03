@@ -28,9 +28,9 @@ const userSlice = createSlice({
             state.isLoading = false;
             state.isError = false;
             state.error = null;
-            localStorage.removeItem('user');
 
-            tokenManager.clearTokens();
+            localStorage.removeItem('user');
+            tokenManager.redirectToLogin();
         },
         setLoading: (state, action) => {
             state.isLoading = action.payload;

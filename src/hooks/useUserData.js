@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import {useCallback} from 'react';
+import { useCallback } from 'react';
 import { setUser, setLoading, setError, logout } from '../redux/features/userSlice';
 import { fetchCurrentUser, updateUserById, uploadUserAvatar as UploadUserAvatarAPI } from '../api/userAPI';
 import { loginUser } from '../api/authAPI';
@@ -47,7 +47,7 @@ export const useUserData = () => {
             dispatch(setError(errorMessage));
             throw errorMessage;
         }
-    },[dispatch]);
+    }, [dispatch]);
 
     const updateUserData = useCallback(async (userId, userData) => {
         try {
@@ -80,11 +80,6 @@ export const useUserData = () => {
 
     const logoutUser = useCallback(() => {
         dispatch(logout());
-
-        tokenManager.clearTokens();
-
-        window.location.href = '/auth/login';
-
     }, [dispatch]);
 
     return {

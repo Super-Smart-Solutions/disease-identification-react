@@ -30,6 +30,7 @@ import AdminImages from "../Components/pages/admin/images/AdminImages";
 import Profile from "../pages/Profile";
 import { useUserData } from "../hooks/useUserData";
 import Disease from "../pages/Disease";
+import tokenManager from "../Components/helpers/tokenManager";
 
 const componentMap = {
   Landing,
@@ -96,10 +97,29 @@ const AdminRoute = ({ children, isAuthenticated, isAdmin }) => {
 };
 
 const AppRoutes = () => {
-  const { user } = useUserData();
-
+  const { user, refetchUserData } = useUserData();
   const isAuthenticated = !!user;
   const isAdmin = user?.roles?.some((role) => role.name === "superuser");
+
+  useEffect(() => {
+    const token = tokenManager.getAccessToken();
+    const initializeSession = async () => {
+      if (token) {
+        try {
+          await refetchUserData();
+        } catch (error) {
+          console.error(
+            "Session initialization failed (token might be invalid):",
+            error
+          );
+        }
+      }
+
+      setIsInitializing(false);
+    };
+
+    initializeSession();
+  }, [refetchUserData]);
 
   return (
     <Routes>
