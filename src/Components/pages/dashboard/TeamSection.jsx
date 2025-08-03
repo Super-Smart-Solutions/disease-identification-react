@@ -7,14 +7,14 @@ import * as Yup from "yup";
 import Button from "../../Button";
 import CreateOrganization from "./CreateOrganization";
 import noDataImg from "../../../assets/no-data.png";
-import { deleteUserById, fetchUsers } from "../../../api/userAPI";
-import { FiTrash } from "react-icons/fi";
+import { kickOutUserById, fetchUsers } from "../../../api/userAPI";
 import ConfirmationModal from "../../ConfirmationModal";
 import { useUserTeam } from "../../../api/useUserTeam";
 import { createInvitation } from "../../../api/inviteApi";
 import { toast } from "sonner";
 import DataGrid from "../../DataGrid";
 import InvitationPopup from "./InvitationPopup";
+import { IoPersonRemoveOutline } from "react-icons/io5";
 
 export default function TeamSection() {
   const { t } = useTranslation();
@@ -30,6 +30,7 @@ export default function TeamSection() {
   const [userToDelete, setUserToDelete] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [showInvitationPopup, setShowInvitationPopup] = useState(true);
+  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
 
   const fetchUsersData = useCallback(
     () =>
@@ -49,7 +50,7 @@ export default function TeamSection() {
   } = useQuery({
     queryKey: ["organizationUsers", user?.organization_id, page, pageSize],
     queryFn: fetchUsersData,
-    enabled: isInOrganization && isAdmin, // Only fetch if user is admin in organization
+    enabled: isInOrganization && isAdmin, 
     staleTime: 1000 * 60 * 5,
   });
 
@@ -90,12 +91,22 @@ export default function TeamSection() {
   const confirmDeleteUser = async () => {
     if (!userToDelete) return;
     try {
-      await deleteUserById(userToDelete);
+      await kickOutUserById(userToDelete);
       setIsDeleteModalOpen(false);
       setUserToDelete(null);
       refetchUsers();
     } catch (err) {
       console.error("Failed to delete user:", err);
+    }
+  };
+  const confirmLeaveOrganization = async () => {
+    try {
+      await kickOutUserById(user?.id);
+      toast.success(t("left_organization_key"));
+      refetchUserData();
+      setIsLeaveModalOpen(false);
+    } catch (err) {
+      toast.error(t("failed_to_leave_organization_key"));
     }
   };
 
@@ -137,7 +148,7 @@ export default function TeamSection() {
                   onClick={() => handleRemoveUser(params?.data?.id)}
                   title={t("remove_user_key")}
                 >
-                  <FiTrash size={18} />
+                  <IoPersonRemoveOutline size={18} />
                 </button>
               ),
           },
@@ -145,7 +156,7 @@ export default function TeamSection() {
       : []),
   ];
 
-  // Render based on user's organization status
+  
   const renderContent = () => {
     if (!isInOrganization) {
       return (
@@ -192,8 +203,16 @@ export default function TeamSection() {
             </div>
           )
         ) : (
-          <div className="text-lg text-gray-600">
-            {t("member_of_team_key")} <strong>{teamData?.name}</strong>
+          <div className="flex items-center justify-between">
+            <div className="text-lg text-gray-600">
+              {t("member_of_team_key")} <strong>{teamData?.name}</strong>
+            </div>
+            <Button
+              variant="outlined"
+              onClick={() => setIsLeaveModalOpen(true)}
+            >
+              {t("leave_organization_key")}
+            </Button>
           </div>
         )}
       </>
@@ -281,6 +300,14 @@ export default function TeamSection() {
           onConfirm={confirmDeleteUser}
           onCancel={() => setIsDeleteModalOpen(false)}
           t={t}
+        />
+      )}
+      {isLeaveModalOpen && (
+        <ConfirmationModal
+          onConfirm={confirmLeaveOrganization}
+          onCancel={() => setIsLeaveModalOpen(false)}
+          t={t}
+          message={t("leave_organization_confirmation_key")}
         />
       )}
     </div>

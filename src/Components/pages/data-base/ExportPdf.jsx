@@ -1,10 +1,9 @@
-import React, { useCallback, useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import { FaFilePdf, FaSpinner } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query";
-import { getImages } from "../../../api/imagesAPI";
 import Button from "../../Button";
+import { useImages } from "../../../hooks/useImages";
 
 const formatTextWithLineBreaks = (text, t) => {
   if (!text) return t("no_data_available_key");
@@ -177,21 +176,12 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
   const page = 1;
   const pageSize = 4;
 
-  const fetchImages = useCallback(
-    () => getImages({ plant_id, diseaseId, size: pageSize, page }),
-    [plant_id, diseaseId, pageSize, page]
-  );
-
-  const {
-    data,
-    isLoading: imagesLoading,
-    error: imagesError,
-  } = useQuery({
-    queryKey: ["images", plant_id, diseaseId, page, pageSize],
-    queryFn: fetchImages,
-    staleTime: 1000 * 60 * 5,
+  const { data, isLoading, error } = useImages({
+    plant_id,
+    diseaseId,
+    page,
+    pageSize,
   });
-
   const handleDownloadPDF = async () => {
     if (!pdfRef.current || isGenerating) return;
     setIsGenerating(true);
@@ -292,8 +282,8 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
         {t("download_key")} <FaFilePdf size={16} />
       </Button>
 
-      {imagesLoading && <LoadingIndicator />}
-      {imagesError && <ErrorIndicator t={t} />}
+      {isLoading && <LoadingIndicator />}
+      {error && <ErrorIndicator t={t} />}
 
       <ImageProcessor images={data} onProcessed={setProcessedImages} />
       <PdfContent

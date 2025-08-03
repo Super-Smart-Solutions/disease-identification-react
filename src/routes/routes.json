@@ -13,6 +13,13 @@
     "breadcrumb": true,
     "label": "models"
   },
+  {
+    "protected": true,
+    "path": "disease",
+    "element": "Disease",
+    "breadcrumb": true,
+    "label": "disease"
+  },
 
   {
     "protected": true,

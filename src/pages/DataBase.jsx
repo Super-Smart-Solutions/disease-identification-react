@@ -1,64 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaSearch, FaLeaf } from "react-icons/fa";
 import ImageGrid from "../Components/pages/data-base/ImageGrid";
 import ExpandableArticle from "../Components/pages/data-base/ExpandableArticle";
 import PlantDiseaseForm from "../Components/pages/data-base/PlantDiseaseForm";
 import { useTranslation } from "react-i18next";
-import DiseaseSearchDropdown from "../Components/pages/data-base/DiseaseSearchDropdown";
-import { useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import { useDiseaseById } from "../hooks/useDiseases";
+import DiseaseSearchDropdown from "../Components/pages/data-base/database-search/DiseaseSearchDropdown";
+import { useSearchHandlers } from "../hooks/useSearchHandlers";
 
-export default function DataBase() {
-  const { t, i18n } = useTranslation();
-  const { state } = useLocation();
+const DataBase = () => {
+  const { t } = useTranslation();
+  const { handleDiseaseChange, handlePlantChange, handleReset } =
+    useSearchHandlers();
+  const [searchParams] = useSearchParams();
+  const diseaseId = searchParams.get("disease_id");
+  const plantId = searchParams.get("plant_id");
   const [searchMethod, setSearchMethod] = useState("plant");
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedDisease, setSelectedDisease] = useState(
-    state?.selectedDisease || null
-  );
-  const [selectedPlant, setSelectedPlant] = useState(null);
 
-  useEffect(() => {
-    if (state?.selectedDisease) {
-      setSelectedDisease(state.selectedDisease);
-    }
-  }, [state]);
+  const { data: selectedDisease, isLoading } = useDiseaseById(diseaseId);
 
   const containerVariants = {
     hidden: { opacity: 0, height: 0 },
     visible: {
       opacity: 1,
       height: "auto",
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
+      transition: { duration: 0.3, ease: "easeInOut" },
     },
     exit: {
       opacity: 0,
       height: 0,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut",
-      },
+      transition: { duration: 0.2, ease: "easeInOut" },
     },
   };
 
-  // Handle disease change with loading state
-  const handleDiseaseChange = (disease) => {
-    if (disease?.id !== selectedDisease?.id) {
-      setIsLoading(true);
-      setSelectedDisease(disease);
-      // Simulate loading for 1-2 seconds
-      const loadingTime = Math.random() * 1000 + 1000; // Between 1-2 seconds
-      setTimeout(() => {
-        setIsLoading(false);
-      }, loadingTime);
-    }
-  };
-
   return (
-    <div className="space-y-6" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+    <div className="space-y-6">
       {/* Search Method Selection */}
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <div
@@ -98,11 +76,20 @@ export default function DataBase() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="mb-6"
+            className="mb-6 w-full cardIt"
           >
+            <label
+              htmlFor="search"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              {t("type_to_search_key")}
+            </label>
             <DiseaseSearchDropdown
-              onSelectDisease={handleDiseaseChange}
-              onSelectPlant={setSelectedPlant}
+              handleReset={handleReset}
+              selectedDisease={diseaseId}
+              selectedPlant={plantId}
+              handleDiseaseChange={handleDiseaseChange}
+              handlePlantChange={handlePlantChange}
             />
           </motion.div>
         )}
@@ -119,8 +106,11 @@ export default function DataBase() {
             className="mb-6"
           >
             <PlantDiseaseForm
-              onSelectDisease={handleDiseaseChange}
-              onSelectPlant={setSelectedPlant}
+              handleReset={handleReset}
+              selectedDisease={diseaseId}
+              selectedPlant={plantId}
+              handleDiseaseChange={handleDiseaseChange}
+              handlePlantChange={handlePlantChange}
             />
           </motion.div>
         )}
@@ -135,19 +125,16 @@ export default function DataBase() {
           className="space-y-8 mt-10"
         >
           <ExpandableArticle
-            plant_id={selectedPlant}
+            plant_id={plantId}
             article={selectedDisease}
             loading={isLoading}
-            diseaseId={selectedDisease?.id}
+            diseaseId={diseaseId}
           />
-
-          <ImageGrid
-            plant_id={selectedPlant}
-            diseaseId={selectedDisease?.id}
-            loading={isLoading}
-          />
+          <ImageGrid plant_id={plantId} diseaseId={diseaseId} />
         </motion.div>
       )}
     </div>
   );
-}
+};
+
+export default React.memo(DataBase);

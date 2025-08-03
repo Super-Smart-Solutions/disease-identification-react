@@ -1,16 +1,17 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { WiStars } from "react-icons/wi"; // Make sure to install react-icons
+import { WiStars } from "react-icons/wi";
 import { useState, useEffect, useRef } from "react";
 import ReviewFormModal from "./features/ReviewFormModal";
 import { useTranslation } from "react-i18next";
 import { IoCalculator } from "react-icons/io5";
-import { GiStarsStack } from "react-icons/gi";
 import { useUserData } from "../hooks/useUserData";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useReviewForm } from "../hooks/features/rating/useReviewForm";
 import SoilCalculator from "./features/soil-calculator/SoilCalculator";
 import { useSoilCalculator } from "../hooks/useSoilCalculator";
+import { useOilTest } from "../hooks/features/oilTest/useOilTest";
+import ModalOilTest from "./features/OilTest";
+import { GiRose } from "react-icons/gi";
 
 const FeaturesPanel = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -19,23 +20,23 @@ const FeaturesPanel = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const panelRef = useRef(null); // Ref for the main panel and its content
-  const toggleButtonRef = useRef(null); // Ref for the toggle button
+  const panelRef = useRef(null);
+  const toggleButtonRef = useRef(null);
 
   const { handleOpenModal: openSoilModal } = useSoilCalculator({
     user,
     dispatch,
     navigate,
   });
-  const { handleOpenModal: openReviewModal } = useReviewForm({
+
+  const { handleOpenModal: openOilModal } = useOilTest({
     user,
-    dispatch,
     navigate,
+    dispatch,
   });
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Check if the click is outside the panel and outside the toggle button
       if (
         panelRef.current &&
         !panelRef.current.contains(event.target) &&
@@ -46,29 +47,26 @@ const FeaturesPanel = () => {
       }
     };
 
-    // Add event listener only when the panel is expanded
     if (isExpanded) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
     }
 
-    // Cleanup function to remove the event listener
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isExpanded]); // Re-run effect if isExpanded changes
+  }, [isExpanded]);
 
   return (
     <motion.div
-      ref={panelRef} // Assign ref to the main container that includes the expanded panel
+      ref={panelRef}
       className="realtive fixed bottom-10 right-10 z-50 flex gap-2 flex-col items-center justify-between w-30"
     >
       {/* Features Panel */}
       <AnimatePresence>
         {isExpanded && (
           <motion.div
-            // No separate ref needed here as panelRef covers this
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
@@ -88,22 +86,22 @@ const FeaturesPanel = () => {
                 color="white"
               />
             </div>{" "}
-            {/* <div
+            <div
+              className="bg-primary cursor-pointer p-2 rounded-full shadow-md w-fit"
               onClick={() => {
-                openReviewModal();
+                openOilModal();
                 setIsExpanded(false);
               }}
-              className="bg-primary cursor-pointer p-2 rounded-full shadow-md  w-fit"
             >
-              <GiStarsStack title={t("rate_key")} size={32} color="white" />
-            </div> */}
+              <GiRose title={t("oil_test_key")} size={28} color="white" />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Toggle Button */}
       <motion.div
-        ref={toggleButtonRef} // Assign ref to the toggle button
+        ref={toggleButtonRef}
         onClick={() => setIsExpanded(!isExpanded)}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
@@ -111,6 +109,7 @@ const FeaturesPanel = () => {
       >
         <WiStars title={t("extra_feature_key")} size={42} color="white" />
       </motion.div>
+      <ModalOilTest />
       <SoilCalculator />
       <ReviewFormModal />
     </motion.div>

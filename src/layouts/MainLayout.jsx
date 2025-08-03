@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import Navbar from "../Components/layout/Navbar";
+import Navbar from "../Components/layout/navbar/Navbar";
 import Footer from "../Components/layout/Footer";
 import Breadcrumbs from "../Components/layout/BreadCrumbs";
 import routes from "../routes/routes";

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "./Button";
 
-const ConfirmationModal = ({ t, onConfirm, onCancel }) => {
+const ConfirmationModal = ({ t, onConfirm, onCancel, message = null }) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleConfirm = async () => {
@@ -23,13 +23,13 @@ const ConfirmationModal = ({ t, onConfirm, onCancel }) => {
         <h2 className="text-xl font-semibold mb-4">
           {t("confirm_delete_title_key")}
         </h2>
-        <p className="mb-6">{t("confirm_delete_message_key")}</p>
+        <p className="mb-6">{message || t("confirm_delete_message_key")}</p>
         <div className="flex justify-end space-x-3">
           <Button variant="outlined" onClick={onCancel} disabled={isDeleting}>
             {t("cancel_key")}
           </Button>
           <Button onClick={handleConfirm} loading={isDeleting}>
-            {t("delete_key")}
+            {t("confirm_key")}
           </Button>
         </div>
       </div>

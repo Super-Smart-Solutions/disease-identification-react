@@ -1,26 +1,22 @@
 import { useSelector, useDispatch } from 'react-redux';
+import {useCallback} from 'react';
 import { setUser, setLoading, setError, logout } from '../redux/features/userSlice';
-import { fetchCurrentUser, updateUserById, uploadUserAvatar as UploadUserAvatar } from '../api/userAPI';
+import { fetchCurrentUser, updateUserById, uploadUserAvatar as UploadUserAvatarAPI } from '../api/userAPI';
 import { loginUser } from '../api/authAPI';
-
-import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import tokenManager from '../Components/helpers/tokenManager';
 
 export const useUserData = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const { user, isLoading, isError, error } = useSelector((state) => state.user);
 
-    const login = async (values) => {
+    const login = useCallback(async (values) => {
         try {
             dispatch(setLoading(true));
             const loginResponse = await loginUser(values);
-            const { access_token } = loginResponse;
-            Cookies.set('token', access_token, {
-                secure: true,
-                sameSite: 'Strict',
-                expires: 1,
-            });
+            const { access_token, refresh_token } = loginResponse;
+            tokenManager.setTokens(access_token, refresh_token)
             const userResponse = await fetchCurrentUser();
             dispatch(setUser(userResponse));
 
@@ -38,9 +34,9 @@ export const useUserData = () => {
             dispatch(setError(errorMessage));
             throw errorMessage;
         }
-    };
+    }, [dispatch, navigate]);
 
-    const refetchUserData = async () => {
+    const refetchUserData = useCallback(async () => {
         try {
             dispatch(setLoading(true));
             const userResponse = await fetchCurrentUser();
@@ -51,9 +47,9 @@ export const useUserData = () => {
             dispatch(setError(errorMessage));
             throw errorMessage;
         }
-    };
+    },[dispatch]);
 
-    const updateUserData = async (userId, userData) => {
+    const updateUserData = useCallback(async (userId, userData) => {
         try {
             dispatch(setLoading(true));
             await updateUserById(userId, userData);
@@ -65,13 +61,13 @@ export const useUserData = () => {
             dispatch(setError(errorMessage));
             throw errorMessage;
         }
-    };
+    }, [dispatch]);
 
-    const uploadUserAvatar = async (avatarFile) => {
+    const uploadUserAvatar = useCallback(async (avatarFile) => {
         try {
             dispatch(setLoading(true));
-            const token = Cookies.get('token');
-            await UploadUserAvatar(avatarFile, token);
+            //const token = tokenManager.getAccessToken()
+            await UploadUserAvatarAPI(avatarFile);
             const updatedUser = await fetchCurrentUser()
             dispatch(setUser(updatedUser));
             return updatedUser;
@@ -80,11 +76,16 @@ export const useUserData = () => {
             dispatch(setError(errorMessage));
             throw errorMessage;
         }
-    };
+    }, [dispatch]);
 
-    const logoutUser = () => {
+    const logoutUser = useCallback(() => {
         dispatch(logout());
-    };
+
+        tokenManager.clearTokens();
+
+        window.location.href = '/auth/login';
+
+    }, [dispatch]);
 
     return {
         user,

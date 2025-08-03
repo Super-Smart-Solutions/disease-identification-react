@@ -38,6 +38,12 @@ export const deleteUserById = async (userId) => {
     return response.data;
 };
 
+// remove from org
+export const kickOutUserById = async (userId) => {
+    const response = await axiosInstance.post(`${USER_ENDPOINT}/${userId}/remove-from-organization`);
+    return response.data;
+};
+
 // Upload user avatar
 export const uploadUserAvatar = async (avatarFile, token) => {
     const formData = new FormData();

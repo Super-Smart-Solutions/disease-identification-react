@@ -19,6 +19,7 @@ const UserForm = ({ userId, onSuccess, onClose, t }) => {
     first_name: userData?.first_name || "",
     last_name: userData?.last_name || "",
     phone_number: userData?.phone_number || "",
+    organization_id: userData?.organization_id || "",
   };
 
   const validationSchema = profileFormValidation(t).concat(
@@ -28,6 +29,7 @@ const UserForm = ({ userId, onSuccess, onClose, t }) => {
         : Yup.string()
             .min(6, t("password_min_length_key"))
             .required(t("required_field_key")),
+      organization_id: Yup.string(),
     })
   );
 
@@ -108,6 +110,25 @@ const UserForm = ({ userId, onSuccess, onClose, t }) => {
             />
             <ErrorMessage
               name="email"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="organization_id"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              {t("organization_id_key")}
+            </label>
+            <Field
+              name="organization_id"
+              type="text"
+              className="custom-input"
+              placeholder={t("organization_id_placeholder_key")}
+            />
+            <ErrorMessage
+              name="organization_id"
               component="div"
               className="text-red-500 text-sm mt-1"
             />

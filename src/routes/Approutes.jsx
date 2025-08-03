@@ -29,11 +29,13 @@ import AdminOrganizations from "../Components/pages/admin/organizations/AdminOrg
 import AdminImages from "../Components/pages/admin/images/AdminImages";
 import Profile from "../pages/Profile";
 import { useUserData } from "../hooks/useUserData";
+import Disease from "../pages/Disease";
 
 const componentMap = {
   Landing,
   DataBase,
   Models,
+  Disease,
   Register,
   Login,
   Dashboard,
@@ -94,16 +96,7 @@ const AdminRoute = ({ children, isAuthenticated, isAdmin }) => {
 };
 
 const AppRoutes = () => {
-  const location = useLocation();
   const { user } = useUserData();
-  const { logout } = useAuthActions();
-
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (!token) {
-      logout();
-    }
-  }, [location.pathname]);
 
   const isAuthenticated = !!user;
   const isAdmin = user?.roles?.some((role) => role.name === "superuser");

@@ -1,25 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { Formik, Form, Field } from "formik";
+import React, { useMemo, useCallback } from "react";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import SelectInput from "../../Formik/SelectInput";
 import Button from "../../Button";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlants, fetchDiseasesByPlant } from "../../../api/plantAPI";
-import { fetchDiseaseById } from "../../../api/diseaseAPI";
 
-const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
+const PlantDiseaseForm = ({
+  selectedDisease,
+  selectedPlant,
+  handleDiseaseChange,
+  handlePlantChange,
+  handleReset,
+}) => {
   const { t, i18n } = useTranslation();
-  const [selectedPlant, setSelectedPlant] = useState(null);
-  const [translatedPlants, setTranslatedPlants] = useState([]);
-  const [translatedDiseases, setTranslatedDiseases] = useState([]);
-  const [hasData, setHasData] = useState(false);
 
   const { data: plantOptions = [], isLoading: plantsLoading } = useQuery({
     queryKey: ["plants"],
     queryFn: async () => {
       const plants = await fetchPlants();
-      return plants.items;
+      return plants.items || [];
     },
   });
 
@@ -28,138 +29,125 @@ const PlantDiseaseForm = ({ onSelectDisease, onSelectPlant }) => {
     queryFn: async () => {
       if (!selectedPlant) return [];
       const diseases = await fetchDiseasesByPlant(selectedPlant);
-      return diseases?.items;
+      return diseases?.items || [];
     },
     enabled: !!selectedPlant,
   });
 
-  useEffect(() => {
-    if (plantOptions.length > 0) {
-      setTranslatedPlants(
-        plantOptions.map((plant) => ({
-          value: plant.id,
-          label: t(`plants.${plant.english_name}`, {
-            defaultValue: plant.english_name,
-          }),
-          english_name: plant.english_name,
-        }))
-      );
-    }
-  }, [plantOptions, i18n.language]);
+  const translatedPlants = useMemo(
+    () =>
+      plantOptions.map((plant) => ({
+        value: plant.id,
+        label: t(`plants.${plant.english_name}`, {
+          defaultValue: plant.english_name,
+        }),
+        english_name: plant.english_name,
+      })),
+    [plantOptions, i18n.language, t]
+  );
 
-  useEffect(() => {
-    if (diseaseOptions.length > 0) {
-      setTranslatedDiseases(
-        diseaseOptions.map((disease) => ({
-          value: disease.id,
-          label: t(`diseases.${disease.english_name}`, {
-            defaultValue: disease.english_name,
-          }),
-          english_name: disease.english_name,
-        }))
-      );
-    }
-  }, [diseaseOptions, i18n.language]);
+  const translatedDiseases = useMemo(
+    () =>
+      diseaseOptions.map((disease) => ({
+        value: disease.id,
+        label: t(`diseases.${disease.english_name}`, {
+          defaultValue: disease.english_name,
+        }),
+        english_name: disease.english_name,
+      })),
+    [diseaseOptions, i18n.language, t]
+  );
 
   const validationSchema = Yup.object().shape({
     plant: Yup.string().required(t("required_field_key")),
     disease: Yup.string().required(t("required_field_key")),
   });
 
-  const handleSubmit = async (values) => {
-    try {
-      const diseaseData = await fetchDiseaseById(values.disease);
-      onSelectDisease(diseaseData);
-      onSelectPlant(values.plant);
-      setHasData(true);
-    } catch (error) {
-      console.error("Failed to fetch disease details:", error);
-    }
+  const onReset = (resetForm) => {
+    handleReset();
+    resetForm();
   };
 
-  const handleReset = (resetForm) => {
-    resetForm();
-    setSelectedPlant(null);
-    onSelectDisease(null);
-    onSelectPlant(null);
-    setHasData(false);
-  };
+  const onPlantSelect = useCallback(
+    (selectedOption, setFieldValue) => {
+      const id = selectedOption.value;
+      setFieldValue("plant", id);
+      setFieldValue("disease", "");
+      handlePlantChange(id);
+    },
+    [handlePlantChange]
+  );
+
+  const onDiseaseSelect = useCallback(
+    (selectedOption, setFieldValue) => {
+      const id = selectedOption.value;
+      setFieldValue("disease", id);
+      handleDiseaseChange(id);
+    },
+    [handleDiseaseChange]
+  );
 
   return (
     <Formik
       enableReinitialize
-      initialValues={{ plant: "", disease: "" }}
+      initialValues={{
+        plant: selectedPlant,
+        disease: selectedDisease,
+      }}
       validationSchema={validationSchema}
-      onSubmit={handleSubmit}
     >
-      {({ setFieldValue, values, errors, touched, resetForm }) => (
+      {({
+        setFieldValue,
+        errors,
+        touched,
+        resetForm,
+        isSubmitting,
+        values,
+      }) => (
         <Form className="w-full cardIt">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
-            {/* Plant Select Input */}
             <div className="md:col-span-2">
-              <Field name="plant">
-                {({ field }) => (
-                  <SelectInput
-                    label={t("select_plant_key")}
-                    options={translatedPlants}
-                    value={field?.value}
-                    onChange={(selectedOption) => {
-                      setFieldValue("plant", selectedOption.value);
-                      setSelectedPlant(selectedOption.value);
-                      setFieldValue("disease", null);
-                      setHasData(false);
-                    }}
-                    placeholder={t("select_plant_key")}
-                    isLoading={plantsLoading}
-                  />
-                )}
-              </Field>
+              <SelectInput
+                name="plant"
+                label={t("select_plant_key")}
+                options={translatedPlants}
+                value={Number(values.plant) || null}
+                onChange={(opt) => onPlantSelect(opt, setFieldValue)}
+                placeholder={t("select_plant_key")}
+                isLoading={plantsLoading}
+              />
               {errors.plant && touched.plant && (
                 <div className="text-red-500 text-sm">{errors.plant}</div>
               )}
             </div>
 
-            {/* Disease Select Input */}
             <div className="md:col-span-2">
-              <Field name="disease">
-                {({ field }) => (
-                  <SelectInput
-                    label={t("select_disease_key")}
-                    options={translatedDiseases}
-                    value={field?.value || null}
-                    onChange={(selectedOption) => {
-                      setFieldValue("disease", selectedOption.value);
-                      setHasData(false);
-                    }}
-                    placeholder={
-                      diseasesLoading
-                        ? t("loading_key")
-                        : t("select_disease_key")
-                    }
-                    isLoading={diseasesLoading}
-                  />
-                )}
-              </Field>
+              <SelectInput
+                name="disease"
+                label={t("select_disease_key")}
+                options={translatedDiseases}
+                value={Number(values.disease) || null}
+                onChange={(opt) => onDiseaseSelect(opt, setFieldValue)}
+                placeholder={
+                  diseasesLoading ? t("loading_key") : t("select_disease_key")
+                }
+                isLoading={diseasesLoading}
+                isDisabled={!values.plant}
+              />
               {errors.disease && touched.disease && (
                 <div className="text-red-500 text-sm">{errors.disease}</div>
               )}
             </div>
 
-            {/* Conditional Button */}
             <div className="md:col-span-1">
-              {hasData ? (
-                <Button
-                  type="button"
-                  onClick={() => handleReset(resetForm)}
-                  width="full"
-                >
-                  {t("reset_key")}
-                </Button>
-              ) : (
-                <Button type="submit" width="full">
-                  {t("get_data_key")}
-                </Button>
-              )}
+              <Button
+                type="button"
+                onClick={() => onReset(resetForm)}
+                width="full"
+                disabled={isSubmitting}
+              >
+                {t("reset_key")}
+              </Button>
             </div>
           </div>
         </Form>

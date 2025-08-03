@@ -103,9 +103,9 @@ const DropdownMenu = ({ buttonContent, options }) => {
             initial="hidden"
             animate="visible"
             exit="hidden"
-            className={`absolute z-10 min-w-[120px] overflow-auto rounded-lg border border-slate-200 bg-white shadow-md ${
+            className={`absolute z-10 min-w-[140px] overflow-auto rounded-lg border border-slate-200 bg-white shadow-md ${
               menuDirection === "down" ? "mt-2" : "mb-2 bottom-full"
-            } left-0`}
+            } -end-8`}
             style={{
               maxHeight: "calc(100vh - 100px)", // Prevent going off-screen vertically
               overflowY: "auto",
@@ -129,7 +129,7 @@ const DropdownMenu = ({ buttonContent, options }) => {
                       selectedOption === option ? "text-primary" : ""
                     }`}
                   >
-                    {option.icon}
+                    {<option.icon size={16} />}
                   </span>
                 )}
                 {option.label}

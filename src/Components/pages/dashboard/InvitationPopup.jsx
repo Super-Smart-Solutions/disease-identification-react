@@ -93,7 +93,10 @@ export default function InvitationPopup({ onClose }) {
     rejectMutate(inviteId);
   };
 
-  const invitations = invitationsData?.items || [];
+  const invitations =
+    invitationsData?.items?.filter(
+      (invitation) => invitation.status === "pending"
+    ) || [];
   const totalPages = invitationsData?.pages || 1;
   const totalItems = invitationsData?.total || 0;
 
@@ -126,11 +129,13 @@ export default function InvitationPopup({ onClose }) {
                   team: invitation.organization_name,
                 })}
               </p>
-              <img
-                src={familyImage}
-                alt="Organization"
-                className="w-10/12 max-h-60 mx-auto object-cover"
-              />
+              {invitations.length === 1 && (
+                <img
+                  src={familyImage}
+                  alt="Organization"
+                  className="w-10/12 max-h-60 mx-auto object-cover"
+                />
+              )}
               <div
                 className={`flex gap-4 ${
                   i18n.dir() === "rtl" ? "flex-row-reverse" : ""

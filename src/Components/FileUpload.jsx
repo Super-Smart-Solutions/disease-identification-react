@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
 import { FiUploadCloud, FiX } from "react-icons/fi";
-import { FaFilePdf } from "react-icons/fa";
+import { FaFilePdf, FaFileCsv } from "react-icons/fa";
 
 const FileUpload = ({
   accept = { "image/*": [".jpeg", ".jpg", ".png", ".gif"] },
@@ -12,34 +12,73 @@ const FileUpload = ({
   allowRemove = false,
 }) => {
   const { t } = useTranslation();
+  const [error, setError] = useState("");
   const isPdf = accept["application/pdf"]?.includes(".pdf");
+  const isCsv = accept["text/csv"]?.includes(".csv");
 
   const { getRootProps, getInputProps } = useDropzone({
     accept,
     multiple,
-    maxSize: 4 * 1024 * 1024, // 4MB in bytes
+    maxSize: 4 * 1024 * 1024,
     onDrop: (acceptedFiles, fileRejections) => {
       setSelectedFile(acceptedFiles);
       if (fileRejections.length > 0) {
-        alert(
-          t("file_rejected_key", {
-            reasons: fileRejections
-              .map((rej) =>
-                rej.errors.map((err) =>
-                  err.code === "file-too-large"
-                    ? t("file_too_large_key", { maxSize: "4MB" })
-                    : t("file_type_invalid_key")
-                )
+        const reasons = fileRejections
+          .map((rej) =>
+            rej.errors
+              .map((err) =>
+                err.code === "file-too-large"
+                  ? t("file_too_large_key", { maxSize: "4MB" })
+                  : t("file_type_invalid_key")
               )
-              .join(", "),
+              .join(", ")
+          )
+          .join(", ");
+
+        setError(
+          t("file_rejected_key", {
+            reasons,
           })
         );
+      } else {
+        setError(""); // Clear error if upload successful
       }
     },
   });
 
   const removeFile = (index) => {
     setSelectedFile((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
+
+  const renderFilePreview = (file) => {
+    const fileType = file.type;
+
+    if (isPdf && fileType === "application/pdf") {
+      return (
+        <div className="flex items-center space-x-2">
+          <FaFilePdf className="text-3xl text-red-500" />
+          <span className="text-sm text-gray-600">{file.name}</span>
+        </div>
+      );
+    }
+
+    if (isCsv && fileType === "text/csv") {
+      return (
+        <div className="flex items-center space-x-2">
+          <FaFileCsv className="text-3xl text-green-600" />
+          <span className="text-sm text-gray-600">{file.name}</span>
+        </div>
+      );
+    }
+
+    // Default to image preview
+    return (
+      <img
+        src={URL.createObjectURL(file)}
+        alt={file.name}
+        className="max-w-120 max-h-80 object-cover rounded-md"
+      />
+    );
   };
 
   return (
@@ -64,18 +103,7 @@ const FileUpload = ({
             {selectedFile.map((file, index) => (
               <div key={index} className="relative group">
                 <div className="flex items-center p-2 bg-gray-50 rounded-md">
-                  {isPdf ? (
-                    <div className="flex items-center space-x-2">
-                      <FaFilePdf className="text-3xl text-red-500" />
-                      <span className="text-sm text-gray-600">{file.name}</span>
-                    </div>
-                  ) : (
-                    <img
-                      src={URL.createObjectURL(file)}
-                      alt={file.name}
-                      className="max-w-120 max-h-80 object-cover rounded-md"
-                    />
-                  )}
+                  {renderFilePreview(file)}
                 </div>
                 {allowRemove && (
                   <button
@@ -90,6 +118,11 @@ const FileUpload = ({
             ))}
           </div>
         </div>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <p className="text-sm text-red-500 bg-red-50 p-2 rounded-md">{error}</p>
       )}
     </div>
   );

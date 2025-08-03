@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import Cookies from 'js-cookie';
+import tokenManager from '../../Components/helpers/tokenManager';
 
 const initialState = {
     user: JSON.parse(localStorage.getItem('user')) || null,
@@ -13,11 +13,15 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
+            const { accessToken, refreshToken } = action.payload;
             state.user = action.payload;
             state.isLoading = false;
             state.isError = false;
             state.error = null;
             localStorage.setItem('user', JSON.stringify(action.payload));
+            if (accessToken && refreshToken) {
+                tokenManager.initialize(accessToken, refreshToken);
+            }
         },
         logout: (state) => {
             state.user = null;
@@ -25,7 +29,8 @@ const userSlice = createSlice({
             state.isError = false;
             state.error = null;
             localStorage.removeItem('user');
-            Cookies.remove('token');
+
+            tokenManager.clearTokens();
         },
         setLoading: (state, action) => {
             state.isLoading = action.payload;

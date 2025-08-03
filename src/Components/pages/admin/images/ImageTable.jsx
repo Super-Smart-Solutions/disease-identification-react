@@ -32,6 +32,16 @@ const ImageTable = ({ onEdit, onAdd, onReview, t }) => {
 
   const columnDefs = [
     {
+      field: "plant_id",
+      headerName: t("plant_id_key"),
+      flex: 1,
+    },
+    {
+      field: "disease_id",
+      headerName: t("disease_id_key"),
+      flex: 1,
+    },
+    {
       field: "name",
       headerName: t("name_key"),
       flex: 2,

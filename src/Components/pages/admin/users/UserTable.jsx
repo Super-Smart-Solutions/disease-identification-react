@@ -34,6 +34,11 @@ const UserTable = ({ onEdit, onAdd, t }) => {
 
   const columnDefs = [
     {
+      field: "organization_id",
+      headerName: t("organization_id_key"),
+      flex: 1,
+    },
+    {
       field: "email",
       headerName: t("email_key"),
       flex: 2,
