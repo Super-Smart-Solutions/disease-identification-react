@@ -318,8 +318,14 @@
     "bacterial": "bacterial diseases",
     "virus": "viral diseases",
 
-    "Coffee leaf Miner": "Coffee leaf Miner",
+    "coffee leaf miner": "Coffee leaf Miner",
     "coffee_rust": "coffee_rust",
+    "coffee coccus viridis" :"coffee coccus viridis",
+    "coffee thrips":"coffee thrips",
+    "coffee_mealybug": "coffee mealybug",
+    "coffee toxoptera auranti": "coffee aphid",
+    "coffee prophantis smaragdina": "coffee moth",
+
     "animals_foot and mouth disease": "animals_foot and mouth disease",
     "animals_lumpy skin disease": "animals_lumpy skin disease",
     "animals_Lice disease": "animals_Lice disease"
@@ -769,6 +775,9 @@
   "summary_step_key": "Summary",
   "selected_file_key": "selected file",
   "optional_key": "Optional",
+
+  "image_reviewer_key": "Image Reviewer",
+  "no_images_found_key": "No images found for the selected criteria.",
   "file_rejected_key": "Upload failed due to: {{reasons}}",
   "file_too_large_key": "File too large. Max allowed is {{maxSize}}",
   "file_type_invalid_key": "Unsupported file type",

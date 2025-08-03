@@ -23,6 +23,7 @@ const Button = ({
     outlined:
       "border border-primary text-primary hover:bg-primary hover:text-white",
     default: "bg-gray-500 text-white hover:bg-gray-600",
+    danger: "border border-red-500 text-red-500 hover:bg-red-500 hover:text-white",
   };
 
   // Define size styles
