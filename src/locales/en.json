@@ -780,5 +780,10 @@
   "left_organization_key": "You have left the organization",
   "failed_to_leave_organization_key": "Failed to leave organization",
   "leave_organization_confirmation_key": "Are you sure you want to leave the organization?",
-  "confirm_key": "Confirm"
+  "confirm_key": "Confirm",
+  "upload_key": "Upload",
+  "oil_test_analysis_key": "Oil Test Analysis",
+  "oil_test_desc_key": "Upload your oil test data files",
+  "file_name_key": "File name",
+  "file_name_required_key": "File name is required"
 }

@@ -784,5 +784,10 @@
   "left_organization_key": "لقد غادرت المجموعة",
   "failed_to_leave_organization_key": "فشل في مغادرة المجموعة",
   "leave_organization_confirmation_key": "هل أنت متأكد أنك تريد مغادرة المجموعة؟",
-  "confirm_key": "تأكبد"
+  "confirm_key": "تأكبد",
+  "upload_key": "رفع الملف",
+  "oil_test_analysis_key": "تحليل اختبار الزيت",
+  "oil_test_desc_key": "قم برفع ملفات بيانات اختبار الزيت",
+  "file_name_key": "اسم الملف",
+  "please_select_file_and_name_key": "يرجى تحديد ملف واسم"
 }
