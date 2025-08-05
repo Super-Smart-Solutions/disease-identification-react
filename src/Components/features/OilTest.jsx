@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import FileUpload from "../FileUpload";
@@ -14,31 +14,40 @@ import * as Yup from "yup";
 export default function ModalOilTest() {
   const { t } = useTranslation();
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [resultData, setResultData] = useState(null);
   const isOpen = useSelector((state) => state.oilTestModal.isOpen);
   const dispatch = useDispatch();
 
   const handleClose = () => {
     dispatch(setOilTestModalOpen(false));
     setSelectedFiles([]);
+    setResultData(null);
   };
 
   const { mutate, data, isPending } = useMutation({
     mutationFn: ({ file, name }) => checkOilAuthenticity(file, name),
-    onSuccess: () => {
-      handleClose();
+    onSuccess: (res) => {
+      setResultData(res);
     },
   });
 
+  const handleFileChange = useCallback(
+    (files, setFieldValue) => {
+      setSelectedFiles(files);
 
-  const handleFileChange = (files, setFieldValue) => {
-    setSelectedFiles(files);
-    if (files?.length) {
-      const fileNameWithoutExtension = files[0].name.replace(/\.[^/.]+$/, "");
-      setFieldValue("name", fileNameWithoutExtension);
-    } else {
-      setFieldValue("name", "");
-    }
-  };
+      if (files?.length) {
+        const fileNameWithoutExtension = files[0]?.name.replace(
+          /\.[^/.]+$/,
+          ""
+        );
+        setFieldValue("name", fileNameWithoutExtension);
+      } else {
+        setFieldValue("name", "");
+        setResultData(null);
+      }
+    },
+    [selectedFiles]
+  );
 
   const validationSchema = Yup.object({
     name: Yup.string().required(t("file_name_required_key")),
@@ -99,12 +108,40 @@ export default function ModalOilTest() {
                 </motion.div>
               )}
             </AnimatePresence>
-            {data?.result && (
-              <span className="block text-sm font-medium text-gray-700 mb-2">
-                {" "}
-                {data?.result || "no result"}
-              </span>
+            {resultData?.result && (
+              <motion.div
+                key="result"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className={`p-4 rounded-md shadow-sm border
+      ${
+        resultData.result === "AUTHENTIC"
+          ? "bg-green-100 border-green-400"
+          : "bg-red-100 border-red-400"
+      }`}
+              >
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  {t("oil_test_result_key", "Oil Test Result")}
+                </h3>
+                <p className="text-sm text-gray-700 mb-1">
+                  <strong>{t("result_key", "Result")}:</strong>{" "}
+                  {resultData.result === "AUTHENTIC"
+                    ? t("authentic_key", "Authentic")
+                    : resultData.result}
+                </p>
+                {resultData.confidence_score !== undefined && (
+                  <p className="text-sm text-gray-700">
+                    <strong>
+                      {t("confidence_score_key", "Confidence Score")}:
+                    </strong>{" "}
+                    {(resultData.confidence_score * 100).toFixed(2)}%
+                  </p>
+                )}
+              </motion.div>
             )}
+
             <Button type="submit" loading={isPending} width="full">
               {t("upload_key")}
             </Button>

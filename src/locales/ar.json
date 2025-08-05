@@ -311,8 +311,8 @@
     "virus": "الأمراض الفيروسية",
     "Coffee leaf Miner": "حشرة حفار الاوراق",
     "coffee_rust": "صدا اوراق البن",
-    "coffee coccus viridis" :"الحشرة القشرية في البن",
-    "coffee thrips":"التربس",
+    "coffee coccus viridis": "الحشرة القشرية في البن",
+    "coffee thrips": "التربس",
     "coffee_mealybug": "البق الدقيقي",
     "coffee toxoptera auranti": "حشرة المن",
     "coffee prophantis smaragdina": "عثة ثمار البن",
@@ -797,5 +797,9 @@
   "oil_test_analysis_key": "تحليل اختبار الزيت",
   "oil_test_desc_key": "قم برفع ملفات بيانات اختبار الزيت",
   "file_name_key": "اسم الملف",
-  "please_select_file_and_name_key": "يرجى تحديد ملف واسم"
+  "please_select_file_and_name_key": "يرجى تحديد ملف واسم",
+  "file_name_required_key": "اسم الملف مطلوب.",
+  "oil_test_result_key": "نتيجة اختبار الزيت",
+  "confidence_score_key": "درجة الثقة",
+  "authentic_key": "موثوق منه"
 }

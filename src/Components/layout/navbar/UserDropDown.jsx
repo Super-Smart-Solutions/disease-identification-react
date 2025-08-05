@@ -16,11 +16,14 @@ const UserDropdown = ({ t, user }) => {
       {user?.id ? (
         <DropdownMenu
           buttonContent={
-            <img
-              src={user?.avatar || "/user-avatar.png"}
-              alt="User avatar"
-              className="w-8 h-8 rounded-full object-cover"
-            />
+            <div className=" flex gap-2 items-center">
+              <img
+                src={user?.avatar || "/user-avatar.png"}
+                alt="User avatar"
+                className="w-8 h-8 rounded-full object-cover"
+              />
+              <strong className=" text-lg"> {`${t("welcome_key")}  ${user?.first_name}`} </strong>
+            </div>
           }
           options={options}
         />

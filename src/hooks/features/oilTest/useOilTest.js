@@ -5,14 +5,14 @@ export const useOilTest = ({ user, navigate,
     dispatch
 }) => {
 
-    const handleOpenModal = useCallback(() => {
-        if (user?.id) {
-            dispatch(setOilTestModalOpen(true));
-        }
-        else {
+    const handleOpenModal = () => {
+        if (!user?.id) {
             navigate("/auth/login");
         }
-    }, [dispatch]);
+        else {
+            dispatch(setOilTestModalOpen(true));
+        }
+    }
 
     return { handleOpenModal };
 };
