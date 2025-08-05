@@ -97,29 +97,9 @@ const AdminRoute = ({ children, isAuthenticated, isAdmin }) => {
 };
 
 const AppRoutes = () => {
-  const { user, refetchUserData } = useUserData();
+  const { user } = useUserData();
   const isAuthenticated = !!user;
   const isAdmin = user?.roles?.some((role) => role.name === "superuser");
-
-  useEffect(() => {
-    const token = tokenManager.getAccessToken();
-    const initializeSession = async () => {
-      if (token) {
-        try {
-          await refetchUserData();
-        } catch (error) {
-          console.error(
-            "Session initialization failed (token might be invalid):",
-            error
-          );
-        }
-      }
-
-      setIsInitializing(false);
-    };
-
-    initializeSession();
-  }, [refetchUserData]);
 
   return (
     <Routes>
