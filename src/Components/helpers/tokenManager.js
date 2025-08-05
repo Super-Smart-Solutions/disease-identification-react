@@ -10,7 +10,7 @@ class TokenManager {
 
     // Get access token from cookies
     getAccessToken() {
-        return (Cookies.get("access_token") || Cookies.get("access_token"))
+        return Cookies.get("access_token")
     }
 
     // Get refresh token from cookies
