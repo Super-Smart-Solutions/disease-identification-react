@@ -3,10 +3,11 @@ import {
   getImages,
   getImageUrls,
   fetchImageById,
-  uploadImageAdmin,
   updateImage,
   deleteImage,
+  uploadImage,
 } from "../api/imagesAPI";
+import { preprocessImage } from "../utils/imageProcessor";
 
 export const useImages = ({ plant_id, diseaseId, page = 1, pageSize = 10 }) => {
   return useQuery({
@@ -31,15 +32,41 @@ export const useImageById = (imageId) => {
   });
 };
 
-export const useUploadImage = () => {
+export const useUploadImage = ({ onSuccess }) => {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: uploadImageAdmin,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["images"]);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async ({ file, category }) => {
+      console.log("[Upload] Starting image preprocessing...");
+
+      const processedImage = await preprocessImage(file);
+
+      const selectedPlant = category.label.toLowerCase();
+      const timestamp = Date.now();
+      const formattedName = `uploads/${selectedPlant}/${timestamp}_${file.name}`;
+
+      console.log("[Upload] Image preprocessed. Sending to server:", formattedName);
+
+      return uploadImage({
+        name: formattedName,
+        plantId: category.value,
+        imageFile: processedImage,
+      });
     },
+    onSuccess: (data) => {
+      console.log("[Upload] Upload successful. Image ID:", data?.id);
+      queryClient.invalidateQueries(["images"]);
+      onSuccess?.(data);
+    },
+
   });
+
+  return {
+    upload: mutate,
+    isUploading: isPending,
+  };
 };
+
 
 export const useUpdateImage = () => {
   const queryClient = useQueryClient();

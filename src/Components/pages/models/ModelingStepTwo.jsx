@@ -2,29 +2,19 @@ import React, { useState } from "react";
 import FileUpload from "../../FileUpload";
 import Button from "../../Button";
 import { useTranslation } from "react-i18next";
-import { useMutation } from "@tanstack/react-query";
-import { uploadImage } from "../../../api/imagesAPI";
+import { useUploadImage } from "../../../hooks/useImages";
 
 export default function ModelingStepTwo({ modelingData, setModelingData }) {
   const { t } = useTranslation();
   const [tempFile, setTempFile] = useState(modelingData?.selected_file || []);
-  const [isUploading, setIsUploading] = useState(false);
 
-  // Mutation for uploading the image
-  const uploadMutation = useMutation({
-    mutationFn: uploadImage,
+  const { upload, isUploading } = useUploadImage({
     onSuccess: (data) => {
       setModelingData((prev) => ({
         ...prev,
         selected_file: tempFile,
-        image_id: data.id, // Save image ID from response
+        image_id: data?.id,
       }));
-    },
-    onError: (error) => {
-      console.error("Upload failed:", error);
-    },
-    onSettled: () => {
-      setIsUploading(false);
     },
   });
 
@@ -33,24 +23,14 @@ export default function ModelingStepTwo({ modelingData, setModelingData }) {
   };
 
   const handleSave = () => {
-    if (!tempFile.length) return;
-    if (!modelingData?.category?.value) {
-      console.error("No plant selected!");
-      return;
-    }
+    if (!tempFile.length || !modelingData?.category?.value) return;
 
     const file = tempFile[0];
-    const selectedPlant = modelingData.category.label.toLowerCase(); // Convert plant name to lowercase
-    const timestamp = Date.now();
-    const formattedName = `uploads/${selectedPlant}/${timestamp}_${file.name}`;
 
-    // Upload image with metadata
-    setIsUploading(true);
-    uploadMutation.mutate({
-      name: formattedName,
-      plantId: modelingData.category.value,
+    upload({
+      file,
+      category: modelingData.category,
       farmId: 1,
-      imageFile: file,
     });
   };
 
@@ -72,8 +52,13 @@ export default function ModelingStepTwo({ modelingData, setModelingData }) {
         setSelectedFile={handleSelectFile}
       />
       <div className="flex gap-2 items-center justify-end mt-4">
-        <Button onClick={handleSave} disabled={isUploading}>
-          {isUploading ? t("loading_key") : t("start_detection_key")}
+        <Button
+          onClick={() => {
+            handleSave();
+          }}
+          loading={isUploading}
+        >
+          {t("start_detection_key")}
         </Button>
         <Button variant="outlined" onClick={handleReset} disabled={isUploading}>
           {t("reset_key")}
