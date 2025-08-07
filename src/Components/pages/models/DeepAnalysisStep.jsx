@@ -72,13 +72,22 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
     fetchPrediction();
   }, [modelingData?.inference_id]);
   const navigateToDatabase = () => {
-    navigate("/database", {
-      state: {
-        selectedPlantName: modelingData?.category,
-        selectedDisease: diseaseData,
-      },
-    });
+    const diseaseId = diseaseData?.id;
+    const plantId = modelingData?.category?.value;
+
+    if (!diseaseId) {
+      console.warn("Disease ID is missing. Navigation cancelled.");
+      return; // Stop navigation if disease ID is not valid
+    }
+
+    const query = new URLSearchParams();
+
+    query.set("disease_id", diseaseId);
+    if (plantId) query.set("plant_id", plantId);
+
+    navigate(`/database?${query.toString()}`);
   };
+
   const handleTryDifferentImage = () => {
     setModelingData((prev) => ({
       category: prev.category,

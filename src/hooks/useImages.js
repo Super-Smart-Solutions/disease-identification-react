@@ -37,7 +37,6 @@ export const useUploadImage = ({ onSuccess }) => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async ({ file, category }) => {
-      console.log("[Upload] Starting image preprocessing...");
 
       const processedImage = await preprocessImage(file);
 
@@ -45,7 +44,6 @@ export const useUploadImage = ({ onSuccess }) => {
       const timestamp = Date.now();
       const formattedName = `uploads/${selectedPlant}/${timestamp}_${file.name}`;
 
-      console.log("[Upload] Image preprocessed. Sending to server:", formattedName);
 
       return uploadImage({
         name: formattedName,
@@ -54,7 +52,6 @@ export const useUploadImage = ({ onSuccess }) => {
       });
     },
     onSuccess: (data) => {
-      console.log("[Upload] Upload successful. Image ID:", data?.id);
       queryClient.invalidateQueries(["images"]);
       onSuccess?.(data);
     },

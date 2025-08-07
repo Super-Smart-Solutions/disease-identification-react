@@ -39,23 +39,27 @@ function loadImage(file) {
 
 function getOrientation(file) {
     return new Promise((resolve) => {
-        let resolved = false;
+        const reader = new FileReader();
+        reader.onload = () => {
+            const img = new Image();
+            img.onload = () => {
+                EXIF.getData(img, function () {
+                    const orientation = EXIF.getTag(this, "Orientation") || 1;
+                    console.log("[Preprocess] Orientation:", orientation);
+                    resolve(orientation);
+                });
+            };
+            img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
 
-        EXIF.getData(file, function () {
-            const orientation = EXIF.getTag(this, "Orientation") || 1;
-            resolved = true;
-            resolve(orientation);
-        });
-
-        // Fallback in case EXIF.getData never calls the callback
         setTimeout(() => {
-            if (!resolved) {
-                console.warn("[Preprocess] EXIF.getData did not resolve in time. Falling back to 1.");
-                resolve(1); // Default orientation
-            }
-        }, 1000); // 1 second timeout
+            console.warn("[Preprocess] EXIF.getData timed out. Returning default (1).");
+            resolve(1);
+        }, 1000);
     });
 }
+
 
 
 function applyOrientation(img, orientation) {
