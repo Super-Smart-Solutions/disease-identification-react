@@ -35,6 +35,8 @@
   "search_about_data_key": "Search",
   "select_plant_key": "Select Plant",
   "select_disease_key": "Select Disease",
+  "select_category_key":"Select Category",
+  "select_pest_key":"Select disease / pest",
   "plants_animals_key": "Plants and Animals",
   "select_plant_required_key": "Please select a plant.",
   "select_disease_required_key": "Please select a disease.",
