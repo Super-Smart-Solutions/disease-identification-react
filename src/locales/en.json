@@ -316,9 +316,9 @@
     "honey bees_varroa": "honey bees_varroa",
     "death's-head hawkmoth": "death's-head hawkmoth",
     "honey bees_oriental hornet": "honey bees_oriental hornet",
-    "PARASITIC": "parasitic diseases",
     "bacterial": "bacterial diseases",
-    "virus": "viral diseases",
+    "Viral Diseases": "Viral Diseases",
+    "Parasitic Diseases":"Parasitic Diseases",
 
     "coffee leaf miner": "Coffee leaf Miner",
     "coffee_rust": "coffee_rust",

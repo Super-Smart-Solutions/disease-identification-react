@@ -9,7 +9,7 @@ export const useImageReviewer = ({ selectedPlant, selectedDisease, t }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const queryClient = useQueryClient();
 
-  const queryParams = { page, plantId: selectedPlant, diseaseId: selectedDisease };
+  const queryParams = { page, plantId: null, diseaseId: selectedDisease };
 
   const { data, isLoading, error, isFetching } = useQuery({
     queryKey: ['images', queryParams],
