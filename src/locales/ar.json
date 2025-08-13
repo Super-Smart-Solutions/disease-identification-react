@@ -307,10 +307,9 @@
     "honey bees_varroa": "الفاروا المدمرة",
     "death's-head hawkmoth": "فراشة السمسم",
     "honey bees_oriental hornet": "الدبور الشرقي",
-    "PARASITIC": "الأمراض الطفيلية",
-
-    "bacterial": "الأمراض البكتيرية",
-    "virus": "الأمراض الفيروسية",
+    "bacterial": "الامراض البكتيريه",
+    "Viral Diseases": "الامراض الفيروسية",
+    "Parasitic Diseases":"الامراض الطفيلية",
     "Coffee leaf Miner": "حشرة حفار الاوراق",
     "coffee_rust": "صدا اوراق البن",
     "coffee coccus viridis": "الحشرة القشرية في البن",
@@ -428,7 +427,7 @@
   "fish_exophthalmos_treatments": null,
   "bacterial_arabic_name":"الامراض البكتيريه",
   "bacterial_symptoms":"- عدم تجانس توزيع الأسماك في الأحواض، وتتجمع في الأركان مع ميلها إلى السكون وقلة الحركة، إضافةَ إلى فقدان الشهية والتوقف عن تناول الغذاء وفقد انعكاس الهروب عند محاولة الإمساك بها. Escape reflex  \r\n-  ظهور بقع دموية عند قواعد الزعانف وحول فتحة الشرج وداخل الفم وحوله وعلى الغطاء الخيشومي والفك السفلي ومناطق متفرقة من الجسم. \r\n-  لون الجسم داكن نتيجة لزيادة في عدد نوع من الخلايا الدفاعية Melanomacrophage    cells والتي تتجمع على جلد الأسماك المصابة في محاولة للدفاع عن الجسم وهي المسئولة عن اللون الداكن. \r\n- تضخم البطن وامتلائها بسائل مدمم أو أصفر مع بروز واحتقان في فتحة الشرج. \r\n-  جحوظ في إحدى العينين أو كلتاهما وتساقط القشور",
-  "bacterial_description"
+  "bacterial_description":"",
   "bacterial_treatments":"",
   "viral_diseases_arabic_name": "الامراض الفيروسية",
   "viral_diseases_scientific_name": "Viral Diseases",
