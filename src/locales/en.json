@@ -330,7 +330,13 @@
 
     "animals_foot and mouth disease": "animals_foot and mouth disease",
     "animals_lumpy skin disease": "animals_lumpy skin disease",
-    "animals_Lice disease": "animals_Lice disease"
+    "animals_Lice disease": "animals_Lice disease",
+    "Mastitis": "Mastitis",
+    "Bluetongue":"Bluetongue",
+    "Goat plague": "Goat plague",
+    "Foot Rot":"Foot Rot",
+    "Manage":"Manage"
+
   },
   "phone_input": {
     "label": "Phone Input",
@@ -553,6 +559,37 @@
   "animals_Lice_disease_description": "Lice are external parasites that feed on the blood of dairy animals. Their mouthparts are designed for sucking, penetrating the skin to reach blood vessels. Most lice species affect livestock and are host-specific, meaning they do not typically transfer between different animal species (e.g., from cattle to sheep). There are 464 known species of sucking lice. These lice cause local skin irritation, hair loss, redness, and itching, leading to skin infections and secondary diseases. Severe infestations may lead to anemia and reduced productivity.",
   "animals_Lice_disease_symptoms": "1. Livestock lose weight due to lice infestation, especially in young animals. Lice numbers increase in winter when the animal's hair is long and coarse.\r\n2. Lice cause itching, discomfort, decreased activity, and hair loss from scratching, which leads to blood loss and anemia.\r\n3. Excessive licking and constant movement.\r\n4. Intense itching.\r\n5. Hair loss.\r\n6. Reduced hide quality.\r\n7. Lower milk production and weight gain.\r\n8. Cause anemia.",
   "animals_Lice_disease_treatments": "1. Shave infected animals and spray or dust them with Gamma-Tox, or immerse them in baths containing 0.05% nicotine sulfate. Repeat as needed. Good nutrition and housing in uncrowded, clean barns reduce lice infestation.\r\n2. Avoid overcrowding during winter.\r\n3. Maintain good nutrition and health for the animals.\r\n4. Dipping and spraying with organophosphates, synthetic pyrethroids, and amides is effective but does not kill lice eggs. Repeat treatment every 2–3 weeks for maximum effect.\r\n5. Pour-ons: Use formulations of organophosphates, pyrethroids, or systemic pesticides like Permethrin for beef cattle, lactating and non-lactating sheep and goats. Pour from the neck to the tail. Fenvalerate is suitable for non-lactating sheep and goats. Other options include Ivermectin, Fenthion, and Doramectin as pour-ons for beef cattle.\r\n6. Injection method: Use macrocyclic lactones such as Ivermectin + Doramectin to reach sucking lice through the animal's bloodstream.\r\n7. Back rubbers: Use dust bags and ear tags containing organophosphates, pyrethroids, Malathion, and phosphates for beef cattle.",
+
+  "goat_plague_english_name": "Goat plague",
+  "goat_plague_scientific_name": "Morbilli virus",
+  "goat_plague_description": "",
+  "goat_plague_symptoms": "Symptoms appear as fever and elevated body temperature ranging from 40–41°C, accompanied by loss of appetite. Nasal discharges are initially watery and later become thick, mucopurulent, and dry, blocking the nostrils and causing breathing difficulties, along with sneezing and coughing. Diarrhea without blood, dehydration, and severe emaciation are also observed. Ulcers appear on the gums and tongue, with excessive salivation. In the final stage, the animal dies within 5–10 days, and morbidity and mortality rates reach 100% when complications occur.",
+  "goat_plague_treatments": "Prevention:\r\n- Immediate reporting of any suspected cases.\r\n- Quarantining farms suspected of infection.\r\n- Isolating sick animals.\r\n- Safe disposal of carcasses and contaminated materials.\r\n- Avoid importing animals from countries where the disease exists, and fully apply quarantine procedures.\r\n- Disinfect barns and equipment.\r\n- Conduct regular vaccinations by specialists.",
+  "bluetongue_english_name": "Bluetongue",
+  "bluetongue_scientific_name": "Reoviridae virus",
+  "bluetongue_description": "",
+  "bluetongue_symptoms": "The disease appears as a rise in body temperature in the infected animal, along with lethargy and loss of appetite. Increased nasal and salivary secretions are observed, leading to the formation of dry crusts around the mouth and nose, with inflammation of the oral mucosa, gums, and tongue, and the appearance of hemorrhagic spots that turn blue. The animal may develop diarrhea with blood, swelling of the head, and muscle pain. In severe cases, the tongue appears blue, walking becomes difficult, and cases of abortion, pneumonia, and eye inflammation occur. Mortality rates range between 2% and 30%.",
+  "bluetongue_treatments": "1. Identify and immediately cull infected sheep, cattle, or ruminants.\r\n2. Use insecticides to eliminate vector insects.\r\n3. Use vaccines and serums to protect healthy or uninfected animals.",
+  "mastitis_english_name": "Mastitis",
+  "mastitis_scientific_name": "Mastitis",
+  "mastitis_description": "",
+  "mastitis_symptoms": "In the acute form: ewes die suddenly without any apparent symptoms. In subacute cases:\r\n1. Swelling of the udder and increased temperature, making it painful to touch.\r\n2. Redness of the udder.\r\n3. Elevated body temperature.\r\n4. Changes in the normal characteristics of milk.\r\n5. Milk flow may stop, sometimes accompanied by blood.\r\n6. The female refuses to nurse her young.\r\n7. Difficulty moving the hind legs due to pain.\r\nIn chronic cases: the udder becomes hardened with the presence of one or more abscesses on the udder.",
+  "mastitis_treatments": "1. Consult a veterinarian when symptoms appear.\r\n2. Wash and dry the udder before milking.\r\n3. The milker’s hands should be clean by washing them before milking.\r\n4. Do not leave milk in the udder for long periods without milking.\r\n5. Regularly examine females.\r\n6. Exclude females with chronic infections.",
+  "manage_english_name": "Manage",
+  "manage_scientific_name": "Mites",
+  "manage_description": "",
+  "manage_symptoms": "The disease is characterized by dermatitis accompanied by painful itching, the presence of skin crusts, and hair loss. Under microscopic examination of skin scrapings, the edges of the affected area are scraped with a scalpel until blood appears on the skin surface. The scrapings are then placed in a test tube with a few drops of 10% sodium hydroxide solution and heated slightly, then centrifuged and examined under the microscope to confirm the presence of mites.",
+  "manage_treatments": "1. Do not introduce infected animals into the healthy herd.\r\n2. Isolate and treat infected animals immediately, and do not allow them to mix with the herd until full recovery is confirmed.\r\n3. Disinfect all bedding and tools used by infected animals.\r\n4. Apply regular spraying or dipping of the herd, especially after shearing.\r\n5. Provide a good, balanced diet rich in vitamin A, zinc, cobalt, and copper.\r\n6. In endemic areas, inject all animals regularly with one of the preparations for mange mentioned earlier.",
+  "foot_rot_english_name": "Foot Rot",
+  "foot_rot_scientific_name": "Fusobacterium necrophorum",
+  "foot_rot_description": "A bacterial infection causing swelling, foul odor, and ulceration in the feet of livestock.",
+  "foot_rot_symptoms": "Lesions appear on the feet as ulcers, with swelling of the affected foot and a foul smell. Ulcers may not be visible at first, but later open cracks form in the skin, and the wound discharges a dirty yellowish fluid.",
+  "foot_rot_treatments": "1. Keep the affected areas clean and ensure proper drainage of discharge, keeping barns free from manure to prevent infection.\r\n2. For treatment, use a 4-inch-deep footbath filled with hydrated lime, placed where cattle are forced to walk through it during milking; this helps prevent infection.\r\n3. Infected animals can be treated by removing necrotic tissue and soaking the foot in Lysol or a 1% copper sulfate solution. Veterinarians have also successfully treated foot rot using sulfa drug doses.",
+
+
+
+
+  
   "coffee_mealybug_scientific_name": "hemptera aphidae",
   "coffee_mealybug_description": "Mealybugs (family Pseudococcidae) are small white or grayish, cotton-like insects that appear on the leaves, stems, flowers, and fruits of coffee plants. They feed on plant sap, weakening the plant, and are considered dangerous pests in warm and humid regions. They secrete honeydew, which attracts ants and black fungi, increasing crop damage.",
   "coffee_mealybug_symptoms": "- White cottony masses: Appear on leaves, branches, and fruits, especially the underside of leaves.\n- Leaf yellowing and stunting: Due to nutrient loss and toxic substances injected by insects.\n- Sooty mold: Grows on honeydew, hindering photosynthesis and deforming fruits.\n- Early fruit drop: As a result of plant weakening and incomplete fruit development.",
