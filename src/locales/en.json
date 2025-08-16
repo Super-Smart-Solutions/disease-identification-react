@@ -308,12 +308,12 @@
     "honey bees_bee wolf": "honey bees_bee wolf",
     "Wax Moth": "Wax Moth",
     "pomegranate_green peach aphid": "pomegranate_green peach aphid",
-    "roses_black spot": "roses_black spot",
-    "roses_downy mildew": "roses_downy mildew",
-    "powdery mildew": "roses_powdery mildew",
-    "honey bees_bee louse": "honey bees_bee louse",
-    "honey bees_stone brood": "honey bees_stone brood",
-    "honey bees_varroa": "honey bees_varroa",
+    "roses_black spot": "black spot",
+    "roses_downy mildew": "downy mildew",
+    "powdery mildew": "powdery mildew",
+    "honey bees_bee louse": "bee louse",
+    "honey bees_stone brood": "stone brood",
+    "honey bees_varroa": "varroa",
     "death's-head hawkmoth": "death's-head hawkmoth",
     "honey bees_oriental hornet": "honey bees_oriental hornet",
     "bacterial": "bacterial diseases",
@@ -321,16 +321,16 @@
     "Parasitic Diseases":"Parasitic Diseases",
 
     "coffee leaf miner": "Coffee leaf Miner",
-    "coffee_rust": "coffee_rust",
+    "coffee_rust": "leaf rust",
     "coffee coccus viridis": "coffee coccus viridis",
-    "coffee thrips": "coffee thrips",
-    "coffee_mealybug": "coffee mealybug",
-    "coffee toxoptera auranti": "coffee aphid",
-    "coffee fruit borer": "coffee moth",
+    "coffee thrips": "thrips",
+    "coffee_mealybug": "mealybug",
+    "coffee toxoptera auranti": "aphid",
+    "coffee fruit borer": "moth",
 
-    "animals_foot and mouth disease": "animals_foot and mouth disease",
-    "animals_lumpy skin disease": "animals_lumpy skin disease",
-    "animals_Lice disease": "animals_Lice disease",
+    "animals_foot and mouth disease": "foot and mouth disease",
+    "animals_lumpy skin disease": "lumpy skin disease",
+    "animals_Lice disease": "Lice disease",
     "Mastitis": "Mastitis",
     "Bluetongue":"Bluetongue",
     "Goat plague": "Goat plague",
@@ -403,7 +403,7 @@
   "pomegranate_arabic_name": "pomegranate",
   "pomegranate_description": "The Romans Tree is an important fruit trees in Saudi Arabia and the world. It is a very old tree. The scientific name of pomegranate pomega Granawatum means red fruit with pomegranate seeds is one of the blessed trees such as figs, olives, palm trees and grapes, where it is mentioned in the Holy Quran, and pomegranate is one of the most important fruit crops that grow in the countries of the world that many farmers depend on. Farmers have been agitated in recent years after it became an important export crop. In view of the high nutritional and health values ​​of pomegranate fruits, there is an increasing global demand for a fruit, which is one of the fruit trees that bear dry and salinity. In addition, the pomegranate tree grows in different types of lands appropriate to the different environmental conditions of the growth of trees and a good quality production of fruits. The pomegranate is also a fruit crop that is easy to multiply due to the speed of its growth and fruit, and one of the advantages in which it also is also is that the pomegranate is easy to trade and store its fruits. However, there are some challenges facing the expansion of its cultivation. One of the most important challenges is the ability of trees and fruits to infection with insects, diseases and physiological damage",
   
-  
+
     "citrus_bacterial_canker_description": "Mullein ulcers are spread through the winds driven by the wind, and bacteria cells spread to long distances. The disease is also transmitted through the affected plant parts, tools and contaminated equipment, in addition to the movement of workers within the fields of citrus. Warm and wet conditions and periods of heavy rains or irrigation with spraying on the spread and development of the disease help. Also, modern plant tissues are more likely to be injured than ripe and hard tissues",
     "citrus_bacterial_canker_symptoms": "The bacteria that cause alive coffee ulceration remain in infected plant parts such as leaves, branches and fruits, as well as polluted soils and various surfaces, including tools and equipment used in citrus orchids. A cycle of citrus ulceration begins with the introduction of bacteria that cause disease into the orchids, and the bacteria that cause the plant through natural openings such as gaps or wounds caused by wind, cold or mechanical damage. Once bacteria enter the plant, bacteria multiply and symptoms cause leaves, branches and fruits. During the wet weather periods, bacteria flow from the symptoms in the vegetable parts and are spread by wind, rain or water scattered into other parts of the plant or to the adjacent trees. Bacteria can also survive in the remains of the plant, soil, or on contaminated surfaces, which is possible sources of infection for the upcoming agricultural seasons.",
     "citrus_bacterial_canker_treatments": "1. Clean and sterilize pruning tools by soaking in the chlorx solution 10 % for 5 minutes or with a quadruple ammonium solution\r\r\n\r\n2. Cultivation of healthy seedlings taken from disease -free nurseries. \r\r\n\r\n3. Get rid of dead trees burning them so that they are not a source of infection.\r\r\n\r\n4. Conducting good pruning and scraping and removing ulcers that are a source of next public infection and after pruning the scatter paint with a Bordeaux dough consisting of 1 kg copper sulfate + 1 kg live gear + 10 liters of water provided that the paint is made by its brush for the affected part with a ghee of the healthy tissue around the affected spot or spraying with a crochet pesticide (its effective material is the copper sulfate) 10 % SP at a rate of 125 g / 100 liters of water.\r\r\n\r\n5. Balanced fertilization.\r\r\n\r\n6. Use a lot of pathogens free\r\r\n\r\n7. Preventive spraying with copper fungi pesticides\r\r\n\r\n8. Fight in the pylocnistis citrellla insect",
@@ -532,7 +532,7 @@
     "foot_rot_symptoms": "Symptoms appear on the feet in the images of ulceration and swelling of the affected foot, and its smell becomes unpleasant. No ulcers can be seen at the beginning, but open cracks occur in the skin late, and the wound produces a dirty substance that tends to yellow.",
     "foot_rot_treatments": "1. Maintaining the survival of the injuries clean and draining the infiltration well, taking into account that the barn is free of stool because this is a good prevention to avoid infection.\r\r\n\r\n2. For the treatment of this condition, we use a 4 -inch depth box and are filled with lime hydrates and placed where the cows will be pushed by force to walk at the time of Halabah, and this method helps to avoid developing the disease.\r\r\n\r\n3. The infected animals can be treated by removing mold, saturation of the foot with leisure or 1 % copper sulfate solution. Veterinary doctors have been able to succeed in treating foot mold using sulfa doses.",
 
-  
+
   "required_field_key": "This field is required",
   "ph_min_error_key": "pH must be at least 0",
   "ph_max_error_key": "pH must be at most 14",
