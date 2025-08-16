@@ -7,11 +7,6 @@ import { RiAdminFill } from "react-icons/ri";
 export const navItems = (t) => [
     { path: "/", label: t("home_key"), icon: FaHome },
     {
-        path: "/models",
-        label: t("models_key"),
-        icon: AiFillGolden
-    },
-    {
         path: "/database",
         label: t("database_key"),
         icon: FaDatabase

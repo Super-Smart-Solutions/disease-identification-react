@@ -75,7 +75,7 @@ const ForbiddenRoute = ({ children, isAuthenticated }) => {
         localStorage.removeItem("redirectPath");
         navigate(redirectPath);
       } else {
-        navigate("/models");
+        navigate("/database");
       }
     }
   }, [isAuthenticated, navigate, location.state]);
@@ -90,7 +90,7 @@ const AdminRoute = ({ children, isAuthenticated, isAdmin }) => {
     localStorage.setItem("redirectPath", location.pathname);
     return <Navigate to="/auth/login" replace state={{ from: location }} />;
   } else if (!isAdmin) {
-    return <Navigate to="/models" replace state={{ from: location }} />;
+    return <Navigate to="/database" replace state={{ from: location }} />;
   }
 
   return children;

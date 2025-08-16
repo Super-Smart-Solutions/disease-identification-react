@@ -8,7 +8,7 @@
 
   {
     "protected": true,
-    "path": "models",
+    "path": "",
     "element": "Models",
     "breadcrumb": true,
     "label": "models"
