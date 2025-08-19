@@ -64,7 +64,7 @@
   "result_key": "Inference Result",
   "uploaded_image_key": "Uploaded image",
   "category_key": "Category",
-  "selected_disease": "Selected Disease",
+  "selected_disease": "Inference Results",
   "confidence_level": "Confidence Level",
   "next_key": "Next",
   "previous_key": "Previous",
