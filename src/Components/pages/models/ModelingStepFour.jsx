@@ -70,11 +70,15 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
     retry: false,
   });
 
+  console.log("prediction: ", prediction);
+
   const isHealthy = prediction?.status === 2 && !prediction?.disease_id;
   const predictionFailed =
     prediction !== undefined && (prediction?.status !== 2 || isPredictionError);
   const confidenceScore = prediction?.confidence_level * 100;
   const visualizationUrl = visualization?.attention_map_url;
+
+
 
   const handleTryDifferentImage = () => {
     setModelingData((prev) => ({
@@ -143,7 +147,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
               <div className="space-y-3">
                 {t("selected_disease")}:{" "}
                 {isHealthy
-                  ? t("healthy")
+                  ? t("healthy_key")
                   : t(`diseases.${diseaseData?.english_name}`, {
                       defaultValue: diseaseData?.english_name || t("loading"),
                     })}

@@ -109,11 +109,11 @@ const PlantDiseaseForm = ({
             <div className="md:col-span-2">
               <SelectInput
                 name="plant"
-                label={t("select_plant_key")}
+                label={t("select_category_key")}
                 options={translatedPlants}
                 value={Number(values.plant) || null}
                 onChange={(opt) => onPlantSelect(opt, setFieldValue)}
-                placeholder={t("select_plant_key")}
+                placeholder={t("select_category_key")}
                 isLoading={plantsLoading}
               />
               {errors.plant && touched.plant && (
@@ -124,12 +124,12 @@ const PlantDiseaseForm = ({
             <div className="md:col-span-2">
               <SelectInput
                 name="disease"
-                label={t("select_disease_key")}
+                label={t("select_pest_key")}
                 options={translatedDiseases}
                 value={Number(values.disease) || null}
                 onChange={(opt) => onDiseaseSelect(opt, setFieldValue)}
                 placeholder={
-                  diseasesLoading ? t("loading_key") : t("select_disease_key")
+                  diseasesLoading ? t("loading_key") : t("select_pest_key")
                 }
                 isLoading={diseasesLoading}
                 isDisabled={!values.plant}

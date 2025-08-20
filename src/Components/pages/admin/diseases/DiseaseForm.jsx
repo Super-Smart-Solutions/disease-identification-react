@@ -19,7 +19,7 @@ const DiseaseForm = ({ diseaseId, onSuccess, onClose, t }) => {
     english_name: diseaseData?.english_name || "",
     arabic_name: diseaseData?.arabic_name || "",
     scientific_name: diseaseData?.scientific_name || "",
-    control_method: diseaseData?.control_method || "",
+    treatments: diseaseData?.treatments || "",
     description: diseaseData?.description || "",
     symptoms: diseaseData?.symptoms || "",
   };
@@ -129,7 +129,7 @@ const DiseaseForm = ({ diseaseId, onSuccess, onClose, t }) => {
 
           <div>
             <label
-              htmlFor="control_method"
+              htmlFor="treatments"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
               {t("control_methods_key")}
@@ -137,12 +137,12 @@ const DiseaseForm = ({ diseaseId, onSuccess, onClose, t }) => {
             <Field
               as="textarea"
               rows={3}
-              name="control_method"
+              name="treatments"
               className="custom-input"
               placeholder={t("control_methods_key")}
             />
             <ErrorMessage
-              name="control_method"
+              name="treatments"
               component="div"
               className="text-red-500 text-sm mt-1"
             />

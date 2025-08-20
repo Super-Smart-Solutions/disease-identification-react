@@ -76,7 +76,7 @@ export default function ExpandableArticle({
               <h4 className="text-lg font-bold me-2 text-gray-800">
                 {t("Symptoms")}
               </h4>
-              <p className="text-gray-700 text-base leading-relaxed">
+              <p className="text-gray-700 text-base leading-relaxed whitespace-pre-wrap">
                 {t(`${formatKey(article?.english_name)}_symptoms`) ||
                   t("no_symptoms_key")}
               </p>
@@ -86,7 +86,7 @@ export default function ExpandableArticle({
               <h4 className="text-lg font-bold me-2 text-gray-800">
                 {t("Control Methods:")}
               </h4>
-              <p className="text-gray-700 text-base leading-relaxed">
+              <p className="text-gray-700 text-base leading-relaxed whitespace-pre-wrap">
                 {t(`${formatKey(article?.english_name)}_treatments`) ||
                   t("no_treatment_key")}
               </p>
