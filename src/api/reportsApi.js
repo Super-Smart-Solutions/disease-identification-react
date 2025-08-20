@@ -1,27 +1,43 @@
 import axiosInstance from "../utils/axiosInstance";
 
-const REPORT_ENDPOINT = "/reports"
+const REPORTS_ENDPOINT = "/reports";
 
+export const uploadReport = async ({ reportType, file, report_origin }) => {
+    const formData = new FormData();
+    formData.append("file", file);
 
-export const fetchReports = async (params = {}) => {
-    const response = await axiosInstance.get(REPORT_ENDPOINT, { params });
+    const params = {
+        report_type: reportType,
+        report_origin: report_origin
+    };
+
+    const response = await axiosInstance.post(
+        `${REPORTS_ENDPOINT}/upload`,
+        formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            params,
+        }
+    );
+
+    return response.data;
+};
+
+export const fetchReports = async () => {
+    const response = await axiosInstance.get(REPORTS_ENDPOINT);
     return response.data;
 };
 
 
 export const fetchReportById = async (reportId) => {
-    const response = await axiosInstance.get(`${REPORT_ENDPOINT}/${reportId}`);
-    return response.data;
-};
-
-
-export const updateReport = async (reportId, reportData) => {
-    const response = await axiosInstance.put(`${REPORT_ENDPOINT}/${reportId}`, reportData);
+    const response = await axiosInstance.get(`${REPORTS_ENDPOINT}/${reportId}`);
     return response.data;
 };
 
 
 export const deleteReport = async (reportId) => {
-    const response = await axiosInstance.delete(`${REPORT_ENDPOINT}/${reportId}`);
+    const response = await axiosInstance.delete(`${REPORTS_ENDPOINT}/${reportId}`);
     return response.data;
 };
