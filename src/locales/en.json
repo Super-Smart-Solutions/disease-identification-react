@@ -768,5 +768,11 @@
   "file_name_required_key": "File name is required",
   "oil_test_result_key": "Oil Test Result",
   "confidence_score_key": "Confidence Score",
-  "authentic_key": "AUTHENTIC"
+  "authentic_key": "AUTHENTIC",
+  "report_deleted_successfully_key": "Report deleted successfully",
+  "failed_to_delete_report_key": "Failed to delete report",
+  "report_type_key": "Report Type",
+  "file_key": "File",
+  "view_file_key": "View File",
+  "report_logs_key": "Report Logs"
 }
