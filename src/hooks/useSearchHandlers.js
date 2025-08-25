@@ -19,6 +19,22 @@ export const useSearchHandlers = () => {
         [navigate, setSearchParams]
     );
 
+    const handleCategoryChange = useCallback(
+        (category) => {
+            const newParams = new URLSearchParams(searchParams.toString());
+            if (category) {
+                newParams.set("category", category);
+            } else {
+                newParams.delete("category");
+            }
+            newParams.delete("plant_id");
+            newParams.delete("disease_id");
+            updateParamsAndNavigate(newParams);
+        },
+        [searchParams, updateParamsAndNavigate]
+    );
+
+
     const handleDiseaseChange = useCallback(
         (diseaseId) => {
             const newParams = new URLSearchParams(searchParams.toString());
@@ -51,6 +67,7 @@ export const useSearchHandlers = () => {
     }, [navigate, setSearchParams]);
 
     return {
+        handleCategoryChange,
         handleDiseaseChange,
         handlePlantChange,
         handleReset,
