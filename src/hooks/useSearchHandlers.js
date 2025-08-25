@@ -42,7 +42,7 @@ export const useSearchHandlers = () => {
                 newParams.set("disease_id", diseaseId);
             } else {
                 newParams.delete("disease_id");
-                // newParams.delete("plant_id");
+                newParams.delete("plant_id");
             }
             updateParamsAndNavigate(newParams);
         },
@@ -57,7 +57,6 @@ export const useSearchHandlers = () => {
             } else {
                 newParams.delete("plant_id");
             }
-            newParams.delete("disease_id");
             updateParamsAndNavigate(newParams);
         },
         [searchParams, updateParamsAndNavigate]

@@ -56,6 +56,7 @@ const PlantDiseaseForm = ({
             return diseases?.items || [];
         },
         enabled: !!selectedPlant,
+        keepPreviousData: true,
     });
 
     const translatedPlants = useMemo(
