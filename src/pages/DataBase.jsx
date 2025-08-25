@@ -12,11 +12,12 @@ import { useSearchHandlers } from "../hooks/useSearchHandlers";
 
 const DataBase = () => {
   const { t } = useTranslation();
-  const { handleDiseaseChange, handlePlantChange, handleReset } =
+  const { handleCategoryChange, handleDiseaseChange, handlePlantChange, handleReset } =
     useSearchHandlers();
   const [searchParams] = useSearchParams();
   const diseaseId = searchParams.get("disease_id");
   const plantId = searchParams.get("plant_id");
+  const category = searchParams.get("category");
   const [searchMethod, setSearchMethod] = useState("plant");
 
   const { data: selectedDisease, isLoading } = useDiseaseById(diseaseId);
@@ -107,8 +108,10 @@ const DataBase = () => {
           >
             <PlantDiseaseForm
               handleReset={handleReset}
+              selectedCategory={category}
               selectedDisease={diseaseId}
               selectedPlant={plantId}
+              handleCategoryChange={handleCategoryChange}
               handleDiseaseChange={handleDiseaseChange}
               handlePlantChange={handlePlantChange}
             />

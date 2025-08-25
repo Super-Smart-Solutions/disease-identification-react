@@ -772,5 +772,10 @@
   "file_name_required_key": "File name is required",
   "oil_test_result_key": "Oil Test Result",
   "confidence_score_key": "Confidence Score",
-  "authentic_key": "AUTHENTIC"
+  "authentic_key": "AUTHENTIC",
+  "categories":{
+    "roses": "Roses",
+    "fruits": "Fruits",
+    "animals": "Animals"
+  }
 }
