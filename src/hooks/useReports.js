@@ -6,16 +6,17 @@ import {
     deleteReport,
 } from "../api/reportsApi";
 
-// Fetch all reports
-export const useReports = () => {
+
+export const useReports = ({ page = 1, pageSize = 10 } = {}) => {
     return useQuery({
-        queryKey: ["reports"],
-        queryFn: fetchReports,
+        queryKey: ["reports", page, pageSize],
+        queryFn: () => fetchReports(page, pageSize),
         keepPreviousData: true,
+        staleTime: 1000 * 60 * 5, 
     });
 };
 
-// Fetch a report by ID
+
 export const useReportById = (reportId) => {
     return useQuery({
         queryKey: ["report", reportId],
@@ -24,7 +25,7 @@ export const useReportById = (reportId) => {
     });
 };
 
-// Upload a new report
+
 export const useUploadReport = ({ whenSucces }) => {
     const queryClient = useQueryClient();
     return useMutation({
@@ -36,7 +37,7 @@ export const useUploadReport = ({ whenSucces }) => {
     });
 };
 
-// Delete a report
+
 export const useDeleteReport = () => {
     const queryClient = useQueryClient();
     return useMutation({

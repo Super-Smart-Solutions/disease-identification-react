@@ -5,7 +5,8 @@ import { toast } from "sonner";
 import DataGrid from "../../DataGrid";
 import { FiTrash2 } from "react-icons/fi";
 import ConfirmationModal from "../../ConfirmationModal";
-import { useReports } from "../../../hooks/useReports";
+import { useReports, useDeleteReport } from "../../../hooks/useReports";
+import Button from "../../Button";
 
 export default function ReportsSection() {
   const { t } = useTranslation();
@@ -13,13 +14,14 @@ export default function ReportsSection() {
   const [pageSize, setPageSize] = useState(10);
   const [reportToDelete, setReportToDelete] = useState(null);
 
-  const { data, isLoading, isError, error, removeReport, isDeleting, refetch } =
-    useReports({ page, pageSize });
+  const { data, isLoading, isError, error } = useReports({ page, pageSize });
+
+  const { mutate: deleteReport } = useDeleteReport();
 
   const handleConfirmDelete = () => {
     if (!reportToDelete) return;
 
-    removeReport(reportToDelete, {
+    deleteReport(reportToDelete, {
       onSuccess: () => {
         toast.success(t("report_deleted_successfully_key"));
       },
@@ -33,9 +35,12 @@ export default function ReportsSection() {
     });
   };
 
+  const handleDownload = (url) => {
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   const columnDefs = [
     { field: "id", headerName: "#", flex: 0.5 },
-
     {
       field: "status",
       headerName: t("status_key"),
@@ -52,48 +57,46 @@ export default function ReportsSection() {
       headerName: t("file_key"),
       cellRenderer: (params) =>
         params?.value ? (
-          <a
-            href={params.value}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:underline"
+          <Button
+            variant="outlined"
+            onClick={() => handleDownload(params.value)}
           >
-            {t("view_file_key")}
-          </a>
+            {t("show_key")}
+          </Button>
         ) : (
           "-"
         ),
       flex: 1.5,
     },
     {
-      field: "date",
-      headerName: t("date_key"),
+      field: "created_at",
+      headerName: t("created_at_key"),
       valueFormatter: ({ value }) =>
-        value ? moment(value).format("YYYY-MM-DD") : "-",
-      flex: 1,
+        value && moment(value).format("YYYY-MM-DD"),
     },
     {
       field: "actions",
       headerName: t("actions_key"),
       cellRenderer: (params) => (
         <button
-          className="text-red-500 hover:text-red-700"
           onClick={() => setReportToDelete(params?.data?.id)}
+          className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer text-gray-500"
+          title={t("delete_key")}
         >
-          <FiTrash2 />
+          <FiTrash2 size={20} />
         </button>
       ),
       flex: 0.5,
     },
   ];
 
-//   if (isError) {
-//     return (
-//       <div className="text-red-500">
-//         {error?.message || t("failed_to_load_logs_key")}
-//       </div>
-//     );
-//   }
+  if (isError) {
+    return (
+      <div className="text-red-500">
+        {error?.message || t("failed_to_load_logs_key")}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -101,24 +104,7 @@ export default function ReportsSection() {
         <h2 className="text-2xl font-semibold">{t("report_logs_key")}</h2>
       </div>
       <DataGrid
-        rowData={
-          data?.items || [
-            {
-              id: 1,
-              status: "Detected",
-              report_type: "Daily",
-              file_link: "https://example.com/file1.pdf",
-              date: new Date().toISOString(),
-            },
-            {
-              id: 2,
-              status: "Pending",
-              report_type: "Weekly",
-              file_link: "https://example.com/file2.pdf",
-              date: new Date().toISOString(),
-            },
-          ]
-        }
+        rowData={data?.items || []}
         colDefs={columnDefs}
         loading={isLoading}
         pagination={true}

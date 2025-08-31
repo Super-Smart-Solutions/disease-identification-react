@@ -34,8 +34,13 @@ export const uploadReport = async ({ reportType, file, report_origin, data }) =>
     return response.data;
 };
 
-export const fetchReports = async () => {
-    const response = await axiosInstance.get(REPORTS_ENDPOINT);
+export const fetchReports = async (page = 1, pageSize = 10) => {
+    const response = await axiosInstance.get(REPORTS_ENDPOINT , {
+        params: {
+          pageNumber: page,
+          pageSize: pageSize
+        }
+      });
     return response.data;
 };
 
