@@ -22,6 +22,7 @@ export default function ModalOilTest() {
   const isOpen = useSelector((state) => state.oilTestModal.isOpen);
   const dispatch = useDispatch();
   const resultsRef = useRef(null);
+  const hasGeneratedForResult = useRef(null);
   const { user } = useUserData();
 
   const handleClose = () => {
@@ -45,6 +46,9 @@ export default function ModalOilTest() {
   useEffect(() => {
     const generateAndUpload = async () => {
       if (!resultData?.result || !resultsRef.current) return;
+
+      if (hasGeneratedForResult.current === resultData) return;
+      hasGeneratedForResult.current = resultData;
 
       try {
         const canvas = await html2canvas(resultsRef.current, {

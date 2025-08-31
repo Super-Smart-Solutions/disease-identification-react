@@ -6,6 +6,8 @@ import { toast } from "sonner";
 
 export const ResultsCard = ({ assessmentResult, t, user }) => {
   const resultsRef = useRef(null);
+  const hasGenerated = useRef(false);
+
   const { mutate: submitUpload } = useUploadReport({
     onSuccess: () => {
       console.log("Upload finished in background");
@@ -16,6 +18,9 @@ export const ResultsCard = ({ assessmentResult, t, user }) => {
   const recommendations = assessmentResult.assessment.recommendations;
 
   useEffect(() => {
+    if (hasGenerated.current) return;
+    hasGenerated.current = true;
+
     const generateAndUploadPDF = async () => {
       if (!resultsRef.current) return;
 
@@ -61,13 +66,13 @@ export const ResultsCard = ({ assessmentResult, t, user }) => {
           file,
         });
       } catch (error) {
-        toast.error("PDF generation/upload failed:", error);
+        toast.error("PDF generation/upload failed");
+        console.error(error);
       }
     };
 
     generateAndUploadPDF();
-  }, [assessmentResult]);
-
+  }, [submitUpload, user]);
   return (
     <div
       ref={resultsRef}
