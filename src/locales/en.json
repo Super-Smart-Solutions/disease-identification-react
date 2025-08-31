@@ -776,5 +776,16 @@
     "animals": "Animals"
   },
   "reset_password_key": "Reset Password",
-  "new_password_key": "New Password"
+  "reset_password_desc_key": "Enter your email to get an OTP. Then, use the OTP and set a new password to reset your account.",
+  "new_password_key": "New Password",
+  "password_min_key": "Password must be at least 6 characters",
+  "otp_key": "OTP Code",
+  "send_otp_key": "Send OTP",
+  "otp_sent_key": "If an account with this email exists, a password reset link has been sent.",
+  "otp_request_failed_key": "Failed to send OTP",
+  "password_reset_success_key": "Password reset successfully",
+  "password_reset_failed_key": "Failed to reset password",
+  "forgot_password_key": "Forgot Password?",
+  "reset_now_key": "Reset Now",
+  "back_to_login_key": "Back to Login"
 }
