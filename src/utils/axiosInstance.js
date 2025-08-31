@@ -41,7 +41,17 @@ axiosInstance.interceptors.response.use(
 
     if (error.response) {
       const { status, data } = error.response;
-      const errorMessage = data?.detail || "An unexpected error occurred.";
+      let errorMessages = data?.detail || "An unexpected error occurred.";
+
+      // Convert errorMessages to array if it's not already
+      if (!Array.isArray(errorMessages)) {
+        errorMessages = [errorMessages];
+      }
+
+      // Map error messages to extract the 'msg' field if it's an object
+      errorMessages = errorMessages.map((err) =>
+        typeof err === 'object' && err !== null && err.msg ? err.msg : String(err)
+      );
 
       // Handle unauthorized error (try to refresh token)
       if (status === 401 && !originalRequest._retry) {
@@ -49,7 +59,14 @@ axiosInstance.interceptors.response.use(
 
         try {
           // Attempt to refresh the access token
-          const newAccessToken = await tokenManager.refreshAccessToken();
+          let newAccessToken = await tokenManager.refreshAccessToken();
+
+          // Ensure newAccessToken is a string
+          if (Array.isArray(newAccessToken)) {
+            newAccessToken = newAccessToken[0]; // Take first token if array
+          } else if (typeof newAccessToken === 'object' && newAccessToken !== null) {
+            newAccessToken = newAccessToken.token || Object.values(newAccessToken)[0]; // Extract token from object
+          }
 
           if (newAccessToken) {
             // Update the original request with new token
@@ -63,8 +80,10 @@ axiosInstance.interceptors.response.use(
           return Promise.reject(refreshError);
         }
       } else if (status !== 401) {
-        // Show error message for non-auth errors
-        toast.error(errorMessage);
+        // Show error messages for non-auth errors
+        errorMessages.forEach((message) => {
+          toast.error(message);
+        });
       }
     } else {
       toast.error("Network error. Please check your connection.");
@@ -73,5 +92,4 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 export default axiosInstance;
