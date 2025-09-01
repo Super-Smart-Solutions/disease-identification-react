@@ -108,6 +108,7 @@ export default function ReviewFormPopover() {
         className="flex flex-col items-center gap-4 justify-between"
       >
         <textarea
+          required
           name="review_text"
           className="custom-input w-full h-18"
           placeholder={t("your_review_key")}
