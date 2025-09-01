@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useCallback } from 'react';
 import { setUser, setLoading, setError, logout } from '../redux/features/userSlice';
 import { fetchCurrentUser, updateUserById, uploadUserAvatar as UploadUserAvatarAPI } from '../api/userAPI';
-import { loginUser } from '../api/authAPI';
+import { loginUser, resetPassword as resetPasswordAPI, forgotPassword } from '../api/authAPI';
 import { useNavigate } from 'react-router-dom';
 import tokenManager from '../Components/helpers/tokenManager';
 
@@ -66,11 +66,36 @@ export const useUserData = () => {
     const uploadUserAvatar = useCallback(async (avatarFile) => {
         try {
             dispatch(setLoading(true));
-            //const token = tokenManager.getAccessToken()
             await UploadUserAvatarAPI(avatarFile);
             const updatedUser = await fetchCurrentUser()
             dispatch(setUser(updatedUser));
             return updatedUser;
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || error.message;
+            dispatch(setError(errorMessage));
+            throw errorMessage;
+        }
+    }, [dispatch]);
+
+
+    const resetUserPassword = useCallback(async (resetData) => {
+        try {
+            dispatch(setLoading(true));
+            const response = await resetPasswordAPI(resetData);
+            return response;
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || error.message;
+            dispatch(setError(errorMessage));
+            throw errorMessage;
+        }
+    }, [dispatch]); 
+
+    //get otp for reset password
+    const requestOTP = useCallback(async (resetData) => {
+        try {
+            dispatch(setLoading(true));
+            const response = await forgotPassword(resetData);
+            return response;
         } catch (error) {
             const errorMessage = error.response?.data?.message || error.message;
             dispatch(setError(errorMessage));
@@ -91,6 +116,8 @@ export const useUserData = () => {
         refetchUserData,
         updateUserData,
         uploadUserAvatar,
+        resetUserPassword,
+        requestOTP,
         logoutUser,
     };
 };

@@ -130,6 +130,15 @@ export default function Login() {
                       )}
                     />
                   </div>
+                  <p className=" text-sm text-gray-700">
+                    {t("forgot_password_key")}
+                    <Link
+                      to="/auth/reset-password"
+                      className="text-blue-500 hover:underline mx-1"
+                    >
+                      {t("reset_now_key")}
+                    </Link>
+                  </p>
                   <Button
                     type="submit"
                     loading={isSubmitting}
@@ -141,6 +150,7 @@ export default function Login() {
                 </Form>
               )}
             </Formik>
+
             <p className="mt-4">
               {t("no_account_key")}
               <Link

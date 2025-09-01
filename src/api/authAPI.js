@@ -36,6 +36,7 @@ export const forgotPassword = async (email) => {
     return response.data;
 };
 
+
 // Reset password
 export const resetPassword = async (resetData) => {
     const response = await axiosInstance.post(`${AUTH_ENDPOINT}/reset-password`, resetData);
