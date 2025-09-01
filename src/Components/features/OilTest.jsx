@@ -14,6 +14,7 @@ import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import { uploadReport } from "../../api/reportsApi";
 import { useUserData } from "./../../hooks/useUserData";
+import { useUploadReport } from "../../hooks/useReports";
 
 export default function ModalOilTest() {
   const { t } = useTranslation();
@@ -38,11 +39,13 @@ export default function ModalOilTest() {
     },
   });
 
-  const { mutate: uploadReportMutate, isPending: isUploading } = useMutation({
-    mutationFn: ({ file }) =>
-      uploadReport({ file, report_origin: "computed", reportType: "oil" }),
+  const {
+    data: uploadResult,
+    mutate: uploadReportMutate,
+    isPending: isUploading,
+  } = useUploadReport({
+    whenSucces: () => {},
   });
-
   useEffect(() => {
     const generateAndUpload = async () => {
       if (!resultData?.result || !resultsRef.current) return;
@@ -51,6 +54,8 @@ export default function ModalOilTest() {
       hasGeneratedForResult.current = resultData;
 
       try {
+        await new Promise((r) => setTimeout(r, 300));
+
         const canvas = await html2canvas(resultsRef.current, {
           scale: 2,
           useCORS: true,
@@ -79,14 +84,16 @@ export default function ModalOilTest() {
 
         const pdfBlob = pdf.output("blob");
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const fileName = `oil_report_${user?.id || "guest"}_${timestamp}.pdf`;
 
-        const file = new File(
-          [pdfBlob],
-          `oil_report_${user?.id || "guest"}_${timestamp}.pdf`,
-          { type: "application/pdf" }
-        );
+        const file = new File([pdfBlob], fileName, { type: "application/pdf" });
 
-        uploadReportMutate({ file });
+        // Upload the PDF
+        uploadReportMutate({
+          reportType: "oil",
+          file: file,
+          report_origin: "computed",
+        });
       } catch (error) {
         console.error("Failed to generate/upload PDF:", error);
       }
@@ -166,9 +173,8 @@ export default function ModalOilTest() {
               )}
             </AnimatePresence>
 
-            {resultData?.result && (
+            {resultData?.result && selectedFiles.length > 0 && (
               <motion.div
-                ref={resultsRef}
                 key="result"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -180,23 +186,25 @@ export default function ModalOilTest() {
                     : "bg-red-100 border-red-400"
                 }`}
               >
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                  {t("oil_test_result_key", "Oil Test Result")}
-                </h3>
-                <p className="text-sm text-gray-700 mb-1">
-                  <strong>{t("result_key", "Result")}:</strong>{" "}
-                  {resultData.result === "AUTHENTIC"
-                    ? t("authentic_key", "Authentic")
-                    : resultData.result}
-                </p>
-                {resultData.confidence_score !== undefined && (
-                  <p className="text-sm text-gray-700">
-                    <strong>
-                      {t("confidence_score_key", "Confidence Score")}:
-                    </strong>{" "}
-                    {(resultData.confidence_score * 100).toFixed(2)}%
+                <div ref={resultsRef}>
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                    {t("oil_test_result_key", "Oil Test Result")}
+                  </h3>
+                  <p className="text-sm text-gray-700 mb-1">
+                    <strong>{t("result_key", "Result")}:</strong>{" "}
+                    {resultData.result === "AUTHENTIC"
+                      ? t("authentic_key", "Authentic")
+                      : resultData.result}
                   </p>
-                )}
+                  {resultData.confidence_score !== undefined && (
+                    <p className="text-sm text-gray-700">
+                      <strong>
+                        {t("confidence_score_key", "Confidence Score")}:
+                      </strong>{" "}
+                      {(resultData.confidence_score * 100).toFixed(2)}%
+                    </p>
+                  )}
+                </div>
               </motion.div>
             )}
 

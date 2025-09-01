@@ -96,6 +96,7 @@ export function useSoilCalculator({ user, dispatch, navigate }) {
                 submitUpload({
                     reportType: "soil",
                     file: values.uploadedPdf,
+                    report_origin: "uploaded"
                 });
             } else {
                 setCurrentStep(3);
