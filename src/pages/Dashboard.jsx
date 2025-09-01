@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import LogsSection from "../Components/pages/dashboard/LogsSection";
 import InferenceStats from "../Components/pages/dashboard/InferenceStats";
+import ReportsSection from "../Components/pages/dashboard/ReportsSection";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -41,6 +42,9 @@ export default function Dashboard() {
 
         <motion.div variants={sectionVariants}>
           <LogsSection />
+        </motion.div>
+        <motion.div variants={sectionVariants}>
+          <ReportsSection />
         </motion.div>
       </motion.div>
     </>
