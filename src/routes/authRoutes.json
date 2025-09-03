@@ -8,6 +8,13 @@
   },
   {
     "protected": false,
+    "path": "auth/reset-password",
+    "element": "ResetPassword",
+    "breadcrumb": false,
+    "label": "reset_password"
+  },
+  {
+    "protected": false,
     "path": "auth/register",
     "element": "Register",
     "breadcrumb": false,

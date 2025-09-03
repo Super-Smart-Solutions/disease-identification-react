@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { assessSoil, fetchCrops, uploadReport } from "../api/soilApi";
+import { assessSoil, fetchCrops } from "../api/soilApi";
+import { useUploadReport } from "../hooks/useReports";
 import { setSoilCalculatorOpen } from "../redux/features/soilCalculatorSlice";
 import { useSoilCalculatorValidations } from "../schemas/soilCalculatorValidations";
 
@@ -11,6 +12,7 @@ export function useSoilCalculator({ user, dispatch, navigate }) {
     const { validationSchema, initialValues } = useSoilCalculatorValidations();
     const [formValues, setFormValues] = useState(initialValues);
 
+    // Soil assessment mutation
     const {
         data: assessmentResult,
         mutate: submitAssessment,
@@ -20,7 +22,7 @@ export function useSoilCalculator({ user, dispatch, navigate }) {
         mutationFn: assessSoil,
         onSuccess: (data, variables) => {
             setSearchError(null);
-            setLastAssessmentData(variables); // Store the submitted data
+            setLastAssessmentData(variables);
             setCurrentStep(2);
         },
         onError: (error) => {
@@ -29,22 +31,18 @@ export function useSoilCalculator({ user, dispatch, navigate }) {
         },
     });
 
+
     const {
         data: uploadResult,
         mutate: submitUpload,
         isPending: isUploadPending,
-        error: uploadError,
-    } = useMutation({
-        mutationFn: uploadReport,
-        onSuccess: () => {
+    } = useUploadReport({
+        whenSucces: () => {
             setSearchError(null);
             setCurrentStep(3);
         },
-        onError: (error) => {
-            console.error("Upload Error:", error);
-            setSearchError(error.message || "An error occurred during file upload.");
-        },
     });
+
 
     const handleSubmit = async (values, { setSubmitting }) => {
         setFormValues(values);
@@ -66,7 +64,6 @@ export function useSoilCalculator({ user, dispatch, navigate }) {
                 temperature: parseFloat(values.temperature),
             };
 
-            // Check if assessment data is identical to the last submitted data
             if (
                 lastAssessmentData &&
                 lastAssessmentData.crop_id === assessmentData.crop_id &&
@@ -74,7 +71,6 @@ export function useSoilCalculator({ user, dispatch, navigate }) {
                 lastAssessmentData.salinity === assessmentData.salinity &&
                 lastAssessmentData.temperature === assessmentData.temperature
             ) {
-                // Skip mutation and go to next step
                 setSearchError(null);
                 setCurrentStep(2);
                 setSubmitting(false);
@@ -91,19 +87,24 @@ export function useSoilCalculator({ user, dispatch, navigate }) {
 
     const handleUploadSubmit = async (values, { setSubmitting }) => {
         setFormValues(values);
-        setSearchError(null);
         try {
-            if (values.uploadedPdf) {
-                submitUpload({ file: values.uploadedPdf });
+            // Only upload if a new file is provided AND it's different from the stored one
+            if (
+                values.uploadedPdf &&
+                values.uploadedPdf !== formValues.uploadedPdf
+            ) {
+                submitUpload({
+                    reportType: "soil",
+                    file: values.uploadedPdf,
+                    report_origin: "uploaded"
+                });
             } else {
                 setCurrentStep(3);
             }
         } catch (error) {
             setSearchError(error.message || "An error occurred during file upload.");
-        }
-        finally {
+        } finally {
             setSubmitting(false);
-
         }
     };
 
@@ -115,7 +116,7 @@ export function useSoilCalculator({ user, dispatch, navigate }) {
             setCurrentStep(1);
             setSearchError(null);
             setFormValues(initialValues);
-            setLastAssessmentData(null); // Reset last assessment data on modal open
+            setLastAssessmentData(null);
         }
     };
 
@@ -124,7 +125,7 @@ export function useSoilCalculator({ user, dispatch, navigate }) {
         setCurrentStep(1);
         setSearchError(null);
         setFormValues(initialValues);
-        setLastAssessmentData(null); // Reset last assessment data on modal close
+        setLastAssessmentData(null);
     };
 
     const goToNextStep = () => {
@@ -156,7 +157,7 @@ export function useSoilCalculator({ user, dispatch, navigate }) {
         resetForm: () => {
             setFormValues(initialValues);
             setSearchError(null);
-            setLastAssessmentData(null); // Reset last assessment data on form reset
+            setLastAssessmentData(null);
         },
     };
 }

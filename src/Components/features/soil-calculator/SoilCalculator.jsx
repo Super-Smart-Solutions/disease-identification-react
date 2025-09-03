@@ -148,9 +148,8 @@ export default function SoilCalculator() {
                   {t("results_step_key")}
                 </h3>
                 <ResultsCard
+                  user={user}
                   assessmentResult={assessmentResult}
-                  onNextStep={goToNextStep}
-                  onPrevStep={goToPrevStep}
                   t={t}
                 />
                 {searchError && (

@@ -17,9 +17,7 @@ import DataBase from "../pages/DataBase";
 import Models from "../pages/Models";
 import Register from "../Components/pages/auth/Register";
 import Login from "../Components/pages/auth/Login";
-import Cookies from "js-cookie";
 import Dashboard from "../pages/Dashboard";
-import { useAuthActions } from "../Components/helpers/authHelpers";
 import AdminPlants from "../Components/pages/admin/plants/AdminPlants";
 import AdminDiseases from "../Components/pages/admin/diseases/AdminDiseases";
 import LogsSection from "../Components/pages/dashboard/LogsSection";
@@ -30,7 +28,7 @@ import AdminImages from "../Components/pages/admin/images/AdminImages";
 import Profile from "../pages/Profile";
 import { useUserData } from "../hooks/useUserData";
 import Disease from "../pages/Disease";
-import tokenManager from "../Components/helpers/tokenManager";
+import ResetPassword from "../Components/pages/auth/ResetPassword";
 
 const componentMap = {
   Landing,
@@ -48,6 +46,7 @@ const componentMap = {
   AdminOrganizations,
   AdminImages,
   AdminUsers,
+  ResetPassword,
 };
 
 const ProtectedRoute = ({ children, isAuthenticated }) => {
