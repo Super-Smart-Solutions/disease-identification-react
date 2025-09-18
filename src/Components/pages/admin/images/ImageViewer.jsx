@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
@@ -12,6 +13,11 @@ const ImageViewer = ({
   handleNext,
   images,
   currentIndex,
+  globalIndex,
+  page,
+  totalPages,
+  totalItems,
+  hasNextPage,
 }) => {
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
@@ -63,26 +69,6 @@ const ImageViewer = ({
     }
   }, [touchStart, touchEnd, handleNext, handleBack]);
 
-  const slideVariants = {
-    enter: (direction) => ({
-      x: direction > 0 ? -300 : 300,
-      opacity: 0,
-      scale: 0.9,
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-      scale: 1,
-    },
-    exit: (direction) => ({
-      zIndex: 0,
-      x: direction < 0 ? -300 : 300,
-      opacity: 0,
-      scale: 0.9,
-    }),
-  };
-
   const transition = {
     x: { type: "spring", stiffness: 300, damping: 30 },
     opacity: { duration: 0.2 },
@@ -90,7 +76,7 @@ const ImageViewer = ({
   };
 
   return (
-    <div className="relative w-full h-[50vh] rounded-lg ">
+    <div className="relative w-full h-[40vh] rounded-lg overflow-hidden space-y-4 ">
       {isLoading && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -109,11 +95,10 @@ const ImageViewer = ({
           <motion.div
             key={currentImage.id}
             custom={0}
-            variants={slideVariants}
             initial="enter"
             animate="center"
             exit="exit"
-            className="flex items-center h-full justify-center mx-auto"
+            className="flex items-center justify-center mx-auto h-full"
             transition={transition}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
@@ -148,8 +133,8 @@ const ImageViewer = ({
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={handleBack}
-            className="absolute start-4 top-1/2 -translate-y-1/2 bg-black/60 text-white p-3 rounded-full hover:bg-black/80 transition-colors disabled:opacity-50 z-10"
-            disabled={currentIndex === 0}
+            className="absolute start-4 top-1/3 -translate-y-1/2 bg-black/60 text-white p-3 rounded-full hover:bg-black/80 transition-colors disabled:opacity-50 z-10"
+            disabled={globalIndex === 0}
           >
             <FiChevronLeft size={20} className="rtl:rotate-180" />
           </motion.button>
@@ -158,20 +143,23 @@ const ImageViewer = ({
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={handleNext}
-            className="absolute end-4 top-1/2 -translate-y-1/2 bg-black/60 text-white p-3 rounded-full hover:bg-black/80 transition-colors disabled:opacity-50 z-10"
-            disabled={images && currentIndex === images.length - 1}
+            className="absolute end-4 top-1/3 -translate-y-1/2 bg-black/60 text-white p-3 rounded-full hover:bg-black/80 transition-colors disabled:opacity-50 z-10"
+            disabled={!hasNextPage && currentIndex === images.length - 1}
           >
             <FiChevronRight size={20} className="rtl:rotate-180" />
           </motion.button>
 
           {/* Image Counter */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="relative bottom-4 text-white text-sm bg-black px-2 rounded-full  w-fit mx-auto"
-          >
-            {currentIndex + 1} / {images?.length || 0}
-          </motion.div>
+          <div className="flex flex-col items-center space-y-1 absolute bottom-4 left-1/2 transform -translate-x-1/2">
+            <div className="text-white text-sm bg-black/80 px-3 py-1 rounded-full">
+              {globalIndex + 1} / {totalItems || 0}
+            </div>
+            {totalPages > 1 && (
+              <div className="text-white text-xs bg-black/60 px-2 py-1 rounded-full">
+                {t("page_key") || "Page"} {page} / {totalPages}
+              </div>
+            )}
+          </div>
         </>
       )}
     </div>

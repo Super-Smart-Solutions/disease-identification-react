@@ -1,4 +1,3 @@
-import { useState, useRef } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import DropdownMenu from "./DropdownMenu";
@@ -42,7 +41,6 @@ const Pagination = ({
   const handlePageSizeSelect = (size) => {
     onPageSizeChange(size);
     onPageChange(1);
-    setIsPageSizeMenuOpen(false);
   };
 
   const pageSizeOptions = [20, 50, 100].map((size) => ({

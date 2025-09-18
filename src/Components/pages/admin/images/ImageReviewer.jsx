@@ -37,10 +37,15 @@ const ImageReviewer = ({ t, onClose }) => {
     currentImage,
     images,
     currentIndex,
+    globalIndex,
+    page,
+    totalPages,
+    totalItems,
     isLoading,
     handleNext,
     handleBack,
     handleDelete,
+    hasNextPage,
   } = useImageReviewer({
     selectedPlant,
     selectedDisease,
@@ -150,9 +155,14 @@ const ImageReviewer = ({ t, onClose }) => {
             currentImage={currentImage}
             images={images}
             currentIndex={currentIndex}
+            globalIndex={globalIndex}
+            page={page}
+            totalPages={totalPages}
+            totalItems={totalItems}
             isLoading={isLoading}
             handleBack={handleBack}
             handleNext={handleNext}
+            hasNextPage={hasNextPage}
           />
 
           {/* Action Buttons */}
@@ -183,17 +193,6 @@ const ImageReviewer = ({ t, onClose }) => {
           </p>
         </div>
       )}
-
-      {/* Footer Actions */}
-      <div className="flex justify-end space-x-3 pt-4">
-        <Button
-          variant="outlined"
-          onClick={onClose}
-          className="hover:scale-105 transition-transform"
-        >
-          {t("close_key")}
-        </Button>
-      </div>
 
       {/* Confirmation Modal */}
       {imageToDelete && (
