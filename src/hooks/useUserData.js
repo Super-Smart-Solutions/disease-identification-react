@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { setUser, setLoading, setError, logout } from '../redux/features/userSlice';
 import { fetchCurrentUser, updateUserById, uploadUserAvatar as UploadUserAvatarAPI } from '../api/userAPI';
 import { loginUser, resetPassword as resetPasswordAPI, forgotPassword } from '../api/authAPI';
@@ -88,7 +88,7 @@ export const useUserData = () => {
             dispatch(setError(errorMessage));
             throw errorMessage;
         }
-    }, [dispatch]); 
+    }, [dispatch]);
 
     //get otp for reset password
     const requestOTP = useCallback(async (resetData) => {
@@ -107,6 +107,23 @@ export const useUserData = () => {
         dispatch(logout());
     }, [dispatch]);
 
+
+    useEffect(() => {
+        if (!user) return;
+
+        // Check every minute if cookie still exists
+        const interval = setInterval(() => {
+            const storedUser = Cookies.get("user");
+            if (!storedUser) {
+                // Cookie expired → refetch user data
+                refetchUserData().catch(() => {
+                    logoutUser();
+                });
+            }
+        }, 60 * 1000); // every 1 minute
+
+        return () => clearInterval(interval);
+    }, [user, refetchUserData, logoutUser]);
     return {
         user,
         isLoading,

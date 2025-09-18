@@ -18,11 +18,14 @@ const UserDropdown = ({ t, user }) => {
           buttonContent={
             <div className=" flex gap-2 items-center">
               <img
-                src={user?.avatar || "/user-avatar.png"}
+                src={user?.avatar_url || "/user-avatar.png"}
                 alt="User avatar"
                 className="w-8 h-8 rounded-full object-cover"
               />
-              <strong className=" text-lg"> {`${t("welcome_key")}  ${user?.first_name}`} </strong>
+              <strong className=" text-lg">
+                {" "}
+                {`${t("welcome_key")}  ${user?.first_name}`}{" "}
+              </strong>
             </div>
           }
           options={options}

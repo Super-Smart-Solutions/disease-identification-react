@@ -9,7 +9,7 @@ const useProfileLogic = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [changedFields, setChangedFields] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [avatarPreview, setAvatarPreview] = useState(user?.avatar || null);
+    const [avatarPreview, setAvatarPreview] = useState(user?.avatar_url || null);
 
     const initialValues = {
         first_name: user?.first_name || "",
