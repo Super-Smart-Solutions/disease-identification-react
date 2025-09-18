@@ -44,6 +44,7 @@ const SelectInput = ({
           menu: (base) => ({
             ...base,
             borderColor: "#416a00",
+            zIndex: 1000,
           }),
         }}
         {...props}

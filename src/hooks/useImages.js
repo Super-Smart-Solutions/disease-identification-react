@@ -48,7 +48,9 @@ export const useUploadImage = ({ onSuccess }) => {
       return uploadImage({
         name: formattedName,
         plantId: category.value,
+        diseaseId: category.diseaseId,
         imageFile: processedImage,
+        imageType: category.imageType,
       });
     },
     onSuccess: (data) => {

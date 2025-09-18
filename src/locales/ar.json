@@ -796,5 +796,15 @@
   "password_reset_failed_key": "فشل إعادة تعيين كلمة المرور",
   "forgot_password_key": "هل نسيت كلمة المرور؟",
   "reset_now_key": "إعادة تعيين الآن",
-  "back_to_login_key": "العودة إلى تسجيل الدخول"
+  "back_to_login_key": "العودة إلى تسجيل الدخول",
+  "filter_images_key": "تصفية الصور",
+  "image_review_key": "مراجعة الصور",
+  "select_plant_disease_key": "اختر النبات والمرض",
+  "select_plant_disease_desc_key": "يرجى اختيار كل من النبات والمرض لعرض الصور للمراجعة.",
+  "delete_image_key": "حذف الصورة",
+  "image_deleted_successfully_key": "تم حذف الصورة بنجاح",
+  "image_load_error_key": "فشل في تحميل الصورة",
+  "swipe_navigate_key": "اسحب للتنقل بين الصور",
+  "keyboard_shortcuts_key": "اختصارات لوحة المفاتيح",
+  "navigate_key": "تنقل"
 }

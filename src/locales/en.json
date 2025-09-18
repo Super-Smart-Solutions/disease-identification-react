@@ -793,5 +793,15 @@
   "password_reset_failed_key": "Failed to reset password",
   "forgot_password_key": "Forgot Password?",
   "reset_now_key": "Reset Now",
-  "back_to_login_key": "Back to Login"
+  "back_to_login_key": "Back to Login",
+  "filter_images_key": "Filter Images",
+  "image_review_key": "Image Review",
+  "select_plant_disease_key": "Select Plant and Disease",
+  "select_plant_disease_desc_key": "Please select both a plant and disease to view images for review.",
+  "delete_image_key": "Delete Image",
+  "image_deleted_successfully_key": "Image deleted successfully",
+  "image_load_error_key": "Failed to load image",
+  "swipe_navigate_key": "Swipe to navigate between images",
+  "keyboard_shortcuts_key": "Keyboard shortcuts",
+  "navigate_key": "Navigate"
 }

@@ -61,7 +61,9 @@ export const useImageForm = ({ imageId, onSuccess, onClose, t }) => {
                 const selectedPlantOption = plantOptions.find(p => p.id === values.plant_id);
                 const category = {
                     value: values.plant_id,
-                    label: selectedPlantOption?.name || 'unknown'
+                    label: selectedPlantOption?.name || 'unknown',
+                    diseaseId: values.disease_id || null,
+                    imageType: values.image_type || null,
                 };
 
                 await uploadImage({
