@@ -56,7 +56,7 @@ export default function SoilCalculator() {
             >
               {({ isSubmitting, resetForm: formikReset }) => (
                 <Form className="space-y-4 min-h-[60vh] flex flex-col justify-between">
-                  <div className="cardIt">
+                  <div className="">
                     <h3 className="text-lg font-medium mb-4">
                       {t("soil_input_step_key")}
                     </h3>
@@ -106,11 +106,14 @@ export default function SoilCalculator() {
             >
               {({ isSubmitting }) => (
                 <Form className="space-y-4 min-h-[60vh] flex flex-col justify-between">
-                  <div className="cardIt">
+                  <div className="">
                     <h3 className="text-lg font-medium mb-4">
                       {t("upload_pdf_step_key")}
                     </h3>
-                    <UploadPdf name="uploadedPdf" />
+                    <UploadPdf
+                      assessmentResult={assessmentResult}
+                      name="uploadedPdf"
+                    />
                     {searchError && (
                       <div className="text-red-500 text-sm mt-2">
                         {searchError}
@@ -143,7 +146,7 @@ export default function SoilCalculator() {
 
           {currentStep === 3 && assessmentResult && (
             <div className="space-y-4 min-h-[60vh] flex flex-col justify-between">
-              <div className="cardIt">
+              <div className="">
                 <h3 className="text-lg font-medium mb-4">
                   {t("results_step_key")}
                 </h3>
@@ -179,7 +182,7 @@ export default function SoilCalculator() {
 
           {currentStep === 4 && assessmentResult && (
             <div className="space-y-4 min-h-[60vh] flex flex-col justify-between">
-              <div className="cardIt">
+              <div className="">
                 <h3 className="text-lg font-medium mb-4">
                   {t("summary_step_key")}
                 </h3>

@@ -3,7 +3,7 @@ import { useField } from "formik";
 import { useTranslation } from "react-i18next";
 import FileUpload from "../../FileUpload";
 
-export default function UploadPdf({ name }) {
+export default function UploadPdf({ name, assessmentResult }) {
   const { t } = useTranslation();
   const [field, , helpers] = useField(name);
 
@@ -14,13 +14,16 @@ export default function UploadPdf({ name }) {
 
   return (
     <div className="space-y-2">
-      <span className=" text-muted text-sm block mb-2" > {t("optional_key")}</span>
+      <span className=" text-muted text-sm block mb-2">
+        {" "}
+        {t("optional_key")}
+      </span>
       <FileUpload
         accept={{ "application/pdf": [".pdf"] }}
         multiple={false}
         selectedFile={field.value ? [field.value] : []}
         setSelectedFile={handleFileChange}
-        allowRemove={true}
+        allowRemove={!assessmentResult}
       />
       {field.value && (
         <div className="text-sm text-gray-600">

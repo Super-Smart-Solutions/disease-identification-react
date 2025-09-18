@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import AvatarEditor from "react-avatar-editor";
 import { motion, AnimatePresence } from "framer-motion";
+import { MdEdit } from "react-icons/md";
 import Button from "../../Button";
 
 const AvatarUpload = ({ handleAvatarChange, avatarPreview }) => {
@@ -14,17 +15,15 @@ const AvatarUpload = ({ handleAvatarChange, avatarPreview }) => {
   const [rotate, setRotate] = useState(0);
   const [error, setError] = useState(null);
 
-  const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB in bytes
+  const MAX_FILE_SIZE = 4 * 1024 * 1024;
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validate file type
       if (!file.type.startsWith("image/")) {
         setError(t("avatar_upload_failed") + ": Only image files are allowed");
         return;
       }
-      // Validate file size
       if (file.size > MAX_FILE_SIZE) {
         setError(
           t("avatar_upload_failed") + ": File size must be less than 4MB"
@@ -89,15 +88,13 @@ const AvatarUpload = ({ handleAvatarChange, avatarPreview }) => {
             scale={1.2}
             rotate={0}
             disableBoundaryChecks={false}
-            className="w-full h-full object-cover "
+            className="w-full h-full object-cover"
           />
           <div
-            className="relative"
+            className="absolute inset-0 flex items-center justify-center bg-black/50 bg opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
             onClick={() => fileInputRef.current?.click()}
           >
-            <span className="text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              {t("edit_key")}
-            </span>
+            <MdEdit className="text-white text-3xl" />
           </div>
           <input
             type="file"

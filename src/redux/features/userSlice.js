@@ -1,15 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
-import tokenManager from '../../Components/helpers/tokenManager';
+import { createSlice } from "@reduxjs/toolkit";
+import tokenManager from "../../Components/helpers/tokenManager";
+import Cookies from "js-cookie";
 
 const initialState = {
-    user: JSON.parse(localStorage.getItem('user')) || null,
+    user: Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null,
     isLoading: false,
     isError: false,
     error: null,
 };
 
 const userSlice = createSlice({
-    name: 'user',
+    name: "user",
     initialState,
     reducers: {
         setUser: (state, action) => {
@@ -18,7 +19,11 @@ const userSlice = createSlice({
             state.isLoading = false;
             state.isError = false;
             state.error = null;
-            localStorage.setItem('user', JSON.stringify(action.payload));
+
+            // Save in cookies for 45 minutes
+            Cookies.set("user", JSON.stringify(action.payload), { expires: 45 / 1440 });
+            // 45 mins = 45/1440 days
+
             if (accessToken && refreshToken) {
                 tokenManager.initialize(accessToken, refreshToken);
             }
@@ -29,7 +34,7 @@ const userSlice = createSlice({
             state.isError = false;
             state.error = null;
 
-            localStorage.removeItem('user');
+            Cookies.remove("user");
             tokenManager.redirectToLogin();
         },
         setLoading: (state, action) => {
