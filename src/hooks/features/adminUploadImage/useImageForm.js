@@ -13,7 +13,7 @@ import { fetchDiseasesByPlant, fetchPlants } from '../../../api/plantAPI';
 export const useImageForm = ({ imageId, onSuccess, onClose, t }) => {
     const isEdit = !!imageId;
     const { data: imageData } = useImageById(imageId);
-    const { mutateAsync: uploadImage, isPending: isUploading } = useUploadImage();
+    const { upload: uploadImage, isUploading } = useUploadImage({ onSuccess });
     const { mutateAsync: updateImage, isPending: isUpdating } = useUpdateImage();
     const formRef = useRef();
     const [selectedPlant, setSelectedPlant] = useState(null);
@@ -56,18 +56,18 @@ export const useImageForm = ({ imageId, onSuccess, onClose, t }) => {
 
     const handleSubmit = async (values, { setSubmitting }) => {
         try {
-            const formData = new FormData();
-            formData.append('name', values.name || values.image_file[0]?.name);
-            formData.append('image_type', values.image_type);
-            formData.append('plant_id', values.plant_id);
-            formData.append('disease_id', values.disease_id);
-
-            if (!isEdit && values.image_file) {
-                formData.append('image_file', values.image_file);
-            }
-
             if (!isEdit) {
-                await uploadImage(formData);
+
+                const selectedPlantOption = plantOptions.find(p => p.id === values.plant_id);
+                const category = {
+                    value: values.plant_id,
+                    label: selectedPlantOption?.name || 'unknown'
+                };
+
+                await uploadImage({
+                    file: values.image_file,
+                    category: category
+                });
             } else {
                 await updateImage({ ...values, id: imageId });
             }
