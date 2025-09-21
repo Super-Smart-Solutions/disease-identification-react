@@ -48,7 +48,7 @@ export const uploadImageAdmin = async (formData) => {
   }
 };
 
-export const uploadImage = async ({ name, plantId, imageFile }) => {
+export const uploadImage = async ({ name, plantId, imageFile, diseaseId, imageType }) => {
   const formData = new FormData();
 
 
@@ -60,7 +60,7 @@ export const uploadImage = async ({ name, plantId, imageFile }) => {
   formData.append("image_file", imageFile);
   imageType && formData.append("image_type", imageType);
 
-  
+
   const response = await axiosInstance.post(UPLOAD_ENDPOINT, formData);
 
   return response.data;
