@@ -52,11 +52,22 @@ export const visualizeInference = async (inferenceId) => {
   return response.data;
 };
 
-// Get deep analysis results for inference
+// Get deep analysis results for inference (legacy endpoint)
 export const analyzeInference = async (inferenceId) => {
   const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/${inferenceId}/deep-analysis`);
   return response.data;
 };
+
+// New Deep Analysis flow - posts answers and returns plain text
+export const postDeepAnalysis = async ({ answer_1, answer_2, answer_3, locale, inference_id }) => {
+  const payload = { answer_1, answer_2, answer_3, locale };
+  const response = await axiosInstance.post(`/inferences/${inference_id}/deep-analysis`, payload, {
+    responseType: "text",
+    headers: { Accept: "text/plain, */*" },
+  });
+  return response.data; // plain text string
+};
+
 // Get aggregates
 export const getAggregates = async (start_date, end_date) => {
   const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/aggregates`, {

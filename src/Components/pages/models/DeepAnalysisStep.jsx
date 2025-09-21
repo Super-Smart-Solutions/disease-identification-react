@@ -1,191 +1,167 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useReducer } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom"; // Import for navigation
 import Button from "../../Button";
-import { fetchDiseaseById } from "../../../api/diseaseAPI";
-import {
-  analyzeInference,
-  visualizeInference,
-} from "../../../api/inferenceAPI";
-import { RiImageEditLine } from "react-icons/ri";
-import { GiNotebook } from "react-icons/gi";
-import { useDispatch } from "react-redux";
-import { useReviewForm } from "../../../hooks/features/rating/useReviewForm";
-import { useUserData } from "../../../hooks/useUserData";
+import Modal from "../../Modal";
+import { postDeepAnalysis } from "../../../api/inferenceAPI";
 
 export default function DeepAnalysisStep({ modelingData, setModelingData }) {
-  const { t } = useTranslation();
-  const navigate = useNavigate(); // Navigation function
-  const { user } = useUserData();
-  const { dispatch } = useDispatch();
-  const { handleOpenModal: openReviewModal } = useReviewForm({
-    user,
-    dispatch,
-    navigate,
-  });
-  const [diseaseData, setDiseaseData] = useState(null);
-  const [confidenceScore, setConfidenceScore] = useState(null);
-  const [predictionFailed, setPredictionFailed] = useState(false);
-  const [visualizationUrl, setVisualizationUrl] = useState(null); // Visualization image URL
+  const { t, i18n } = useTranslation();
+  const isAr = useMemo(() => i18n.language?.toLowerCase().startsWith("ar"), [i18n.language]);
 
-  useEffect(() => {
-    const fetchPrediction = async () => {
-      try {
-        if (!modelingData?.inference_id) return;
+  // Consolidated state to reduce re-renders and simplify updates
+  const initialState = useMemo(
+    () => ({
+      isOpen: false,
+      currentStep: 1, // 1..3 questions, 4: results
+      answers: { answer_1: "", answer_2: "", answer_3: "" },
+      errors: {},
+      submitting: false,
+      resultText: "",
+      apiError: "",
+    }),
+    []
+  );
 
-        const response = await analyzeInference(modelingData.inference_id);
+  function reducer(state, action) {
+    return { ...state, ...action };
+  }
 
-        if (response?.status === 3) {
-          setConfidenceScore(response.confidence_level * 100);
-          setPredictionFailed(false);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { isOpen, currentStep, answers, errors, submitting, resultText, apiError } = state;
 
-          // Fetch disease details
-          if (response.disease_id) {
-            const diseaseDetails = await fetchDiseaseById(response.disease_id);
-            setDiseaseData(diseaseDetails); // Store full disease data
-          }
-        } else {
-          console.warn("analysis Failed:", response);
-          setPredictionFailed(true);
-          setModelingData((prev) => ({
-            ...prev,
-            is_deep: true,
-          }));
-        }
+  const qLabels = useMemo(
+    () => ({
+      1: t("deep_analysis_question_1_key"),
+      2: t("deep_analysis_question_2_key"),
+      3: t("deep_analysis_question_3_key"),
+    }),
+    [i18n.language]
+  );
 
-        // Fetch visualization (attention map)
-        const visualizationResponse = await visualizeInference(
-          modelingData.inference_id
-        );
-        if (visualizationResponse?.attention_map_url) {
-          setVisualizationUrl(visualizationResponse.attention_map_url);
-        }
-        // Wait 2 seconds then open review modal after successful analysis
-        setTimeout(() => {
-          openReviewModal();
-        }, 2000);
-      } catch (error) {
-        console.error("Error in analysis request:", error);
-      }
-    };
-
-    fetchPrediction();
-  }, [modelingData?.inference_id]);
-  const navigateToDatabase = () => {
-    const diseaseId = diseaseData?.id;
-    const plantId = modelingData?.category?.value;
-
-    if (!diseaseId) {
-      console.warn("Disease ID is missing. Navigation cancelled.");
-      return; // Stop navigation if disease ID is not valid
+  const validateStep = (step) => {
+    const key = `answer_${step}`;
+    const newErrors = {};
+    if (!answers[key]?.trim()) {
+      newErrors[key] = t("field_required_key");
     }
-
-    const query = new URLSearchParams();
-
-    query.set("disease_id", diseaseId);
-    if (plantId) query.set("plant_id", plantId);
-
-    navigate(`/database?${query.toString()}`);
+    if (Object.keys(newErrors).length) {
+      dispatch({ errors: { ...errors, ...newErrors } });
+      return false;
+    }
+    return true;
   };
 
-  const handleTryDifferentImage = () => {
-    setModelingData((prev) => ({
-      category: prev.category,
-      selected_file: [],
-      category: {},
-    }));
+  const handleNext = () => {
+    dispatch({ apiError: "" });
+    if (currentStep <= 3 && !validateStep(currentStep)) return;
+    dispatch({ currentStep: Math.min(currentStep + 1, 4) });
+  };
+
+  const handlePrev = () => {
+    dispatch({ apiError: "" });
+    dispatch({ currentStep: Math.max(currentStep - 1, 1) });
+  };
+
+  const handleOpen = () => {
+    dispatch({ isOpen: true, currentStep: 1, apiError: "", resultText: "" });
+  };
+
+  const handleClose = () => {
+    dispatch({ isOpen: false, currentStep: 1, apiError: "" });
+  };
+
+  const handleChange = (key, val) => {
+    dispatch({
+      answers: { ...answers, [key]: val },
+      errors: { ...errors, [key]: "" },
+    });
+  };
+
+  const handleSubmit = async () => {
+    dispatch({ apiError: "" });
+    // Validate last step
+    if (!validateStep(3)) return;
+
+    if (!modelingData?.inference_id) {
+      dispatch({ apiError: t("missing_inference_id_key") });
+      return;
+    }
+
+    try {
+      dispatch({ submitting: true });
+      const locale = isAr ? "ar" : "en";
+      const resText = await postDeepAnalysis({
+        ...answers,
+        locale,
+        inference_id: modelingData.inference_id,
+      });
+      dispatch({
+        resultText: typeof resText === "string" ? resText : String(resText),
+        currentStep: 4,
+      });
+    } catch (err) {
+      const msg = err?.response?.data || err?.message || t("deep_analysis_error_key");
+      dispatch({ apiError: msg });
+    } finally {
+      dispatch({ submitting: false });
+    }
+  };
+
+  const renderStep = () => {
+    if (currentStep === 4) {
+      return (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">{t("deep_analysis_result_title_key")}</h3>
+          {apiError && <div className="text-red-500 text-sm">{apiError}</div>}
+          <div className="cardIt whitespace-pre-wrap break-words p-3">{resultText}</div>
+          <div className="flex justify-end gap-2 mt-4">
+            <Button variant="outlined" onClick={handleClose}>{t("close_key")}</Button>
+          </div>
+        </div>
+      );
+    }
+
+    const key = `answer_${currentStep}`;
+    return (
+      <div className="space-y-4">
+        <p className="text-sm text-gray-600">{qLabels[currentStep]}</p>
+        <textarea
+          className="custom-input min-h-[120px]"
+          value={answers[key]}
+          onChange={(e) => handleChange(key, e.target.value)}
+          placeholder={t("deep_analysis_placeholder_key")}
+        />
+        {errors[key] && <div className="text-red-500 text-sm">{errors[key]}</div>}
+        {apiError && <div className="text-red-500 text-sm">{apiError}</div>}
+
+        <div className="flex justify-between gap-2 mt-4">
+          <Button width="full" variant="outlined" onClick={handlePrev} disabled={currentStep === 1 || submitting}>
+            {t("previous_key")}
+          </Button>
+          {currentStep < 3 ? (
+            <Button width="full" onClick={handleNext} disabled={submitting}>{t("next_key")}</Button>
+          ) : (
+            <Button width="full" onClick={handleSubmit} loading={submitting} disabled={submitting}>
+              {t("submit_key")}
+            </Button>
+          )}
+        </div>
+      </div>
+    );
   };
 
   return (
-    <div>
-      {modelingData?.selected_file.map((file, index) => (
-        <div
-          key={index}
-          className="flex items-center p-2 border rounded-lg bg-gray-50 flex-col gap-4"
-        >
-          {visualizationUrl ? (
-            <>
-              <img
-                src={visualizationUrl}
-                alt={file.name}
-                className="w-300 h-80 object-cover rounded-md"
-              />
-              <span>{t("uploaded_image_key")}</span>
-            </>
-          ) : (
-            <>
-              <span>{t("loading image.")}</span>
-            </>
-          )}
+    <div className="space-y-4">
+      <div className="cardIt p-4 flex flex-col items-center">
+        <p className="text-gray-700 mb-3">
+          {t("deep_analysis_intro_key")}
+        </p>
+        <Button  onClick={handleOpen} className="mt-2 mx-auto">{t("go_to_deep_analysis_key")}</Button>
+      </div>
 
-          <div className="flex flex-col  p-4 rounded-2xl">
-            <span>{`${t("category_key")} : ${
-              modelingData?.category?.label
-            }`}</span>
-
-            {predictionFailed ? (
-              <>
-                <span className="text-red-500">
-                  {t("detection_inconclusive_message")}
-                </span>
-                <Button
-                  onClick={() => {
-                    setModelingData((prev) => ({
-                      ...prev,
-                      is_deep: true,
-                    }));
-                  }}
-                >
-                  {t("go_to_deep_analysis_key")}
-                </Button>
-              </>
-            ) : (
-              <>
-                <span>
-                  {`${t("selected_disease")} : ${t(
-                    `diseases.${diseaseData?.english_name}`,
-                    {
-                      defaultValue:
-                        diseaseData?.english_name || t("loading_key"),
-                    }
-                  )}`}
-                </span>
-
-                <span>{`${t("confidence_level")} : ${
-                  confidenceScore !== null
-                    ? `${confidenceScore.toFixed(2)}%`
-                    : t("loading_key")
-                }`}</span>
-                <Button
-                  className="flex items-center gap-2 mx-auto mt-2"
-                  onClick={navigateToDatabase}
-                >
-                  <GiNotebook size={22} />
-                  {t("read_more_about_disease_key")}
-                </Button>
-              </>
-            )}
-          </div>
-
-          {predictionFailed ? (
-            <></>
-          ) : (
-            <>
-              <div>
-                <div className="flex gap-2">
-                  <Button
-                    className="flex items-center gap-2"
-                    onClick={handleTryDifferentImage}
-                  >
-                    <RiImageEditLine size={22} />
-                    {t("try_with_a_different_image_key")}
-                  </Button>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-      ))}
+      <Modal isOpen={isOpen} onClose={handleClose} title={t("deep_analytics_key")}>
+        {renderStep()}
+      </Modal>
     </div>
   );
 }
