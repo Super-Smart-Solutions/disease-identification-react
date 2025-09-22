@@ -132,7 +132,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
           </div>
 
           {/* Results Panel */}
-          <div className="p-4 bg-gray-100 rounded-lg flex flex-col  gap-4 items-center ">
+          <div className="p-4 bg-gray-100 rounded-lg flex flex-col gap-4 items-center ">
             <div className="font-medium">
               {t("category_key")}: {modelingData?.category?.label}
             </div>
@@ -143,7 +143,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
                 <div className="h-4 w-48 bg-gray-300 rounded animate-pulse" />
                 <div className="h-10 w-56 bg-gray-300 rounded animate-pulse mx-auto" />
               </div>
-            ) : (
+            ) : prediction.status === 2 ? (
               <div className="space-y-3">
                 {t("selected_disease")}:{" "}
                 {isHealthy
@@ -151,7 +151,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
                   : t(`diseases.${diseaseData?.english_name}`, {
                       defaultValue: diseaseData?.english_name || t("loading"),
                     })}
-                <span className=" block">{`${t("confidence_level")} : ${
+                <span className="block">{`${t("confidence_level")} : ${
                   confidenceScore !== null
                     ? `${confidenceScore.toFixed(2)}%`
                     : t("loading_key")
@@ -166,15 +166,20 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
                   </Button>
                 )}
               </div>
+            ) : (
+              <div className="text-red-500 text-center mb-2">
+                {t("detection_inconclusive_message")}
+              </div>
             )}
           </div>
+
 
           {/* Action Buttons */}
           {predictionFailed ? (
             <div className="flec flex-col items-center ">
-              <div className="text-red-500 text-center mb-2">
+{/*              <div className="text-red-500 text-center mb-2">
                 {t("detection_inconclusive_message")}
-              </div>
+              </div>*/}
               <div className=" flex gap-2 justify-center">
                 <Button onClick={handleDeepAnalysis}>
                   {t("go_to_deep_analysis_key")}

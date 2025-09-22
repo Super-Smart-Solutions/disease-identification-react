@@ -5,6 +5,8 @@ import { fetchCurrentUser, updateUserById, uploadUserAvatar as UploadUserAvatarA
 import { loginUser, resetPassword as resetPasswordAPI, forgotPassword } from '../api/authAPI';
 import { useNavigate } from 'react-router-dom';
 import tokenManager from '../Components/helpers/tokenManager';
+import Cookies from "js-cookie";
+
 
 export const useUserData = () => {
     const dispatch = useDispatch();
