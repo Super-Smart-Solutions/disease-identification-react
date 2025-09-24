@@ -8,6 +8,7 @@ import { useDiagnosticQuestionItems } from "../../../hooks/useDiagnosticQuestion
 import { useDiseaseById } from "../../../hooks/useDiseases";
 import { RiImageEditLine } from "react-icons/ri";
 import { GiNotebook } from "react-icons/gi";
+import { useNavigate } from "react-router-dom";
 
 export default function DeepAnalysisStep({ modelingData, setModelingData }) {
   const { t, i18n } = useTranslation();
@@ -15,7 +16,7 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
     () => i18n.language?.toLowerCase().startsWith("ar"),
     [i18n.language]
   );
-
+  const navigate = useNavigate();
   // Resolve plant questions dynamically from modelingData.category.value
   const plantId = modelingData?.category?.value;
   const questionItems = useDiagnosticQuestionItems({ plant_id: plantId, t }); // [{ key, label }]
@@ -47,7 +48,7 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
   // Consolidated state to reduce re-renders and simplify updates
   const initialState = useMemo(
     () => ({
-      isOpen: true,
+      isOpen: false,
       currentStep: 1, // 1..N questions, N+1: results
       answers: {}, // dynamic mapping by question key
       errors: {},
@@ -246,11 +247,12 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
   }, [setModelingData]);
 
   // Derive result view data
-  const attentionMapDefaultUrl =
-    "https://platform-ui-uploads.oss-me-central-1.aliyuncs.com/attention_maps%2F2535_1758718633.png?OSSAccessKeyId=LTAI5tLFdFsy3dprbunHT3pZ&Expires=1758722430&Signature=SiddgGl364K1KSIUVAJTld5%2BWDc%3D";
-  const attentionMapUrl = result?.attention_map_url || attentionMapDefaultUrl;
+
+  const attentionMapUrl = result?.attention_map_url;
   const reasoning = result?.deep_analysis_reasoning || resultText || "";
   const visualIndicators = result?.deep_analysis_visual_indicators;
+  const confidenceScore = result?.confidence_level;
+
   const diseaseId = result?.disease_id;
   const {
     data: diseaseData,
@@ -352,7 +354,7 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
                   })}
                   :
                 </span>{" "}
-                {result?.confidence}
+                {confidenceScore !== null && `${confidenceScore.toFixed(2)}%`}
               </p>
               <p className="text-sm text-gray-700">{reasoning}</p>
             </div>
@@ -407,7 +409,7 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
             )}
 
             {/* Try Different Image Button under results */}
-            <div className="mt-4 flex justify-center gap-4">
+            <div className="mt-4 flex justify-center gap-4 w-full ">
               <Button
                 className="flex items-center gap-2"
                 onClick={handleTryDifferentImage}
@@ -417,7 +419,7 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
               </Button>
               {diseaseId && (
                 <Button
-                  className="flex items-center gap-2 mx-auto mt-2"
+                  className="flex items-center gap-2 "
                   onClick={navigateToDatabase}
                 >
                   <GiNotebook size={22} />
@@ -430,7 +432,7 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
       </div>
 
       <Modal
-        isOpen={isOpen}
+        isOpen={!reasoning || reasoning === ""}
         onClose={handleClose}
         title={t("deep_analytics_key")}
       >
