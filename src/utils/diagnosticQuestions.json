@@ -1,0 +1,40 @@
+{
+  "21": {
+    "0": ["what_are_the_symptoms_you_see"]
+  },
+  "15": {
+    "0": ["what_are_the_symptoms_you_see"]
+  },
+  "18": {
+    "0": ["what_are_the_symptoms_you_see"]
+  },
+  "19": {
+    "0": ["what_are_the_symptoms_you_see"]
+  },
+  "20": {
+    "0": ["what_are_the_symptoms_you_see"]
+  },
+  "27": {
+    "0": ["what_are_the_symptoms_you_see"],
+    "71": [
+      "what_do_you_notice_on_the_plant_surface",
+      "when_you_touch_the_insect_what_happens",
+      "with_a_magnifying_lens_what_do_you_see",
+      "which_plant_parts_are_most_affected"
+    ]
+  },
+  "31": {
+    "0": ["what_are_the_symptoms_you_see"],
+    "84": ["is_there_severe_itching_scaling_localized_hair_loss"],
+    "77": ["is_there_itching_small_parasites_gradual_thinness"],
+    "76": ["are_there_any_visible_hard_lumps_on_the_skin_fever_loss_of_appetite"],
+    "75": [
+      "is_there_swelling_change_in_color_consistency_of_milk",
+      "is_there_swelling_bad_smell_severe_lameness",
+      "are_there_blisters_or_ulcers_in_the_mouth_and_tongue_drooling"
+    ]
+  },
+  "33": {
+    "0": ["what_are_the_symptoms_you_see"]
+  }
+}

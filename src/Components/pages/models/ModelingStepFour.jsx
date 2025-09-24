@@ -70,21 +70,21 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
     retry: false,
   });
 
-  console.log("prediction: ", prediction);
-
   const isHealthy = prediction?.status === 2 && !prediction?.disease_id;
   const predictionFailed =
     prediction !== undefined && (prediction?.status !== 2 || isPredictionError);
   const confidenceScore = prediction?.confidence_level * 100;
   const visualizationUrl = visualization?.attention_map_url;
 
-
-
   const handleTryDifferentImage = () => {
     setModelingData((prev) => ({
-      category: prev.category,
+      ...prev,
       selected_file: [],
-      category: {},
+      image_id: null,
+      inference_id: null,
+      is_final: false,
+      is_deep: false,
+      deep_analysis_result: null,
     }));
   };
 
@@ -109,7 +109,6 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
     navigate(`/database?${query.toString()}`);
   };
 
-
   if (!modelingData?.selected_file?.length) {
     return <div>{t("no_image_selected")}</div>;
   }
@@ -132,42 +131,42 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
           </div>
 
           {/* Results Panel */}
-          <div className="p-4 bg-gray-100 rounded-lg flex flex-col  gap-4 items-center ">
-            <div className="font-medium">
-              {t("category_key")}: {modelingData?.category?.label}
-            </div>
+          {prediction?.status !== -2 && (
+            <div className="p-4 bg-gray-100 rounded-lg flex flex-col  gap-4 items-center ">
+              <div className="font-medium">
+                {t("category_key")}: {modelingData?.category?.label}
+              </div>
 
-            {isDiseaseLoading || !prediction ? (
-              <div className="space-y-3">
-                <div className="h-4 w-40 bg-gray-300 rounded animate-pulse" />
-                <div className="h-4 w-48 bg-gray-300 rounded animate-pulse" />
-                <div className="h-10 w-56 bg-gray-300 rounded animate-pulse mx-auto" />
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {t("selected_disease")}:{" "}
-                {isHealthy
-                  ? t("healthy_key")
-                  : t(`diseases.${diseaseData?.english_name}`, {
-                      defaultValue: diseaseData?.english_name || t("loading"),
-                    })}
-                <span className=" block">{`${t("confidence_level")} : ${
-                  confidenceScore !== null
-                    ? `${confidenceScore.toFixed(2)}%`
-                    : t("loading_key")
-                }`}</span>
-                {confidenceScore && !isHealthy && diseaseData && (
-                  <Button
-                    className="flex items-center gap-2 mx-auto mt-2"
-                    onClick={navigateToDatabase}
-                  >
-                    <GiNotebook size={22} />
-                    {t("read_more_about_disease_key")}
-                  </Button>
-                )}
-              </div>
-            )}
-          </div>
+              {isDiseaseLoading || !prediction ? (
+                <div className="space-y-3">
+                  <div className="h-4 w-40 bg-gray-300 rounded animate-pulse" />
+                  <div className="h-4 w-48 bg-gray-300 rounded animate-pulse" />
+                  <div className="h-10 w-56 bg-gray-300 rounded animate-pulse mx-auto" />
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {t("selected_disease")}:{" "}
+                  {isHealthy
+                    ? t("healthy_key")
+                    : t(`diseases.${diseaseData?.english_name}`, {
+                        defaultValue: diseaseData?.english_name || t("loading"),
+                      })}
+                  <span className=" block">{`${t("confidence_level")} : ${
+                    confidenceScore !== null && `${confidenceScore.toFixed(2)}%`
+                  }`}</span>
+                  {confidenceScore && !isHealthy && diseaseData && (
+                    <Button
+                      className="flex items-center gap-2 mx-auto mt-2"
+                      onClick={navigateToDatabase}
+                    >
+                      <GiNotebook size={22} />
+                      {t("read_more_about_disease_key")}
+                    </Button>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Action Buttons */}
           {predictionFailed ? (

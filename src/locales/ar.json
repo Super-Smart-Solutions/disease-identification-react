@@ -821,5 +821,17 @@
   "keyboard_shortcuts_key": "اختصارات لوحة المفاتيح",
   "navigate_key": "تنقل",
   "page_key": "الصفحة",
-  "deep_analysis_placeholder_key": "اكتب إجابتك هنا"
+  "deep_analysis_placeholder_key": "اكتب إجابتك هنا",
+  "what_are_the_symptoms_you_see": "ما هي الأعراض التي تراها؟",
+  "what_do_you_notice_on_the_plant_surface": "ماذا تلاحظ على سطح النبات؟",
+  "when_you_touch_the_insect_what_happens": "عند لمس الحشرة، ماذا يحدث؟",
+  "with_a_magnifying_lens_what_do_you_see": "باستخدام عدسة مكبرة، ماذا ترى؟",
+  "which_plant_parts_are_most_affected": "ما هي الأجزاء الأكثر تأثرًا في النبات؟",
+  "is_there_severe_itching_scaling_localized_hair_loss": "هل يوجد حكة شديدة + تقشر + تساقط شعر موضعي؟",
+  "is_there_itching_small_parasites_gradual_thinness": "هل يوجد حكة + طفيليات صغيرة + نحول تدريجي؟",
+  "are_there_any_visible_hard_lumps_on_the_skin_fever_loss_of_appetite": "هل توجد كتل صلبة مرئية على الجلد + حمى + فقدان الشهية؟",
+  "is_there_swelling_change_in_color_consistency_of_milk": "هل يوجد تورم + تغيير في لون/قوام الحليب؟",
+  "is_there_swelling_bad_smell_severe_lameness": "هل يوجد تورم + رائحة كريهة + عرج شديد؟",
+  "are_there_blisters_or_ulcers_in_the_mouth_and_tongue_drooling": "هل توجد فقاعات أو تقرحات في الفم واللسان + سيلان اللعاب؟",
+  "deep_analysis_visual_indicators_key": "العوامل المرئية للتحليل العميق"
 }

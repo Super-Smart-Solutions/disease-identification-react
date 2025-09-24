@@ -815,5 +815,17 @@
   "keyboard_shortcuts_key": "Keyboard shortcuts",
   "navigate_key": "Navigate",
   "page_key": "Page",
-  "deep_analysis_placeholder_key": "Type your answer here"
+  "deep_analysis_placeholder_key": "Type your answer here",
+  "what_are_the_symptoms_you_see": "What are the symptoms you see?",
+  "what_do_you_notice_on_the_plant_surface": "What do you notice on the plant surface?",
+  "when_you_touch_the_insect_what_happens": "When you touch the insect, what happens?",
+  "with_a_magnifying_lens_what_do_you_see": "With a magnifying lens, what do you see?",
+  "which_plant_parts_are_most_affected": "Which plant parts are most affected?",
+  "is_there_severe_itching_scaling_localized_hair_loss": "Is there severe itching + scaling + localized hair loss?",
+  "is_there_itching_small_parasites_gradual_thinness": "Is there itching + small parasites + gradual thinness?",
+  "are_there_any_visible_hard_lumps_on_the_skin_fever_loss_of_appetite": "Are there any visible hard lumps on the skin + fever + loss of appetite?",
+  "is_there_swelling_change_in_color_consistency_of_milk": "Is there swelling + change in color/consistency of milk?",
+  "is_there_swelling_bad_smell_severe_lameness": "Is there swelling + bad smell + severe lameness?",
+  "are_there_blisters_or_ulcers_in_the_mouth_and_tongue_drooling": "Are there blisters or ulcers in the mouth and tongue + drooling?" , 
+  "deep_analysis_visual_indicators_key" : "Deep Analysis Visual Indicators"
 }

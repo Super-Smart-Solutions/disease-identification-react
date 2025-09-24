@@ -58,14 +58,34 @@ export const analyzeInference = async (inferenceId) => {
   return response.data;
 };
 
-// New Deep Analysis flow - posts answers and returns plain text
-export const postDeepAnalysis = async ({ answer_1, answer_2, answer_3, locale, inference_id }) => {
-  const payload = { answer_1, answer_2, answer_3, locale };
-  const response = await axiosInstance.post(`/inferences/${inference_id}/deep-analysis`, payload, {
-    responseType: "text",
-    headers: { Accept: "text/plain, */*" },
-  });
-  return response.data; // plain text string
+// Deep Analysis flow 
+export const postDeepAnalysis = async ({ inference_id, locale, questions = [], answers = [] }) => {
+  // Create an object mapping questions to their corresponding answers
+  const answersMap = questions.reduce((acc, question, index) => {
+    acc[question] = answers[index] || null;
+    return acc;
+  }, {});
+
+  const payload = { 
+    locale,
+    answers: answersMap
+  };
+
+  const response = await axiosInstance.post(
+    `/inferences/${inference_id}/deep-analysis`,
+    payload,
+    {
+      responseType: "json",
+      headers: { Accept: "application/json" },
+    }
+  );
+  // Expecting JSON with fields like: deep_analysis_reasoning, deep_analysis_visual_indicators, attention_map_url, disease_id
+  // Fallback: if server returns text/plain, wrap it into an object
+  const data = response?.data;
+  if (typeof data === "string") {
+    return { deep_analysis_reasoning: data };
+  }
+  return data;
 };
 
 // Get aggregates
