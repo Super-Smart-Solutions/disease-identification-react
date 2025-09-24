@@ -7,6 +7,7 @@ import { postDeepAnalysis } from "../../../api/inferenceAPI";
 import { useDiagnosticQuestionItems } from "../../../hooks/useDiagnosticQuestions";
 import { useDiseaseById } from "../../../hooks/useDiseases";
 import { RiImageEditLine } from "react-icons/ri";
+import { GiNotebook } from "react-icons/gi";
 
 export default function DeepAnalysisStep({ modelingData, setModelingData }) {
   const { t, i18n } = useTranslation();
@@ -46,7 +47,7 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
   // Consolidated state to reduce re-renders and simplify updates
   const initialState = useMemo(
     () => ({
-      isOpen: false,
+      isOpen: true,
       currentStep: 1, // 1..N questions, N+1: results
       answers: {}, // dynamic mapping by question key
       errors: {},
@@ -90,7 +91,11 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
 
   // Hydrate persisted deep analysis result from global modelingData when component mounts or re-mounts
   useEffect(() => {
-    if (!result && modelingData?.deep_analysis_result && modelingData?.inference_id) {
+    if (
+      !result &&
+      modelingData?.deep_analysis_result &&
+      modelingData?.inference_id
+    ) {
       dispatch({ result: modelingData.deep_analysis_result });
     }
   }, [modelingData?.deep_analysis_result, modelingData?.inference_id]);
@@ -140,17 +145,22 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
     }
   };
 
-  const handleOpen = () => {
-    const initAnswers = Object.fromEntries(items.map((it) => [it.key, ""]));
-    dispatch({
-      isOpen: true,
-      currentStep: 1,
-      apiError: "",
-      resultText: "",
-      answers: initAnswers,
-    });
-  };
+  const navigateToDatabase = () => {
+    const diseaseId = diseaseData?.id;
+    const plantId = modelingData?.category?.value;
 
+    if (!diseaseId) {
+      console.warn("Disease ID is missing. Navigation cancelled.");
+      return; // Stop navigation if disease ID is not valid
+    }
+
+    const query = new URLSearchParams();
+
+    query.set("disease_id", diseaseId);
+    if (plantId) query.set("plant_id", plantId);
+
+    navigate(`/database?${query.toString()}`);
+  };
   const handleClose = () => {
     dispatch({ isOpen: false, currentStep: 1, apiError: "" });
   };
@@ -178,7 +188,11 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
       const cached = cacheRef.current[inferenceId];
       if (cached) {
         // Persist to global state so it survives unmount/remount
-        setModelingData((prev) => ({ ...prev, deep_analysis_result: cached, is_deep: true }));
+        setModelingData((prev) => ({
+          ...prev,
+          deep_analysis_result: cached,
+          is_deep: true,
+        }));
         dispatch({ result: cached, isOpen: false, currentStep: 1 });
         return;
       }
@@ -200,7 +214,11 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
       // Cache and display
       cacheRef.current[inferenceId] = data;
       // Persist to global state so result survives closing/reopening the step
-      setModelingData((prev) => ({ ...prev, deep_analysis_result: data, is_deep: true }));
+      setModelingData((prev) => ({
+        ...prev,
+        deep_analysis_result: data,
+        is_deep: true,
+      }));
       dispatch({ result: data, isOpen: false, currentStep: 1 });
     } catch (err) {
       const msg =
@@ -327,6 +345,15 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
               <h4 className="font-semibold text-gray-800 mb-1">
                 {t("deep_analysis_result_title_key")}
               </h4>
+              <p>
+                <span className="font-semibold text-sm text-gray-700">
+                  {t("confidence_score_key", {
+                    defaultValue: "Confidence Score",
+                  })}
+                  :
+                </span>{" "}
+                {result?.confidence}
+              </p>
               <p className="text-sm text-gray-700">{reasoning}</p>
             </div>
 
@@ -367,49 +394,38 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
                     })}
                   </p>
                 ) : (
-                  <div className="text-sm text-gray-700">
-                    <p>
-                      <span className="font-semibold">
-                        {t("name_key", { defaultValue: "Name" })}:
-                      </span>{" "}
-                      {isAr
-                        ? diseaseData?.arabic_name
-                        : diseaseData?.english_name}
-                    </p>
-                    {diseaseData?.description && (
-                      <p className="mt-1">
-                        <span className="font-semibold">
-                          {t("description_key", {
-                            defaultValue: "Description",
-                          })}
-                          :
-                        </span>{" "}
-                        {diseaseData.description}
-                      </p>
-                    )}
-                  </div>
+                  <p>
+                    <span className="font-semibold text-sm text-gray-700">
+                      {t("name_key", { defaultValue: "Name" })}:
+                    </span>{" "}
+                    {isAr
+                      ? diseaseData?.arabic_name
+                      : diseaseData?.english_name}
+                  </p>
                 )}
               </div>
             )}
 
             {/* Try Different Image Button under results */}
-            <div className="mt-4 flex justify-center">
-              <Button className="flex items-center gap-2" onClick={handleTryDifferentImage}>
+            <div className="mt-4 flex justify-center gap-4">
+              <Button
+                className="flex items-center gap-2"
+                onClick={handleTryDifferentImage}
+              >
                 <RiImageEditLine size={22} />
                 {t("try_with_a_different_image_key")}
               </Button>
+              {diseaseId && (
+                <Button
+                  className="flex items-center gap-2 mx-auto mt-2"
+                  onClick={navigateToDatabase}
+                >
+                  <GiNotebook size={22} />
+                  {t("read_more_about_disease_key")}
+                </Button>
+              )}
             </div>
           </div>
-        )}
-
-        {/* Hide the open button once results are available */}
-        {!reasoning && (
-          <>
-            <p className="text-gray-700 mb-3">{t("deep_analysis_intro_key")}</p>
-            <Button onClick={handleOpen} className="mt-2 mx-auto">
-              {t("go_to_deep_analysis_key")}
-            </Button>
-          </>
         )}
       </div>
 

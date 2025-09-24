@@ -60,13 +60,16 @@ export const analyzeInference = async (inferenceId) => {
 
 // Deep Analysis flow 
 export const postDeepAnalysis = async ({ inference_id, locale, questions = [], answers = [] }) => {
-  // Create an object mapping questions to their corresponding answers
-  const answersMap = questions.reduce((acc, question, index) => {
-    acc[question] = answers[index] || null;
-    return acc;
-  }, {});
+  // Normalize inputs to arrays to avoid runtime errors
+  const normalizedQuestions = Array.isArray(questions) ? questions : [];
+  const normalizedAnswers = Array.isArray(answers) ? answers : [];
 
-  const payload = { 
+  // Create an object mapping questions to their corresponding answers without mutating accumulator
+  const answersMap = Object.fromEntries(
+    normalizedQuestions.map((q, i) => [String(q ?? ""), normalizedAnswers?.[i] ?? null])
+  );
+
+  const payload = {
     locale,
     answers: answersMap
   };

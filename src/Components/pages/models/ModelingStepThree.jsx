@@ -92,7 +92,7 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
           <p className="text-red-500">
             {typeof error === "string"
               ? error
-              : error.response?.data?.detail || t("something_went_wrong")}
+              : error.response?.data?.detail || t("commonErrors.somethingWentWrong")}
           </p>
           <Button variant="outlined" onClick={handleReset}>
             {t("reset_key")}
