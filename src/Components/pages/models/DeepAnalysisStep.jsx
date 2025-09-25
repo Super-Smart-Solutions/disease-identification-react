@@ -19,7 +19,8 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
   const navigate = useNavigate();
   // Resolve plant questions dynamically from modelingData.category.value
   const plantId = modelingData?.category?.value;
-  const questionItems = useDiagnosticQuestionItems({ plant_id: plantId, t }); // [{ key, label }]
+  const diseaseIdFromPrediction = modelingData?.disease_id ?? null;
+  const questionItems = useDiagnosticQuestionItems({ plant_id: plantId, t, diseaseId: diseaseIdFromPrediction, }); // [{ key, label }]
   const fallbackItems = useMemo(
     () => [
       {

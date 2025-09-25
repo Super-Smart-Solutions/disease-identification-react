@@ -89,7 +89,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
   };
 
   const handleDeepAnalysis = () => {
-    setModelingData((prev) => ({ ...prev, is_deep: true }));
+    setModelingData((prev) => ({ ...prev, is_deep: true, disease_id: prediction?.disease_id ?? null, }));
   };
 
   const navigateToDatabase = () => {
