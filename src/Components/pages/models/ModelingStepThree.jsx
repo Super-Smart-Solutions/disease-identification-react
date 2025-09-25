@@ -71,9 +71,13 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
 
   const handleTryDifferentImage = () => {
     setModelingData((prev) => ({
-      category: prev.category,
+      ...prev,
       selected_file: [],
-      category: {},
+      image_id: null,
+      inference_id: null,
+      is_final: false,
+      is_deep: false,
+      deep_analysis_result: null,
     }));
   };
 
@@ -88,13 +92,13 @@ export default function ModelingStepThree({ modelingData, setModelingData }) {
           <p className="text-red-500">
             {typeof error === "string"
               ? error
-              : error.response?.data?.detail || t("something_went_wrong")}
+              : error.response?.data?.detail || t("commonErrors.somethingWentWrong")}
           </p>
           <Button variant="outlined" onClick={handleReset}>
             {t("reset_key")}
           </Button>
         </>
-      ) : modelingData.inference_id && !modelingData.is_final ? (
+      ) : modelingData.inference_id ? (
         <>
           <span>{t("inValid-message")}</span>
           <div className="flex gap-2">

@@ -48,17 +48,17 @@ export const uploadImageAdmin = async (formData) => {
   }
 };
 
-export const uploadImage = async ({ name, plantId, imageFile }) => {
+export const uploadImage = async ({ name, plantId, imageFile, diseaseId, imageType }) => {
   const formData = new FormData();
 
 
   formData.append("name", name);
   formData.append("farm_id", "1");
   formData.append("plant_id", plantId);
+  diseaseId && formData.append("disease_id", diseaseId);
   formData.append("annotated", "false");
-
-
   formData.append("image_file", imageFile);
+  imageType && formData.append("image_type", imageType);
 
 
   const response = await axiosInstance.post(UPLOAD_ENDPOINT, formData);

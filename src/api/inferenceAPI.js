@@ -52,11 +52,45 @@ export const visualizeInference = async (inferenceId) => {
   return response.data;
 };
 
-// Get deep analysis results for inference
+// Get deep analysis results for inference (legacy endpoint)
 export const analyzeInference = async (inferenceId) => {
   const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/${inferenceId}/deep-analysis`);
   return response.data;
 };
+
+// Deep Analysis flow 
+export const postDeepAnalysis = async ({ inference_id, locale, questions = [], answers = [] }) => {
+  // Normalize inputs to arrays to avoid runtime errors
+  const normalizedQuestions = Array.isArray(questions) ? questions : [];
+  const normalizedAnswers = Array.isArray(answers) ? answers : [];
+
+  // Create an object mapping questions to their corresponding answers without mutating accumulator
+  const answersMap = Object.fromEntries(
+    normalizedQuestions.map((q, i) => [String(q ?? ""), normalizedAnswers?.[i] ?? null])
+  );
+
+  const payload = {
+    locale,
+    answers: answersMap
+  };
+
+  const response = await axiosInstance.post(
+    `/inferences/${inference_id}/deep-analysis`,
+    payload,
+    {
+      responseType: "json",
+      headers: { Accept: "application/json" },
+    }
+  );
+  // Expecting JSON with fields like: deep_analysis_reasoning, deep_analysis_visual_indicators, attention_map_url, disease_id
+  // Fallback: if server returns text/plain, wrap it into an object
+  const data = response?.data;
+  if (typeof data === "string") {
+    return { deep_analysis_reasoning: data };
+  }
+  return data;
+};
+
 // Get aggregates
 export const getAggregates = async (start_date, end_date) => {
   const response = await axiosInstance.post(`${INFERENCE_ENDPOINT}/aggregates`, {
