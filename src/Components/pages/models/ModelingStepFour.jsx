@@ -172,9 +172,9 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
           {/* Action Buttons */}
           {predictionFailed ? (
             <div className="flec flex-col items-center ">
-{/*              <div className="text-red-500 text-center mb-2">
+              <div className="text-red-500 text-center mb-2">
                 {t("detection_inconclusive_message")}
-              </div>*/}
+              </div>
               <div className=" flex gap-2 justify-center">
                 <Button onClick={handleDeepAnalysis}>
                   {t("go_to_deep_analysis_key")}
