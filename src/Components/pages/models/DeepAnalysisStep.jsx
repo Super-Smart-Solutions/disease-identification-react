@@ -48,7 +48,7 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
   // Consolidated state to reduce re-renders and simplify updates
   const initialState = useMemo(
     () => ({
-      isOpen: false,
+      isOpen: true,
       currentStep: 1, // 1..N questions, N+1: results
       answers: {}, // dynamic mapping by question key
       errors: {},
@@ -330,17 +330,19 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
     <div className="space-y-4">
       <div className="cardIt p-4 flex flex-col items-center">
         {/* Display results here after successful submission */}
-        {reasoning && (
+        {reasoning ? (
           <div className="w-full  whitespace-pre-wrap break-words p-3 mb-4">
             {/* Attention Map */}
-            <div className="w-full flex flex-col items-center mb-4">
-              <img
-                src={attentionMapUrl}
-                alt={t("attention_map_key")}
-                className="w-72 rounded shadow object-contain"
-                loading="lazy"
-              />
-            </div>
+            {attentionMapUrl && (
+              <div className="w-full flex flex-col items-center mb-4">
+                <img
+                  src={attentionMapUrl}
+                  alt={t("attention_map_key")}
+                  className="w-72 rounded shadow object-contain"
+                  loading="lazy"
+                />
+              </div>
+            )}
 
             {/* Deep Analysis Reasoning */}
             <div className="mb-3">
@@ -428,11 +430,23 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
               )}
             </div>
           </div>
+        ) : (
+          <>
+            <span>{t("deep_analysis_intro_key")}</span>
+            <Button
+              onClick={() => {
+                dispatch({ isOpen: true });
+              }}
+              className={`mt-2`}
+            >
+              {t("next_key")}
+            </Button>
+          </>
         )}
       </div>
 
       <Modal
-        isOpen={!reasoning || reasoning === ""}
+        isOpen={!reasoning && isOpen}
         onClose={handleClose}
         title={t("deep_analytics_key")}
       >

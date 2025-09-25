@@ -22,12 +22,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
     navigate,
   });
   // Fetch disease prediction
-  const {
-    data: prediction,
-    isLoading: isPredicting,
-    error: predictionError,
-    isError: isPredictionError,
-  } = useQuery({
+  const { data: prediction, isError: isPredictionError } = useQuery({
     queryKey: ["diseasePrediction", modelingData.inference_id],
     queryFn: () => detectDisease(modelingData.inference_id),
     enabled: !!modelingData?.inference_id,
@@ -36,11 +31,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
   });
 
   // Fetch disease details if prediction is successful
-  const {
-    data: diseaseData,
-    isLoading: isDiseaseLoading,
-    isError: isDiseaseError,
-  } = useQuery({
+  const { data: diseaseData, isLoading: isDiseaseLoading } = useQuery({
     queryKey: ["diseaseDetails", prediction?.disease_id],
     queryFn: () => fetchDiseaseById(prediction.disease_id),
     enabled: !!prediction?.disease_id,
@@ -49,16 +40,12 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
   });
 
   // Fetch visualization if prediction is successful
-  const {
-    data: visualization,
-    isLoading: isVisualizing,
-    isError: isVisualizationError,
-  } = useQuery({
+  const { data: visualization } = useQuery({
     queryKey: ["visualization", modelingData.inference_id],
     queryFn: async () => {
       const result = await visualizeInference(modelingData.inference_id);
 
-      if (result) {
+      if (result && !(prediction?.status < 0)) {
         setTimeout(() => {
           openReviewModal();
         }, 6000);
