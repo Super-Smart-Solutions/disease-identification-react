@@ -174,7 +174,7 @@ export default function ExportPdf({ plant_id, diseaseId, article, t }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [processedImages, setProcessedImages] = useState([]);
   const page = 1;
-  const pageSize = 4;
+  const pageSize = 8;
 
   const { data, isLoading, error } = useImages({
     plant_id,

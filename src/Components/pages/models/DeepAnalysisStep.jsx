@@ -153,11 +153,10 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
 
     if (!diseaseId) {
       console.warn("Disease ID is missing. Navigation cancelled.");
-      return; // Stop navigation if disease ID is not valid
+      return;
     }
 
     const query = new URLSearchParams();
-
     query.set("disease_id", diseaseId);
     if (plantId) query.set("plant_id", plantId);
 
@@ -431,7 +430,6 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
           </div>
         )}
       </div>
-
       <Modal
         isOpen={!reasoning || reasoning === ""}
         onClose={handleClose}
