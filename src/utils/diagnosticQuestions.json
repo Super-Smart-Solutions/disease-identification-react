@@ -1,6 +1,10 @@
 {
   "21": {
-    "0": ["what_are_the_symptoms_you_see"]
+    "0": ["what_are_the_symptoms_you_see"],
+    "38": [
+      "pom_q2",
+      "pom_q3"
+    ]
   },
   "15": {
     "0": ["what_are_the_symptoms_you_see"]
@@ -9,7 +13,32 @@
     "0": ["what_are_the_symptoms_you_see"]
   },
   "19": {
-    "0": ["what_are_the_symptoms_you_see"]
+    "0": ["what_are_the_symptoms_you_see"],
+    "34": [
+      "bee_q1",
+      "bee_q2"
+    ],
+    "61":[
+      "bee_q1",
+      "bee_q2"
+    ],
+    "62":[
+      "bee_q3",
+      "bee_q4"
+    ],
+    "36":[
+      "bee_q3",
+      "bee_q4"
+    ],
+    "58":[
+      "bee_q5",
+      "bee_q6"
+    ],
+    "60":[
+      "bee_q5",
+      "bee_q6",
+      "bee_q7"
+    ]
   },
   "20": {
     "0": ["what_are_the_symptoms_you_see"]
