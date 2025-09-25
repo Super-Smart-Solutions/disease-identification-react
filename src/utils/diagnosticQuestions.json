@@ -26,10 +26,13 @@
   "31": {
     "0": ["what_are_the_symptoms_you_see"],
     "84": ["is_there_severe_itching_scaling_localized_hair_loss"],
+    "83": ["is_there_swelling_change_in_color_consistency_of_milk"],
     "77": ["is_there_itching_small_parasites_gradual_thinness"],
-    "76": ["are_there_any_visible_hard_lumps_on_the_skin_fever_loss_of_appetite"],
+    "76": [
+      "are_there_any_visible_hard_lumps_on_the_skin_fever_loss_of_appetite",
+      "is_there_swelling_change_in_color_consistency_of_milk"
+    ],
     "75": [
-      "is_there_swelling_change_in_color_consistency_of_milk",
       "is_there_swelling_bad_smell_severe_lameness",
       "are_there_blisters_or_ulcers_in_the_mouth_and_tongue_drooling"
     ]

@@ -76,7 +76,7 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
   };
 
   const handleDeepAnalysis = () => {
-    setModelingData((prev) => ({ ...prev, is_deep: true }));
+    setModelingData((prev) => ({ ...prev, is_deep: true, disease_id: prediction?.disease_id ?? null, }));
   };
 
   const navigateToDatabase = () => {
@@ -155,12 +155,13 @@ export default function ModelingStepFour({ modelingData, setModelingData }) {
             </div>
           )}
 
+
           {/* Action Buttons */}
           {predictionFailed ? (
             <div className="flec flex-col items-center ">
-              <div className="text-red-500 text-center mb-2">
+{/*              <div className="text-red-500 text-center mb-2">
                 {t("detection_inconclusive_message")}
-              </div>
+              </div>*/}
               <div className=" flex gap-2 justify-center">
                 <Button onClick={handleDeepAnalysis}>
                   {t("go_to_deep_analysis_key")}

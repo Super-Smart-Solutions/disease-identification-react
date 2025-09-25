@@ -19,7 +19,8 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
   const navigate = useNavigate();
   // Resolve plant questions dynamically from modelingData.category.value
   const plantId = modelingData?.category?.value;
-  const questionItems = useDiagnosticQuestionItems({ plant_id: plantId, t }); // [{ key, label }]
+  const diseaseIdFromPrediction = modelingData?.disease_id ?? null;
+  const questionItems = useDiagnosticQuestionItems({ plant_id: plantId, t, diseaseId: diseaseIdFromPrediction, }); // [{ key, label }]
   const fallbackItems = useMemo(
     () => [
       {
@@ -152,11 +153,10 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
 
     if (!diseaseId) {
       console.warn("Disease ID is missing. Navigation cancelled.");
-      return; // Stop navigation if disease ID is not valid
+      return;
     }
 
     const query = new URLSearchParams();
-
     query.set("disease_id", diseaseId);
     if (plantId) query.set("plant_id", plantId);
 
@@ -444,7 +444,6 @@ export default function DeepAnalysisStep({ modelingData, setModelingData }) {
           </>
         )}
       </div>
-
       <Modal
         isOpen={!reasoning && isOpen}
         onClose={handleClose}
