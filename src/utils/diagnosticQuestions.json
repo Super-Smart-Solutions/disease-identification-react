@@ -1,10 +1,6 @@
 {
   "21": {
-    "0": ["what_are_the_symptoms_you_see"],
-    "38": [
-      "pom_q2",
-      "pom_q3"
-    ]
+    "0": ["what_are_the_symptoms_you_see"]
   },
   "15": {
     "0": ["what_are_the_symptoms_you_see"]
@@ -41,7 +37,11 @@
     ]
   },
   "20": {
-    "0": ["what_are_the_symptoms_you_see"]
+    "0": ["what_are_the_symptoms_you_see"],
+    "38": [
+      "pom_q2",
+      "pom_q3"
+    ]
   },
   "27": {
     "0": ["what_are_the_symptoms_you_see"],
